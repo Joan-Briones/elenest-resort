@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Activities | Elenest Resort</title>
+  <link rel="icon" type="image/png" href="../Images/icon.png">
+  <link rel="stylesheet" href="../css/style.css?v=20260922-menu3">
+</head>
+<body class="subpage">
+  <header>
+    <div class="content flex_space">
+      <div class="logo">
+        <a href="index.html" class="site-logo-link" aria-label="Elenest Resort home">
+          <img class="site-logo" src="../Images/elenest_logo_pink.png" alt="Elenest Event Center">
+        </a>
+      </div>
+      <div class="navlinks">
+        <ul id="menulist" class="site-nav-list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="reviews.html">Reviews</a></li>
+          <li><a href="rooms.html">Facilities</a></li>
+          <li><a href="policies.html">Policies</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a class="active" href="activities.html">Activities</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+          <li class="role-login-nav" id="roleLoginNav">
+            <a href="login.html" class="role-login-trigger staff-access-btn" id="roleLoginTrigger" aria-label="Sign In">Sign In</a>
+          </li>
+        </ul>
+        <button type="button" class="nav-menu-toggle" id="navMenuToggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="menulist">
+          <span class="nav-menu-toggle__bar" aria-hidden="true"></span>
+          <span class="nav-menu-toggle__bar" aria-hidden="true"></span>
+          <span class="nav-menu-toggle__bar" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Activities &amp; Celebrations</h1>
+      <p>Discover past events and upcoming promotions at Elenest Resort — from weddings and birthdays to corporate gatherings and family reunions.</p>
+    </section>
+
+    <section class="section activities-section" aria-labelledby="activitiesPromoTitle">
+      <h2 id="activitiesPromoTitle" class="activities-section__title">Promotions &amp; Upcoming Events</h2>
+      <p class="activities-section__lead">Special packages and seasonal celebrations you can book for your next occasion.</p>
+      <div id="activitiesPromoHost" class="activities-grid" role="list"></div>
+    </section>
+
+    <section class="section activities-section" aria-labelledby="activitiesPastTitle">
+      <h2 id="activitiesPastTitle" class="activities-section__title">Past Celebrations</h2>
+      <p class="activities-section__lead">A glimpse of memorable moments hosted at our resort.</p>
+      <div id="activitiesPastHost" class="activities-grid" role="list"></div>
+    </section>
+
+    <section class="section">
+      <article class="card activities-cta-card">
+        <h2 class="activities-cta-card__title">Plan your own celebration</h2>
+        <p>Ready to host a wedding, birthday, reunion, or corporate event? Sign in to complete your reservation with all the details that matter to you.</p>
+        <a href="login.html" class="btn primary-btn">Sign In</a>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>Copyright 2026 Elenest Resort. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-config.js"></script>
+  <script src="../js/supabase-client.js"></script>
+  <script src="../js/content-store.js"></script>
+  <script src="../js/header-nav.js?v=20260922-menu2"></script>
+  <script src="../js/activities-page.js?v=20260917-pos1"></script>
+  <script src="../js/role-login.js"></script>
+</body>
+</html>

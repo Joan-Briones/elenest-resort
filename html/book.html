@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reserve Your Stay | Elenest Resort</title>
+  <link rel="icon" type="image/png" href="../Images/icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css?v=20260929-unavail1">
+  <script src="../js/supabase-config.js?v=20260922-iphone13"></script>
+  <script src="../js/site-boot.js"></script>
+</head>
+<body class="subpage book-page">
+  <div id="bookLoadingOverlay" class="book-loading-overlay book-loading-overlay--active" aria-busy="true" aria-live="polite" aria-label="Loading booking page">
+    <div class="book-loading-inner">
+      <div class="book-loading-spinner" aria-hidden="true">
+        <span class="book-loading-leaf book-loading-leaf--a"></span>
+        <span class="book-loading-leaf book-loading-leaf--b"></span>
+        <span class="book-loading-leaf book-loading-leaf--c"></span>
+      </div>
+      <p class="book-loading-text">Preparing your reservation...</p>
+    </div>
+  </div>
+  <script>
+    (function () {
+      function hideBookBoot() {
+        var el = document.getElementById("bookLoadingOverlay");
+        if (!el) return;
+        el.classList.remove("book-loading-overlay--active");
+        el.setAttribute("aria-hidden", "true");
+        el.setAttribute("aria-busy", "false");
+        el.setAttribute("hidden", "");
+      }
+      setTimeout(hideBookBoot, 1200);
+      window.addEventListener("load", function () {
+        setTimeout(hideBookBoot, 200);
+      });
+      document.addEventListener("DOMContentLoaded", function () {
+        setTimeout(hideBookBoot, 600);
+      });
+    })();
+  </script>
+  <header>
+    <div class="content flex_space">
+      <div class="logo">
+        <a href="index.html" class="site-logo-link" aria-label="Elenest Resort home">
+          <img class="site-logo" src="../Images/elenest_logo_pink.png" alt="Elenest Event Center">
+        </a>
+      </div>
+      <div class="navlinks">
+        <ul id="menulist" class="site-nav-list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="policies.html">Policies</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+          <li class="role-login-nav" id="roleLoginNav">
+            <a href="login.html" class="role-login-trigger staff-access-btn" id="roleLoginTrigger" aria-label="Sign In">Sign In</a>
+          </li>
+          <li id="bookNavUser" class="book-nav-user" hidden></li>
+        </ul>
+        <button type="button" class="nav-menu-toggle" id="navMenuToggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="menulist">
+          <span class="nav-menu-toggle__bar" aria-hidden="true"></span>
+          <span class="nav-menu-toggle__bar" aria-hidden="true"></span>
+          <span class="nav-menu-toggle__bar" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <aside id="weatherBarTop" class="weather-bar weather-bar--top" aria-live="polite"></aside>
+
+  <section id="bookReserveBanner" class="book book-page-reserve" hidden>
+    <div class="container flex_space">
+      <div class="text">
+        <h1><span>Reserve</span> Your Stay</h1>
+        <p class="book-page-reserve__lead">Check dates, sign in, and complete your reservation.</p>
+      </div>
+      <div class="form">
+        <form class="book-reserve-form" id="bookReservePreviewForm" action="javascript:void(0)" method="dialog" onsubmit="return false;">
+          <input type="hidden" name="arrival" value="">
+          <input type="hidden" name="departure" value="">
+          <button type="button" class="book-date-trigger book-date-trigger--range" data-open-avail-cal data-date-role="dates" aria-label="Select stay dates">
+            <span class="book-date-trigger__text" data-date-label>Select dates</span>
+            <span class="book-date-trigger__icon" aria-hidden="true"></span>
+          </button>
+          <input type="number" name="adults" min="1" placeholder="Adults" aria-label="Number of adults" value="2">
+          <input type="number" name="children" min="0" placeholder="Children" aria-label="Number of children" value="0">
+          <button type="button" class="book-reserve-submit" data-open-avail-cal>Check availability</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <main class="container">
+    <aside id="weatherPanelGuest" class="weather-panel weather-panel--guest section" hidden aria-live="polite"></aside>
+
+    <section id="authGate" class="section" hidden>
+      <article class="card auth-gate-card">
+        <div class="auth-gate-card__header">
+          <h3>Sign in to book</h3>
+          <p class="auth-gate-card__lead">Use Sign In on the website, or continue with Google below. Booking opens after your account is verified.</p>
+        </div>
+        <p id="bookGateMsg" class="auth-msg" hidden></p>
+        <div class="auth-gate-actions">
+          <a class="btn auth-gate-btn" href="register.html">Register</a>
+          <a class="btn btn--outline auth-gate-btn" href="login.html">Sign In</a>
+        </div>
+        <div class="auth-oauth">
+          <div class="auth-oauth-divider" role="presentation"><span>or</span></div>
+          <div class="auth-oauth-stack">
+            <button type="button" class="btn btn--google" id="googleBookGateBtn" aria-label="Continue with Google to book">
+              <svg class="btn-google-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+              </svg>
+              Continue with Google
+            </button>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section id="bookingSection">
+      <div class="section book-flow-layout">
+        <article class="card book-flow">
+          <nav class="book-flow-stepper" id="bookFlowStepper" aria-label="Booking progress">
+            <ol class="book-flow-stepper__list">
+              <li class="book-flow__step is-active" data-step="1">
+                <span class="book-flow-stepper__marker" aria-hidden="true">1</span>
+                <span class="book-flow-stepper__label">Booking details</span>
+              </li>
+              <li class="book-flow-stepper__connector" data-after="1" aria-hidden="true"></li>
+              <li class="book-flow__step" data-step="2">
+                <span class="book-flow-stepper__marker" aria-hidden="true">2</span>
+                <span class="book-flow-stepper__label">Guest details</span>
+              </li>
+              <li class="book-flow-stepper__connector" data-after="2" aria-hidden="true"></li>
+              <li class="book-flow__step" data-step="3">
+                <span class="book-flow-stepper__marker" aria-hidden="true">3</span>
+                <span class="book-flow-stepper__label">Payment</span>
+              </li>
+              <li class="book-flow-stepper__connector" data-after="3" aria-hidden="true"></li>
+              <li class="book-flow__step" data-step="4">
+                <span class="book-flow-stepper__marker" aria-hidden="true">4</span>
+                <span class="book-flow-stepper__label">Confirmation</span>
+              </li>
+            </ol>
+          </nav>
+
+          <div class="book-flow__panels">
+            <div class="book-flow__panel is-active" id="bookPanel1" data-step="1" role="tabpanel">
+              <h3 class="book-flow__panel-title">Step 1 - Booking details</h3>
+              <p class="book-flow__panel-lead" id="bookPanel2Lead">Choose a booking type, then pick your date on the calendar.</p>
+              <div class="reception-walkin-stay-bar book-flow-stay-bar" role="radiogroup" aria-label="Booking type">
+                <span class="reception-walkin-stay-bar__label">Booking type</span>
+                <div class="reception-walkin-stay-bar__toggle">
+                  <label class="reception-walkin-stay-bar__option">
+                    <input type="radio" name="bookStayType" value="day_tour" form="stepBookingForm" checked>
+                    <span>Day Tour</span>
+                  </label>
+                  <label class="reception-walkin-stay-bar__option">
+                    <input type="radio" name="bookStayType" value="overnight" form="stepBookingForm">
+                    <span>Overnight</span>
+                  </label>
+                </div>
+              </div>
+              <div class="admin-dash-cal-layout book-flow-cal-layout">
+                <div class="admin-dash-cal-main">
+                  <div class="book-flow-calendar-head admin-dash-cal-head">
+                    <button type="button" class="book-flow-cal-nav" id="calPrev" aria-label="Previous month">&lsaquo;</button>
+                    <h4 class="book-flow-cal-month" id="calMonthLabel"></h4>
+                    <button type="button" class="book-flow-cal-nav" id="calNext" aria-label="Next month">&rsaquo;</button>
+                  </div>
+                  <div id="calendarHost" class="book-flow-calendar book-flow-cal-host admin-dash-cal-host" role="grid" aria-label="Available dates"></div>
+                </div>
+                <aside class="admin-dash-cal-notes book-flow-cal-notes" aria-label="Calendar notes">
+                  <h3 class="admin-dash-cal-notes__title">Calendar Notes</h3>
+                  <ul class="admin-dash-cal-legend">
+                    <li>
+                      <span class="avail-legend__swatch avail-legend__swatch--available" aria-hidden="true"></span>
+                      <span class="admin-dash-cal-legend__text">
+                        <strong>Available</strong>
+                        <span>Open for booking.</span>
+                      </span>
+                    </li>
+                    <li>
+                      <span class="avail-legend__swatch avail-legend__swatch--booked" aria-hidden="true"></span>
+                      <span class="admin-dash-cal-legend__text">
+                        <strong>Booked</strong>
+                        <span>Already reserved — gray and not selectable.</span>
+                      </span>
+                    </li>
+                    <li>
+                      <span class="avail-legend__swatch avail-legend__swatch--unavailable" aria-hidden="true"></span>
+                      <span class="admin-dash-cal-legend__text">
+                        <strong>Closed</strong>
+                        <span>Blocked by manager.</span>
+                      </span>
+                    </li>
+                  </ul>
+                  <p class="admin-dash-cal-notes__hint" id="bookCalNotesHint">Select your date on the calendar.</p>
+                </aside>
+              </div>
+              <p id="pickedDatesSummary" class="book-flow-picked" aria-live="polite"></p>
+              <section id="bookDetailsSummarySection" class="book-unit-summary book-details-summary" hidden aria-labelledby="bookDetailsSummaryTitle">
+                <h4 id="bookDetailsSummaryTitle" class="book-unit-picker__title">Booking summary</h4>
+                <dl id="bookDetailsSummaryDl" class="book-details-summary__list"></dl>
+                <p id="bookDetailsSummaryHint" class="book-details-summary__hint">You can still change dates, times, or your facility before continuing.</p>
+              </section>
+              <section id="bookUnitSummarySection" class="book-unit-summary" hidden aria-labelledby="bookUnitSummaryTitle">
+                <h4 id="bookUnitSummaryTitle" class="book-unit-picker__title">Selected facilities</h4>
+                <div id="bookUnitSelectionSummary" class="book-unit-summary__body"></div>
+                <p id="bookUnitCapacitySummary" class="book-unit-summary__capacity" aria-live="polite"></p>
+                <div id="bookUnitFacilityPoolSummaryNotes" class="book-facility-pool-notes" aria-live="polite">
+                  <aside id="bookUnitRoomPoolSummaryNote" class="book-facility-pool-note book-facility-pool-note--room" hidden aria-hidden="true" role="note" data-facility-pool-note="room">
+                    <p><strong>Room:</strong> Swimming pool access is included with your room booking at no additional charge.</p>
+                  </aside>
+                  <aside id="bookUnitHallPoolSummaryNote" class="book-facility-pool-note book-facility-pool-note--hall" hidden aria-hidden="true" role="note" data-facility-pool-note="hall">
+                    <p><strong>Event Hall:</strong> Swimming pool access is included at no additional charge for <strong>20–25 guests</strong> only. Additional guests are subject to the applicable swimming pool entrance fee.</p>
+                  </aside>
+                  <aside id="bookUnitCottagePoolSummaryNote" class="book-facility-pool-note book-facility-pool-note--cottage" hidden aria-hidden="true" role="note" data-facility-pool-note="cottage">
+                    <p><strong>Cottage:</strong> Swimming pool access is not included in the cottage rate. A <strong>₱250</strong> swimming pool entrance fee per chargeable guest will be automatically added for adults and children ages 6–12 based on the total chargeable guest count.</p>
+                  </aside>
+                </div>
+                <button type="button" class="btn btn--outline btn--small" id="bookUnitReopenBtn">Change selection</button>
+              </section>
+              <form id="stepBookingForm" class="form-grid book-flow-form book-flow-block" autocomplete="off">
+                <h4 class="book-flow-block__title">Guests</h4>
+                <div>
+                  <label for="adults">Adults (13 years &amp; older) <span class="req-mark">*</span></label>
+                  <input id="adults" name="adults" type="number" min="1" required placeholder="Ages 13 and older" aria-label="Number of adults 13 years and older">
+                </div>
+                <div>
+                  <label for="children">Children (6–12 years)</label>
+                  <input id="children" name="children" type="number" min="0" placeholder="Ages 6 to 12" value="0" aria-label="Number of children ages 6 to 12">
+                </div>
+                <div>
+                  <label for="childrenUnder6">Children (0–5 years)</label>
+                  <input id="childrenUnder6" name="childrenUnder6" type="number" min="0" placeholder="Ages 0 to 5" value="0" aria-label="Number of children ages 0 to 5">
+                </div>
+                <div class="full">
+                  <p id="guestCapacityLiveWarn" class="book-guest-capacity-warn" hidden role="alert" aria-live="polite"></p>
+                </div>
+                <div class="full">
+                  <aside id="guestCapacityHint" class="book-capacity-notice" role="note" aria-labelledby="guestCapacityNoticeTitle">
+                    <div class="book-capacity-notice__icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                        <line x1="12" y1="9" x2="12" y2="13"/>
+                        <line x1="12" y1="17" x2="12.01" y2="17"/>
+                      </svg>
+                    </div>
+                    <div class="book-capacity-notice__body">
+                      <h5 id="guestCapacityNoticeTitle" class="book-capacity-notice__title">Capacity &amp; Entrance Reminder</h5>
+                      <p class="book-capacity-notice__lead">
+                        Only <strong>Adults</strong> and <strong>Children (6–12 years)</strong> are counted for facility capacity and entrance fees.
+                        Children <strong>0–5 years are FREE</strong> and <strong>do not count toward facility capacity or entrance fees.</strong>
+                      </p>
+                    </div>
+                  </aside>
+                </div>
+                <div class="full" id="bookPoolUseFieldWrap" hidden aria-hidden="true">
+                  <label for="poolUse">Booking stay marker</label>
+                  <select id="poolUse" name="poolUse" tabindex="-1">
+                    <option value="day_tour" selected>Day Tour</option>
+                    <option value="none">Overnight</option>
+                  </select>
+                </div>
+                <div class="full book-facility-pool-notes book-facility-pool-notes--form" id="bookStayTypeHint" aria-live="polite">
+                  <aside id="bookStayRoomPoolNote" class="book-facility-pool-note book-facility-pool-note--room" hidden aria-hidden="true" role="note" data-facility-pool-note="room">
+                    <p><strong>Room:</strong> Swimming pool access is included with your room booking at no additional charge.</p>
+                  </aside>
+                  <aside id="bookStayHallPoolNote" class="book-facility-pool-note book-facility-pool-note--hall" hidden aria-hidden="true" role="note" data-facility-pool-note="hall">
+                    <p><strong>Event Hall:</strong> Swimming pool access is included at no additional charge for <strong>20–25 guests</strong> only. Additional guests are subject to the applicable swimming pool entrance fee.</p>
+                  </aside>
+                  <aside id="bookStayCottagePoolNote" class="book-facility-pool-note book-facility-pool-note--cottage" hidden aria-hidden="true" role="note" data-facility-pool-note="cottage">
+                    <p><strong>Cottage:</strong> Swimming pool access is not included in the cottage rate. A <strong>₱250</strong> swimming pool entrance fee per chargeable guest will be automatically added for adults and children ages 6–12 based on the total chargeable guest count.</p>
+                  </aside>
+                </div>
+              </form>
+              <div class="form-grid book-flow-times" id="bookFlowTimesSection">
+                <div id="bookDayTourScheduleWrap" class="full" hidden>
+                  <label for="bookDayTourSchedule">Schedule <span class="req-mark">*</span></label>
+                  <input
+                    id="bookDayTourSchedule"
+                    type="text"
+                    value="8:00 AM — 10:00 PM"
+                    readonly
+                    tabindex="-1"
+                    aria-readonly="true"
+                    title="Day tour schedule is fixed"
+                  >
+                </div>
+                <div id="bookOvernightArrivalWrap">
+                  <label for="checkInTime" id="checkInTimeLabel">Arrival time (day of check-in) <span class="req-mark">*</span></label>
+                  <select id="checkInTime" name="checkInTime" required></select>
+                </div>
+                <div id="checkOutTimeWrap">
+                  <label for="checkOutTime" id="checkOutTimeLabel">Departure time (day of check-out) <span class="req-mark">*</span></label>
+                  <select id="checkOutTime" name="checkOutTime" required></select>
+                </div>
+              </div>
+              <p class="booking-form-hint" id="bookTimeHint">Times use 12-hour AM/PM format.</p>
+              <p id="calendarError" class="auth-msg auth-msg--err" hidden></p>
+              <div class="full book-flow-actions">
+                <button type="button" class="btn book-flow-btn-main" id="nextFromCal" disabled aria-disabled="true">Continue</button>
+              </div>
+            </div>
+
+            <div class="book-flow__panel" id="bookPanel2" data-step="2" role="tabpanel" hidden>
+              <h3 class="book-flow__panel-title">Step 2 - Guest details</h3>
+              <p class="book-flow__panel-lead"><span class="req-mark">*</span> Required. Name, phone, and email come from your account and can be edited here.</p>
+              <form id="step1Form" class="form-grid book-flow-form book-flow-block">
+                <div>
+                  <label for="fullName">Full name <span class="req-mark">*</span></label>
+                  <input id="fullName" name="fullName" type="text" required autocomplete="name" placeholder="Juan Dela Cruz">
+                </div>
+                <div>
+                  <label for="phone">Phone number <span class="req-mark">*</span></label>
+                  <input id="phone" name="phone" type="tel" required autocomplete="tel" inputmode="numeric" minlength="11" maxlength="11" pattern="[0-9]{11}" placeholder="09XXXXXXXXX">
+                </div>
+                <div>
+                  <label for="email">Email <span class="req-mark">*</span></label>
+                  <input id="email" name="email" type="email" required autocomplete="email" pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$" placeholder="you@example.com">
+                </div>
+                <div>
+                  <label for="eventType">Activity <span class="req-mark">*</span></label>
+                  <select id="eventType" name="eventType" required>
+                    <option value="" disabled selected>Select activity type</option>
+                    <option value="na">N/A</option>
+                    <option value="birthday">Birthday</option>
+                    <option value="wedding">Wedding</option>
+                    <option value="reunion">Reunion</option>
+                    <option value="swimming">Swimming</option>
+                    <option value="other">Other - describe below</option>
+                  </select>
+                </div>
+                <div class="full" id="eventOtherWrap" hidden>
+                  <label for="eventOther">Your activity <span class="req-mark">*</span></label>
+                  <input id="eventOther" type="text" placeholder="e.g. Company retreat, debut..." autocomplete="off">
+                </div>
+                <div class="full">
+                  <label for="request">Special requests</label>
+                  <textarea id="request" name="request" rows="3" placeholder="Dietary needs, accessibility, surprise setup..."></textarea>
+                </div>
+                <div class="full book-flow-actions book-flow-actions-split">
+                  <button type="button" class="btn btn--outline" id="backFromCal">Back</button>
+                  <button type="submit" class="btn book-flow-btn-main">Continue to Payment</button>
+                </div>
+              </form>
+            </div>
+
+            <div class="book-flow__panel" id="bookPanel3" data-step="3" role="tabpanel" hidden>
+              <h3 class="book-flow__panel-title">Step 3 - Payment</h3>
+              <p class="book-flow__panel-lead" id="paymentStepLead">
+                Choose how you want to pay, scan a QR code (GCash, Maya, or bank transfer), then upload your receipt.
+              </p>
+
+              <fieldset class="payment-type-choice" id="paymentTypeFieldset">
+                <legend class="payment-type-choice__legend">Payment option</legend>
+                <label class="payment-type-choice__option">
+                  <input type="radio" name="paymentTypeChoice" value="full" id="paymentTypeFull" checked>
+                  <span class="payment-type-choice__body">
+                    <strong>Full Payment</strong>
+                    <span>Pay 100% now. After admin verification your booking is confirmed, non-refundable, and your slot is locked.</span>
+                  </span>
+                </label>
+                <label class="payment-type-choice__option">
+                  <input type="radio" name="paymentTypeChoice" value="down" id="paymentTypeDown">
+                  <span class="payment-type-choice__body">
+                    <strong>Down Payment (20%)</strong>
+                    <span>Temporary 3-hour hold after verification. You must arrive within 3 hours or the reservation is cancelled.</span>
+                  </span>
+                </label>
+              </fieldset>
+
+              <div id="paymentSummaryHost" class="payment-summary" aria-live="polite"></div>
+              <div id="paymentMethodsHost" class="payment-methods-grid" role="radiogroup" aria-label="Select payment method"></div>
+              <div class="payment-proof-section">
+                <label for="paymentProofFile">Proof of payment <span class="req-mark">*</span></label>
+                <input id="paymentProofFile" type="file" accept="image/*" aria-describedby="paymentProofHint">
+                <p id="paymentProofHint" class="booking-form-hint">Upload a screenshot or photo of your successful transfer receipt.</p>
+                <div id="paymentProofPreview" class="payment-proof-preview" hidden></div>
+              </div>
+              <p id="paymentStepError" class="auth-msg auth-msg--err" hidden></p>
+              <div class="full book-flow-actions book-flow-actions-split">
+                <button type="button" class="btn btn--outline" id="backFromPayment">Back</button>
+                <button type="button" class="btn book-flow-btn-main" id="submitPaymentBtn">Submit payment &amp; confirm</button>
+              </div>
+            </div>
+
+            <div class="book-flow__panel" id="bookPanel4" data-step="4" role="tabpanel" hidden>
+              <div class="book-flow-confirm-icon" aria-hidden="true"><svg class="status-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+              <h3 class="book-flow__panel-title">Step 4 - All set</h3>
+              <p class="book-flow__panel-lead">Booking saved. Your payment was submitted successfully. Status is <strong>For Verification</strong> until the Owner confirms. View it in <strong>Appointments</strong> beside your name.</p>
+              <div id="bookFlowReceipt" class="book-flow-receipt" hidden></div>
+              <div class="book-flow-step4-cta">
+                <button type="button" class="btn book-flow-btn-main" id="bookFlowReceiptDownloadBtn" hidden>Download JPG receipt</button>
+                <button type="button" class="btn btn--outline" id="scrollToAppointmentsBtn">Go to appointments</button>
+              </div>
+              <div class="book-flow-actions">
+                <button type="button" class="btn book-flow-btn-main" id="newBookingFlowBtn">Start a new booking</button>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>Copyright 2026 Elenest Resort. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <div id="feedbackRequiredOverlay" class="admin-settings-overlay logout-confirm-overlay" hidden>
+    <div
+      class="admin-settings-modal logout-confirm-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="feedbackRequiredTitle"
+      aria-describedby="logoutConfirmLead"
+    >
+      <div id="logoutFeedbackConfirmStep" class="logout-confirm">
+        <div class="logout-confirm__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10 17H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h5"></path>
+            <path d="M15 12H8"></path>
+            <path d="M12 8l4 4-4 4"></path>
+          </svg>
+        </div>
+        <h3 id="feedbackRequiredTitle" class="logout-confirm__title">Log out</h3>
+        <p id="logoutConfirmLead" class="logout-confirm__lead">Do you want to log out?</p>
+        <div class="logout-confirm__actions">
+          <button type="button" id="logoutFeedbackYesBtn" class="logout-confirm__btn logout-confirm__btn--yes">Yes</button>
+          <button type="button" id="logoutFeedbackNoBtn" class="logout-confirm__btn logout-confirm__btn--no">No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    id="bookFacilityLoadingOverlay"
+    class="book-facility-loading"
+    hidden
+    aria-hidden="true"
+    aria-busy="false"
+    aria-live="polite"
+  >
+    <div class="book-facility-loading__card">
+      <div class="book-facility-loading__spinner" aria-hidden="true"></div>
+      <p class="book-facility-loading__text">Please wait… loading available facilities</p>
+    </div>
+  </div>
+
+  <div id="paymentQrLightbox" class="payment-qr-lightbox" hidden aria-hidden="true">
+    <div class="payment-qr-lightbox__backdrop" data-payment-qr-close tabindex="-1"></div>
+    <div class="payment-qr-lightbox__dialog" role="dialog" aria-modal="true" aria-labelledby="paymentQrLightboxTitle">
+      <button type="button" class="payment-qr-lightbox__close" data-payment-qr-close aria-label="Close QR code">&times;</button>
+      <h3 id="paymentQrLightboxTitle" class="payment-qr-lightbox__title">Payment QR</h3>
+      <div class="payment-qr-lightbox__stage">
+        <img id="paymentQrLightboxImg" class="payment-qr-lightbox__img" alt="Payment QR code">
+      </div>
+      <p class="payment-qr-lightbox__hint">Scan this QR with your banking or e-wallet app.</p>
+    </div>
+  </div>
+
+  <div id="bookUnitModal" class="book-unit-modal" hidden aria-hidden="true">
+    <div class="book-unit-modal__backdrop" data-book-unit-close tabindex="-1"></div>
+    <div class="book-unit-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="bookUnitModalTitle">
+      <button type="button" class="book-unit-modal__close" data-book-unit-close aria-label="Close">&times;</button>
+      <div class="book-unit-modal__header">
+        <h3 id="bookUnitModalTitle" class="book-unit-modal__title">Select facilities</h3>
+        <p id="bookUnitModalDates" class="book-unit-modal__dates"></p>
+        <p id="bookUnitModalCapacity" class="book-unit-modal__capacity" aria-live="polite"></p>
+        <p id="bookUnitModalCapacityWarn" class="book-unit-modal__capacity-warn auth-msg auth-msg--err" hidden role="alert"></p>
+        <nav class="book-unit-tabs" role="tablist" aria-label="Facility type">
+          <button type="button" class="facilities-tab facilities-tab--active" data-book-unit-tab="room" role="tab" aria-selected="true">Rooms</button>
+          <button type="button" class="facilities-tab" data-book-unit-tab="cottage" role="tab" aria-selected="false">Cottages</button>
+          <button type="button" class="facilities-tab" data-book-unit-tab="hall" role="tab" aria-selected="false">Event Hall</button>
+        </nav>
+        <div id="bookUnitFacilityPoolModalNotes" class="book-facility-pool-notes book-facility-pool-notes--modal" aria-live="polite">
+          <aside id="bookUnitRoomPoolNote" class="book-facility-pool-note book-facility-pool-note--room book-facility-pool-note--modal" hidden aria-hidden="true" role="note" data-facility-pool-note="room">
+            <p><strong>Room:</strong> Swimming pool access is included with your room booking at no additional charge.</p>
+          </aside>
+          <aside id="bookUnitHallPoolNote" class="book-facility-pool-note book-facility-pool-note--hall book-facility-pool-note--modal" hidden aria-hidden="true" role="note" data-facility-pool-note="hall">
+            <p><strong>Event Hall:</strong> Swimming pool access is included at no additional charge for <strong>20–25 guests</strong> only. Additional guests are subject to the applicable swimming pool entrance fee.</p>
+          </aside>
+          <aside id="bookUnitCottagePoolNote" class="book-facility-pool-note book-facility-pool-note--cottage book-facility-pool-note--modal" hidden aria-hidden="true" role="note" data-facility-pool-note="cottage">
+            <p><strong>Cottage:</strong> Swimming pool access is not included in the cottage rate. A <strong>₱250</strong> swimming pool entrance fee per chargeable guest will be automatically added for adults and children ages 6–12 based on the total chargeable guest count.</p>
+          </aside>
+        </div>
+      </div>
+      <div id="bookUnitModalHost" class="book-unit-picker__groups"></div>
+      <p id="bookUnitModalEmpty" class="book-unit-modal__empty" hidden>No units available for these dates.</p>
+      <p id="bookUnitModalError" class="auth-msg auth-msg--err" hidden></p>
+      <div class="book-unit-modal__actions">
+        <button type="button" class="btn book-flow-btn-main" id="bookUnitModalDone" disabled aria-disabled="true">Confirm selection</button>
+      </div>
+      <div id="bookUnitInfoPopup" class="book-unit-info" hidden>
+        <div class="book-unit-info__card" role="dialog" aria-modal="true" aria-labelledby="bookUnitInfoTitle">
+          <p class="book-unit-info__eyebrow">Elenest Resort</p>
+          <h4 class="book-unit-info__title" id="bookUnitInfoTitle">Select facilities</h4>
+          <p class="book-unit-info__dates" id="bookUnitInfoDates"></p>
+          <p class="book-unit-info__lead" id="bookUnitInfoLead">Select a room, cottage, or event hall. Gray units are already booked. Capacity counts adults and children ages 6–12. Swimming pool terms appear for the facility type you select.</p>
+          <button type="button" class="welcome-modal__ok" id="bookUnitInfoOk">Got it</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="availCalendarModal" class="avail-modal" hidden aria-hidden="true">
+    <div class="avail-modal__backdrop" data-avail-close></div>
+    <div class="avail-modal__dialog avail-modal__dialog--simple" role="dialog" aria-modal="true" aria-labelledby="availModalTitle">
+      <button type="button" class="avail-modal__close" data-avail-close aria-label="Close availability calendar">&times;</button>
+      <section class="avail-modal__calendar">
+        <h3 id="availModalTitle" class="avail-modal__calendar-title">Select your dates</h3>
+        <p class="avail-modal__calendar-lead">Tap <strong>one date</strong> for a day visit, or a <strong>second later date</strong> for overnight. Then choose a facility.</p>
+        <div class="admin-dash-cal-layout avail-modal-cal-layout">
+          <div class="admin-dash-cal-main">
+            <div class="book-flow-calendar-head admin-dash-cal-head">
+              <button type="button" class="book-flow-cal-nav" id="availModalCalPrev" aria-label="Previous month">&lsaquo;</button>
+              <h4 class="book-flow-cal-month" id="availModalCalMonthLabel"></h4>
+              <button type="button" class="book-flow-cal-nav" id="availModalCalNext" aria-label="Next month">&rsaquo;</button>
+            </div>
+            <div id="availModalCalendarHost" class="book-flow-calendar admin-dash-cal-host" role="grid" aria-label="Resort date availability"></div>
+          </div>
+          <aside class="admin-dash-cal-notes" aria-label="Calendar notes">
+            <h3 class="admin-dash-cal-notes__title">Calendar Notes</h3>
+            <ul class="admin-dash-cal-legend">
+              <li>
+                <span class="avail-legend__swatch avail-legend__swatch--available" aria-hidden="true"></span>
+                <span class="admin-dash-cal-legend__text">
+                  <strong>Available</strong>
+                  <span>Open for booking.</span>
+                </span>
+              </li>
+              <li>
+                <span class="avail-legend__swatch avail-legend__swatch--booked" aria-hidden="true"></span>
+                <span class="admin-dash-cal-legend__text">
+                  <strong>Booked</strong>
+                  <span>Already reserved — gray and not selectable.</span>
+                </span>
+              </li>
+              <li>
+                <span class="avail-legend__swatch avail-legend__swatch--unavailable" aria-hidden="true"></span>
+                <span class="admin-dash-cal-legend__text">
+                  <strong>Closed</strong>
+                  <span>Blocked by manager.</span>
+                </span>
+              </li>
+            </ul>
+            <p class="admin-dash-cal-notes__hint">Tap one date for a day visit, or a second later date for overnight.</p>
+          </aside>
+        </div>
+        <p id="availModalPickedSummary" class="book-flow-picked" aria-live="polite">Tap one date for a day visit, or tap a second later date for overnight.</p>
+        <section id="availModalFacilitySection" class="avail-facility-section" hidden>
+          <h4 class="avail-facility-section__title">Choose a facility</h4>
+          <p id="availModalFacilityEmpty" class="avail-facility-section__empty" hidden>Booked rooms, cottages, and halls stay listed in gray and cannot be selected.</p>
+          <div id="availModalFacilityHost" class="avail-facility-host"></div>
+        </section>
+        <div class="avail-modal__actions">
+          <button type="button" class="btn book-flow-btn-main" id="availModalReserveBtn" disabled aria-disabled="true">Select dates &amp; facility</button>
+          <button type="button" class="btn btn--outline" data-avail-close>Close</button>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div id="welcomeModal" class="welcome-modal-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="welcomeModalTitle" aria-hidden="true">
+    <div class="welcome-modal">
+      <div class="welcome-modal__glow" aria-hidden="true"></div>
+      <div class="welcome-modal__decor" aria-hidden="true">
+        <span class="welcome-modal__bloom welcome-modal__bloom--a"></span>
+        <span class="welcome-modal__bloom welcome-modal__bloom--b"></span>
+        <span class="welcome-modal__bloom welcome-modal__bloom--c"></span>
+      </div>
+      <div class="welcome-modal__inner">
+        <span class="welcome-modal__mark" aria-hidden="true"></span>
+        <p class="welcome-modal__eyebrow">Elenest Resort</p>
+        <h2 class="welcome-modal__title" id="welcomeModalTitle">Welcome</h2>
+        <p class="welcome-modal__subtitle">We're happy to see you. Ready to plan your stay at the resort?</p>
+        <button type="button" class="welcome-modal__ok" id="welcomeModalOk">Continue</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="downPaymentRulesOverlay" class="admin-settings-overlay payment-rules-overlay" hidden aria-hidden="true">
+    <div class="admin-settings-modal payment-rules-modal" role="dialog" aria-modal="true" aria-labelledby="downPaymentRulesTitle">
+      <div class="payment-rules-modal__header">
+        <p class="payment-rules-modal__eyebrow">Elenest Resort</p>
+        <h3 id="downPaymentRulesTitle" class="payment-rules-modal__title">Down payment rules</h3>
+        <p class="payment-rules-modal__lead">Please read these terms before you continue with a 20% down payment.</p>
+      </div>
+      <ol class="payment-rules-modal__list">
+        <li class="payment-rules-modal__item payment-rules-modal__item--hold">
+          <span class="payment-rules-modal__badge" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9"/>
+              <path d="M12 7v5l3 2"/>
+            </svg>
+          </span>
+          <div class="payment-rules-modal__rule">
+            <strong>3-hour hold</strong>
+            <span>Your slot is held for 3 hours after the owner verifies your payment.</span>
+          </div>
+        </li>
+        <li class="payment-rules-modal__item payment-rules-modal__item--verify">
+          <span class="payment-rules-modal__badge" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 12l2 2 4-4"/>
+              <path d="M12 3l7 3v5c0 4.5-3.1 8.4-7 9.5C8.1 19.4 5 15.5 5 11V6l7-3z"/>
+            </svg>
+          </span>
+          <div class="payment-rules-modal__rule">
+            <strong>Verification required</strong>
+            <span>The reservation stays temporary until your receipt is confirmed.</span>
+          </div>
+        </li>
+        <li class="payment-rules-modal__item payment-rules-modal__item--arrive">
+          <span class="payment-rules-modal__badge" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10.3 4.3 3.6 18a1.5 1.5 0 0 0 1.3 2.2h14.2a1.5 1.5 0 0 0 1.3-2.2L13.7 4.3a1.5 1.5 0 0 0-2.6 0z"/>
+              <path d="M12 9v4"/>
+              <path d="M12 17h.01"/>
+            </svg>
+          </span>
+          <div class="payment-rules-modal__rule">
+            <strong>Arrive within 3 hours</strong>
+            <span>If you do not arrive on time, the booking is cancelled and the slot is released.</span>
+          </div>
+        </li>
+        <li class="payment-rules-modal__item payment-rules-modal__item--temp">
+          <span class="payment-rules-modal__badge" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8 4h8v16l-4-2.5L8 20V4z"/>
+            </svg>
+          </span>
+          <div class="payment-rules-modal__rule">
+            <strong>Temporary reservation</strong>
+            <span>A down payment does not confirm your stay until you check in on time.</span>
+          </div>
+        </li>
+      </ol>
+      <label class="payment-rules-modal__agree" for="downPaymentRulesAgree">
+        <input id="downPaymentRulesAgree" type="checkbox">
+        <span>I agree to these down payment terms and conditions.</span>
+      </label>
+      <div class="payment-rules-modal__actions">
+        <button type="button" class="btn" id="downPaymentRulesAgreeBtn" disabled aria-disabled="true">I agree</button>
+        <button type="button" class="btn btn--outline" id="downPaymentRulesCancelBtn">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="bookingTermsOverlay" class="admin-settings-overlay booking-terms-overlay" hidden aria-hidden="true">
+    <div class="admin-settings-modal booking-terms-modal" role="dialog" aria-modal="true" aria-labelledby="bookingTermsTitle">
+      <p class="booking-terms-modal__eyebrow">Elenest Resort</p>
+      <h3 id="bookingTermsTitle" class="booking-terms-modal__title">Terms &amp; Conditions</h3>
+      <p class="booking-terms-modal__lead">Please review these important rules before continuing.</p>
+
+      <div class="booking-terms-modal__body">
+        <section class="booking-terms-modal__rules" aria-labelledby="bookingResortRulesTitle">
+          <h4 id="bookingResortRulesTitle" class="booking-terms-modal__heading booking-terms-modal__heading--plain">Important Resort Rules</h4>
+          <ul class="booking-terms-modal__rules-list">
+            <li>Valid government ID required at check-in</li>
+            <li>Pool hours: <strong>8:00 AM — 10:00 PM</strong> only; children under 12 need an adult</li>
+            <li>Quiet hours: <strong>10:00 PM — 7:00 AM</strong></li>
+            <li>Smoking only in designated outdoor areas</li>
+          </ul>
+        </section>
+
+        <section class="booking-terms-modal__policy" aria-labelledby="bookingCapacityPolicyTitle">
+          <h4 id="bookingCapacityPolicyTitle" class="booking-terms-modal__heading">
+            <span class="booking-terms-modal__warn-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                <line x1="12" y1="9" x2="12" y2="13"/>
+                <line x1="12" y1="17" x2="12.01" y2="17"/>
+              </svg>
+            </span>
+            Capacity Policy
+          </h4>
+
+          <dl class="booking-terms-modal__caps">
+            <div><dt>Small Room</dt><dd>4 pax</dd></div>
+            <div><dt>Family Room</dt><dd>15 pax</dd></div>
+            <div><dt>Cottage</dt><dd>20 pax</dd></div>
+            <div><dt>Event Hall</dt><dd>60–150 pax</dd></div>
+          </dl>
+
+          <p class="booking-terms-modal__note">
+            Only <strong>Adults (13+)</strong> and <strong>Children (6–12)</strong> count.
+            <strong>Children 0–5</strong> are free and not counted.
+          </p>
+          <p class="booking-terms-modal__important">
+            Capacity cannot be exceeded — even if you are willing to pay extra.
+          </p>
+        </section>
+      </div>
+
+      <label class="booking-terms-modal__agree" for="bookingTermsAgree">
+        <input id="bookingTermsAgree" type="checkbox">
+        <span>I agree to the Terms &amp; Conditions, resort rules, and capacity policy.</span>
+      </label>
+      <div class="booking-terms-modal__actions">
+        <button type="button" class="btn" id="bookingTermsAgreeBtn" disabled aria-disabled="true">Agree &amp; Continue</button>
+        <button type="button" class="btn btn--outline" id="bookingTermsCancelBtn">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="paymentSuccessOverlay" class="payment-success-overlay" hidden aria-hidden="true">
+    <div class="payment-success-modal" role="dialog" aria-modal="true" aria-labelledby="paymentSuccessTitle">
+      <div class="payment-success-icon payment-success-icon--success" aria-hidden="true">
+        <svg class="status-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+      </div>
+      <h2 class="payment-success-title" id="paymentSuccessTitle">Payment submitted</h2>
+      <p class="payment-success-lead">Your proof of payment was received. We will verify it shortly and update your booking status.</p>
+      <div id="paymentSuccessReceipt" class="book-flow-receipt book-flow-receipt--modal" hidden></div>
+      <div class="payment-success-actions">
+        <button type="button" class="btn payment-success-btn" id="paymentSuccessDownloadBtn">Download JPG receipt</button>
+        <button type="button" class="btn payment-success-btn payment-success-btn--secondary" id="paymentSuccessOk">Continue</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="guestProfileOverlay" class="admin-settings-overlay" hidden aria-hidden="true">
+    <div class="admin-settings-modal guest-profile-modal" role="dialog" aria-modal="true" aria-labelledby="guestProfileTitle">
+      <h3 id="guestProfileTitle">My profile</h3>
+      <p class="guest-profile-modal__lead">Update your details or change your password.</p>
+
+      <form id="guestProfileForm" class="form-grid guest-profile-form" autocomplete="on">
+        <div class="full">
+          <label for="guestProfileName">Full name</label>
+          <input id="guestProfileName" type="text" required autocomplete="name" placeholder="Your full name">
+        </div>
+        <div>
+          <label for="guestProfilePhone">Phone number</label>
+          <input id="guestProfilePhone" type="tel" required autocomplete="tel" inputmode="numeric" minlength="11" maxlength="11" pattern="[0-9]{11}" placeholder="09XXXXXXXXX">
+        </div>
+        <div>
+          <label for="guestProfileGender">Gender</label>
+          <select id="guestProfileGender" required>
+            <option value="neutral">Prefer not to say</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
+        </div>
+        <div class="full guest-profile-email">
+          <label>Email</label>
+          <p id="guestProfileEmail" class="guest-profile-email__value">-</p>
+        </div>
+        <div class="full">
+          <button type="submit" class="btn">Save profile</button>
+          <p id="guestProfileMsg" class="auth-msg" hidden></p>
+        </div>
+      </form>
+
+      <div class="guest-profile-divider" role="presentation"><span>Password</span></div>
+
+      <p id="guestOAuthPasswordNote" class="guest-profile-oauth-note" hidden>
+        You signed in with Google or Facebook. Set a password below if you also want to sign in with email.
+      </p>
+
+      <div id="guestPasswordSection">
+        <form id="guestChangePasswordForm" class="form-grid guest-profile-form" autocomplete="off">
+          <div class="full" id="guestCurrentPasswordWrap">
+            <label for="guestCurrentPassword">Current password</label>
+            <input id="guestCurrentPassword" type="password" placeholder="Enter current password">
+          </div>
+          <div class="full">
+            <label for="guestNewPassword">New password</label>
+            <input id="guestNewPassword" type="password" required placeholder="At least 6 characters">
+          </div>
+          <div class="full">
+            <label for="guestConfirmPassword">Confirm new password</label>
+            <input id="guestConfirmPassword" type="password" required placeholder="Confirm new password">
+          </div>
+          <div class="full">
+            <button type="submit" class="btn btn--outline">Update password</button>
+            <p id="guestChangePasswordMsg" class="auth-msg" hidden></p>
+          </div>
+        </form>
+      </div>
+
+      <div class="admin-settings-modal__actions">
+        <button type="button" id="guestProfileCloseBtn" class="btn btn--outline">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="appointmentsOverlay" class="admin-settings-overlay appointments-overlay" hidden aria-hidden="true">
+    <div class="admin-settings-modal appointments-modal" role="dialog" aria-modal="true" aria-labelledby="appointmentsTitle">
+      <div class="appointments-modal__head">
+        <h3 id="appointmentsTitle">Your appointments</h3>
+        <p class="appointments-modal__lead">Your reservations. Status updates when the owner verifies payment.</p>
+      </div>
+      <div id="appointmentsBoard" class="appointments-board reservation-status-host" aria-live="polite"></div>
+      <div class="admin-settings-modal__actions">
+        <button type="button" id="appointmentsCloseBtn" class="btn btn--outline">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="guestReceiptOverlay" class="admin-settings-overlay guest-receipt-overlay" hidden aria-hidden="true">
+    <div class="admin-settings-modal guest-receipt-modal" role="dialog" aria-modal="true" aria-labelledby="guestReceiptTitle">
+      <div class="guest-receipt-modal__toolbar">
+        <h3 id="guestReceiptTitle" class="guest-receipt-modal__title">Booking receipt</h3>
+        <div class="guest-receipt-modal__actions">
+          <button type="button" id="guestReceiptDownloadBtn" class="btn btn--small">Download JPG</button>
+          <button type="button" id="guestReceiptPrintBtn" class="btn btn--small btn--outline">Print / PDF</button>
+          <button type="button" id="guestReceiptCloseBtn" class="btn btn--small btn--outline">Close</button>
+        </div>
+      </div>
+      <div id="guestReceiptBody" class="guest-receipt-body" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-config.js?v=20260922-iphone13"></script>
+  <script src="../js/supabase-client.js"></script>
+  <script src="../js/ui-button-loading.js"></script>
+  <script src="../js/auth.js?v=20260918-role2"></script>
+  <script src="../js/role-login.js?v=20260917-custnav3"></script>
+  <script src="../js/auth-oauth.js?v=20260922-iphone13"></script>
+  <script src="../js/auth-social-ui.js?v=20260718-google3"></script>
+  <script src="../js/payment-flow.js?v=20260929-queue3"></script>
+  <script src="../js/payment-proofs.js"></script>
+  <script src="../js/bookings.js?v=20260929-queue1"></script>
+  <script src="../js/content-store.js?v=20260916-lightbox1"></script>
+  <script src="../js/unit-availability.js?v=20260929-queue4"></script>
+  <script src="../js/payment-methods.js?v=20260914-step3orig1"></script>
+  <script src="../js/notifications.js?v=20260929-notify1"></script>
+  <script src="../js/feedback-photos.js"></script>
+  <script src="../js/guest-feedback.js?v=20260927-review1"></script>
+  <script>
+    // Live calendar uses Supabase bookings only (no Google Calendar).
+    window.ElenestGoogleCalendarIcsUrl = "";
+  </script>
+  <script src="../js/elenest-availability.js?v=20260718-ok"></script>
+  <script src="../js/elenest-calendar-widget.js?v=20260922-ux2"></script>
+  <script src="../js/guest-avatar.js?v=20260918-icons1"></script>
+  <script src="../js/guest-profile.js"></script>
+  <script src="../js/customer-notifications-ui.js?v=20260916-notifread1"></script>
+  <script src="../js/book-availability-modal.js?v=20260914-bookfac2"></script>
+  <script src="../js/home-reserve.js?v=20260718-ok"></script>
+  <script src="../js/weather-widget.js?v=20260911-weather3"></script>
+  <script src="../js/book-flow.js?v=20260929-queue4"></script>
+  <script>
+    (function () {
+      function bindSocial() {
+        if (window.ElenestAuthSocialUi && window.ElenestAuthSocialUi.initBookGate) {
+          window.ElenestAuthSocialUi.initBookGate({ next: "book.html" });
+        }
+      }
+      bindSocial();
+      // Re-bind after auth modules finish attaching (safe no-op if already bound).
+      setTimeout(bindSocial, 300);
+      setTimeout(bindSocial, 1000);
+    })();
+  </script>
+  <script type="text/plain" id="book-inline-removed">
+    (function () {
+      var gate = document.getElementById("authGate_REMOVED");
+      var booking = document.getElementById("bookingSection");
+      var navUser = document.getElementById("bookNavUser");
+      var listEl = document.getElementById("bookingsList");
+      var formMsg = document.getElementById("bookingFormMsg");
+      var checkInEl = document.getElementById("checkIn");
+      var checkOutEl = document.getElementById("checkOut");
+      var welcomeOverlay = document.getElementById("welcomeModal");
+      var welcomeOk = document.getElementById("welcomeModalOk");
+      var welcomeTitle = document.getElementById("welcomeModalTitle");
+
+      function syncStayDates() {
+        if (!checkInEl || !checkOutEl) return;
+        var today = new Date().toISOString().slice(0, 10);
+        checkInEl.min = today;
+        if (checkInEl.value) {
+          var d = new Date(checkInEl.value + "T12:00:00");
+          d.setDate(d.getDate() + 1);
+          checkOutEl.min = d.toISOString().slice(0, 10);
+          if (checkOutEl.value && checkOutEl.value <= checkInEl.value) {
+            checkOutEl.setCustomValidity("Check-out must be after check-in.");
+          } else {
+            checkOutEl.setCustomValidity("");
+          }
+        } else {
+          checkOutEl.min = today;
+          checkOutEl.setCustomValidity("");
+        }
+      }
+
+      if (checkInEl) {
+        checkInEl.addEventListener("change", syncStayDates);
+        checkInEl.addEventListener("input", syncStayDates);
+      }
+      if (checkOutEl) {
+        checkOutEl.addEventListener("change", syncStayDates);
+        checkOutEl.addEventListener("input", syncStayDates);
+      }
+
+      function labelPool(v, booking) {
+        if (
+          booking &&
+          window.ElenestUnitAvailability &&
+          typeof window.ElenestUnitAvailability.swimmingPoolLabelForBooking === "function"
+        ) {
+          return window.ElenestUnitAvailability.swimmingPoolLabelForBooking(booking);
+        }
+        var m = {
+          none: "Swimming Included",
+          day_tour: "Swimming Included",
+          pool_only: "Swimming Pool Only",
+          day: "Day use",
+          overnight: "Overnight",
+          swimming_overnight: "Swimming Included"
+        };
+        return m[v] || v || "-";
+      }
+      function labelEventHall(v) {
+        return v === "yes" ? "Yes" : "No";
+      }
+      function labelEventType(v) {
+        var m = {
+          none: "None / room stay only",
+          na: "N/A",
+          birthday: "Birthday",
+          wedding: "Wedding",
+          reunion: "Reunion",
+          swimming: "Swimming",
+          other: "Other"
+        };
+        return m[v] || v || "-";
+      }
+      function fmtWhen(iso) {
+        try {
+          var d = new Date(iso);
+          return isNaN(d.getTime()) ? "-" : d.toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" });
+        } catch (err) {
+          return "-";
+        }
+      }
+
+      function fmtDateLong(iso) {
+        if (!iso) return "-";
+        try {
+          var d = new Date(iso + "T12:00:00");
+          if (isNaN(d.getTime())) return iso;
+          return d.toLocaleDateString(undefined, {
+            weekday: "short",
+            year: "numeric",
+            month: "short",
+            day: "numeric"
+          });
+        } catch (err) {
+          return iso;
+        }
+      }
+
+      function statusLabel(st) {
+        var s = String(st || "Pending");
+        if (/^pending$/i.test(s)) return "Pending review";
+        if (/^confirmed$/i.test(s)) return "Confirmed";
+        if (/^approved$/i.test(s)) return "Approved";
+        if (/^cancelled$/i.test(s)) return "Cancelled";
+        return s;
+      }
+
+      function statusClass(st) {
+        var s = String(st || "Pending").toLowerCase();
+        if (s === "confirmed" || s === "approved") return "booking-status--confirmed";
+        if (s === "cancelled") return "booking-status--cancelled";
+        return "booking-status--pending";
+      }
+
+      function labelRoomType(v) {
+        if (v === "big") return "Big room";
+        if (v === "small") return "Small room";
+        return v ? String(v) : "-";
+      }
+
+      function buildBookingCard(b) {
+        var status = b.status || "Pending";
+        var card = document.createElement("article");
+        card.className = "booking-card";
+
+        var badge = document.createElement("span");
+        badge.className = "booking-status " + statusClass(status);
+        badge.textContent = statusLabel(status);
+
+        var nameEl = document.createElement("h4");
+        nameEl.className = "booking-card__name";
+        nameEl.textContent = b.fullName || "Guest";
+
+        var dateRow = document.createElement("div");
+        dateRow.className = "booking-card__row";
+        var dateLab = document.createElement("span");
+        dateLab.className = "booking-card__label";
+        dateLab.textContent = "Stay begins";
+        var dateVal = document.createElement("span");
+        dateVal.className = "booking-card__value";
+        dateVal.textContent = fmtDateLong(b.checkIn);
+        dateRow.appendChild(dateLab);
+        dateRow.appendChild(dateVal);
+
+        var roomRow = document.createElement("div");
+        roomRow.className = "booking-card__row";
+        var roomLab = document.createElement("span");
+        roomLab.className = "booking-card__label";
+        roomLab.textContent = "Room type";
+        var roomVal = document.createElement("span");
+        roomVal.className = "booking-card__value";
+        roomVal.textContent = labelRoomType(b.roomType);
+        roomRow.appendChild(roomLab);
+        roomRow.appendChild(roomVal);
+
+        var sub = document.createElement("p");
+        sub.className = "booking-card__sub";
+        sub.textContent = "Submitted " + fmtWhen(b.submittedAt);
+
+        var details = document.createElement("details");
+        details.className = "booking-card__details";
+        var summ = document.createElement("summary");
+        summ.textContent = "Full request details";
+        var dl = document.createElement("dl");
+        dl.className = "booking-dl booking-dl--compact";
+        function addRow(term, val) {
+          var dt = document.createElement("dt");
+          dt.textContent = term;
+          var dd = document.createElement("dd");
+          dd.textContent = val === undefined || val === null || val === "" ? "-" : String(val);
+          dl.appendChild(dt);
+          dl.appendChild(dd);
+        }
+        addRow("Phone", b.phone);
+        addRow("Email", b.email);
+        addRow("Room type", labelRoomType(b.roomType));
+        addRow("Check-out", b.checkOut);
+        addRow("Adults", b.adults);
+        addRow("Children", b.children);
+        addRow("Event hall rental", labelEventHall(b.eventHall));
+        addRow("Swimming pool", labelPool(b.poolUse, b));
+        addRow("Event", labelEventType(b.eventType));
+        addRow("Special request", b.request);
+        details.appendChild(summ);
+        details.appendChild(dl);
+
+        card.appendChild(badge);
+        card.appendChild(nameEl);
+        card.appendChild(dateRow);
+        card.appendChild(roomRow);
+        card.appendChild(sub);
+        card.appendChild(details);
+        return card;
+      }
+
+      function renderBookings() {
+        var user = window.ElenestAuth.getCurrentUser();
+        if (!user || !listEl) return;
+        if (listEl._bookCarouselCleanup) {
+          listEl._bookCarouselCleanup();
+          listEl._bookCarouselCleanup = null;
+        }
+        var rows = window.ElenestBookings.listForUser(user.email);
+        listEl.textContent = "";
+        if (!rows.length) {
+          var empty = document.createElement("p");
+          empty.className = "bookings-empty";
+          empty.textContent = "No booking requests yet. Submit the form below - your details will show up here.";
+          listEl.appendChild(empty);
+          return;
+        }
+
+        var wrap = document.createElement("div");
+        wrap.className = "booking-carousel";
+
+        var nav = document.createElement("div");
+        nav.className = "booking-carousel__shell";
+
+        var prevBtn = document.createElement("button");
+        prevBtn.type = "button";
+        prevBtn.className = "booking-carousel__arrow booking-carousel__arrow--prev";
+        prevBtn.setAttribute("aria-label", "Previous booking");
+        prevBtn.innerHTML =
+          '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>';
+
+        var viewport = document.createElement("div");
+        viewport.className = "booking-carousel__viewport";
+
+        var track = document.createElement("div");
+        track.className = "booking-carousel__track";
+
+        var nextBtn = document.createElement("button");
+        nextBtn.type = "button";
+        nextBtn.className = "booking-carousel__arrow booking-carousel__arrow--next";
+        nextBtn.setAttribute("aria-label", "Next booking");
+        nextBtn.innerHTML =
+          '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>';
+
+        var slides = [];
+        rows.forEach(function (b) {
+          var slide = document.createElement("div");
+          slide.className = "booking-carousel__slide";
+          slide.setAttribute("role", "group");
+          slide.setAttribute("aria-roledescription", "slide");
+          slide.setAttribute(
+            "aria-label",
+            "Booking for " + (b.fullName || "guest") + ", stay begins " + fmtDateLong(b.checkIn)
+          );
+          slide.appendChild(buildBookingCard(b));
+          track.appendChild(slide);
+          slides.push(slide);
+        });
+
+        viewport.appendChild(track);
+        nav.appendChild(prevBtn);
+        nav.appendChild(viewport);
+        nav.appendChild(nextBtn);
+
+        var footer = document.createElement("div");
+        footer.className = "booking-carousel__footer";
+
+        var counter = document.createElement("span");
+        counter.className = "booking-carousel__counter";
+
+        var dots = document.createElement("div");
+        dots.className = "booking-carousel__dots";
+        var dotButtons = [];
+        rows.forEach(function (_, di) {
+          var dot = document.createElement("button");
+          dot.type = "button";
+          dot.className = "booking-carousel__dot";
+          dot.setAttribute("aria-label", "Go to booking " + (di + 1));
+          dot.addEventListener("click", function () {
+            index = di;
+            updateCarousel();
+          });
+          dots.appendChild(dot);
+          dotButtons.push(dot);
+        });
+
+        footer.appendChild(counter);
+        if (rows.length > 1) {
+          footer.appendChild(dots);
+        }
+
+        wrap.appendChild(nav);
+        wrap.appendChild(footer);
+        listEl.appendChild(wrap);
+
+        wrap.setAttribute("tabindex", "0");
+        wrap.setAttribute("role", "region");
+        wrap.setAttribute("aria-roledescription", "carousel");
+        wrap.setAttribute("aria-label", "Your booking requests");
+
+        var index = 0;
+        var touchStartX = null;
+
+        function updateCarousel() {
+          var w = viewport.offsetWidth;
+          if (w < 1) return;
+          slides.forEach(function (slide) {
+            slide.style.flex = "0 0 " + w + "px";
+          });
+          track.style.transform = "translate3d(" + -index * w + "px,0,0)";
+          var n = rows.length;
+          prevBtn.disabled = index <= 0;
+          nextBtn.disabled = index >= n - 1;
+          prevBtn.setAttribute("aria-disabled", prevBtn.disabled ? "true" : "false");
+          nextBtn.setAttribute("aria-disabled", nextBtn.disabled ? "true" : "false");
+          counter.textContent = n > 1 ? index + 1 + " / " + n : "1 booking";
+          dotButtons.forEach(function (d, i) {
+            d.classList.toggle("booking-carousel__dot--active", i === index);
+            if (i === index) d.setAttribute("aria-current", "true");
+            else d.removeAttribute("aria-current");
+          });
+        }
+
+        function goPrev() {
+          if (index > 0) {
+            index--;
+            updateCarousel();
+          }
+        }
+        function goNext() {
+          if (index < rows.length - 1) {
+            index++;
+            updateCarousel();
+          }
+        }
+
+        prevBtn.addEventListener("click", goPrev);
+        nextBtn.addEventListener("click", goNext);
+
+        wrap.addEventListener("keydown", function (e) {
+          if (rows.length < 2) return;
+          if (e.key === "ArrowLeft") {
+            e.preventDefault();
+            goPrev();
+          } else if (e.key === "ArrowRight") {
+            e.preventDefault();
+            goNext();
+          }
+        });
+
+        viewport.addEventListener(
+          "touchstart",
+          function (e) {
+            if (e.touches.length === 1) touchStartX = e.touches[0].clientX;
+          },
+          { passive: true }
+        );
+        viewport.addEventListener(
+          "touchend",
+          function (e) {
+            if (touchStartX === null) return;
+            var x = e.changedTouches[0].clientX;
+            var dx = x - touchStartX;
+            touchStartX = null;
+            if (dx > 56) goPrev();
+            else if (dx < -56) goNext();
+          },
+          { passive: true }
+        );
+
+        var resizeTimer;
+        function onResize() {
+          clearTimeout(resizeTimer);
+          resizeTimer = setTimeout(updateCarousel, 100);
+        }
+        window.addEventListener("resize", onResize);
+        var ro =
+          typeof ResizeObserver !== "undefined"
+            ? new ResizeObserver(function () {
+                updateCarousel();
+              })
+            : null;
+        if (ro) ro.observe(viewport);
+
+        listEl._bookCarouselCleanup = function () {
+          window.removeEventListener("resize", onResize);
+          if (ro) ro.disconnect();
+        };
+
+        if (rows.length <= 1) {
+          prevBtn.hidden = true;
+          nextBtn.hidden = true;
+          nav.classList.add("booking-carousel__shell--single");
+          viewport.classList.add("booking-carousel__viewport--full");
+        }
+
+        requestAnimationFrame(function () {
+          requestAnimationFrame(updateCarousel);
+        });
+      }
+
+      function applySession() {
+        var user = window.ElenestAuth.getCurrentUser();
+        if (!user) {
+          gate.hidden = false;
+          booking.hidden = true;
+          navUser.hidden = true;
+          navUser.innerHTML = "";
+          return;
+        }
+        gate.hidden = true;
+        booking.hidden = false;
+        navUser.hidden = false;
+        navUser.textContent = "";
+        var greet = document.createElement("span");
+        greet.className = "book-nav-greet";
+        greet.textContent = "Hi, " + user.name;
+        var logoutBtn = document.createElement("button");
+        logoutBtn.type = "button";
+        logoutBtn.className = "btn btn--small";
+        logoutBtn.textContent = "Log out";
+        logoutBtn.addEventListener("click", function () {
+          window.ElenestAuth.logout();
+          window.location.reload();
+        });
+        navUser.appendChild(greet);
+        navUser.appendChild(logoutBtn);
+
+        var fn = document.getElementById("fullName");
+        var ph = document.getElementById("phone");
+        var em = document.getElementById("email");
+        if (fn && !fn.value) fn.value = user.name;
+        if (ph && !ph.value) ph.value = user.phone;
+        if (em && !em.value) em.value = user.email;
+
+        syncStayDates();
+        renderBookings();
+        tryShowWelcomePostLogin();
+      }
+
+      function closeWelcomeModal() {
+        if (!welcomeOverlay) return;
+        welcomeOverlay.classList.remove("welcome-modal-overlay--open");
+        document.body.style.overflow = "";
+        setTimeout(function () {
+          welcomeOverlay.setAttribute("hidden", "");
+          welcomeOverlay.setAttribute("aria-hidden", "true");
+        }, 380);
+      }
+
+      function tryShowWelcomePostLogin() {
+        if (!welcomeOverlay || !welcomeTitle) return;
+        try {
+          if (sessionStorage.getItem("elenest_welcome") !== "1") return;
+          sessionStorage.removeItem("elenest_welcome");
+          var u = window.ElenestAuth.getCurrentUser();
+          if (!u) return;
+          welcomeTitle.textContent = "Welcome, " + u.name + "! ??";
+          welcomeOverlay.removeAttribute("hidden");
+          welcomeOverlay.setAttribute("aria-hidden", "false");
+          document.body.style.overflow = "hidden";
+          requestAnimationFrame(function () {
+            requestAnimationFrame(function () {
+              welcomeOverlay.classList.add("welcome-modal-overlay--open");
+            });
+          });
+          if (welcomeOk) {
+            setTimeout(function () {
+              welcomeOk.focus();
+            }, 100);
+          }
+        } catch (err) {}
+      }
+
+      if (welcomeOk) {
+        welcomeOk.addEventListener("click", closeWelcomeModal);
+      }
+      document.addEventListener("keydown", function (ev) {
+        if (ev.key !== "Escape") return;
+        if (!welcomeOverlay || !welcomeOverlay.classList.contains("welcome-modal-overlay--open")) return;
+        closeWelcomeModal();
+      });
+
+      applySession();
+
+      var form = document.getElementById("bookingForm");
+      if (form) {
+        form.addEventListener("submit", function (e) {
+          e.preventDefault();
+          if (!window.ElenestAuth.isLoggedIn()) {
+            alert("Please log in to submit a booking.");
+            window.location.href = "login.html";
+            return;
+          }
+          syncStayDates();
+          if (!form.reportValidity()) {
+            return;
+          }
+          var user = window.ElenestAuth.getCurrentUser();
+          var record = {
+            fullName: document.getElementById("fullName").value.trim(),
+            phone: document.getElementById("phone").value.trim(),
+            email: document.getElementById("email").value.trim(),
+            roomType: document.getElementById("roomType").value,
+            checkIn: document.getElementById("checkIn").value,
+            checkOut: document.getElementById("checkOut").value,
+            adults: document.getElementById("adults").value,
+            children: document.getElementById("children").value,
+            eventHall: document.getElementById("eventHall").value,
+            poolUse: document.getElementById("poolUse").value,
+            eventType: document.getElementById("eventType").value,
+            request: document.getElementById("request").value.trim()
+          };
+          window.ElenestBookings.add(user.email, record);
+          if (formMsg) {
+            formMsg.hidden = false;
+            formMsg.textContent = "Saved. Your booking appears in Your bookings above with full details.";
+          }
+          form.reset();
+          document.getElementById("eventHall").value = "no";
+          document.getElementById("poolUse").value = "none";
+          document.getElementById("eventType").value = "none";
+          var roomSel = document.getElementById("roomType");
+          if (roomSel) roomSel.selectedIndex = 0;
+          applySession();
+        });
+      }
+    })();
+  </script>
+  <script src="../js/header-nav.js?v=20260922-menu2"></script>
+</body>
+</html>

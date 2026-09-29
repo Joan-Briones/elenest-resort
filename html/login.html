@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | Elenest Resort</title>
+  <link rel="icon" type="image/png" href="../Images/icon.png">
+  <link rel="stylesheet" href="../css/style.css?v=20260925-reset1">
+  <script src="../js/supabase-config.js?v=20260922-iphone13"></script>
+  <script src="../js/site-boot.js"></script>
+</head>
+<body class="subpage">
+  <header>
+    <div class="content flex_space">
+      <div class="logo">
+        <a href="index.html" class="site-logo-link" aria-label="Elenest Resort home">
+          <img class="site-logo" src="../Images/elenest_logo_pink.png" alt="Elenest Event Center">
+        </a>
+      </div>
+      <div class="navlinks">
+        <ul id="menulist" class="site-nav-list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="reviews.html">Reviews</a></li>
+          <li><a href="rooms.html">Facilities</a></li>
+          <li><a href="policies.html">Policies</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="activities.html">Activities</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+          <li class="role-login-nav" id="roleLoginNav">
+            <a href="login.html" class="role-login-trigger staff-access-btn active" id="roleLoginTrigger" aria-label="Sign In" aria-current="page">Sign In</a>
+          </li>
+        </ul>
+        <button type="button" class="nav-menu-toggle" id="navMenuToggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="menulist">
+          <span class="nav-menu-toggle__bar" aria-hidden="true"></span>
+          <span class="nav-menu-toggle__bar" aria-hidden="true"></span>
+          <span class="nav-menu-toggle__bar" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1 id="loginHeroTitle">Welcome back</h1>
+      <p id="loginHeroLead">Check dates and activities below, then sign in to continue your booking.</p>
+    </section>
+
+    <section class="section login-reserve" id="loginReserve">
+      <article class="card login-reserve-card">
+        <h2 class="login-reserve-card__title">Reserve Your Stay</h2>
+
+        <nav class="login-reserve-tabs" role="tablist" aria-label="Reserve options">
+          <button type="button" class="login-reserve-tab login-reserve-tab--active" data-login-reserve-tab="calendar" role="tab" aria-selected="true">Calendar</button>
+          <button type="button" class="login-reserve-tab" data-login-reserve-tab="activities" role="tab" aria-selected="false">Activities</button>
+        </nav>
+
+        <div class="login-reserve-panel" data-login-reserve-panel="calendar" role="tabpanel">
+          <div class="login-reserve-stay-bar" role="radiogroup" aria-label="Booking type">
+            <span class="login-reserve-stay-bar__label">Booking type</span>
+            <div class="login-reserve-stay-bar__toggle">
+              <label class="login-reserve-stay-bar__option">
+                <input type="radio" name="loginReserveStayType" value="overnight" checked>
+                <span>Overnight Book</span>
+              </label>
+              <label class="login-reserve-stay-bar__option">
+                <input type="radio" name="loginReserveStayType" value="day_tour">
+                <span>One-Day Book</span>
+              </label>
+            </div>
+          </div>
+          <form class="book-reserve-form login-reserve-form" id="loginReserveForm" action="javascript:void(0)" method="dialog" onsubmit="return false;">
+            <input type="hidden" name="arrival" value="">
+            <input type="hidden" name="departure" value="">
+            <button type="button" class="book-date-trigger book-date-trigger--range" data-open-avail-cal data-date-role="dates" aria-label="Open availability calendar">
+              <span class="book-date-trigger__text" data-date-label>Open calendar</span>
+              <span class="book-date-trigger__icon" aria-hidden="true"></span>
+            </button>
+            <button type="button" class="book-reserve-submit" data-open-avail-cal>Check availability</button>
+          </form>
+        </div>
+
+        <div class="login-reserve-panel" data-login-reserve-panel="activities" role="tabpanel" hidden>
+          <p class="login-reserve-panel__note">Tap an activity to view details. Sign in or sign up when you are ready to book.</p>
+          <div id="loginReserveActivitiesHost" class="login-activity-grid" role="list"></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="section">
+      <article class="card auth-card">
+        <h3 id="loginCardTitle">Sign in</h3>
+        <p id="loginReserveContinue" class="auth-msg auth-msg--ok" hidden></p>
+        <p id="loginMsg" class="auth-msg" hidden></p>
+        <form id="loginForm" class="form-grid auth-form-single" autocomplete="on">
+          <div class="full">
+            <label for="loginEmail">Email</label>
+            <input id="loginEmail" name="email" type="email" autocomplete="email" required placeholder="Your email">
+          </div>
+          <div class="full">
+            <label for="loginPassword">Password</label>
+            <input id="loginPassword" name="password" type="password" autocomplete="current-password" required placeholder="Your password">
+          </div>
+          <div class="full auth-forgot">
+            <a href="forgot-password.html">Forgot Password?</a>
+          </div>
+          <div class="full">
+            <button class="btn" type="submit" id="loginSubmitBtn">Sign in</button>
+          </div>
+        </form>
+
+        <div class="auth-oauth" id="guestOAuthSection">
+          <div class="auth-oauth-divider" role="presentation"><span>or</span></div>
+          <div class="auth-oauth-stack">
+            <button type="button" class="btn btn--google" id="googleLoginBtn" aria-label="Continue with Google">
+              <svg class="btn-google-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+              </svg>
+              Continue with Google
+            </button>
+          </div>
+        </div>
+
+        <p class="note auth-switch" id="loginSwitchNote">
+          No account yet? <a id="loginRegisterLink" href="register.html?next=book.html">Create a guest account here</a>. Clients are taken to booking after they sign in.
+        </p>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>Copyright 2026 Elenest Resort. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <div id="availCalendarModal" class="avail-modal" hidden aria-hidden="true">
+    <div class="avail-modal__backdrop" data-avail-close></div>
+    <div class="avail-modal__dialog avail-modal__dialog--simple" role="dialog" aria-modal="true" aria-labelledby="availModalTitle">
+      <button type="button" class="avail-modal__close" data-avail-close aria-label="Close availability calendar">&times;</button>
+      <section class="avail-modal__calendar">
+        <h3 id="availModalTitle" class="avail-modal__calendar-title">Select your dates</h3>
+        <div class="login-reserve-stay-bar avail-modal-stay-bar" role="radiogroup" aria-label="Booking type">
+          <span class="login-reserve-stay-bar__label">Booking type</span>
+          <div class="login-reserve-stay-bar__toggle">
+            <label class="login-reserve-stay-bar__option">
+              <input type="radio" name="availStayType" value="overnight" checked>
+              <span>Overnight Book</span>
+            </label>
+            <label class="login-reserve-stay-bar__option">
+              <input type="radio" name="availStayType" value="day_tour">
+              <span>One-Day Book</span>
+            </label>
+          </div>
+        </div>
+        <p id="availModalCalendarLead" class="avail-modal__calendar-lead">Overnight Book: tap <strong>check-in</strong>, then a later <strong>check-out</strong>. Then choose a facility.</p>
+        <div class="admin-dash-cal-layout avail-modal-cal-layout">
+          <div class="admin-dash-cal-main">
+            <div class="book-flow-calendar-head admin-dash-cal-head">
+              <button type="button" class="book-flow-cal-nav" id="availModalCalPrev" aria-label="Previous month">&lsaquo;</button>
+              <h4 class="book-flow-cal-month" id="availModalCalMonthLabel"></h4>
+              <button type="button" class="book-flow-cal-nav" id="availModalCalNext" aria-label="Next month">&rsaquo;</button>
+            </div>
+            <div id="availModalCalendarHost" class="book-flow-calendar admin-dash-cal-host" role="grid" aria-label="Resort date availability"></div>
+          </div>
+          <aside class="admin-dash-cal-notes" aria-label="Calendar notes">
+            <h3 class="admin-dash-cal-notes__title">Calendar Notes</h3>
+            <ul class="admin-dash-cal-legend">
+              <li>
+                <span class="avail-legend__swatch avail-legend__swatch--available" aria-hidden="true"></span>
+                <span class="admin-dash-cal-legend__text">
+                  <strong>Available</strong>
+                  <span>Open for booking.</span>
+                </span>
+              </li>
+              <li>
+                <span class="avail-legend__swatch avail-legend__swatch--booked" aria-hidden="true"></span>
+                <span class="admin-dash-cal-legend__text">
+                  <strong>Booked</strong>
+                  <span>Already reserved — gray and not selectable.</span>
+                </span>
+              </li>
+              <li>
+                <span class="avail-legend__swatch avail-legend__swatch--unavailable" aria-hidden="true"></span>
+                <span class="admin-dash-cal-legend__text">
+                  <strong>Closed</strong>
+                  <span>Blocked on the official calendar.</span>
+                </span>
+              </li>
+            </ul>
+            <p class="admin-dash-cal-notes__hint">Overnight: tap check-in, then a later check-out. One-Day: tap a single date.</p>
+          </aside>
+        </div>
+        <p id="availModalPickedSummary" class="book-flow-picked" aria-live="polite">Overnight Book: tap check-in, then a later check-out.</p>
+        <section id="availModalFacilitySection" class="avail-facility-section" hidden>
+          <h4 class="avail-facility-section__title">Choose a facility</h4>
+          <p id="availModalFacilityEmpty" class="avail-facility-section__empty" hidden>Booked rooms, cottages, and halls stay listed in gray and cannot be selected.</p>
+          <div id="availModalFacilityHost" class="avail-facility-host"></div>
+        </section>
+        <div class="avail-modal__actions">
+          <button type="button" class="btn book-flow-btn-main" id="availModalReserveBtn" disabled aria-disabled="true">Select dates &amp; facility</button>
+          <button type="button" class="btn btn--outline" data-avail-close>Close</button>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div id="loginActivityDetailModal" class="login-activity-detail" hidden aria-hidden="true">
+    <div class="login-activity-detail__backdrop" data-login-activity-close></div>
+    <div class="login-activity-detail__dialog" role="dialog" aria-modal="true" aria-labelledby="loginActivityDetailTitle">
+      <button type="button" class="login-activity-detail__close" data-login-activity-close aria-label="Close activity details">&times;</button>
+      <h3 id="loginActivityDetailTitle" class="login-activity-detail__title">Activity</h3>
+      <div id="loginActivityDetailBody" class="login-activity-detail__body"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-config.js?v=20260922-iphone13"></script>
+  <script src="../js/supabase-client.js"></script>
+  <script src="../js/ui-button-loading.js"></script>
+  <script src="../js/content-store.js?v=20260718-gallery"></script>
+  <script src="../js/auth.js?v=20260925-reset1"></script>
+  <script src="../js/activity-logs.js?v=20260917-actlog1"></script>
+  <script src="../js/auth-oauth.js?v=20260922-iphone13"></script>
+  <script src="../js/auth-social-ui.js?v=20260720-admin-google"></script>
+  <script src="../js/password-toggle.js"></script>
+  <script src="../js/header-nav.js?v=20260922-menu2"></script>
+  <script src="../js/role-login.js"></script>
+  <script src="../js/bookings.js?v=20260917-nlag1"></script>
+  <script>
+    window.ElenestGoogleCalendarIcsUrl = "";
+  </script>
+  <script src="../js/unit-availability.js?v=20260718-ok"></script>
+  <script src="../js/elenest-availability.js?v=20260718-ok"></script>
+  <script src="../js/elenest-calendar-widget.js?v=20260922-ux2"></script>
+  <script src="../js/book-availability-modal.js?v=20260902-factabs2"></script>
+  <script src="../js/home-reserve.js?v=20260902-loginreserve1"></script>
+  <script src="../js/login-reserve.js?v=20260902-loginreserve1"></script>
+  <script>
+    (function () {
+      var form = document.getElementById("loginForm");
+      var msg = document.getElementById("loginMsg");
+      var params = new URLSearchParams(window.location.search);
+      var submitBtn = document.getElementById("loginSubmitBtn");
+      var loginEmail = document.getElementById("loginEmail");
+      var loginPassword = document.getElementById("loginPassword");
+      var Auth = window.ElenestAuth;
+      var nextPage = params.get("next") || "book.html";
+      var registerLink = document.getElementById("loginRegisterLink");
+      if (registerLink) {
+        registerLink.href = "register.html?next=" + encodeURIComponent(nextPage);
+      }
+
+      if (window.ElenestAuthSocialUi && window.ElenestAuthSocialUi.initLogin) {
+        window.ElenestAuthSocialUi.initLogin({ next: nextPage });
+      }
+
+      Auth.ready.then(function (user) {
+        if (!user) return;
+        if (params.get("registered") === "1") return;
+        var path = Auth.getPostLoginPath(user);
+        var role = Auth.normalizeRole(user && user.role);
+        // Staff always return to their dashboard — never follow a customer next=book.html.
+        if (Auth.isStaffRole && Auth.isStaffRole(role)) {
+          window.location.replace(path);
+          return;
+        }
+        if (role === "guest" && nextPage) {
+          window.location.replace(nextPage);
+          return;
+        }
+        window.location.replace(path);
+      });
+
+      if (params.get("registered") === "1") {
+        msg.hidden = false;
+        msg.className = "auth-msg auth-msg--ok";
+        msg.textContent = "Account created. Sign in with your email and password.";
+      }
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var email = loginEmail ? loginEmail.value : "";
+        var password = loginPassword ? loginPassword.value : "";
+        var BL = window.ElenestButtonLoading;
+        if (BL) BL.set(submitBtn, true);
+        Auth.login(email, password).then(function (result) {
+          if (result.ok) {
+            try {
+              sessionStorage.setItem("elenest_welcome", "1");
+              var user = Auth.getCurrentUser();
+              var isGuest = Auth.normalizeRole(user && user.role) === "guest";
+              if (isGuest) {
+                sessionStorage.setItem("elenest_booking_restart", "1");
+              }
+            } catch (err) {}
+            var user = Auth.getCurrentUser();
+            var role = Auth.normalizeRole(user && user.role);
+            if (Auth.isStaffRole && Auth.isStaffRole(role)) {
+              window.location.href = result.homePath || Auth.getPostLoginPath(user);
+              return;
+            }
+            if (role === "guest" && nextPage) {
+              window.location.href = nextPage;
+              return;
+            }
+            window.location.href = result.homePath || Auth.getPostLoginPath(user);
+            return;
+          }
+          if (BL) BL.set(submitBtn, false);
+          msg.hidden = false;
+          msg.className = "auth-msg auth-msg--err";
+          msg.textContent = result.message;
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

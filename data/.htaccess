@@ -1,0 +1,11 @@
+# Serve historical JSON on InfinityFree / Apache hosts
+<IfModule mod_mime.c>
+  AddType application/json .json
+</IfModule>
+
+<IfModule mod_headers.c>
+  Header set Access-Control-Allow-Origin "*"
+  Header set Cache-Control "public, max-age=3600"
+</IfModule>
+
+Options -Indexes

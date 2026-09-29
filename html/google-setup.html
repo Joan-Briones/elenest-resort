@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fix Google Login | Elenest</title>
+  <link rel="stylesheet" href="../css/style.css?v=20260922-menu3">
+  <script src="../js/supabase-config.js?v=20260922-iphone13"></script>
+  <style>
+    .g-check { max-width: 44rem; margin: 2rem auto; padding: 1.5rem; }
+    .g-check code, .g-check pre {
+      display: block;
+      background: #f3f0ea;
+      padding: 0.55rem 0.75rem;
+      margin: 0.4rem 0;
+      word-break: break-all;
+      border-radius: 8px;
+      font-size: 13px;
+    }
+    .g-check li { margin: 0.55rem 0; }
+    .ok { color: #1b6b3a; font-weight: 700; }
+    .warn { color: #9a3412; font-weight: 700; }
+    .status {
+      padding: 12px 14px;
+      border-radius: 10px;
+      margin: 1rem 0;
+      border: 1px solid #ddd;
+    }
+    .status--ok { background: #edf7e5; border-color: #b8e096; }
+    .status--bad { background: #fef2f2; border-color: #fecaca; }
+  </style>
+</head>
+<body class="subpage">
+  <main class="container g-check">
+    <h1>Make Google go straight to booking</h1>
+    <p class="warn">Close any black supabase.co JSON tab. Do not refresh it. That page is not booking.</p>
+
+    <div id="configStatus" class="status status--bad">Checking config…</div>
+
+    <h2>Step A — Fix Supabase Site URL (fixes —site url is improperly formatted—)</h2>
+    <ol>
+      <li>Open Supabase ? <strong>Authentication</strong> ? <strong>URL Configuration</strong></li>
+      <li>Set <strong>Site URL</strong> to exactly this (not <code>elenest://</code>):</li>
+    </ol>
+    <code>http://localhost/Elenest_Resort/html/</code>
+    <p>Redirect URLs must include:</p>
+    <code>http://localhost/Elenest_Resort/html/auth-callback.html</code>
+    <code>elenest://auth/callback</code>
+    <p>Click <strong>Save</strong>.</p>
+
+    <h2>Step B — Paste Google Client ID into the website</h2>
+    <ol>
+      <li>Google Cloud ? <strong>Clients</strong> ? your <strong>Web application</strong></li>
+      <li>Copy <strong>Client ID</strong> (ends with <code>.apps.googleusercontent.com</code>)</li>
+      <li>Open <code>js/supabase-config.js</code> in Cursor</li>
+      <li>Put it here:</li>
+    </ol>
+    <pre>googleClientId: "YOUR_CLIENT_ID_HERE",</pre>
+    <p>Also in that Web client:</p>
+    <ul>
+      <li>Authorized JavaScript origins: <code>http://localhost</code></li>
+      <li>Authorized redirect URIs: <code>https://wstgqfcdpfifkqyrclkx.supabase.co/auth/v1/callback</code></li>
+    </ul>
+
+    <h2>Step C — Supabase Google provider</h2>
+    <ol>
+      <li>Authentication ? Providers ? <strong>Google</strong> ? Enable</li>
+      <li>Paste the same Client ID + Client Secret ? Save</li>
+    </ol>
+
+    <h2>Step D — Test the right way</h2>
+    <ol>
+      <li>Open the book page below</li>
+      <li>Hard refresh: <strong>Ctrl+F5</strong></li>
+      <li>Click <strong>Continue with Google</strong></li>
+      <li>Use the Google button in the popup ? booking</li>
+    </ol>
+
+    <p><a class="btn" href="book.html">Open Book page</a></p>
+  </main>
+  <script>
+    (function () {
+      var el = document.getElementById("configStatus");
+      var id = (window.ElenestSupabaseConfig && window.ElenestSupabaseConfig.googleClientId) || "";
+      id = String(id).trim();
+      if (id) {
+        el.className = "status status--ok";
+        el.innerHTML =
+          '<span class="ok">googleClientId is set.</span> Hard-refresh book.html and try Continue with Google.';
+      } else {
+        el.className = "status status--bad";
+        el.innerHTML =
+          '<span class="warn">googleClientId is still empty in js/supabase-config.js.</span> Paste your Web Client ID, save, then reload this page.';
+      }
+    })();
+  </script>
+</body>
+</html>

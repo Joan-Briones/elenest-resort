@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | Elenest Resort Booking System</title>
+  <link rel="icon" type="image/png" href="../Images/icon.png">
+  <link rel="stylesheet" href="../css/style.css?v=20260922-menu3">
+</head>
+<body class="subpage">
+  <header>
+    <div class="content flex_space">
+      <div class="logo">
+        <a href="index.html" class="site-logo-link" aria-label="Elenest Resort home">
+          <img class="site-logo" src="../Images/elenest_logo_pink.png" alt="Elenest Event Center">
+        </a>
+      </div>
+      <div class="navlinks">
+        <ul id="menulist" class="site-nav-list">
+          <li><a href="index.html">Home</a></li>
+          <li class="role-login-nav" id="roleLoginNav">
+            <a href="login.html" class="role-login-trigger staff-access-btn" id="roleLoginTrigger" aria-label="Sign In">Sign In</a>
+          </li>
+        </ul>
+        <button type="button" class="nav-menu-toggle" id="navMenuToggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="menulist">
+          <span class="nav-menu-toggle__bar" aria-hidden="true"></span>
+          <span class="nav-menu-toggle__bar" aria-hidden="true"></span>
+          <span class="nav-menu-toggle__bar" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Dashboard</h1>
+      <p>Elenest Resort Booking System — phone verification complete.</p>
+    </section>
+
+    <section class="section">
+      <article class="card auth-card">
+        <h3>OTP Verified Successfully</h3>
+        <p class="auth-msg auth-msg--ok" id="otpDashboardStatus">
+          Your phone number has been verified.
+        </p>
+        <p class="auth-lead" id="otpDashboardPhone"></p>
+        <div class="form-grid auth-form-single">
+          <div class="full">
+            <a class="btn" href="book.html">Continue to booking</a>
+          </div>
+          <div class="full">
+            <button type="button" class="btn btn--outline" id="otpSignOutBtn">Verify another number</button>
+          </div>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>Copyright 2026 Elenest Resort. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="../js/otp-verification.js"></script>
+  <script src="../js/header-nav.js?v=20260922-menu2"></script>
+  <script src="../js/role-login.js"></script>
+  <script>
+    (function () {
+      var Otp = window.ElenestOtp;
+      var phoneEl = document.getElementById("otpDashboardPhone");
+      var signOutBtn = document.getElementById("otpSignOutBtn");
+
+      if (!Otp.isVerifiedSession()) {
+        window.location.replace("otp-login.html");
+        return;
+      }
+
+      var phone = Otp.getVerifiedPhone();
+      if (phoneEl && phone) {
+        phoneEl.textContent = "Verified number: " + phone;
+      }
+
+      if (signOutBtn) {
+        signOutBtn.addEventListener("click", function () {
+          Otp.clearOtpSession();
+          window.location.href = "otp-login.html";
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

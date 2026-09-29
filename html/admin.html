@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | Elenest Resort</title>
+  <link rel="icon" type="image/png" href="../Images/icon.png">
+  <link rel="stylesheet" href="../css/style.css?v=20260929-notify2">
+  <link rel="stylesheet" href="../css/predictive-analytics.css?v=20260922-ux1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="subpage admin-app elenest-role-gated" data-required-role="admin">
+  <div id="staffBootLoading" class="staff-boot-loading staff-boot-loading--active" aria-busy="true" aria-live="polite" aria-label="Loading Admin Portal">
+    <div class="staff-boot-loading__card" role="status">
+      <div class="staff-boot-loading__spinner" aria-hidden="true">
+        <span class="staff-boot-loading__ring"></span>
+        <span class="staff-boot-loading__ring staff-boot-loading__ring--soft"></span>
+      </div>
+      <p class="staff-boot-loading__kicker">Elenest Resort</p>
+      <p class="staff-boot-loading__title">Admin Portal</p>
+      <p class="staff-boot-loading__sub">Preparing your workspace</p>
+      <div class="staff-boot-loading__bar" aria-hidden="true"><span></span></div>
+    </div>
+  </div>
+  <header>
+    <div class="content flex_space">
+      <div class="logo">
+        <a href="index.html" class="site-logo-link" aria-label="Elenest Resort home">
+          <img class="site-logo" src="../Images/elenest_logo_pink.png" alt="Elenest Event Center">
+        </a>
+      </div>
+      <div class="navlinks">
+        <ul id="menulist" class="site-nav-list">
+          <li><a href="#section-dashboard">Dashboard</a></li>
+          <li class="admin-nav-dropdown" id="adminNavManagement">
+            <button
+              type="button"
+              class="admin-nav-dropdown-toggle"
+              id="adminNavManagementToggle"
+              aria-haspopup="true"
+              aria-expanded="false"
+              aria-controls="adminNavManagementMenu"
+            >Management</button>
+            <div id="adminNavManagementMenu" class="admin-nav-dropdown-menu" role="menu">
+              <a href="#section-payments" class="admin-nav-dropdown-item" role="menuitem">Payment Management</a>
+              <a href="#section-reservation-queue" class="admin-nav-dropdown-item" role="menuitem">Reservation Queue</a>
+              <a href="#section-calendar-access" class="admin-nav-dropdown-item" role="menuitem">Calendar Access Control</a>
+              <a href="#section-activity-logs" class="admin-nav-dropdown-item" role="menuitem">Activity Logs</a>
+              <a href="#section-manager-user" class="admin-nav-dropdown-item" role="menuitem">User administration</a>
+            </div>
+          </li>
+          <li class="admin-nav-dropdown" id="adminNavAnalytics">
+            <button
+              type="button"
+              class="admin-nav-dropdown-toggle"
+              id="adminNavAnalyticsToggle"
+              aria-haspopup="true"
+              aria-expanded="false"
+              aria-controls="adminNavAnalyticsMenu"
+            >Analytics</button>
+            <div id="adminNavAnalyticsMenu" class="admin-nav-dropdown-menu" role="menu">
+              <a href="#section-reports" class="admin-nav-dropdown-item" role="menuitem">Report &amp; Analytics</a>
+              <a href="#section-sentiment" class="admin-nav-dropdown-item" role="menuitem">Sentiment Analytics</a>
+              <a href="#section-predictive" class="admin-nav-dropdown-item" role="menuitem">Predictive Analytics</a>
+            </div>
+          </li>
+          <li id="adminAuthNav" class="admin-auth-nav">
+            <a
+              id="adminSettingsToggle"
+              href="#"
+              aria-haspopup="true"
+              aria-expanded="false"
+              aria-controls="adminSettingsMenu"
+              hidden
+            >Settings</a>
+            <div id="adminSettingsMenu" class="admin-settings-menu" role="menu" hidden>
+              <button type="button" id="adminMenuProfile" class="admin-settings-item" role="menuitem">
+                Admin Profile
+              </button>
+              <button type="button" id="adminMenuChangePassword" class="admin-settings-item" role="menuitem">
+                Change Password
+              </button>
+              <button type="button" id="adminMenuLogout" class="admin-settings-item admin-settings-item--danger" role="menuitem">
+                Logout
+              </button>
+            </div>
+          </li>
+        </ul>
+        <div id="staffHeaderRoleItem" class="staff-header-user" hidden>
+          <div id="staffHeaderRole" class="staff-header-user__inner"></div>
+        </div>
+        <button type="button" class="nav-menu-toggle" id="navMenuToggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="menulist">
+          <span class="nav-menu-toggle__bar" aria-hidden="true"></span>
+          <span class="nav-menu-toggle__bar" aria-hidden="true"></span>
+          <span class="nav-menu-toggle__bar" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+  <script src="../js/header-nav.js?v=20260922-menu2"></script>
+
+  <main class="container">
+    <section class="section admin-section" id="section-dashboard">
+      <div class="appointments-strip">
+        <div class="appointments-strip__head">
+          <h2 class="appointments-strip__title">Booking Dashboard</h2>
+        </div>
+        <div class="split-2" style="margin-top: 18px;">
+          <article
+            class="card kpi admin-kpi-card"
+            id="adminKpiCardPending"
+            role="button"
+            tabindex="0"
+            aria-label="Go to reports for pending bookings"
+          >
+            <h4 id="adminKpiPending">0</h4>
+            <p>Total pending</p>
+          </article>
+          <article
+            class="card kpi admin-kpi-card"
+            id="adminKpiCardConfirmed"
+            role="button"
+            tabindex="0"
+            aria-label="Go to reports for confirmed bookings"
+          >
+            <h4 id="adminKpiConfirmed">0</h4>
+            <p>Total confirmed</p>
+          </article>
+          <article
+            class="card kpi admin-kpi-card"
+            id="adminKpiCardCancelled"
+            role="button"
+            tabindex="0"
+            aria-label="Go to reports for cancelled bookings"
+          >
+            <h4 id="adminKpiCancelled">0</h4>
+            <p>Total cancelled</p>
+          </article>
+          <article
+            class="card kpi admin-kpi-card"
+            id="adminKpiCardTotalReviews"
+            role="button"
+            tabindex="0"
+            aria-label="Open guest sentiment analysis for total reviews"
+          >
+            <h4 id="adminKpiTotalReviews">0</h4>
+            <p>Total Reviews</p>
+          </article>
+        </div>
+      </div>
+
+      <div class="card admin-upcoming-card" style="margin-top: 18px;" id="adminUpcomingBookingsCard">
+        <h2 class="section-title admin-upcoming-card__title">Upcoming Bookings</h2>
+        <div id="adminUpcomingBookingsList" class="admin-payment-verification-list"></div>
+        <div id="adminUpcomingBookingsEmpty" class="admin-upcoming-empty" hidden>No upcoming confirmed bookings.</div>
+      </div>
+
+      <div class="card admin-dash-cal-card" style="margin-top: 18px;">
+        <div class="admin-dash-cal-card__head">
+          <h2 class="section-title admin-dash-cal-card__title">Reservation Calendar</h2>
+          <p class="admin-dash-cal-card__lead">
+            Tap a date to open customer reservations for that day.
+          </p>
+        </div>
+
+        <div class="admin-dash-cal-layout">
+          <div class="admin-dash-cal-main">
+            <div class="book-flow-calendar-head admin-dash-cal-head">
+              <button type="button" class="book-flow-cal-nav" id="adminCalPrev" aria-label="Previous month">&lsaquo;</button>
+              <h4 class="book-flow-cal-month" id="adminCalMonthLabel"></h4>
+              <button type="button" class="book-flow-cal-nav" id="adminCalNext" aria-label="Next month">&rsaquo;</button>
+            </div>
+            <div id="adminCalendarHost" class="book-flow-calendar admin-dash-cal-host" role="grid" aria-label="Reservation calendar"></div>
+          </div>
+
+          <aside class="admin-dash-cal-notes" aria-label="Calendar notes">
+            <h3 class="admin-dash-cal-notes__title">Calendar Notes</h3>
+            <ul class="admin-dash-cal-legend">
+              <li>
+                <span class="avail-legend__swatch avail-legend__swatch--available" aria-hidden="true"></span>
+                <span class="admin-dash-cal-legend__text">
+                  <strong>Available</strong>
+                  <span>Open for new bookings.</span>
+                </span>
+              </li>
+              <li>
+                <span class="avail-legend__swatch avail-legend__swatch--booked" aria-hidden="true"></span>
+                <span class="admin-dash-cal-legend__text">
+                  <strong>Booked</strong>
+                  <span>Reserved by a guest stay — gray and not available to book.</span>
+                </span>
+              </li>
+              <li>
+                <span class="avail-legend__swatch avail-legend__swatch--unavailable" aria-hidden="true"></span>
+                <span class="admin-dash-cal-legend__text">
+                  <strong>Closed</strong>
+                  <span>Blocked on the official calendar.</span>
+                </span>
+              </li>
+            </ul>
+            <p class="admin-dash-cal-notes__hint">Live colors come from pending, confirmed, and held reservations.</p>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="section admin-section" id="section-reports" hidden>
+      <div class="appointments-strip admin-reports-strip">
+        <div class="appointments-strip__head">
+          <h2 class="appointments-strip__title">Report &amp; Analytics</h2>
+          <p class="admin-reports-lede">
+            Live booking, revenue, facility, guest-review, and model metrics from saved reservations and feedback.
+          </p>
+        </div>
+      </div>
+
+      <div class="split-2 admin-reports-kpi-row">
+        <article class="card kpi">
+          <h4 id="adminKpiMonthlyIncome">?0</h4>
+          <p>Monthly income (confirmed)</p>
+        </article>
+        <article class="card kpi">
+          <h4 id="adminKpiTotalIncome">?0</h4>
+          <p>Total income (confirmed)</p>
+        </article>
+      </div>
+
+      <div class="admin-reports-grid" id="adminReportsGrid">
+        <article class="card admin-report-chart-card">
+          <h3 class="admin-report-card-title">Booking trends</h3>
+          <p class="booking-card__sub admin-report-chart-sub">Reservations by month (last 12 months).</p>
+          <div class="admin-report-chart-legend" aria-label="Chart legend">
+            <span class="admin-report-chart-legend__item">
+              <span class="admin-report-chart-legend__swatch admin-report-chart-legend__swatch--green" aria-hidden="true"></span>
+              Reservations
+            </span>
+          </div>
+          <div class="admin-report-chart-wrap">
+            <canvas id="adminReportTrendChart" width="640" height="200" class="admin-pro-chart" aria-label="Booking trends line chart"></canvas>
+            <div class="admin-report-chart-months" id="adminReportTrendMonths" aria-hidden="true"></div>
+            <div class="admin-report-chart-tooltip" id="adminReportTrendTip" hidden></div>
+          </div>
+          <div class="admin-report-insights" id="adminReportTrendInsights" aria-live="polite">
+            <h4 class="admin-report-insights__title">Interpretation</h4>
+            <ul class="admin-report-insights__list" id="adminReportTrendInsightsList"></ul>
+          </div>
+        </article>
+
+        <article class="card admin-report-chart-card">
+          <h3 class="admin-report-card-title">Booking status</h3>
+          <p class="booking-card__sub admin-report-chart-sub">Share of pending, confirmed, and cancelled bookings.</p>
+          <div class="admin-report-donut-layout">
+            <canvas id="adminReportStatusChart" width="280" height="200" class="admin-pro-chart admin-report-donut-chart" aria-label="Booking status donut chart"></canvas>
+            <ul class="admin-report-donut-legend" id="adminReportStatusLegend" aria-live="polite"></ul>
+          </div>
+        </article>
+
+        <article class="card admin-report-chart-card">
+          <h3 class="admin-report-card-title">Facility usage</h3>
+          <p class="booking-card__sub admin-report-chart-sub">Bookings by facility category from reservation records.</p>
+          <canvas id="adminReportFacilityChart" width="640" height="220" class="admin-pro-chart" aria-label="Facility usage bar chart"></canvas>
+        </article>
+
+        <article class="card admin-report-chart-card">
+          <h3 class="admin-report-card-title">Revenue</h3>
+          <p class="booking-card__sub admin-report-chart-sub" id="adminReportRevenueSub">Confirmed earnings by month (last 12 months).</p>
+          <div class="admin-report-chart-legend" aria-label="Revenue legend">
+            <span class="admin-report-chart-legend__item">
+              <span class="admin-report-chart-legend__swatch admin-report-chart-legend__swatch--pink" aria-hidden="true"></span>
+              Confirmed revenue
+            </span>
+          </div>
+          <div class="admin-report-chart-wrap admin-report-chart-wrap--revenue">
+            <canvas id="adminReportRevenueChart" width="640" height="240" class="admin-pro-chart" aria-label="Revenue bar chart"></canvas>
+            <div class="admin-report-chart-tooltip" id="adminReportRevenueTip" hidden></div>
+          </div>
+        </article>
+
+        <article class="card admin-report-chart-card admin-report-reviews-card" id="adminReportGuestReviewsCard">
+          <div class="admin-report-card-head">
+            <h3 class="admin-report-card-title">Guest Reviews</h3>
+            <a href="#section-sentiment" class="btn btn--outline btn--small admin-report-link-btn">Sentiment details</a>
+          </div>
+          <p class="booking-card__sub admin-report-chart-sub" id="adminReportReviewsSub">
+            Live from guest feedback in the database.
+          </p>
+          <div class="admin-report-reviews-kpis" aria-live="polite">
+            <div class="admin-report-reviews-kpi">
+              <strong id="adminReportReviewsAvg">…</strong>
+              <hr>
+              <span>Average rating</span>
+            </div>
+            <div class="admin-report-reviews-kpi">
+              <strong id="adminReportReviewsPos">…</strong>
+              <hr>
+              <span>Would recommend</span>
+            </div>
+            <div class="admin-report-reviews-kpi">
+              <strong id="adminReportReviewsTotal">0</strong>
+              <hr>
+              <span>Total reviews</span>
+            </div>
+          </div>
+          <div class="admin-report-reviews-bars">
+            <div class="sentiment-row admin-report-sentiment-row">
+              <label class="admin-sentiment-label">Positive</label>
+              <div class="sentiment-bar"><span class="positive" id="adminReportBarPos" style="width: 0%;"></span></div>
+              <strong id="adminReportPctPos">0%</strong>
+            </div>
+            <div class="sentiment-row admin-report-sentiment-row">
+              <label class="admin-sentiment-label">Negative</label>
+              <div class="sentiment-bar"><span class="negative" id="adminReportBarNeg" style="width: 0%;"></span></div>
+              <strong id="adminReportPctNeg">0%</strong>
+            </div>
+            <div class="sentiment-row admin-report-sentiment-row" style="margin-bottom: 0;">
+              <label class="admin-sentiment-label">Neutral</label>
+              <div class="sentiment-bar"><span class="neutral" id="adminReportBarNeu" style="width: 0%;"></span></div>
+              <strong id="adminReportPctNeu">0%</strong>
+            </div>
+          </div>
+          <div class="admin-report-reviews-chart-block">
+            <div class="admin-report-reviews-chart-head">
+              <p class="admin-report-reviews-chart-title">Composition over time</p>
+              <div class="admin-report-chart-legend admin-report-reviews-legend" aria-label="Review sentiment legend">
+                <span class="admin-report-chart-legend__item">
+                  <span class="admin-report-chart-legend__swatch admin-report-chart-legend__swatch--pos" aria-hidden="true"></span>
+                  Positive
+                </span>
+                <span class="admin-report-chart-legend__item">
+                  <span class="admin-report-chart-legend__swatch admin-report-chart-legend__swatch--neu" aria-hidden="true"></span>
+                  Neutral
+                </span>
+                <span class="admin-report-chart-legend__item">
+                  <span class="admin-report-chart-legend__swatch admin-report-chart-legend__swatch--neg" aria-hidden="true"></span>
+                  Negative
+                </span>
+              </div>
+            </div>
+            <div class="admin-report-chart-wrap admin-report-reviews-chart-wrap">
+              <canvas
+                id="adminReportReviewsChart"
+                width="640"
+                height="210"
+                class="admin-pro-chart admin-report-reviews-chart"
+                aria-label="Guest reviews composition over time"
+              ></canvas>
+              <div class="admin-report-chart-tooltip" id="adminReportReviewsTip" hidden></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card admin-model-eval admin-report-chart-card" id="adminModelEvaluation"></article>
+      </div>
+    </section>
+
+    <section class="section admin-section" id="section-payments" hidden>
+      <div class="appointments-strip admin-payments-strip">
+        <div class="appointments-strip__head admin-payments-strip__head">
+          <h2 class="appointments-strip__title admin-payments-strip__title">Payment Management</h2>
+        </div>
+      </div>
+
+      <div class="card admin-payments-card">
+        <nav class="content-mgmt-tabs admin-payments-tabs" role="tablist" aria-label="Payment Management sections">
+          <button
+            type="button"
+            class="content-mgmt-tab content-mgmt-tab--active"
+            role="tab"
+            id="adminPaymentsTabApproval"
+            data-payments-tab="approval"
+            aria-selected="true"
+            aria-controls="adminPaymentsPanelApproval"
+          >
+            Payment Approval
+          </button>
+          <button
+            type="button"
+            class="content-mgmt-tab"
+            role="tab"
+            id="adminPaymentsTabSettings"
+            data-payments-tab="settings"
+            aria-selected="false"
+            aria-controls="adminPaymentsPanelSettings"
+          >
+            Payment Settings
+          </button>
+        </nav>
+
+        <div class="admin-payments-panels">
+          <div
+            class="admin-payments-panel"
+            id="adminPaymentsPanelApproval"
+            data-payments-panel="approval"
+            role="tabpanel"
+            aria-labelledby="adminPaymentsTabApproval"
+          >
+            <div class="split-2 admin-payments-kpi-row">
+              <article
+                class="card kpi admin-kpi-card admin-payment-kpi-card"
+                id="adminPaymentKpiCardVerification"
+                role="button"
+                tabindex="0"
+                data-scroll-target="adminPaymentVerificationCard"
+                aria-label="Jump to payment verification"
+              >
+                <h4 id="adminPaymentKpiVerification">0</h4>
+                <p>Payment verification</p>
+              </article>
+              <article
+                class="card kpi admin-kpi-card admin-payment-kpi-card"
+                id="adminPaymentKpiCardArrival"
+                role="button"
+                tabindex="0"
+                data-scroll-target="adminArrivalMonitoringCard"
+                aria-label="Jump to 3-hour arrival monitoring"
+              >
+                <h4 id="adminPaymentKpiArrival">0</h4>
+                <p>Down payment — 3-hour monitoring</p>
+              </article>
+              <article
+                class="card kpi admin-kpi-card admin-payment-kpi-card"
+                id="adminPaymentKpiCardHistory"
+                role="button"
+                tabindex="0"
+                data-scroll-target="adminPaymentHistoryCard"
+                aria-label="Jump to payment history"
+              >
+                <h4 id="adminPaymentKpiHistory">0</h4>
+                <p>Payment history</p>
+              </article>
+            </div>
+
+            <div class="card admin-payment-approval-board">
+              <section class="admin-pay-table-section admin-payment-feature-card" id="adminPaymentVerificationCard">
+                <div class="admin-status-group-head">
+                  <h3 class="admin-pay-table-title">For payment verification</h3>
+                  <div class="admin-pay-table-head-actions">
+                    <span id="adminPaymentVerificationCount" class="admin-arrival-status-pill admin-pay-verify-count" hidden></span>
+                    <button type="button" class="btn btn--outline btn--small" id="adminPaymentVerificationRefresh">Refresh</button>
+                  </div>
+                </div>
+                <div id="adminPaymentVerificationList" class="admin-payment-verification-list"></div>
+                <div id="adminPaymentVerificationPagination" class="admin-pagination" hidden></div>
+              </section>
+
+              <section class="admin-pay-table-section admin-payment-feature-card" id="adminArrivalMonitoringCard">
+                <div class="admin-status-group-head">
+                  <h3 class="admin-pay-table-title">Down payment — 3-hour monitoring</h3>
+                  <button type="button" class="btn btn--outline btn--small" id="adminArrivalMonitoringRefresh">Refresh</button>
+                </div>
+                <div id="adminArrivalMonitoringList" class="admin-payment-verification-list"></div>
+                <div id="adminArrivalMonitoringPagination" class="admin-pagination" hidden></div>
+              </section>
+
+              <section class="admin-pay-table-section admin-payment-feature-card" id="adminPaymentHistoryCard">
+                <div class="admin-status-group-head">
+                  <h3 class="admin-pay-table-title">Payment history</h3>
+                  <button type="button" class="btn btn--outline btn--small" id="adminPaymentHistoryRefresh">Refresh</button>
+                </div>
+                <div id="adminPaymentVerificationHistoryList" class="admin-payment-verification-list"></div>
+                <div id="adminPaymentHistoryPagination" class="admin-pagination" hidden></div>
+              </section>
+            </div>
+          </div>
+
+          <div
+            class="admin-payments-panel"
+            id="adminPaymentsPanelSettings"
+            data-payments-panel="settings"
+            role="tabpanel"
+            aria-labelledby="adminPaymentsTabSettings"
+            hidden
+          >
+            <div class="split-2 admin-payments-split">
+              <article class="card">
+                <h3 style="margin: 0 0 10px;">Add / edit payment method</h3>
+                <form id="adminPaymentMethodForm" class="form-grid" autocomplete="off">
+                  <input type="hidden" id="adminPaymentMethodEditId" value="">
+                  <div>
+                    <label for="adminPaymentProvider">Payment provider <span class="req-mark">*</span></label>
+                    <input id="adminPaymentProvider" type="text" required placeholder="e.g. GCash, BDO, LandBank">
+                  </div>
+                  <div>
+                    <label for="adminPaymentAccountName">Account name <span class="req-mark">*</span></label>
+                    <input id="adminPaymentAccountName" type="text" required placeholder="Account holder name">
+                  </div>
+                  <div class="full">
+                    <label for="adminPaymentAccountNumber">Account number <span class="req-mark">*</span></label>
+                    <input id="adminPaymentAccountNumber" type="text" required placeholder="Account or mobile number">
+                  </div>
+                  <div class="full">
+                    <label for="adminPaymentInstructions">Payment instructions</label>
+                    <textarea id="adminPaymentInstructions" rows="3" placeholder="Steps for the guest when paying…"></textarea>
+                  </div>
+                  <div class="full">
+                    <label for="adminPaymentQrUrl">QR image URL (optional)</label>
+                    <input id="adminPaymentQrUrl" type="text" placeholder="../Images/payment-qr.svg">
+                  </div>
+                  <div class="full">
+                    <label for="adminPaymentQrUpload">Or upload QR image</label>
+                    <input id="adminPaymentQrUpload" type="file" accept="image/*">
+                  </div>
+                  <div class="full">
+                    <label class="admin-payment-active-label">
+                      <input type="checkbox" id="adminPaymentActive" checked>
+                      Active (visible to guests)
+                    </label>
+                  </div>
+                  <div class="full admin-payment-form-actions">
+                    <button type="submit" class="btn" id="adminPaymentMethodSubmitBtn">Save payment method</button>
+                    <button type="button" class="btn btn--outline" id="adminPaymentMethodCancelBtn" hidden>Cancel edit</button>
+                    <p id="adminPaymentMethodMsg" class="auth-msg" hidden></p>
+                  </div>
+                </form>
+              </article>
+
+              <article class="card">
+                <h3 style="margin: 0 0 10px;">Configured payment methods</h3>
+                <p style="margin: 0 0 14px; color: #5f6673; line-height: 1.6;">
+                  Guests see active methods during the booking payment step. Deactivated methods are hidden but kept on file.
+                </p>
+                <div id="adminPaymentMethodsList" class="admin-payment-methods-list"></div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section admin-section" id="section-reservation-queue" hidden>
+      <div class="rq-board">
+        <header class="rq-board__head">
+          <div>
+            <p class="rq-board__kicker">Management</p>
+            <h2 class="rq-board__title">Reservation Queue</h2>
+            <p class="rq-board__lead" id="adminReservationQueueLead">
+              Double bookings are marked on the calendar. The table below lists every one so you can review them in order.
+            </p>
+          </div>
+          <button type="button" class="btn btn--small" id="adminReservationQueueRefresh">Refresh</button>
+        </header>
+        <div class="rq-stack">
+          <section class="rq-calendar-card" aria-label="Reservation calendar">
+            <div class="rq-cal-nav">
+              <button type="button" class="rq-cal-nav__btn" id="rqCalPrev" aria-label="Previous month">‹</button>
+              <h3 class="rq-cal-nav__title" id="rqCalTitle">Calendar</h3>
+              <button type="button" class="rq-cal-nav__btn" id="rqCalNext" aria-label="Next month">›</button>
+              <button type="button" class="btn btn--outline btn--small" id="rqCalToday">Today</button>
+            </div>
+            <div class="rq-weekdays" aria-hidden="true">
+              <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+            </div>
+            <div id="rqCalendar" class="rq-month"></div>
+          </section>
+          <section class="rq-panel" id="rqDoubles" aria-live="polite"></section>
+        </div>
+      </div>
+    </section>
+
+    <section class="section admin-section" id="section-sentiment" hidden>
+      <div class="card admin-sentiment-hero">
+        <div class="admin-sentiment-header-row">
+          <div>
+            <h2 class="section-title admin-sentiment-title">Guest sentiment analysis</h2>
+            <p class="admin-sentiment-lede" id="sentimentCurrentWeekNote"></p>
+          </div>
+          <div class="admin-sentiment-archive-actions">
+            <button
+              type="button"
+              class="btn btn--outline btn--small"
+              id="sentimentCommentArchiveOpen"
+            >
+              Comment Archive
+            </button>
+            <button
+              type="button"
+              class="btn btn--outline btn--small"
+              id="sentimentRecommendationArchiveOpen"
+            >
+              Recommendation Archive
+            </button>
+          </div>
+        </div>
+        <div class="split-2">
+          <article class="card admin-sentiment-metric-card">
+            <h3 class="admin-sentiment-h3">Aggregate distribution</h3>
+            <p class="booking-card__sub admin-sentiment-sub" style="margin: 0 0 12px;">
+              Classification: <strong>Positive</strong> (4–5 stars), <strong>Negative</strong> (1–2 stars), <strong>Neutral</strong> (3 stars).
+              <span id="sentimentTotalCount" class="admin-sentiment-total" style="display: block; margin-top: 8px;"></span>
+            </p>
+            <div class="sentiment-row">
+              <label class="admin-sentiment-label">Positive</label>
+              <div class="sentiment-bar"><span class="positive" id="sentimentBarPos" style="width: 0%;"></span></div>
+              <strong id="sentimentPctPos">0%</strong>
+              <button
+                type="button"
+                class="btn btn--outline btn--small sentiment-view-btn"
+                data-sentiment="positive"
+              >
+                Details
+              </button>
+            </div>
+            <div class="sentiment-row">
+              <label class="admin-sentiment-label">Negative</label>
+              <div class="sentiment-bar"><span class="negative" id="sentimentBarNeg" style="width: 0%;"></span></div>
+              <strong id="sentimentPctNeg">0%</strong>
+              <button
+                type="button"
+                class="btn btn--outline btn--small sentiment-view-btn"
+                data-sentiment="negative"
+              >
+                Details
+              </button>
+            </div>
+            <div class="sentiment-row" style="margin-bottom: 0;">
+              <label class="admin-sentiment-label">Neutral</label>
+              <div class="sentiment-bar"><span class="neutral" id="sentimentBarNeu" style="width: 0%;"></span></div>
+              <strong id="sentimentPctNeu">0%</strong>
+              <button
+                type="button"
+                class="btn btn--outline btn--small sentiment-view-btn"
+                data-sentiment="neutral"
+              >
+                Details
+              </button>
+            </div>
+          </article>
+          <article class="card admin-sentiment-metric-card">
+            <h3 class="admin-sentiment-h3">Recent guest comments</h3>
+            <div class="sentiment-feedback-list"></div>
+          </article>
+        </div>
+
+        <aside
+          class="admin-sentiment-recommendations"
+          id="sentimentRecommendationsPanel"
+          aria-live="polite"
+        >
+          <div class="admin-sentiment-rec-inner">
+            <div class="admin-sentiment-rec-heading">
+              <span class="admin-sentiment-rec-badge">Weekly insights</span>
+              <h3 class="admin-sentiment-rec-title" id="sentimentRecHeadline">Weekly recommendation</h3>
+              <p id="sentimentRecExampleNote" class="admin-sentiment-rec-example-note" hidden></p>
+              <p class="admin-sentiment-rec-summary" id="sentimentRecSummary"></p>
+            </div>
+            <ul class="admin-sentiment-rec-list" id="sentimentRecList"></ul>
+            <p class="admin-sentiment-rec-footnote" id="sentimentRecFootnote"></p>
+          </div>
+        </aside>
+
+        <div class="card admin-report-chart-card admin-sentiment-chart-card" style="margin-top: 18px;">
+          <div class="sentiment-chart-header">
+            <h3 class="admin-sentiment-h3" style="margin: 0 0 8px;">Composition over time</h3>
+            <div class="sentiment-chart-header__right">
+              <span class="admin-sentiment-live" aria-live="polite">Live</span>
+              <div
+                class="sentiment-period-filters"
+                id="sentimentPeriodFilters"
+                role="group"
+                aria-label="Reporting interval"
+              >
+              <button
+                type="button"
+                class="btn btn--outline btn--small sentiment-period-btn sentiment-period-btn--active"
+                data-sentiment-period="month"
+                aria-pressed="true"
+              >
+                Monthly
+              </button>
+              <button
+                type="button"
+                class="btn btn--outline btn--small sentiment-period-btn"
+                data-sentiment-period="week"
+                aria-pressed="false"
+              >
+                Weekly
+              </button>
+              <button
+                type="button"
+                class="btn btn--outline btn--small sentiment-period-btn"
+                data-sentiment-period="day"
+                aria-pressed="false"
+              >
+                Daily
+              </button>
+              </div>
+            </div>
+          </div>
+          <p class="booking-card__sub admin-report-chart-sub" id="sentimentChartSub" style="margin: 0 0 8px;">
+            Live from Supabase guest reviews — last 6 months. Stacked area fills the timeline (no large empty bar gaps).
+          </p>
+          <div class="admin-report-chart-wrap admin-sentiment-period-chart-wrap">
+            <canvas
+              id="adminSentimentPeriodChart"
+              width="720"
+              height="240"
+              class="admin-pro-chart admin-sentiment-period-chart"
+              aria-label="Guest reviews composition over time"
+            ></canvas>
+            <div class="admin-report-chart-tooltip" id="adminSentimentPeriodTip" hidden></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section admin-section" id="section-predictive" hidden>
+      <div class="pa-shell">
+        <div class="pa-panel pa-panel--header">
+          <div class="pa-header-row">
+            <div class="pa-header-copy">
+              <h2 class="pa-title">Predictive Analytics</h2>
+              <p class="pa-lede">
+                Monthly booking &amp; revenue forecast from reservations, weather, weekends, holidays, and seasonality.
+              </p>
+              <p class="pa-updated" id="paUpdatedNote">tap a section below</p>
+            </div>
+            <div class="pa-header-actions">
+              <span class="pa-live-badge" id="paLiveBadge" aria-live="polite">
+                <span class="pa-live-dot" aria-hidden="true"></span>
+                <span id="paLiveLabel">Live</span>
+              </span>
+              <button type="button" class="pa-refresh-btn" id="paRunForecastBtn">Refresh</button>
+            </div>
+          </div>
+
+          <div class="pa-status" id="paStatusBar" role="status" aria-live="polite" hidden>
+            <p class="pa-status__msg" id="paStatusMsg">Loading predictive analytics...</p>
+            <button type="button" class="pa-status__retry" id="paStatusRetry" hidden>Retry</button>
+          </div>
+
+          <div class="pa-filters" id="paFiltersBar">
+            <label class="pa-filter-chip">
+              <span>Horizon:</span>
+              <select id="paHorizon">
+                <option value="1">1 month</option>
+                <option value="2">2 months</option>
+                <option value="3">3 months</option>
+                <option value="4">4 months</option>
+                <option value="5">5 months</option>
+                <option value="6" selected>6 months</option>
+                <option value="7">7 months</option>
+                <option value="8">8 months</option>
+                <option value="9">9 months</option>
+                <option value="10">10 months</option>
+                <option value="11">11 months</option>
+                <option value="12">12 months</option>
+              </select>
+            </label>
+            <label class="pa-filter-chip">
+              <span>Year:</span>
+              <select id="paYearFilter">
+                <option value="">All years</option>
+              </select>
+            </label>
+            <label class="pa-filter-chip">
+              <span>Month:</span>
+              <select id="paMonthFilter">
+                <option value="">All months</option>
+                <option value="1">January</option>
+                <option value="2">February</option>
+                <option value="3">March</option>
+                <option value="4">April</option>
+                <option value="5">May</option>
+                <option value="6">June</option>
+                <option value="7">July</option>
+                <option value="8">August</option>
+                <option value="9">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+              </select>
+            </label>
+            <label class="pa-filter-chip">
+              <span>Facility:</span>
+              <select id="paFacilityType">
+                <option value="all" selected>All facilities</option>
+                <option value="rooms">Rooms</option>
+                <option value="cottages">Cottages</option>
+                <option value="event_hall">Event Hall</option>
+              </select>
+            </label>
+            <label class="pa-filter-chip">
+              <span>Weather:</span>
+              <select id="paWeatherFilter">
+                <option value="expected" selected>Expected mix</option>
+                <option value="sunny">Sunny</option>
+                <option value="rainy">Rainy</option>
+                <option value="stormy">Stormy</option>
+              </select>
+            </label>
+          </div>
+
+          <nav class="pa-section-nav" id="paSectionNav" aria-label="Predictive sections">
+            <button type="button" class="pa-section-btn pa-section-btn--active" data-pa-section="overview" aria-pressed="true">
+              Overview
+            </button>
+            <button type="button" class="pa-section-btn" data-pa-section="charts" aria-pressed="false">
+              Charts
+            </button>
+            <button type="button" class="pa-section-btn" data-pa-section="table" aria-pressed="false">
+              Table
+            </button>
+            <button type="button" class="pa-section-btn" data-pa-section="weather" aria-pressed="false">
+              Weather
+            </button>
+            <button type="button" class="pa-section-btn" data-pa-section="insights" aria-pressed="false">
+              Insights
+            </button>
+          </nav>
+        </div>
+
+        <div class="pa-view" data-pa-view="overview" id="paViewOverview">
+          <div class="pa-stat-grid">
+            <article class="pa-stat-card pa-stat-card--green">
+              <p class="pa-stat-label">Predicted bookings</p>
+              <p class="pa-stat-value" id="paKpiBookings">0</p>
+            </article>
+            <article class="pa-stat-card pa-stat-card--pink">
+              <p class="pa-stat-label">Predicted guests</p>
+              <p class="pa-stat-value" id="paKpiGuests">0</p>
+            </article>
+            <article class="pa-stat-card pa-stat-card--green">
+              <p class="pa-stat-label">Predicted revenue</p>
+              <p class="pa-stat-value" id="paKpiRevenue">?0</p>
+            </article>
+            <article class="pa-stat-card pa-stat-card--pink">
+              <p class="pa-stat-label">Avg occupancy / confidence</p>
+              <p class="pa-stat-value" id="paKpiOccConf">0% — 0%</p>
+            </article>
+          </div>
+
+          <div class="pa-panel" style="margin-top: 16px;">
+            <h3 class="pa-panel-title">Positive feedback signal</h3>
+            <p class="pa-panel-sub">
+              Guest sentiment feeds the forecast model — more positive reviews increase predicted bookings and confidence.
+            </p>
+            <div class="pa-feedback-grid" id="paFeedbackSignal">
+              <article class="pa-feedback-card pa-feedback-card--green">
+                <p class="pa-feedback-label">Positive reviews</p>
+                <p class="pa-feedback-value" id="paFbPositive">0/0</p>
+              </article>
+              <article class="pa-feedback-card pa-feedback-card--pink">
+                <p class="pa-feedback-label">Positive share</p>
+                <p class="pa-feedback-value" id="paFbShare">0%</p>
+              </article>
+              <article class="pa-feedback-card pa-feedback-card--green">
+                <p class="pa-feedback-label">Avg rating</p>
+                <p class="pa-feedback-value" id="paFbRating">0 ?</p>
+              </article>
+              <article class="pa-feedback-card pa-feedback-card--pink">
+                <p class="pa-feedback-label">Demand lift</p>
+                <p class="pa-feedback-value" id="paFbLift">+0%</p>
+              </article>
+            </div>
+          </div>
+
+          <div class="pa-panel" style="margin-top: 16px;" id="paModelNotePanel">
+            <p class="pa-model-note" id="paModelNote"></p>
+          </div>
+        </div>
+
+        <div class="pa-view" data-pa-view="charts" id="paViewCharts" hidden>
+          <div class="pa-charts-grid">
+            <article class="pa-panel">
+              <h3 class="pa-panel-title">Bookings &amp; guest outlook</h3>
+              <div class="pa-chart-wrap">
+                <canvas id="paChartBookings" width="640" height="280" class="pa-canvas" aria-label="Bookings trend line chart"></canvas>
+                <div class="pa-chart-tooltip" id="paTipBookings" hidden></div>
+              </div>
+              <p class="pa-chart-footer" id="paGuestsFooter"></p>
+              <div class="pa-chart-insights" id="paBookingsInsights" aria-live="polite">
+                <h4 class="pa-chart-insights__title">Analytics</h4>
+                <ul class="pa-chart-insights__list" id="paBookingsInsightsList"></ul>
+              </div>
+            </article>
+            <article class="pa-panel">
+              <h3 class="pa-panel-title">Revenue forecast (PHP)</h3>
+              <div class="pa-chart-wrap">
+                <canvas id="paChartRevenue" width="640" height="280" class="pa-canvas" aria-label="Revenue trend line chart"></canvas>
+                <div class="pa-chart-tooltip" id="paTipRevenue" hidden></div>
+              </div>
+              <p class="pa-chart-footer" id="paRevenueFooter"></p>
+              <div class="pa-chart-insights" id="paRevenueInsights" aria-live="polite">
+                <h4 class="pa-chart-insights__title">Analytics</h4>
+                <ul class="pa-chart-insights__list" id="paRevenueInsightsList"></ul>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <div class="pa-view" data-pa-view="table" id="paViewTable" hidden>
+          <div class="pa-panel">
+            <h3 class="pa-panel-title">Forecast detail</h3>
+            <p class="pa-panel-sub">Predicted bookings, guests, occupancy, revenue, and confidence by month.</p>
+            <div class="pa-table-wrap">
+              <table class="pa-table" id="paForecastTable">
+                <thead>
+                  <tr>
+                    <th>Month</th>
+                    <th>Bookings</th>
+                    <th>Guests</th>
+                    <th>Occupancy</th>
+                    <th>Revenue</th>
+                    <th>Confidence</th>
+                    <th>Weather Δ</th>
+                    <th>vs prev</th>
+                  </tr>
+                </thead>
+                <tbody id="paForecastTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="pa-view" data-pa-view="weather" id="paViewWeather" hidden>
+          <div class="pa-panel">
+            <h3 class="pa-panel-title">Weather Impact Analysis</h3>
+            <p class="pa-panel-sub">
+              Estimated change in reservations under sunny, rainy, and stormy conditions relative to the expected seasonal weather mix.
+            </p>
+            <div class="pa-weather-rows" id="paWeatherImpactList"></div>
+          </div>
+        </div>
+
+        <div class="pa-view" data-pa-view="insights" id="paViewInsights" hidden>
+          <div class="pa-panel">
+            <h3 class="pa-panel-title">Prescriptive Recommendations</h3>
+            <p class="pa-panel-sub">
+              Actions generated from the forecast — staffing, promotions, facilities, maintenance, and income outlook.
+            </p>
+            <ul class="pa-rec-list" id="paRecommendationsList"></ul>
+          </div>
+          <div class="pa-panel" style="margin-top: 16px;">
+            <h3 class="pa-panel-title">Income vs previous months</h3>
+            <p class="pa-panel-sub">Recent actual revenue compared with the next forecast months.</p>
+            <div id="paIncomeCompare"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section admin-section" id="section-calendar-access" hidden>
+      <div class="appointments-strip">
+        <div class="appointments-strip__head">
+          <h2 class="appointments-strip__title">Calendar Access Control</h2>
+        </div>
+      </div>
+
+      <div class="split-2 admin-payments-kpi-row" style="margin-bottom: 18px;">
+        <article class="card kpi">
+          <h4 id="adminCalendarKpiPending">0</h4>
+          <p>Pending requests</p>
+        </article>
+        <article class="card kpi">
+          <h4 id="adminCalendarKpiBlocked">0</h4>
+          <p>Officially blocked dates</p>
+        </article>
+        <article class="card kpi">
+          <h4 id="adminCalendarKpiHistory">0</h4>
+          <p>Request history</p>
+        </article>
+      </div>
+
+      <div class="card manager-cal-panel">
+        <div class="manager-cal-toolbar">
+          <div class="book-flow-calendar-head manager-cal-head">
+            <button type="button" class="book-flow-cal-nav" id="adminAccessCalPrev" aria-label="Previous month">&lsaquo;</button>
+            <h4 class="book-flow-cal-month" id="adminAccessCalMonthLabel"></h4>
+            <button type="button" class="book-flow-cal-nav" id="adminAccessCalNext" aria-label="Next month">&rsaquo;</button>
+          </div>
+          <div class="manager-cal-selected">
+            <p class="manager-cal-selected__info">
+              Selected: <strong id="adminAccessSelectedDateLabel">…</strong>
+              <span id="adminAccessSelectedDateStatus" class="manager-cal-selected__status">…</span>
+            </p>
+            <div class="appointments-strip__tools manager-cal-actions">
+              <button type="button" class="btn btn--outline" id="adminAccessBlockBtn">Block</button>
+              <button type="button" class="btn btn--outline" id="adminAccessUnblockBtn">Unblock</button>
+              <button type="button" class="btn btn--outline" id="adminAccessClearSelectedDate">Clear</button>
+              <button type="button" class="btn btn--outline" id="adminAccessCalendarRefresh">Refresh</button>
+            </div>
+          </div>
+        </div>
+        <div class="manager-cal-layout">
+          <div id="adminAccessCalendarHost" class="book-flow-calendar manager-cal-grid" role="grid" aria-label="Owner calendar"></div>
+          <ul class="list calendar-legend manager-cal-legend">
+            <li><strong>Available</strong> — open for new bookings (green).</li>
+            <li><strong>Booked</strong> — reserved stay; gray and not available to book.</li>
+            <li><strong>Blocked</strong> — closed on the official calendar (Owner control).</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card admin-payment-feature-card" style="margin-top: 18px;" id="adminCalendarRequestsCard">
+        <div class="admin-status-group-head">
+          <h3 class="admin-pay-table-title">Calendar Access Requests</h3>
+          <div class="admin-pay-table-head-actions">
+            <span id="adminCalendarRequestsCount" class="admin-arrival-status-pill admin-pay-verify-count" hidden></span>
+            <button type="button" class="btn btn--outline btn--small" id="adminCalendarRequestsRefresh">Refresh</button>
+          </div>
+        </div>
+        <div id="adminCalendarRequestsList" class="admin-payment-verification-list"></div>
+        <div id="adminCalendarRequestsPagination" class="admin-pagination" hidden></div>
+      </div>
+
+      <div class="card admin-payment-feature-card" style="margin-top: 18px;" id="adminCalendarHistoryCard">
+        <div class="admin-status-group-head">
+          <h3 class="admin-pay-table-title">Request history</h3>
+          <div class="admin-pay-table-head-actions">
+            <button type="button" class="btn btn--outline btn--small" id="adminCalendarHistoryRefresh">Refresh</button>
+          </div>
+        </div>
+        <p class="admin-pay-table-lead">
+          Date, requested action, requester, reason, status, and who approved or rejected each request.
+        </p>
+        <div id="adminCalendarHistoryList" class="admin-payment-verification-list"></div>
+        <div id="adminCalendarHistoryPagination" class="admin-pagination" hidden></div>
+      </div>
+    </section>
+
+    <section class="section admin-section" id="section-activity-logs" hidden>
+      <div class="appointments-strip">
+        <div class="appointments-strip__head">
+          <h2 class="appointments-strip__title">Activity Logs</h2>
+        </div>
+      </div>
+
+      <div class="split-2 admin-payments-kpi-row activity-logs-kpi-row">
+        <article class="card kpi">
+          <h4 id="adminActivityKpiToday">0</h4>
+          <p>Total logs today</p>
+        </article>
+        <article class="card kpi">
+          <h4 id="adminActivityKpiManager">0</h4>
+          <p>Manager</p>
+        </article>
+        <article class="card kpi">
+          <h4 id="adminActivityKpiReception">0</h4>
+          <p>Receptionist</p>
+        </article>
+      </div>
+
+      <div class="card admin-payment-feature-card" id="adminActivityLogsCard">
+        <div class="admin-status-group-head">
+          <h3 class="admin-pay-table-title">Staff activity</h3>
+          <div class="admin-pay-table-head-actions">
+            <button type="button" class="btn btn--outline btn--small" id="adminActivityRefresh">Refresh</button>
+          </div>
+        </div>
+
+        <form class="activity-logs-filters" id="adminActivityFilters" autocomplete="off" onsubmit="return false;">
+          <div class="activity-logs-filters__search">
+            <label for="adminActivitySearch">Search</label>
+            <input id="adminActivitySearch" type="search" placeholder="User, email, or activity" autocomplete="off">
+          </div>
+          <div>
+            <label for="adminActivityRoleFilter">Role</label>
+            <select id="adminActivityRoleFilter">
+              <option value="">All roles</option>
+              <option value="manager">Manager</option>
+              <option value="receptionist">Receptionist</option>
+            </select>
+          </div>
+          <div>
+            <label for="adminActivityTypeFilter">Activity type</label>
+            <select id="adminActivityTypeFilter">
+              <option value="">All activities</option>
+              <option value="booking">Bookings</option>
+              <option value="content">Content</option>
+              <option value="calendar">Calendar</option>
+              <option value="message">Messages</option>
+              <option value="marketing">Promotions &amp; events</option>
+              <option value="auth">Sign in / out</option>
+            </select>
+          </div>
+          <div>
+            <label for="adminActivityDateFrom">From date</label>
+            <input id="adminActivityDateFrom" type="date">
+          </div>
+          <div>
+            <label for="adminActivityDateTo">To date</label>
+            <input id="adminActivityDateTo" type="date">
+          </div>
+          <div class="activity-logs-filters__reset">
+            <button type="button" class="btn btn--outline" id="adminActivityResetFilters">Reset filters</button>
+          </div>
+        </form>
+
+        <div id="adminActivityLogsList" class="admin-payment-verification-list"></div>
+        <p id="adminActivityLogsEmpty" class="section-lead" hidden style="margin-top: 12px;"></p>
+        <div id="adminActivityLogsPagination" class="admin-pagination" hidden></div>
+      </div>
+    </section>
+
+    <section class="section admin-section" id="section-manager-user" hidden>
+      <div class="appointments-strip">
+        <div class="appointments-strip__head">
+          <h2 class="appointments-strip__title">User administration</h2>
+          <p class="appointments-strip__lead">
+            Create staff accounts and assign roles. Staff sign in with the same Sign In page as clients; their dashboard is determined by the role stored on the account.
+          </p>
+        </div>
+      </div>
+      <div class="card">
+        <h2 class="section-title" style="margin-bottom: 10px;">Manage Users</h2>
+        <div class="split-2">
+          <article class="card">
+            <h3 style="margin: 0 0 10px;">Current admin profile</h3>
+            <div class="admin-settings-profile" style="margin-top: 0;">
+              <div class="admin-settings-field">
+                <strong>Name:</strong> <span id="adminManagerName">…</span>
+              </div>
+              <div class="admin-settings-field">
+                <strong>Email:</strong> <span id="adminManagerEmail">…</span>
+              </div>
+            </div>
+          </article>
+          <article class="card">
+            <h3 style="margin: 0 0 10px;">How to use</h3>
+            <p style="margin: 0; color: #5f6673; line-height: 1.6;">
+              First, create a user account (email and password), then assign a job/position such as
+              <strong>Receptionist</strong> or <strong>Manager</strong>. After saving, provide the account details to the
+              respective staff member so they can use <strong>Sign In</strong>. Their dashboard opens automatically from
+              the role stored on their account. Changing their email or password later does not change that role.
+            </p>
+          </article>
+        </div>
+
+        <div class="split-2" style="margin-top: 18px;">
+          <article class="card">
+            <h3 style="margin: 0 0 10px;">Create / assign user</h3>
+            <form id="adminUserForm" class="form-grid" autocomplete="off">
+              <div>
+                <label for="adminUserName">Full name</label>
+                <input id="adminUserName" type="text" required placeholder="Staff full name">
+              </div>
+              <div>
+                <label for="adminUserEmail">Email</label>
+                <input id="adminUserEmail" type="email" required placeholder="staff@example.com">
+              </div>
+              <div>
+                <label for="adminUserPassword">Password</label>
+                <input id="adminUserPassword" type="password" required placeholder="Temporary password">
+              </div>
+              <div class="full">
+                <label for="adminUserRole">Job / Position</label>
+                <select id="adminUserRole" required>
+                  <option value="">Select position</option>
+                  <option value="manager">Manager</option>
+                  <option value="receptionist">Receptionist</option>
+                </select>
+              </div>
+              <div class="full">
+                <button class="btn" type="submit">Save user</button>
+                <p id="adminUserMsg" class="auth-msg" hidden></p>
+              </div>
+            </form>
+          </article>
+
+          <article class="card">
+            <h3 style="margin: 0 0 10px;">Existing user accounts</h3>
+            <p style="margin: 0 0 14px; color: #5f6673; line-height: 1.6;">
+              Staff accounts are saved in Supabase. After creating an account, give the staff member their
+              email and password so they can use Sign In. Access follows the role saved on their profile.
+            </p>
+            <div class="admin-users-wrap">
+              <div id="adminUsersList" class="admin-users-list">
+                <!-- Filled by admin.js -->
+              </div>
+              <div id="adminUsersLoading" class="admin-users-loading" hidden>
+                <span class="admin-users-loading__spinner" aria-hidden="true"></span>
+                <span class="admin-users-loading__text">Loading…</span>
+              </div>
+            </div>
+            <div id="adminUsersPagination" class="admin-pagination" hidden></div>
+          </article>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <div id="adminProfileOverlay" class="admin-settings-overlay" hidden>
+    <div class="admin-settings-modal" role="dialog" aria-modal="true" aria-labelledby="adminProfileTitle">
+      <h3 id="adminProfileTitle">Admin Profile</h3>
+
+      <form id="adminProfileForm" class="form-grid" autocomplete="off">
+        <div class="full">
+          <label for="adminProfileName">Name</label>
+          <input id="adminProfileName" type="text" required autocomplete="name" placeholder="Full name">
+        </div>
+        <div class="full">
+          <label for="adminProfileEmail">Email</label>
+          <input id="adminProfileEmail" type="email" required autocomplete="email" placeholder="admin@example.com">
+        </div>
+        <div class="full">
+          <button class="btn" type="submit">Save changes</button>
+          <p id="adminProfileMsg" class="auth-msg" hidden></p>
+        </div>
+      </form>
+
+      <div class="admin-settings-modal__actions">
+        <button type="button" id="adminProfileCloseBtn" class="btn btn--outline">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="adminPasswordOverlay" class="admin-settings-overlay" hidden>
+    <div class="admin-settings-modal" role="dialog" aria-modal="true" aria-labelledby="adminPasswordTitle">
+      <h3 id="adminPasswordTitle">Change Password</h3>
+
+      <form id="adminChangePasswordForm" class="form-grid" autocomplete="off">
+        <div class="full">
+          <label for="adminCurrentPassword">Current password</label>
+          <input id="adminCurrentPassword" type="password" required placeholder="Enter current password">
+        </div>
+
+        <div class="full">
+          <label for="adminNewPassword">New password</label>
+          <input id="adminNewPassword" type="password" required placeholder="Enter new password">
+        </div>
+
+        <div class="full">
+          <label for="adminConfirmPassword">Confirm new password</label>
+          <input id="adminConfirmPassword" type="password" required placeholder="Confirm new password">
+        </div>
+
+        <div class="full">
+          <button class="btn" type="submit">Update Password</button>
+          <p id="adminChangePasswordMsg" class="auth-msg" hidden></p>
+        </div>
+      </form>
+
+      <div class="admin-settings-modal__actions">
+        <button type="button" id="adminPasswordCloseBtn" class="btn btn--outline">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="adminSentimentOverlay" class="admin-settings-overlay" hidden>
+    <div class="admin-settings-modal" role="dialog" aria-modal="true" aria-labelledby="adminSentimentTitle">
+      <h3 id="adminSentimentTitle">Response detail</h3>
+      <p id="adminSentimentExampleBanner" class="admin-sentiment-example-banner" hidden></p>
+
+      <div class="admin-settings-profile" style="margin-top: 0;">
+        <ul id="adminSentimentList" class="sentiment-comments-list sentiment-comments-list--detail"></ul>
+      </div>
+
+      <div class="admin-settings-modal__actions">
+        <button type="button" id="adminSentimentCloseBtn" class="btn btn--outline">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="sentimentCommentArchiveOverlay" class="admin-settings-overlay" hidden>
+    <div
+      class="admin-settings-modal admin-sentiment-archive-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="sentimentCommentArchiveTitle"
+    >
+      <h3 id="sentimentCommentArchiveTitle">Comment Archive</h3>
+      <p class="note" style="margin: 6px 0 14px;">
+        Guest comments from completed weeks (Monday—Sunday) are moved here automatically at the start of each new week.
+      </p>
+      <div id="sentimentCommentArchiveList" class="sentiment-archive-list"></div>
+      <div class="admin-settings-modal__actions">
+        <button type="button" id="sentimentCommentArchiveClose" class="btn btn--outline">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="sentimentRecommendationArchiveOverlay" class="admin-settings-overlay" hidden>
+    <div
+      class="admin-settings-modal admin-sentiment-archive-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="sentimentRecommendationArchiveTitle"
+    >
+      <h3 id="sentimentRecommendationArchiveTitle">Recommendation Archive</h3>
+      <p class="note" style="margin: 6px 0 14px;">
+        Weekly recommendations generated from each week's guest comments are saved here when that week ends.
+      </p>
+      <div id="sentimentRecommendationArchiveList" class="sentiment-archive-list"></div>
+      <div class="admin-settings-modal__actions">
+        <button type="button" id="sentimentRecommendationArchiveClose" class="btn btn--outline">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="adminManageUsersGateOverlay" class="admin-settings-overlay" hidden>
+    <div class="admin-settings-modal" role="dialog" aria-modal="true" aria-labelledby="adminManageUsersGateTitle">
+      <h3 id="adminManageUsersGateTitle">Confirm admin password</h3>
+      <p class="note" style="margin: 6px 0 12px;">
+        For security, please enter your admin password to access user administration.
+      </p>
+
+      <p id="adminManageUsersGateMsg" class="auth-msg" hidden></p>
+      <form id="adminManageUsersGateForm" class="form-grid" autocomplete="off">
+        <div class="full">
+          <label for="adminManageUsersGatePassword">Password</label>
+          <input id="adminManageUsersGatePassword" type="password" required placeholder="Enter your admin password">
+        </div>
+        <div class="full" style="display: flex; gap: 10px; justify-content: flex-end;">
+          <button type="button" id="adminManageUsersGateCancel" class="btn btn--outline">Cancel</button>
+          <button type="submit" class="btn">Continue</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="adminPaymentProofOverlay" class="admin-settings-overlay" hidden>
+    <div class="admin-settings-modal admin-payment-proof-modal" role="dialog" aria-modal="true" aria-labelledby="adminPaymentProofTitle">
+      <h3 id="adminPaymentProofTitle">Proof of payment</h3>
+      <div id="adminPaymentProofImageHost" class="admin-payment-proof-image-host"></div>
+      <div class="admin-settings-modal__actions">
+        <button type="button" id="adminPaymentProofCloseBtn" class="btn btn--outline">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="adminReservationOverlay" class="admin-settings-overlay admin-reservation-overlay" hidden>
+    <div
+      class="admin-settings-modal admin-reservation-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="adminReservationTitle"
+    >
+      <div class="admin-reservation-modal__accent" aria-hidden="true"></div>
+      <div class="admin-reservation-modal__head">
+        <div class="admin-reservation-modal__title-wrap">
+          <span class="admin-reservation-modal__eyebrow">Selected date</span>
+          <h3 id="adminReservationTitle">Reservation details</h3>
+          <p id="adminReservationDateLabel" class="admin-reservation-modal__date"></p>
+        </div>
+        <button type="button" id="adminReservationCloseBtn" class="admin-reservation-modal__close" aria-label="Close">&times;</button>
+      </div>
+      <div class="admin-reservation-modal__body">
+        <div id="adminReservationPicker" class="admin-reservation-picker" hidden></div>
+        <div id="adminReservationDetail" class="admin-reservation-detail"></div>
+        <div id="adminReservationEmpty" class="admin-reservation-empty" hidden>
+          <p>No reservations for this date.</p>
+        </div>
+      </div>
+      <div class="admin-reservation-modal__footer">
+        <button type="button" id="adminReservationCloseBtn2" class="btn btn--outline">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">
+      <p>Copyright 2026 Elenest Resort. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-config.js?v=20260922-ux1"></script>
+  <script src="../js/supabase-client.js"></script>
+  <script src="../js/ui-button-loading.js"></script>
+  <script src="../js/elenest-errors.js?v=20260922-ux1"></script>
+  <script src="../js/auth.js?v=20260922-ux3"></script>
+  <script src="../js/access-control.js?v=20260918-role2"></script>
+  <script src="../js/password-toggle.js"></script>
+  <script src="../js/payment-flow.js?v=20260929-queue3"></script>
+  <script src="../js/payment-proofs.js"></script>
+  <script src="../js/historical-data.js?v=20260922-ux1"></script>
+  <script src="../js/bookings.js?v=20260929-queue1"></script>
+  <script src="../js/payment-methods.js"></script>
+  <script src="../js/notifications.js?v=20260929-notify1"></script>
+  <script src="../js/staff-notifications-ui.js?v=20260916-notifread1"></script>
+  <script src="../js/contact-messages.js?v=20260911-staffnotif1"></script>
+  <script src="../js/guest-feedback.js?v=20260927-review1"></script>
+  <script src="../js/content-store.js?v=20260718-gallery"></script>
+  <script src="../js/unit-availability.js?v=20260929-queue4"></script>
+  <script>
+    // Live calendar uses Supabase bookings only (no Google Calendar).
+    window.ElenestGoogleCalendarIcsUrl = "";
+  </script>
+  <script src="../js/elenest-availability.js?v=20260908-calacl1"></script>
+  <script src="../js/elenest-calendar-widget.js?v=20260922-ux2"></script>
+  <script src="../js/calendar-access.js?v=20260922-ux2"></script>
+  <script src="../js/activity-logs.js?v=20260917-actlog3"></script>
+  <!-- predictive-analytics.js is lazy-loaded when that section opens -->
+  <script src="../js/model-evaluation.js?v=20260929-pa1"></script>
+  <script src="../js/staff-boot-loading.js?v=20260918-bootfix1"></script>
+  <script src="../js/reservation-queue.js?v=20260929-queue12"></script>
+  <script src="../js/admin.js?v=20260929-queue3"></script>
+  <script src="../js/mobile-tables.js?v=20260929-mobile7"></script>
+</body>
+</html>
+

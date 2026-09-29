@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Sign Up | Elenest Resort</title>
+  <link rel="icon" type="image/png" href="../Images/icon.png">
+  <link rel="stylesheet" href="../css/style.css?v=20260922-menu3">
+</head>
+<body class="subpage">
+  <header>
+    <div class="content flex_space">
+      <div class="logo">
+        <a href="index.html" class="site-logo-link" aria-label="Elenest Resort home">
+          <img class="site-logo" src="../Images/elenest_logo_pink.png" alt="Elenest Event Center">
+        </a>
+      </div>
+      <div class="navlinks">
+        <ul id="menulist" class="site-nav-list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="reviews.html">Reviews</a></li>
+          <li><a href="rooms.html">Facilities</a></li>
+          <li><a href="policies.html">Policies</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="activities.html">Activities</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+          <li class="role-login-nav" id="roleLoginNav">
+            <a href="login.html" class="role-login-trigger staff-access-btn" id="roleLoginTrigger" aria-label="Sign In">Sign In</a>
+          </li>
+        </ul>
+        <button type="button" class="nav-menu-toggle" id="navMenuToggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="menulist">
+          <span class="nav-menu-toggle__bar" aria-hidden="true"></span>
+          <span class="nav-menu-toggle__bar" aria-hidden="true"></span>
+          <span class="nav-menu-toggle__bar" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Admin Sign Up</h1>
+      <p>Create an administrator account to access the Admin Dashboard.</p>
+    </section>
+
+    <section class="section">
+      <article class="card auth-card">
+        <h3>Create Admin Account</h3>
+        <p class="auth-lead">Use a valid email and a strong password. Your account is saved securely in Supabase.</p>
+        <p id="adminRegMsg" class="auth-msg" hidden></p>
+        <form id="adminRegForm" class="form-grid" autocomplete="off">
+          <div>
+            <label for="adminRegName">Full name</label>
+            <input id="adminRegName" name="name" type="text" autocomplete="name" required placeholder="Administrator name">
+          </div>
+          <div>
+            <label for="adminRegEmail">Email</label>
+            <input id="adminRegEmail" name="email" type="email" autocomplete="email" required placeholder="admin@example.com">
+          </div>
+          <div class="full">
+            <label for="adminRegPassword">Password</label>
+            <input id="adminRegPassword" name="password" type="password" autocomplete="new-password" required placeholder="Create a password">
+          </div>
+          <div class="full">
+            <button class="btn" type="submit">Create admin</button>
+          </div>
+        </form>
+        <p class="note auth-switch">
+          Already have an admin account?
+          <a id="adminGoLoginLink" href="login.html">Go to sign in</a>.
+        </p>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>Copyright 2026 Elenest Resort. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-config.js"></script>
+  <script src="../js/supabase-client.js"></script>
+  <script src="../js/ui-button-loading.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/password-toggle.js"></script>
+  <script src="../js/header-nav.js?v=20260922-menu2"></script>
+  <script src="../js/role-login.js"></script>
+  <script>
+    (function () {
+      var Auth = window.ElenestAuth;
+      if (!Auth) return;
+
+      var loginLink = document.getElementById("adminGoLoginLink");
+      if (loginLink) {
+        loginLink.href = "login.html?registered=1";
+      }
+
+      Auth.ready.then(function (user) {
+        if (!user) return;
+        if (Auth.normalizeRole(user.role) === "admin") {
+          window.location.replace(Auth.getPostLoginPath(user));
+        }
+      });
+
+      var form = document.getElementById("adminRegForm");
+      var msg = document.getElementById("adminRegMsg");
+      var submitBtn = form ? form.querySelector('button[type="submit"]') : null;
+
+      function showErr(text) {
+        if (!msg) return;
+        msg.hidden = false;
+        msg.className = "auth-msg auth-msg--err";
+        msg.textContent = text;
+      }
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var name = document.getElementById("adminRegName").value;
+        var email = document.getElementById("adminRegEmail").value;
+        var password = document.getElementById("adminRegPassword").value;
+
+        if (!password || String(password).length < 6) {
+          showErr("Password must be at least 6 characters.");
+          return;
+        }
+
+        var BL = window.ElenestButtonLoading;
+        if (BL) BL.set(submitBtn, true);
+        Auth.register({
+          name: name,
+          phone: "…",
+          email: email,
+          password: password,
+          role: "admin"
+        }).then(function (result) {
+          if (result.ok) {
+            if (msg) {
+              msg.hidden = false;
+              msg.className = "auth-msg auth-msg--ok";
+              msg.textContent =
+                "Admin account created. Redirecting to sign in…";
+            }
+            window.location.href = "login.html?registered=1";
+            return;
+          }
+          if (BL) BL.set(submitBtn, false);
+          showErr(result.message || "Failed to create admin account.");
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
+

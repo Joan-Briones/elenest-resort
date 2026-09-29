@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reviews | Elenest Resort</title>
+  <link rel="icon" type="image/png" href="../Images/icon.png">
+  <link rel="stylesheet" href="../css/style.css?v=20260927-review2">
+</head>
+<body class="subpage reviews-page">
+  <header>
+    <div class="content flex_space">
+      <div class="logo">
+        <a href="index.html" class="site-logo-link" aria-label="Elenest Resort home">
+          <img class="site-logo" src="../Images/elenest_logo_pink.png" alt="Elenest Event Center">
+        </a>
+      </div>
+      <div class="navlinks">
+        <ul id="menulist" class="site-nav-list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a class="active" href="reviews.html">Reviews</a></li>
+          <li><a href="rooms.html">Facilities</a></li>
+          <li><a href="policies.html">Policies</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="activities.html">Activities</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+          <li class="role-login-nav" id="roleLoginNav">
+            <a href="login.html" class="role-login-trigger staff-access-btn" id="roleLoginTrigger" aria-label="Sign In">Sign In</a>
+          </li>
+        </ul>
+        <button type="button" class="nav-menu-toggle" id="navMenuToggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="menulist">
+          <span class="nav-menu-toggle__bar" aria-hidden="true"></span>
+          <span class="nav-menu-toggle__bar" aria-hidden="true"></span>
+          <span class="nav-menu-toggle__bar" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Guest Reviews</h1>
+      <p>What guests say about their stay at Elenest.</p>
+    </section>
+
+    <section class="section reviews-grid" id="reviewsGrid" aria-label="Submitted guest reviews"></section>
+    <div class="reviews-pagination" id="reviewsPagination" hidden>
+      <button type="button" class="btn btn--small" id="reviewsPrevBtn">Previous</button>
+      <span class="reviews-pagination__page" id="reviewsPageLabel">Page 1</span>
+      <button type="button" class="btn btn--small" id="reviewsNextBtn">Next</button>
+    </div>
+
+    <section class="section reviews-sentiment" aria-label="Overall Sentiment">
+      <article class="card reviews-sentiment-card reviews-sentiment-card--solo">
+        <h3>Overall Sentiment</h3>
+        <div class="sentiment-row">
+          <label>Positive</label>
+          <div class="sentiment-bar"><span class="positive" id="reviewsSentimentBarPos" style="width: 0%;"></span></div>
+          <strong id="reviewsSentimentPctPos">0%</strong>
+        </div>
+        <div class="sentiment-row">
+          <label>Neutral</label>
+          <div class="sentiment-bar"><span class="neutral" id="reviewsSentimentBarNeu" style="width: 0%;"></span></div>
+          <strong id="reviewsSentimentPctNeu">0%</strong>
+        </div>
+        <div class="sentiment-row">
+          <label>Needs Work</label>
+          <div class="sentiment-bar"><span class="negative" id="reviewsSentimentBarNeg" style="width: 0%;"></span></div>
+          <strong id="reviewsSentimentPctNeg">0%</strong>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <div id="guestReviewOverlay" class="guest-review-overlay" hidden>
+    <div class="guest-review-modal" role="dialog" aria-modal="true" aria-labelledby="guestReviewModalTitle">
+      <button type="button" class="guest-review-modal__close" id="guestReviewModalClose" aria-label="Close">&times;</button>
+      <p class="guest-review-modal__eyebrow">Elenest Resort</p>
+      <h2 class="guest-review-modal__title" id="guestReviewModalTitle">Review Your Activity</h2>
+      <p class="guest-review-modal__lede" id="guestReviewModalLede">
+        Thank you for your stay. Please share a quick rating and comment.
+      </p>
+      <form id="guestReviewForm" class="guest-review-modal__form" autocomplete="on">
+        <input type="hidden" id="guestReviewBookingId" name="bookingId" value="">
+        <input type="hidden" id="guestReviewName" name="name" value="">
+        <input type="hidden" id="guestReviewEmail" name="email" value="">
+        <div>
+          <label>Star rating <span class="req-mark">*</span></label>
+          <div id="guestReviewStars" class="feedback-stars" role="radiogroup" aria-label="Star rating">
+            <button type="button" class="feedback-star" data-star="1" aria-label="1 star">&#9733;</button>
+            <button type="button" class="feedback-star" data-star="2" aria-label="2 stars">&#9733;</button>
+            <button type="button" class="feedback-star" data-star="3" aria-label="3 stars">&#9733;</button>
+            <button type="button" class="feedback-star" data-star="4" aria-label="4 stars">&#9733;</button>
+            <button type="button" class="feedback-star" data-star="5" aria-label="5 stars">&#9733;</button>
+          </div>
+        </div>
+        <div>
+          <label for="guestReviewComment">Comment <span class="req-mark">*</span></label>
+          <textarea id="guestReviewComment" name="comment" rows="4" required placeholder="Share your experience"></textarea>
+        </div>
+        <p id="guestReviewMsg" class="auth-msg" hidden></p>
+        <div class="guest-review-modal__actions">
+          <button type="submit" class="btn" id="guestReviewSubmit">Submit Review</button>
+          <button type="button" class="guest-review-modal__dismiss" id="guestReviewModalDismiss">Close</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">
+      <p>Copyright 2026 Elenest Resort. All rights reserved.</p>
+    </div>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-config.js"></script>
+  <script src="../js/supabase-client.js"></script>
+  <script src="../js/auth.js?v=20260918-role1"></script>
+  <script src="../js/ui-button-loading.js"></script>
+  <script src="../js/feedback-photos.js"></script>
+  <script src="../js/guest-feedback.js?v=20260927-review1"></script>
+  <script src="../js/header-nav.js?v=20260922-menu2"></script>
+  <script src="../js/reviews-page.js?v=20260927-review1"></script>
+  <script src="../js/role-login.js"></script>
+</body>
+</html>

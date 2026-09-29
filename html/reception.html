@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Receptionist Dashboard | Elenest Resort</title>
+  <link rel="icon" type="image/png" href="../Images/icon.png">
+  <link rel="stylesheet" href="../css/style.css?v=20260929-mobile6">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+</head>
+<body class="subpage elenest-role-gated" data-staff-portal="reception" data-required-role="receptionist">
+  <div id="staffBootLoading" class="staff-boot-loading staff-boot-loading--active" aria-busy="true" aria-live="polite" aria-label="Loading Reception Desk">
+    <div class="staff-boot-loading__card" role="status">
+      <div class="staff-boot-loading__spinner" aria-hidden="true">
+        <span class="staff-boot-loading__ring"></span>
+        <span class="staff-boot-loading__ring staff-boot-loading__ring--soft"></span>
+      </div>
+      <p class="staff-boot-loading__kicker">Elenest Resort</p>
+      <p class="staff-boot-loading__title">Reception Desk</p>
+      <p class="staff-boot-loading__sub">Preparing your workspace</p>
+      <div class="staff-boot-loading__bar" aria-hidden="true"><span></span></div>
+    </div>
+  </div>
+  <header>
+    <div class="content flex_space">
+      <div class="logo">
+        <a href="index.html" class="site-logo-link" aria-label="Elenest Resort home">
+          <img class="site-logo" src="../Images/elenest_logo_pink.png" alt="Elenest Event Center">
+        </a>
+      </div>
+      <div class="navlinks">
+        <ul id="menulist" class="site-nav-list">
+          <li><a href="#section-walkin">Walk-in</a></li>
+          <li><a href="#section-checkin">Check-in</a></li>
+          <li><a href="#section-checkout">Check-out</a></li>
+          <li><a href="#section-customer-record">Customer Record</a></li>
+          <li id="staffAuthNav" class="admin-auth-nav">
+            <a
+              id="staffSettingsToggle"
+              href="#"
+              aria-haspopup="true"
+              aria-expanded="false"
+              aria-controls="staffSettingsMenu"
+              hidden
+            >Settings</a>
+            <div id="staffSettingsMenu" class="admin-settings-menu" role="menu" hidden>
+              <button type="button" id="staffMenuProfile" class="admin-settings-item" role="menuitem">
+                Reception Profile
+              </button>
+              <button type="button" id="staffMenuLogout" class="admin-settings-item admin-settings-item--danger" role="menuitem">
+                Logout
+              </button>
+            </div>
+          </li>
+        </ul>
+        <div id="staffHeaderRoleItem" class="staff-header-user" hidden>
+          <div id="staffHeaderRole" class="staff-header-user__inner"></div>
+        </div>
+        <button type="button" class="nav-menu-toggle" id="navMenuToggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="menulist">
+          <span class="nav-menu-toggle__bar" aria-hidden="true"></span>
+          <span class="nav-menu-toggle__bar" aria-hidden="true"></span>
+          <span class="nav-menu-toggle__bar" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="section admin-section" id="section-walkin">
+      <div class="appointments-strip appointments-strip--reception-checkin">
+        <div class="appointments-strip__head">
+          <h2 class="appointments-strip__title">Walk-in booking</h2>
+        </div>
+      </div>
+
+      <div class="card reception-walkin-calendar-card">
+        <div class="reception-walkin-stay-bar" role="radiogroup" aria-label="Stay type">
+          <span class="reception-walkin-stay-bar__label">Stay type</span>
+          <div class="reception-walkin-stay-bar__toggle">
+            <label class="reception-walkin-stay-bar__option">
+              <input type="radio" name="receptionWiStayType" value="overnight" checked>
+              <span>Overnight</span>
+            </label>
+            <label class="reception-walkin-stay-bar__option">
+              <input type="radio" name="receptionWiStayType" value="day_tour">
+              <span>Day Tour</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="admin-dash-cal-layout reception-cal-layout">
+          <div class="admin-dash-cal-main">
+            <div class="book-flow-calendar-head admin-dash-cal-head manager-cal-head">
+              <button type="button" class="book-flow-cal-nav" id="receptionWiCalPrev" aria-label="Previous month">&lsaquo;</button>
+              <h4 class="book-flow-cal-month" id="receptionWiCalMonthLabel"></h4>
+              <button type="button" class="book-flow-cal-nav" id="receptionWiCalNext" aria-label="Next month">&rsaquo;</button>
+            </div>
+            <p class="admin-toolbar__note reception-walkin-stay-label">
+              Selected stay:
+              <strong id="receptionWiStayLabel">…</strong>
+            </p>
+            <div id="receptionWalkInCalendarHost" class="book-flow-calendar reception-cal-grid admin-dash-cal-host" role="grid" aria-label="Walk-in reservation calendar"></div>
+          </div>
+
+          <aside class="admin-dash-cal-notes reception-cal-notes" aria-label="Calendar notes">
+            <h3 class="admin-dash-cal-notes__title">Calendar Notes</h3>
+            <ul class="admin-dash-cal-legend">
+              <li>
+                <span class="avail-legend__swatch avail-legend__swatch--available" aria-hidden="true"></span>
+                <span class="admin-dash-cal-legend__text">
+                  <strong>Available</strong>
+                  <span>Open for new walk-in bookings.</span>
+                </span>
+              </li>
+              <li>
+                <span class="avail-legend__swatch avail-legend__swatch--booked" aria-hidden="true"></span>
+                <span class="admin-dash-cal-legend__text">
+                  <strong>Booked</strong>
+                  <span>That room, cottage, or hall is reserved — gray and not selectable.</span>
+                </span>
+              </li>
+              <li>
+                <span class="avail-legend__swatch avail-legend__swatch--unavailable" aria-hidden="true"></span>
+                <span class="admin-dash-cal-legend__text">
+                  <strong>Blocked</strong>
+                  <span>Closed on the official calendar.</span>
+                </span>
+              </li>
+            </ul>
+            <p class="admin-dash-cal-notes__hint">
+              Live with Booking, Reservation, and Check-in. Reception can view dates but cannot block or unblock them.
+            </p>
+          </aside>
+        </div>
+
+        <div id="receptionWiRoomSummary" class="book-unit-summary" hidden>
+          <div class="appointments-strip__head appointments-strip__head--split" style="margin-bottom: 8px;">
+            <h3 class="section-title" style="margin: 0; font-size: 1rem;">Selected facility</h3>
+            <button type="button" class="btn btn--outline btn--small" id="receptionWiChangeRoom">
+              Change facility
+            </button>
+          </div>
+          <p id="receptionWiRoomDates" class="book-step2-facilities__dates" style="margin: 0 0 8px;"></p>
+          <p class="admin-toolbar__note" style="margin: 0;">
+            <strong id="receptionWiSelectedRoomName">…</strong>
+          </p>
+        </div>
+        <p id="receptionWiRoomHint" class="section-lead reception-walkin-hint">
+          Overnight: tap check-in, then a later check-out. Day tour: tap one date. Then choose a facility.
+        </p>
+      </div>
+
+      <div class="card reception-walkin-guest-card">
+        <h2 class="section-title">Guest details</h2>
+        <form
+          id="receptionWalkInForm"
+          class="form-grid reception-walkin-guest-form"
+          data-stay="overnight"
+          autocomplete="off"
+        >
+          <input id="receptionWiRoomCatalogId" type="hidden" value="">
+          <input id="receptionWiHallCatalogId" type="hidden" value="">
+          <input id="receptionWiCottageCatalogIds" type="hidden" value="">
+          <input id="receptionWiRoomType" type="hidden" value="">
+          <input id="receptionWiFacilityType" type="hidden" value="">
+          <div data-wi="name">
+            <label for="receptionWiName">Guest full name</label>
+            <input id="receptionWiName" type="text" required placeholder="Full name">
+          </div>
+          <div data-wi="email">
+            <label for="receptionWiEmail">Contact email</label>
+            <input id="receptionWiEmail" type="email" required pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$" placeholder="guest@example.com">
+          </div>
+          <div data-wi="phone">
+            <label for="receptionWiPhone">Phone</label>
+            <input id="receptionWiPhone" type="text" required inputmode="numeric" minlength="11" maxlength="11" pattern="[0-9]{11}" autocomplete="tel" placeholder="09XXXXXXXXX">
+          </div>
+          <div id="receptionWiCheckInWrap" data-wi="checkin">
+            <label for="receptionWiCheckIn">Check-in date</label>
+            <input id="receptionWiCheckIn" type="date" required>
+          </div>
+          <div id="receptionWiCheckOutWrap" data-wi="checkout">
+            <label for="receptionWiCheckOut">Check-out date</label>
+            <input id="receptionWiCheckOut" type="date" required>
+          </div>
+          <div id="receptionWiTimeDayTourWrap" data-wi="daytime" hidden>
+            <label for="receptionWiDayTourTime">Schedule</label>
+            <input
+              id="receptionWiDayTourTime"
+              type="text"
+              value="8:00 AM — 10:00 PM"
+              readonly
+              tabindex="-1"
+              aria-readonly="true"
+              title="Day tour schedule is fixed"
+            >
+          </div>
+          <div id="receptionWiTimeOvernightWrap" data-wi="arrive">
+            <label for="receptionWiCheckInTime">Arrival time</label>
+            <select id="receptionWiCheckInTime" required></select>
+          </div>
+          <div id="receptionWiTimeOvernightOutWrap" data-wi="depart">
+            <label for="receptionWiCheckOutTime">Departure time</label>
+            <select id="receptionWiCheckOutTime" required></select>
+          </div>
+          <div data-wi="adults">
+            <label for="receptionWiAdults">Adults</label>
+            <input id="receptionWiAdults" type="number" min="1" value="2" required>
+          </div>
+          <div data-wi="children">
+            <label for="receptionWiChildren">Children (6+)</label>
+            <input id="receptionWiChildren" type="number" min="0" value="0" required>
+          </div>
+          <div data-wi="childrenUnder6">
+            <label for="receptionWiChildrenUnder6">Children (0–5)</label>
+            <input id="receptionWiChildrenUnder6" type="number" min="0" value="0">
+          </div>
+          <div class="full" data-wi="actions">
+            <button class="btn" type="submit">Save walk-in</button>
+            <p id="receptionWalkInMsg" class="auth-msg" hidden></p>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <section class="section admin-section" id="section-checkin" hidden>
+      <div class="appointments-strip appointments-strip--reception-checkin">
+        <div class="appointments-strip__head">
+          <h2 class="appointments-strip__title">Check-in</h2>
+        </div>
+      </div>
+      <div class="card reception-checkin-card-wrap">
+        <div class="form-grid" style="margin-bottom: 16px;">
+          <div class="full">
+            <label for="receptionCheckInSearch">Search</label>
+            <input id="receptionCheckInSearch" type="search" autocomplete="off">
+          </div>
+        </div>
+        <div id="receptionCheckInList" class="reception-table-host"></div>
+        <div id="receptionCheckInPager" class="admin-pagination" hidden></div>
+        <p id="receptionCheckInEmpty" class="section-lead" hidden style="margin-top: 12px;">No Admin-verified bookings waiting for check-in. Pending bookings stay with Admin until verified.</p>
+      </div>
+    </section>
+
+    <section class="section admin-section" id="section-checkout" hidden>
+      <div class="appointments-strip">
+        <div class="appointments-strip__head">
+          <h2 class="appointments-strip__title">Check-out</h2>
+        </div>
+      </div>
+      <div class="card reception-checkin-card-wrap" style="margin-top: 18px;">
+        <div class="form-grid" style="margin-bottom: 16px;">
+          <div class="full">
+            <label for="receptionCheckOutSearch">Search</label>
+            <input id="receptionCheckOutSearch" type="search" autocomplete="off">
+          </div>
+        </div>
+        <div id="receptionCheckOutList" class="reception-table-host"></div>
+        <div id="receptionCheckOutPager" class="admin-pagination" hidden></div>
+        <p id="receptionCheckOutEmpty" class="section-lead" hidden style="margin-top: 12px;">No checked-in guests yet. After Complete Check-In, guests appear here in real time from Supabase.</p>
+      </div>
+    </section>
+
+    <section class="section admin-section" id="section-customer-record" hidden>
+      <div class="appointments-strip">
+        <div class="appointments-strip__head">
+          <h2 class="appointments-strip__title">Customer record</h2>
+        </div>
+      </div>
+      <div class="card" style="margin-top: 18px;">
+        <div class="form-grid reception-records-search">
+          <div class="full">
+            <label for="receptionRecordSearch">Search</label>
+            <input id="receptionRecordSearch" type="search" autocomplete="off">
+          </div>
+        </div>
+        <p id="receptionRecordsEmpty" class="section-lead" hidden style="margin-top: 12px;">No matching guests in these lists.</p>
+        <div id="receptionRecordsSplit" class="reception-records-split">
+          <section class="reception-records-panel reception-records-panel--checkin" aria-labelledby="receptionRecordsCheckinHeading">
+            <div class="reception-records-panel__head">
+              <h3 id="receptionRecordsCheckinHeading" class="reception-records-split__heading">Check-in</h3>
+            </div>
+            <p id="receptionRecordsConfirmedEmpty" class="reception-records-split__empty section-lead" hidden>No guests with an approved check-in yet.</p>
+            <div id="receptionRecordsConfirmedList" class="reception-table-host"></div>
+            <div id="receptionRecordsConfirmedPager" class="admin-pagination" hidden></div>
+          </section>
+          <section class="reception-records-panel reception-records-panel--checkout" aria-labelledby="receptionRecordsCheckoutHeading">
+            <div class="reception-records-panel__head">
+              <h3 id="receptionRecordsCheckoutHeading" class="reception-records-split__heading">Check-out</h3>
+            </div>
+            <p id="receptionRecordsCheckoutEmpty" class="reception-records-split__empty section-lead" hidden>No completed check-outs.</p>
+            <div id="receptionRecordsCheckoutList" class="reception-table-host"></div>
+            <div id="receptionRecordsCheckoutPager" class="admin-pagination" hidden></div>
+          </section>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="staffProfileOverlay" class="admin-settings-overlay" hidden>
+    <div class="admin-settings-modal" role="dialog" aria-modal="true" aria-labelledby="staffProfileTitle">
+      <h3 id="staffProfileTitle">Reception Profile</h3>
+
+      <form id="staffProfileForm" class="form-grid" autocomplete="off">
+        <div class="full">
+          <label for="staffProfileName">Name</label>
+          <input id="staffProfileName" type="text" required autocomplete="name" placeholder="Full name">
+        </div>
+        <div class="full">
+          <label for="staffProfileEmail">Email</label>
+          <input id="staffProfileEmail" type="email" required autocomplete="email" placeholder="staff@example.com">
+        </div>
+        <div class="full">
+          <button class="btn" type="submit">Save changes</button>
+          <p id="staffProfileMsg" class="auth-msg" hidden></p>
+        </div>
+      </form>
+
+      <div class="admin-settings-modal__actions">
+        <button type="button" id="staffProfileCloseBtn" class="btn btn--outline">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="receptionBookingDetailOverlay" class="admin-settings-overlay" hidden>
+    <div class="admin-settings-modal" role="dialog" aria-modal="true" aria-labelledby="receptionBookingDetailTitle">
+      <h3 id="receptionBookingDetailTitle">Booking details</h3>
+      <div id="receptionBookingDetailBody" class="reception-booking-detail-body"></div>
+      <div class="admin-settings-modal__actions">
+        <button type="button" id="receptionBookingDetailCloseBtn" class="btn btn--outline">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="receptionWiRoomModal" class="book-unit-modal" hidden aria-hidden="true">
+    <div class="book-unit-modal__backdrop" data-reception-wi-room-close tabindex="-1"></div>
+    <div
+      class="book-unit-modal__dialog"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="receptionWiRoomModalTitle"
+    >
+      <button
+        type="button"
+        class="book-unit-modal__close"
+        data-reception-wi-room-close
+        aria-label="Close"
+      >&times;</button>
+      <div class="book-unit-modal__header">
+        <h3 id="receptionWiRoomModalTitle" class="book-unit-modal__title">Select a facility</h3>
+        <p id="receptionWiRoomModalDates" class="book-unit-modal__dates"></p>
+        <p class="book-unit-modal__lead">
+          Select one or more rooms, cottages, or event halls. Each card shows capacity (pax). Combined capacity must cover the guest count.
+          Units already reserved, checked in, or unavailable are marked <strong>Booked</strong>.
+        </p>
+        <p id="receptionWiRoomModalCapacity" class="book-unit-modal__capacity" aria-live="polite"></p>
+      </div>
+      <div id="receptionWiRoomModalHost" class="book-unit-picker__groups"></div>
+      <p id="receptionWiRoomModalEmpty" class="book-unit-modal__empty" hidden>
+        All facilities are booked for this stay. Choose another date or adjust check-out.
+      </p>
+      <p id="receptionWiRoomModalError" class="auth-msg auth-msg--err" hidden></p>
+      <div class="book-unit-modal__actions">
+        <button
+          type="button"
+          class="btn book-flow-btn-main"
+          id="receptionWiRoomModalDone"
+          disabled
+          aria-disabled="true"
+        >Confirm selection</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">
+      <p>Copyright 2026 Elenest Resort. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-config.js?v=20260923-reviewurl1"></script>
+  <script src="../js/supabase-client.js"></script>
+  <script src="../js/ui-button-loading.js"></script>
+  <script src="../js/elenest-errors.js?v=20260922-ux1"></script>
+  <script src="../js/auth.js?v=20260922-ux3"></script>
+  <script src="../js/access-control.js?v=20260918-role2"></script>
+  <script src="../js/payment-flow.js?v=20260918-oom1"></script>
+  <script src="../js/historical-data.js?v=20260922-ux1"></script>
+  <script src="../js/bookings.js?v=20260929-queue1"></script>
+  <script src="../js/content-store.js?v=20260916-lightbox1"></script>
+  <script src="../js/unit-availability.js?v=20260929-queue1"></script>
+  <script src="../js/elenest-availability.js"></script>
+  <script src="../js/elenest-calendar-widget.js?v=20260922-ux2"></script>
+  <script src="../js/notifications.js?v=20260927-review1"></script>
+  <script src="../js/staff-notifications-ui.js?v=20260916-notifread1"></script>
+  <script src="../js/staff-portal.js?v=20260911-mgrprofile2"></script>
+  <script src="../js/activity-logs.js?v=20260917-actlog1"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+  <script src="../js/staff-boot-loading.js?v=20260918-bootfix1"></script>
+  <script src="../js/reception.js?v=20260927-review1"></script>
+  <script src="../js/mobile-tables.js?v=20260929-mobile7"></script>
+  <script src="../js/header-nav.js?v=20260922-menu2"></script>
+</body>
+</html>

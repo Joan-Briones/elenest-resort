@@ -1,0 +1,18 @@
+# Local secrets / machine paths
+api/config.local.php
+api/config.local.json
+api/python.path
+
+# Python cache
+api/__pycache__/
+api/lib/__pycache__/
+**/__pycache__/
+api/*.pyc
+*.pyc
+
+# Dev-only archives (not required to run the site)
+archive/
+Screenshots/
+_tmp_*/
+_tmp_*
+*.tmp

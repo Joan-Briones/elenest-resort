@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Facebook ? Booking | Elenest</title>
+  <link rel="stylesheet" href="../css/style.css?v=20260922-menu3">
+  <style>
+    .fb-check { max-width: 42rem; margin: 2rem auto; padding: 1.5rem; }
+    .fb-check code { display:block; background:#f3f0ea; padding:0.5rem 0.7rem; margin:0.35rem 0; word-break:break-all; }
+    .fb-check li { margin: 0.55rem 0; }
+    .ok { color:#1b6b3a; font-weight:600; }
+    .warn { color:#9a3412; font-weight:600; }
+  </style>
+</head>
+<body class="subpage">
+  <main class="container fb-check">
+    <h1>Facebook ? go straight to booking</h1>
+    <p class="ok">Website now uses a Facebook popup (no black supabase.co JSON page).</p>
+
+    <h2>1) Run this SQL once</h2>
+    <p>Supabase ? SQL Editor ? run all of:</p>
+    <code>sql/disable-auth-profile-trigger.sql</code>
+
+    <h2>2) Meta (Facebook) — allow localhost</h2>
+    <ol>
+      <li>My Apps ? Elenest Resort</li>
+      <li>App settings ? Basic ? App domains: <code>localhost</code></li>
+      <li>Add platform ? Website ? Site URL:
+        <code>http://localhost/Elenest_Resort/html/</code>
+      </li>
+      <li>Facebook Login ? Settings ? <strong>Allowed Domains for the JavaScript SDK</strong>:
+        <code>http://localhost/</code>
+      </li>
+      <li>Save changes</li>
+    </ol>
+
+    <h2>3) Supabase Site URL</h2>
+    <code>http://localhost/Elenest_Resort/html/</code>
+
+    <h2>4) Test</h2>
+    <ol>
+      <li>Hard refresh (Ctrl+F5)</li>
+      <li>Open book.html on localhost</li>
+      <li>Continue with Facebook ? popup ? stay on site ? booking</li>
+    </ol>
+
+    <p class="warn">Ignore the old black supabase.co/auth/v1/callback page. Use the Book page popup instead.</p>
+    <p><a class="btn" href="book.html">Open Book page</a></p>
+  </main>
+</body>
+</html>

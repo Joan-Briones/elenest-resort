@@ -1,0 +1,24 @@
+# Elenest Resort — project layout (runtime)
+
+## Live folders (do not rename without updating all paths)
+- `html/`     Public + staff pages (entry URLs)
+- `css/`      Stylesheets (`style.css`, `predictive-analytics.css`)
+- `js/`       Front-end modules (shared across pages)
+- `Images/`   Static images (path case matters on Linux)
+- `api/`      PHP endpoints + Python bridge
+- `data/`     Historical datasets used by analytics/import
+- `sql/`      Database migrations (manual apply)
+- `supabase/` Edge functions
+
+## Entry
+- Root `index.html` redirects to `html/index.html`
+- Pages load assets with `../css/`, `../js/`, `../Images/`, `../api/`
+
+## Archive
+- `archive/` holds non-runtime temp files and screenshots.
+  Not required to run the website. Safe to delete after backup.
+
+## Notes
+- Keep pages under `html/` so relative paths stay valid.
+- Prefer shared JS modules over duplicating logic per page.
+- Responsive rules for all viewports live at the end of `css/style.css`.

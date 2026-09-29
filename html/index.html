@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elenest Resort</title>
+  <script>
+    try { if ("scrollRestoration" in history) history.scrollRestoration = "manual"; } catch (e) {}
+  </script>
+  <link rel="icon" type="image/png" href="../Images/icon.png">
+  <link rel="stylesheet" href="../css/style.css?v=20260925-policy1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.css" integrity="sha512-UTNP5BXLIptsaj5WdKFrkFov94lDx+eBvbKyoe1YAfjeRPC+gT5kyZ10kOHCfNZqEui1sxmqvodNUx3KbuYI/A==" crossorigin="anonymous"
+    referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" integrity="sha512-sMXtMNL1zRzolHYKEujM2AqCLUR9F2C4/05cdbxjjLSRvMQIciEPCQZo++nk7go3BtSuK9kfa/s+a4f4i5pLkw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+
+  <header>
+    <div class="content flex_space">
+      <div class="logo">
+        <a href="index.html" class="site-logo-link" aria-label="Elenest Resort home">
+          <img class="site-logo" src="../Images/elenest_logo_pink.png" alt="Elenest Event Center">
+        </a>
+      </div>
+      <div class="navlinks">
+        <ul id="menulist" class="site-nav-list">
+          <li><a class="active" href="index.html" aria-current="page">Home</a></li>
+          <li><a href="about.html">about us</a> </li>
+          <li><a href="reviews.html">reviews</a> </li>
+          <li><a href="rooms.html">facilities</a> </li>
+          <li><a href="policies.html">policies</a> </li>
+          <li><a href="faq.html">FAQ</a> </li>
+          <li><a href="activities.html">activities</a> </li>
+          <li><a href="contact.html">contact us</a> </li>
+          <li class="role-login-nav" id="roleLoginNav">
+            <a href="login.html" class="role-login-trigger staff-access-btn" id="roleLoginTrigger" aria-label="Sign In">Sign In</a>
+          </li>
+        </ul>
+        <button type="button" class="nav-menu-toggle" id="navMenuToggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="menulist">
+          <span class="nav-menu-toggle__bar" aria-hidden="true"></span>
+          <span class="nav-menu-toggle__bar" aria-hidden="true"></span>
+          <span class="nav-menu-toggle__bar" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <script src="../js/header-nav.js?v=20260922-menu2"></script>
+
+
+  <section class="home" id="home">
+    <div class="content">
+      <div class="owl-carousel owl-theme">
+        <div class="item">
+          <img src="../Images/ELENEST BG 1.png" alt="">
+          <div class="text">
+            <p class="hero-kicker">Mataasnakahoy, Batangas</p>
+            <h1 class="hero-title">
+              <span class="hero-title__brand">Elenest</span>
+              <span class="hero-title__accent" aria-hidden="true"></span>
+              <span class="hero-title__suffix">Resort</span>
+            </h1>
+            <p class="hero-tagline">Where happiness checks in and stress checks out.</p>
+          </div>
+        </div>
+        <div class="item">
+          <img src="../Images/ELENEST-BG 2.png" alt="">
+          <div class="text">
+            <h1 class="hero-title hero-title--single">Escape to Serenity</h1>
+            <p class="hero-tagline">Unwind, recharge, and enjoy a peaceful stay surrounded by nature.</p>
+          </div>
+        </div>
+        <div class="item">
+          <img src="../Images/ELENEST RESORT-BG 3.png" alt="">
+          <div class="text">
+            <h1 class="hero-title hero-title--single">Your Perfect Getaway</h1>
+            <p class="hero-tagline">Experience comfort, luxury, and tranquility all in one place.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw==" crossorigin="anonymous"
+    referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.js" integrity="sha512-gY25nC63ddE0LcLPhxUJGFxa2GoIyA5FLym4UJqHDEMHjp8RET6Zn/SHo1sltt3WuVtqfyxECP38/daUc/WVEA==" crossorigin="anonymous"
+    referrerpolicy="no-referrer"></script>
+  <script>
+    (function () {
+      var $hero = $('.home .owl-carousel');
+      if (!$hero.length) return;
+      var x = window.pageXOffset || 0;
+      var y = window.pageYOffset || 0;
+      $hero.owlCarousel({
+        loop: true,
+        margin: 0,
+        nav: true,
+        dots: false,
+        navText: ["<i class = 'fa fa-chevron-left'></i>", "<i class = 'fa fa-chevron-right'></i>"],
+        responsive: {
+          0: {
+            items: 1
+          },
+          768: {
+            items: 1
+          },
+          1000: {
+            items: 1
+          }
+        }
+      });
+      try { window.scrollTo(x, y); } catch (err) {}
+    })();
+  </script>
+
+
+
+
+  <section class="book" id="reserve">
+    <div class="container flex_space">
+      <div class="text">
+        <h1> <span>Reserve </span> Your Stay </h1>
+      </div>
+      <div class="form">
+        <form class="book-reserve-form" id="homeReserveForm" action="javascript:void(0)" method="dialog" onsubmit="return false;">
+          <input type="hidden" name="arrival" value="">
+          <input type="hidden" name="departure" value="">
+          <button type="button" class="book-date-trigger book-date-trigger--range" data-open-avail-cal data-date-role="dates" aria-label="Select stay dates">
+            <span class="book-date-trigger__text" data-date-label>Select dates</span>
+            <span class="book-date-trigger__icon" aria-hidden="true"></span>
+          </button>
+          <input type="number" name="adults" min="1" placeholder="Adults" aria-label="Number of adults" value="2">
+          <input type="number" name="children" min="0" placeholder="Children" aria-label="Number of children" value="0">
+          <button type="button" class="book-reserve-submit" data-open-avail-cal>Check availability</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+
+
+  <section class="about top" id="about">
+    <div class="container flex">
+      <div class="left">
+        <div class="heading">
+          <h1>WELCOME</h1>
+          <h2>Elenest Resort</h2>
+        </div>
+        <p>Leave behind the pressures of daily life and step into a destination where comfort and nature come together. 
+          At Elenest Resort, we provide a calm atmosphere, modern facilities, and genuine hospitality to make every stay relaxing and unforgettable.
+           Whether you're visiting for rest, quality time with loved ones, or a special occasion, Elenest is the perfect place to be.</p>
+        <a href="about.html" class="primary-btn">ABOUT US</a>
+      </div>
+      <div class="right">
+        <div class="about__media">
+          <img src="../Images/ELENEST-BG 2.png" alt="Elenest Resort grounds and facilities">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="counter top counter--quote" aria-label="Elenest Resort quote">
+    <div class="container counter-quote">
+      <i class="fa-solid fa-quote-right" aria-hidden="true"></i>
+      <blockquote>
+        <p>Slow mornings. Cool water. Kind people. That is Elenest.</p>
+        <cite>Elenest Resort · Mataasnakahoy, Batangas</cite>
+      </blockquote>
+    </div>
+  </section>
+
+
+  <section class="gallery" id="pages">
+    <div class="container top">
+      <div class="heading">
+        <h1>PHOTOS</h1>
+        <h2>Moments at Elenest</h2>
+        <p>Make a glimpse of the beauty, comfort, and experiences waiting for you.</p>
+      </div>
+    </div>
+
+    <div class="content mtop">
+      <div class="owl-carousel owl-gallery owl-theme" id="homeGalleryCarousel" aria-label="Moments at Elenest photo gallery">
+        <div class="items">
+          <div class="img">
+            <img src="../Images/gallery-1.png" alt="Elenest Resort lounge">
+          </div>
+          <div class="overlay">
+            <span class="fa fa-plus" aria-hidden="true"></span>
+            <h3>Resort lounge</h3>
+          </div>
+          <p class="gallery-caption">Resort lounge</p>
+        </div>
+        <div class="items">
+          <div class="img">
+            <img src="../Images/gallery-2.png" alt="Poolside area at Elenest">
+          </div>
+          <div class="overlay">
+            <span class="fa fa-plus" aria-hidden="true"></span>
+            <h3>Poolside view</h3>
+          </div>
+          <p class="gallery-caption">Poolside view</p>
+        </div>
+        <div class="items">
+          <div class="img">
+            <img src="../Images/gallery-3.png" alt="Suite bathroom overlooking the water">
+          </div>
+          <div class="overlay">
+            <span class="fa fa-plus" aria-hidden="true"></span>
+            <h3>Ocean suite bath</h3>
+          </div>
+          <p class="gallery-caption">Ocean suite bath</p>
+        </div>
+        <div class="items">
+          <div class="img">
+            <img src="../Images/gallery-4.png" alt="Comfortable living space">
+          </div>
+          <div class="overlay">
+            <span class="fa fa-plus" aria-hidden="true"></span>
+            <h3>Living space</h3>
+          </div>
+          <p class="gallery-caption">Living space</p>
+        </div>
+        <div class="items">
+          <div class="img">
+            <img src="../Images/gallery-5.png" alt="Elenest Resort exterior">
+          </div>
+          <div class="overlay">
+            <span class="fa fa-plus" aria-hidden="true"></span>
+            <h3>Resort exterior</h3>
+          </div>
+          <p class="gallery-caption">Resort exterior</p>
+        </div>
+        <div class="items">
+          <div class="img">
+            <img src="../Images/gallery-6.png" alt="Indoor event hall">
+          </div>
+          <div class="overlay">
+            <span class="fa fa-plus" aria-hidden="true"></span>
+            <h3>Event hall</h3>
+          </div>
+          <p class="gallery-caption">Event hall</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="services top" id="news">
+    <div class="container">
+      <div class="heading">
+        <h1>RULES</h1>
+        <h2>Rules &amp; Policy</h2>
+        <p>Review resort house rules and guest policies for a safe, smooth, and enjoyable stay. <a href="policies.html" class="rooms-explore-link">View all policies</a></p>
+      </div>
+
+
+      <div class="content flex_space">
+        <div class="left grid2" id="homePoliciesGrid">
+          <article class="card policy-card">
+            <div class="policy-card__icon-wrap" aria-hidden="true"><i class="fa-solid fa-utensils"></i></div>
+            <h3>Outside Food Policy</h3>
+            <p>Outside food and beverages may be limited in certain venues or packages&mdash;ask reservations when booking events or catered stays.</p>
+          </article>
+          <article class="card policy-card">
+            <div class="policy-card__icon-wrap" aria-hidden="true"><i class="fa-solid fa-person-swimming"></i></div>
+            <h3>Pool Safety Rules</h3>
+            <p>Swimming pool hours: 8:00 AM to 10:00 PM only. Children under 12 must have an adult present at the pool deck.</p>
+          </article>
+          <article class="card policy-card">
+            <div class="policy-card__icon-wrap" aria-hidden="true"><i class="fa-solid fa-key"></i></div>
+            <h3>Check-in &amp; Check-out</h3>
+            <p>Present a valid government ID at reception. Late checkout may be arranged subject to availability and a modest fee.</p>
+          </article>
+          <article class="card policy-card">
+            <div class="policy-card__icon-wrap" aria-hidden="true"><i class="fa-solid fa-volume-off"></i></div>
+            <h3>Cleanliness &amp; Conduct</h3>
+            <p>Quiet hours: typically 10:00 PM&mdash;7:00 AM. Keep music and gatherings at considerate levels.</p>
+          </article>
+        </div>
+        <div class="right">
+          <div class="services__media">
+            <img src="../Images/policy.jpg" alt="Elenest Resort rules and guest policies">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+
+  <section class="Customer top home-review-kpis" aria-label="Guest review highlights">
+    <div class="container home-review-kpis__grid">
+      <div class="home-review-kpis__item">
+        <h1 id="homeKpiAvgRating">â¦</h1>
+        <hr>
+        <span>Average rating</span>
+      </div>
+      <div class="home-review-kpis__item">
+        <h1 id="homeKpiRecommendRate">â¦</h1>
+        <hr>
+        <span>Would recommend</span>
+      </div>
+      <div class="home-review-kpis__item">
+        <h1 id="homeKpiCount">â¦</h1>
+        <hr>
+        <span>Total reviews</span>
+      </div>
+    </div>
+  </section>
+
+
+
+  <section class="news top" id="contact">
+    <div class="container">
+      <div class="heading">
+        <h1>ACTIVITIES</h1>
+        <h2>Activities from Elenest</h2>
+        <p>Promotions, events, and activities from Elenest Resort in Mataasnakahoy, Batangas &mdash; your nature-inspired escape.</p>
+      </div>
+
+
+      <div class="content flex" id="homeActivitiesSection">
+        <div class="left grid2" id="homeActivitiesFeatured"></div>
+        <div class="right" id="homeActivitiesSide"></div>
+      </div>
+      <p class="rooms-explore-wrap" style="margin-top: 18px;">
+        <a href="activities.html" class="rooms-explore-link">View all activities</a>
+      </p>
+    </div>
+  </section>
+
+
+  <footer>
+    <div class="container grid">
+      <div class="box">
+        <p>Elenest Resort is your sanctuary of relaxation, offering a perfect blend of comfort,
+          nature, and exceptional service. Experience tranquility like never before.</p>
+
+        <div class="icon">
+          <i class="fa fa-facebook-f"></i>
+          <i class="fa fa-instagram"></i>
+          <i class="fa fa-twitter"></i>
+          <i class="fa fa-youtube"></i>
+        </div>
+      </div>
+
+      <div class="box">
+        <h2>Links</h2>
+        <ul>
+          <li>Our Story</li>
+          <li>About Us</li>
+          <li>Contact Us</li>
+          <li>Services</li>
+          <li>Privacy Policy</li>
+        </ul>
+      </div>
+
+      <div class="box">
+        <h2>Contact Us</h2>
+        <p>We&rsquo;re here to assist you with bookings and inquiries. Feel free to reach out anytime.</p>
+        <i class="fa fa-location-dot"></i>
+        <label>Mataasnakahoy, Batangas</label> <br>
+        <i class="fa fa-phone"></i>
+        <label>09177906661</label> <br>
+        <i class="fa fa-envelope"></i>
+        <label>elenest@gmail.com</label> <br>
+      </div>
+    </div>
+  </footer>
+
+  <div class="legal">
+    <p class="container">Copyright (c) 2026 Copyright Holder All Rights Reserved.</p>
+  </div>
+
+
+
+  <div id="availCalendarModal" class="avail-modal" hidden aria-hidden="true">
+    <div class="avail-modal__backdrop" data-avail-close></div>
+    <div class="avail-modal__dialog avail-modal__dialog--simple" role="dialog" aria-modal="true" aria-labelledby="availModalTitle">
+      <button type="button" class="avail-modal__close" data-avail-close aria-label="Close availability calendar">&times;</button>
+      <section class="avail-modal__calendar">
+        <h3 id="availModalTitle" class="avail-modal__calendar-title">Select your dates</h3>
+        <p class="avail-modal__calendar-lead">Tap <strong>one date</strong> for a day visit, or a <strong>second later date</strong> for overnight. Then choose a facility.</p>
+        <div class="admin-dash-cal-layout avail-modal-cal-layout">
+          <div class="admin-dash-cal-main">
+            <div class="book-flow-calendar-head admin-dash-cal-head">
+              <button type="button" class="book-flow-cal-nav" id="availModalCalPrev" aria-label="Previous month">â¦</button>
+              <h4 class="book-flow-cal-month" id="availModalCalMonthLabel"></h4>
+              <button type="button" class="book-flow-cal-nav" id="availModalCalNext" aria-label="Next month">â¦</button>
+            </div>
+            <div id="availModalCalendarHost" class="book-flow-calendar admin-dash-cal-host" role="grid" aria-label="Resort date availability"></div>
+          </div>
+          <aside class="admin-dash-cal-notes" aria-label="Calendar notes">
+            <h3 class="admin-dash-cal-notes__title">Calendar Notes</h3>
+            <ul class="admin-dash-cal-legend">
+              <li>
+                <span class="avail-legend__swatch avail-legend__swatch--available" aria-hidden="true"></span>
+                <span class="admin-dash-cal-legend__text">
+                  <strong>Available</strong>
+                  <span>Open for booking.</span>
+                </span>
+              </li>
+              <li>
+                <span class="avail-legend__swatch avail-legend__swatch--booked" aria-hidden="true"></span>
+                <span class="admin-dash-cal-legend__text">
+                  <strong>Booked</strong>
+                  <span>Already reserved &mdash; gray and not selectable.</span>
+                </span>
+              </li>
+              <li>
+                <span class="avail-legend__swatch avail-legend__swatch--unavailable" aria-hidden="true"></span>
+                <span class="admin-dash-cal-legend__text">
+                  <strong>Closed</strong>
+                  <span>Blocked by manager.</span>
+                </span>
+              </li>
+            </ul>
+            <p class="admin-dash-cal-notes__hint">Tap one date for a day visit, or a second later date for overnight.</p>
+          </aside>
+        </div>
+        <p id="availModalPickedSummary" class="book-flow-picked" aria-live="polite">Tap one date for a day visit, or tap a second later date for overnight.</p>
+        <section id="availModalFacilitySection" class="avail-facility-section" hidden>
+          <h4 class="avail-facility-section__title">Choose a facility</h4>
+          <p id="availModalFacilityEmpty" class="avail-facility-section__empty" hidden>Booked rooms, cottages, and halls stay listed in gray and cannot be selected.</p>
+          <div id="availModalFacilityHost" class="avail-facility-host"></div>
+        </section>
+        <div class="avail-modal__actions">
+          <button type="button" class="btn book-flow-btn-main" id="availModalReserveBtn" disabled aria-disabled="true">Select dates &amp; facility</button>
+          <button type="button" class="btn btn--outline" data-avail-close>Close</button>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-config.js"></script>
+  <script src="../js/supabase-client.js"></script>
+  <script src="../js/content-store.js?v=20260718-gallery"></script>
+  <script src="../js/payment-flow.js?v=20260913-icons1"></script>
+  <script src="../js/auth.js?v=20260918-role1"></script>
+  <script src="../js/bookings.js?v=20260917-nlag1"></script>
+  <script>
+    // Live calendar uses Supabase bookings only (no Google Calendar).
+    window.ElenestGoogleCalendarIcsUrl = "";
+  </script>
+  <script src="../js/unit-availability.js?v=20260718-ok"></script>
+  <script src="../js/elenest-availability.js?v=20260718-ok"></script>
+  <script src="../js/elenest-calendar-widget.js?v=20260922-ux2"></script>
+  <script src="../js/book-availability-modal.js?v=20260902-factabs2"></script>
+  <script src="../js/home-reserve.js?v=20260718-ok"></script>
+  <script src="https://kit.fontawesome.com/032d11eac3.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-config.js"></script>
+  <script src="../js/supabase-client.js"></script>
+  <script src="../js/role-login.js?v=20260831-signin"></script>
+  <script src="../js/guest-feedback.js?v=20260927-review1"></script>
+  <script src="../js/home-content.js?v=20260925-policy1"></script>
+  <script src="../js/home-reviews.js?v=20260918-kpi3"></script>
+</body>
+
+</html>

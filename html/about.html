@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us | Elenest Resort</title>
+  <link rel="icon" type="image/png" href="../Images/icon.png">
+  <link rel="stylesheet" href="../css/style.css?v=20260922-menu3">
+</head>
+<body class="subpage">
+  <header>
+    <div class="content flex_space">
+      <div class="logo">
+        <a href="index.html" class="site-logo-link" aria-label="Elenest Resort home">
+          <img class="site-logo" src="../Images/elenest_logo_pink.png" alt="Elenest Event Center">
+        </a>
+      </div>
+      <div class="navlinks">
+        <ul id="menulist" class="site-nav-list">
+          <li><a href="index.html">Home</a></li>
+          <li><a class="active" href="about.html">About Us</a></li>
+          <li><a href="reviews.html">Reviews</a></li>
+          <li><a href="rooms.html">Facilities</a></li>
+          <li><a href="policies.html">Policies</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="activities.html">Activities</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+          <li class="role-login-nav" id="roleLoginNav">
+            <a href="login.html" class="role-login-trigger staff-access-btn" id="roleLoginTrigger" aria-label="Sign In">Sign In</a>
+          </li>
+        </ul>
+        <button type="button" class="nav-menu-toggle" id="navMenuToggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="menulist">
+          <span class="nav-menu-toggle__bar" aria-hidden="true"></span>
+          <span class="nav-menu-toggle__bar" aria-hidden="true"></span>
+          <span class="nav-menu-toggle__bar" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1 id="aboutHeroTitle">About Elenest Resort</h1>
+      <p id="aboutHeroLead">Elenest Resort is a nature-inspired destination in Mataasnakahoy, Batangas where comfort, warm service, and memorable moments come together for every guest.</p>
+    </section>
+
+    <section class="section grid" id="aboutStoryGrid"></section>
+
+    <section class="section">
+      <h2 class="section-title">Resort Credentials</h2>
+      <p class="credentials-lead" id="aboutCredLead">Elenest Resort is a duly registered tourism business. We maintain clear permits and standards so guests can book with confidence.</p>
+      <div class="grid" id="aboutCredGrid"></div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Find Us</h2>
+      <article class="card">
+        <p id="aboutFindLead">Visit Elenest Resort at Mataasnakahoy, Batangas. Use the map below for directions and nearby landmarks.</p>
+        <div class="map-wrap">
+          <iframe
+            id="aboutMapFrame"
+            title="Elenest Resort Location Map"
+            src="https://maps.google.com/maps?q=Elenest%20Resort%2C%20Mataasnakahoy%2C%20Batangas&t=&z=15&ie=UTF8&iwloc=&output=embed"
+            loading="lazy"
+            allowfullscreen>
+          </iframe>
+        </div>
+        <a class="btn" href="https://maps.app.goo.gl/kXd1WD9w6Q1kgAD56" target="_blank" rel="noopener noreferrer">Open Exact Location</a>
+        <p class="note">Tip: Open Google Maps and search "Elenest Resort, Mataasnakahoy, Batangas" for the fastest route from your location.</p>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>Copyright 2026 Elenest Resort. All rights reserved.</p>
+    </div>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-config.js"></script>
+  <script src="../js/supabase-client.js"></script>
+  <script src="../js/content-store.js?v=20260925-stable1"></script>
+  <script src="../js/header-nav.js?v=20260922-menu2"></script>
+  <script src="../js/about-page.js?v=20260925-stable1"></script>
+  <script src="../js/role-login.js"></script>
+</body>
+</html>

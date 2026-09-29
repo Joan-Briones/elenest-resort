@@ -1,0 +1,1001 @@
+id,guest_name,guest_email,booking_id,stars,comment,photo_url,created_at,sentiment_archived,sentiment_week_key
+past-fb-B2001,Walk-in,past-b2001@imported.elenest.local,past-B2001,2,We encountered some issues with the water pressure. and Sakto lang ang price para sa amenities.,,2024-01-01T12:00:00+08:00,true,2024-01-01
+past-fb-B2002,Walk-in,past-b2002@imported.elenest.local,past-B2002,5,"Not worth the price we paid.. Also, Sulit na sulit ang booking namin.",,2024-01-02T12:00:00+08:00,true,2024-01-01
+past-fb-B2003,Walk-in,past-b2003@imported.elenest.local,past-B2003,4,"Masyadong maingay ang ibang mga bisita., Kailangang linisin pa ang mga kwarto.",,2024-01-19T12:00:00+08:00,true,2024-01-15
+past-fb-B2004,Wedding,past-b2004@imported.elenest.local,past-B2004,5,The water in the pool was a bit cloudy. and Medyo okay naman ang experience.,,2024-02-03T12:00:00+08:00,true,2024-01-29
+past-fb-B2005,Walk-in,past-b2005@imported.elenest.local,past-B2005,4,Solid ang experience rito. and The service is quite fine.,,2024-02-10T12:00:00+08:00,true,2024-02-05
+past-fb-B2006,Walk-in,past-b2006@imported.elenest.local,past-B2006,5,Highly recommended itong resort na ito. and Maayos ang pamamalakad sa lugar.,,2024-02-17T12:00:00+08:00,true,2024-02-12
+past-fb-B2007,Walk-in,past-b2007@imported.elenest.local,past-B2007,4,Napakaganda ng inyong resort. and Mahal ang presyo kumpara sa serbisyo.,,2024-03-09T12:00:00+08:00,true,2024-03-04
+past-fb-B2008,Event,past-b2008@imported.elenest.local,past-B2008,4,Facilities are a bit outdated. and Legit na relaxing ang vibe.,,2024-03-10T12:00:00+08:00,true,2024-03-04
+past-fb-B2009,Walk-in,past-b2009@imported.elenest.local,past-B2009,2,"A bit overpriced for the current state.. Also, Walang masyadong naging problema.",,2024-03-16T12:00:00+08:00,true,2024-03-11
+past-fb-B2010,Walk-in,past-b2010@imported.elenest.local,past-B2010,4,Super ganda ng ambiance dito. and The facilities are wellmaintained.,,2024-03-28T12:00:00+08:00,true,2024-03-25
+past-fb-B2011,Walk-in,past-b2011@imported.elenest.local,past-B2011,4,The water in the pool was a bit cloudy.. Average service during our stay.,,2024-03-28T12:00:00+08:00,true,2024-03-25
+past-fb-B2012,Walk-in,past-b2012@imported.elenest.local,past-B2012,4,Mabagal ang serbisyo sa reception. and Staff are very professional and accommodating.,,2024-03-30T12:00:00+08:00,true,2024-03-25
+past-fb-B2013,Event,past-b2013@imported.elenest.local,past-B2013,4,"The resort exceeded our expectations.. In addition, Hindi kami nasiyahan sa aming stay.",,2024-03-31T12:00:00+08:00,true,2024-03-25
+past-fb-B2014,Toda,past-b2014@imported.elenest.local,past-B2014,4,"Service was slow and needs improvement.. In addition, Sulit na sulit ang booking namin.",,2024-04-04T12:00:00+08:00,true,2024-04-01
+past-fb-B2015,Event,past-b2015@imported.elenest.local,past-B2015,5,Not bad for a short trip. and Sulit na sulit ang booking namin.,,2024-04-06T12:00:00+08:00,true,2024-04-01
+past-fb-B2016,Air Force,past-b2016@imported.elenest.local,past-B2016,5,"Okay naman yung stay namin overall.. In addition, Standard lang ang rooms but clean.",,2024-04-07T12:00:00+08:00,true,2024-04-01
+past-fb-B2017,Walk-in,past-b2017@imported.elenest.local,past-B2017,3,"The staff were not that responsive.. Also, A bit overpriced for the current state.",,2024-04-09T12:00:00+08:00,true,2024-04-08
+past-fb-B2018,Walk-in,past-b2018@imported.elenest.local,past-B2018,4,Facilities are a bit outdated.,,2024-04-18T12:00:00+08:00,true,2024-04-15
+past-fb-B2019,Walk-in,past-b2019@imported.elenest.local,past-B2019,3,"A bit overpriced for the current state.. In addition, Hassle yung process ng checkin.",,2024-04-20T12:00:00+08:00,true,2024-04-15
+past-fb-B2020,Swimming,past-b2020@imported.elenest.local,past-B2020,5,Not bad for a short trip. and Not worth the price we paid.,,2024-04-21T12:00:00+08:00,true,2024-04-15
+past-fb-B2021,Barangay,past-b2021@imported.elenest.local,past-B2021,4,The room was basic but functional.. The water in the pool was a bit cloudy.,,2024-04-28T12:00:00+08:00,true,2024-04-22
+past-fb-B2022,Walk-in,past-b2022@imported.elenest.local,past-B2022,4,"The staff are very approachable and helpful.. In addition, Masarap ang pagkain sa inyong canteen.",,2024-05-01T12:00:00+08:00,true,2024-04-29
+past-fb-B2023,Tristan,past-b2023@imported.elenest.local,past-B2023,4,"Sakto lang ang naging karanasan namin.. In addition, Mahal ang presyo kumpara sa serbisyo.",,2024-05-02T12:00:00+08:00,true,2024-04-29
+past-fb-B2024,Bernie,past-b2024@imported.elenest.local,past-B2024,4,"Napakaganda ng inyong resort., The staff were not that responsive.",,2024-05-04T12:00:00+08:00,true,2024-04-29
+past-fb-B2025,Port Epoy,past-b2025@imported.elenest.local,past-B2025,4,"Naging masaya ang aming pamilya rito.. In addition, The service is quite fine.",,2024-05-05T12:00:00+08:00,true,2024-04-29
+past-fb-B2026,Wedding Tus,past-b2026@imported.elenest.local,past-B2026,4,"The resort exceeded our expectations.. Also, Not bad for a short trip.",,2024-05-08T12:00:00+08:00,true,2024-05-06
+past-fb-B2027,Room Accom,past-b2027@imported.elenest.local,past-B2027,5,"Maayos naman ang pasilidad.. In addition, Not bad for a short trip.",,2024-05-01T12:00:00+08:00,true,2024-04-29
+past-fb-B2028,Melvin,past-b2028@imported.elenest.local,past-B2028,3,May ilang sira sa banyo. and Tahimik naman ang paligid.,,2024-05-11T12:00:00+08:00,true,2024-05-06
+past-fb-B2029,Taas,past-b2029@imported.elenest.local,past-B2029,3,"Hindi kami nasiyahan sa aming stay.. Also, Medyo disappointing ang quality ng rooms.",,2024-05-12T12:00:00+08:00,true,2024-05-06
+past-fb-B2030,Angie,past-b2030@imported.elenest.local,past-B2030,4,"Walang kupas ang ganda ng pool.. Also, Staff are very professional and accommodating.",,2024-05-17T12:00:00+08:00,true,2024-05-13
+past-fb-B2031,Joy,past-b2031@imported.elenest.local,past-B2031,4,Maayos naman ang pasilidad. and Maayos ang pamamalakad sa lugar.,,2024-05-18T12:00:00+08:00,true,2024-05-13
+past-fb-B2032,JR Acar,past-b2032@imported.elenest.local,past-B2032,5,"We had a wonderful and relaxing stay.. In addition, Everything was as expected.",,2024-05-19T12:00:00+08:00,true,2024-05-13
+past-fb-B2033,Allyssa Lubis,past-b2033@imported.elenest.local,past-B2033,4,"It was a decent experience overall.. Also, Madaling hanapin ang lokasyon.",,2024-05-25T12:00:00+08:00,true,2024-05-20
+past-fb-B2034,Walk-in,past-b2034@imported.elenest.local,past-B2034,4,Facilities are a bit outdated. and The room was basic but functional.,,2024-06-01T12:00:00+08:00,true,2024-05-27
+past-fb-B2035,Event,past-b2035@imported.elenest.local,past-B2035,4,Sulit na sulit ang booking namin. and The room was basic but functional.,,2024-06-08T12:00:00+08:00,true,2024-06-03
+past-fb-B2036,Allan Hernandez,past-b2036@imported.elenest.local,past-B2036,4,Maayos ang pamamalakad sa lugar.. The resort exceeded our expectations.,,2024-06-12T12:00:00+08:00,true,2024-06-10
+past-fb-B2037,SB Pamarawan,past-b2037@imported.elenest.local,past-B2037,5,Maayos ang pamamalakad sa lugar.. Great value for money.,,2024-06-14T12:00:00+08:00,true,2024-06-10
+past-fb-B2038,Walk-in,past-b2038@imported.elenest.local,past-B2038,5,"Legit na relaxing ang vibe.. Also, We had a wonderful and relaxing stay.",,2024-06-23T12:00:00+08:00,true,2024-06-17
+past-fb-B2039,Walk-in,past-b2039@imported.elenest.local,past-B2039,4,Staff are very professional and accommodating. and Naging masaya ang aming pamilya rito.,,2024-06-25T12:00:00+08:00,true,2024-06-24
+past-fb-B2040,Lyca's Coz,past-b2040@imported.elenest.local,past-B2040,4,"Facilities are a bit outdated.. In addition, The view from our room was breathtaking.",,2024-06-29T12:00:00+08:00,true,2024-06-24
+past-fb-B2041,Walk-in,past-b2041@imported.elenest.local,past-B2041,4,"The facilities are wellmaintained.. Also, Super ganda ng ambiance dito.",,2024-06-29T12:00:00+08:00,true,2024-06-24
+past-fb-B2042,Walk-in,past-b2042@imported.elenest.local,past-B2042,4,The pool is clean and refreshing. and A bit overpriced for the current state.,,2024-06-30T12:00:00+08:00,true,2024-06-24
+past-fb-B2043,PFA Flying School,past-b2043@imported.elenest.local,past-B2043,4,"Legit na relaxing ang vibe., May ilang sira sa banyo.",,2024-07-06T12:00:00+08:00,true,2024-07-01
+past-fb-B2044,Quennie USA,past-b2044@imported.elenest.local,past-B2044,4,"The location is accessible.. Also, The room was basic but functional.",,2024-07-07T12:00:00+08:00,true,2024-07-01
+past-fb-B2045,Tita Selda,past-b2045@imported.elenest.local,past-B2045,3,"Service was slow and needs improvement.. Also, Staff are very professional and accommodating.",,2024-07-13T12:00:00+08:00,true,2024-07-08
+past-fb-B2046,Walk-in,past-b2046@imported.elenest.local,past-B2046,3,"Facilities are a bit outdated.. In addition, A bit overpriced for the current state.",,2024-07-14T12:00:00+08:00,true,2024-07-08
+past-fb-B2047,Walk-in,past-b2047@imported.elenest.local,past-B2047,4,"Standard na resort para sa presyo.. Also, The pool is clean and refreshing.",,2024-07-17T12:00:00+08:00,true,2024-07-15
+past-fb-B2048,Event,past-b2048@imported.elenest.local,past-B2048,4,May ilang sira sa banyo.. Sakto lang ang price para sa amenities.,,2024-07-18T12:00:00+08:00,true,2024-07-15
+past-fb-B2049,Foolsize,past-b2049@imported.elenest.local,past-B2049,4,Standard lang ang rooms but clean. and The service is quite fine.,,2024-07-20T12:00:00+08:00,true,2024-07-15
+past-fb-B2050,Baba ng Oras,past-b2050@imported.elenest.local,past-B2050,4,The staff are very approachable and helpful.. The service is quite fine.,,2024-07-28T12:00:00+08:00,true,2024-07-22
+past-fb-B2051,Event,past-b2051@imported.elenest.local,past-B2051,4,Not bad for a short trip. and Standard na resort para sa presyo.,,2024-08-03T12:00:00+08:00,true,2024-07-29
+past-fb-B2052,Walk-in,past-b2052@imported.elenest.local,past-B2052,4,The facilities are wellmaintained. and Goods na goods ang service.,,2024-08-03T12:00:00+08:00,true,2024-07-29
+past-fb-B2053,Walk-in,past-b2053@imported.elenest.local,past-B2053,4,Sakto lang ang naging karanasan namin. and Walang kupas ang ganda ng pool.,,2024-08-05T12:00:00+08:00,true,2024-08-05
+past-fb-B2054,Walk-in,past-b2054@imported.elenest.local,past-B2054,4,"Maayos ang pamamalakad sa lugar.. In addition, Walang masyadong naging problema.",,2024-08-24T12:00:00+08:00,true,2024-08-19
+past-fb-B2055,Brian Lagan,past-b2055@imported.elenest.local,past-B2055,4,The service is quite fine.. The room was basic but functional.,,2024-09-15T12:00:00+08:00,true,2024-09-09
+past-fb-B2056,Brian Lagan,past-b2056@imported.elenest.local,past-B2056,4,"Average service during our stay.. In addition, The view from our room was breathtaking.",,2024-09-15T12:00:00+08:00,true,2024-09-09
+past-fb-B2057,Tita Rose,past-b2057@imported.elenest.local,past-B2057,4,The view from our room was breathtaking.. Not bad for a short trip.,,2024-09-28T12:00:00+08:00,true,2024-09-23
+past-fb-B2058,Tita Rose,past-b2058@imported.elenest.local,past-B2058,4,"Very peaceful ang environment.. In addition, Highly recommended itong resort na ito.",,2024-09-28T12:00:00+08:00,true,2024-09-23
+past-fb-B2059,Metrillo,past-b2059@imported.elenest.local,past-B2059,4,"The facilities are wellmaintained.. Also, Napakalinis ng swimming pool.",,2024-09-01T12:00:00+08:00,true,2024-08-26
+past-fb-B2060,Metrillo,past-b2060@imported.elenest.local,past-B2060,3,Masyadong maingay ang ibang mga bisita. and May ilang sira sa banyo.,,2024-09-01T12:00:00+08:00,true,2024-08-26
+past-fb-B2061,Walk-in,past-b2061@imported.elenest.local,past-B2061,4,"Mahal ang presyo kumpara sa serbisyo.. In addition, Walang kupas ang ganda ng pool.",,2024-11-22T12:00:00+08:00,true,2024-11-18
+past-fb-B2062,Walk-in,past-b2062@imported.elenest.local,past-B2062,4,"The facilities are wellmaintained., The room was basic but functional.",,2024-11-24T12:00:00+08:00,true,2024-11-18
+past-fb-B2063,Walk-in,past-b2063@imported.elenest.local,past-B2063,5,Okay naman yung stay namin overall. and Naging masaya ang aming pamilya rito.,,2024-11-24T12:00:00+08:00,true,2024-11-18
+past-fb-B2064,Walk-in,past-b2064@imported.elenest.local,past-B2064,4,"The view from our room was breathtaking.. In addition, The resort exceeded our expectations.",,2024-12-13T12:00:00+08:00,true,2024-12-09
+past-fb-B2065,Event,past-b2065@imported.elenest.local,past-B2065,3,"The staff are very approachable and helpful.. In addition, A bit overpriced for the current state.",,2024-12-14T12:00:00+08:00,true,2024-12-09
+past-fb-B2066,Brgy Captains,past-b2066@imported.elenest.local,past-B2066,4,"Naging masaya ang aming pamilya rito., Maayos naman ang pasilidad.",,2024-12-15T12:00:00+08:00,true,2024-12-09
+past-fb-B2067,Brgy Santol,past-b2067@imported.elenest.local,past-B2067,5,Great value for money.. Sakto lang ang price para sa amenities.,,2024-12-15T12:00:00+08:00,true,2024-12-09
+past-fb-B2068,Brgy Upa,past-b2068@imported.elenest.local,past-B2068,4,"Sulit na sulit ang booking namin.. Also, Kailangang linisin pa ang mga kwarto.",,2024-12-15T12:00:00+08:00,true,2024-12-09
+past-fb-B2069,LHK,past-b2069@imported.elenest.local,past-B2069,4,Standard lang ang rooms but clean.. Very peaceful ang environment.,,2024-12-19T12:00:00+08:00,true,2024-12-16
+past-fb-B2070,Walk-in,past-b2070@imported.elenest.local,past-B2070,4,"Highly recommended itong resort na ito.. In addition, Panalo ang view, seryoso.",,2024-12-21T12:00:00+08:00,true,2024-12-16
+past-fb-B2071,Justine & Lyca,past-b2071@imported.elenest.local,past-B2071,4,"The staff were not that responsive.. In addition, Goods na goods ang service.",,2024-12-28T12:00:00+08:00,true,2024-12-23
+past-fb-B2072,Jerome Aguilar,past-b2072@imported.elenest.local,past-B2072,4,"Staff are very professional and accommodating., Masarap ang pagkain sa inyong canteen.",,2025-01-03T12:00:00+08:00,true,2024-12-30
+past-fb-B2073,Nina Dominguez,past-b2073@imported.elenest.local,past-B2073,5,"Sakto lang ang price para sa amenities.. Also, Legit na relaxing ang vibe.",,2025-01-04T12:00:00+08:00,true,2024-12-30
+past-fb-B2074,Rosemarie Ponce,past-b2074@imported.elenest.local,past-B2074,4,Super ganda ng ambiance dito.. Facilities are a bit outdated.,,2025-01-11T12:00:00+08:00,true,2025-01-06
+past-fb-B2075,Michelle Rivera,past-b2075@imported.elenest.local,past-B2075,4,Sakto lang ang naging karanasan namin.. A bit overpriced for the current state.,,2025-01-12T12:00:00+08:00,true,2025-01-06
+past-fb-B2076,Nina Dominguez,past-b2076@imported.elenest.local,past-B2076,4,Maayos ang pamamalakad sa lugar. and Walang masyadong naging problema.,,2025-01-21T12:00:00+08:00,true,2025-01-20
+past-fb-B2077,Patrick Torres,past-b2077@imported.elenest.local,past-B2077,5,"The pool is clean and refreshing.. Also, Maayos ang pamamalakad sa lugar.",,2025-02-01T12:00:00+08:00,true,2025-01-27
+past-fb-B2078,Erica Padilla,past-b2078@imported.elenest.local,past-B2078,4,"The staff were not that responsive. and Panalo ang view, seryoso.",,2025-02-15T12:00:00+08:00,true,2025-02-10
+past-fb-B2079,Jeffrey Salazar,past-b2079@imported.elenest.local,past-B2079,4,Highly recommended itong resort na ito. and Standard na resort para sa presyo.,,2025-02-16T12:00:00+08:00,true,2025-02-10
+past-fb-B2080,Liza Flores,past-b2080@imported.elenest.local,past-B2080,4,The pool area is fine.. Hindi kami nasiyahan sa aming stay.,,2025-02-22T12:00:00+08:00,true,2025-02-17
+past-fb-B2081,Ana Lopez,past-b2081@imported.elenest.local,past-B2081,4,"Standard na resort para sa presyo.. Also, Naging masaya ang aming pamilya rito.",,2025-02-28T12:00:00+08:00,true,2025-02-24
+past-fb-B2082,Rosemarie Ponce,past-b2082@imported.elenest.local,past-B2082,4,"Sakto lang ang naging karanasan namin.. Also, Facilities are a bit outdated.",,2025-03-15T12:00:00+08:00,true,2025-03-10
+past-fb-B2083,Erica Padilla,past-b2083@imported.elenest.local,past-B2083,4,Napakaganda ng inyong resort.. Mabagal ang serbisyo sa reception.,,2025-03-16T12:00:00+08:00,true,2025-03-10
+past-fb-B2084,Liza Flores,past-b2084@imported.elenest.local,past-B2084,5,"Maayos naman ang pasilidad.. Also, Highly recommended itong resort na ito.",,2025-03-22T12:00:00+08:00,true,2025-03-17
+past-fb-B2085,Jeffrey Salazar,past-b2085@imported.elenest.local,past-B2085,4,Masyadong maingay ang ibang mga bisita.. The staff were not that responsive.,,2025-03-28T12:00:00+08:00,true,2025-03-24
+past-fb-B2086,Liza Flores,past-b2086@imported.elenest.local,past-B2086,3,"It was a decent experience overall.. Also, Medyo madumi yung area nung dumating kami.",,2025-04-04T12:00:00+08:00,true,2025-03-31
+past-fb-B2087,Maria Santos,past-b2087@imported.elenest.local,past-B2087,3,"Staff are very professional and accommodating.. In addition, May ilang sira sa banyo.",,2025-04-09T12:00:00+08:00,true,2025-04-07
+past-fb-B2088,Nina Dominguez,past-b2088@imported.elenest.local,past-B2088,4,"The location is accessible.. In addition, Goods na goods ang service.",,2025-04-10T12:00:00+08:00,true,2025-04-07
+past-fb-B2089,Adrian Vargas,past-b2089@imported.elenest.local,past-B2089,5,"Medyo okay naman ang experience.. In addition, Masarap ang pagkain sa inyong canteen.",,2025-04-13T12:00:00+08:00,true,2025-04-07
+past-fb-B2090,Nina Dominguez,past-b2090@imported.elenest.local,past-B2090,5,"Hassle yung process ng checkin.. Also, Mabait at magalang ang mga staff.",,2025-04-16T12:00:00+08:00,true,2025-04-14
+past-fb-B2091,Jeffrey Salazar,past-b2091@imported.elenest.local,past-B2091,4,"Sulit na sulit ang booking namin., Hassle yung process ng checkin.",,2025-04-21T12:00:00+08:00,true,2025-04-21
+past-fb-B2092,Jerome Aguilar,past-b2092@imported.elenest.local,past-B2092,4,"The pool area is fine., The location is accessible.",,2025-04-23T12:00:00+08:00,true,2025-04-21
+past-fb-B2093,Angel Aquino,past-b2093@imported.elenest.local,past-B2093,4,"Staff are very professional and accommodating.. In addition, Goods na goods ang service.",,2025-04-26T12:00:00+08:00,true,2025-04-21
+past-fb-B2094,Liza Flores,past-b2094@imported.elenest.local,past-B2094,4,"The service is quite fine., Highly recommended itong resort na ito.",,2025-04-27T12:00:00+08:00,true,2025-04-21
+past-fb-B2095,Jose Reyes,past-b2095@imported.elenest.local,past-B2095,4,A bit overpriced for the current state. and Standard lang ang rooms but clean.,,2025-04-30T12:00:00+08:00,true,2025-04-28
+past-fb-B2096,Rosemarie Ponce,past-b2096@imported.elenest.local,past-B2096,4,"The pool is clean and refreshing., Goods na goods ang service.",,2025-04-30T12:00:00+08:00,true,2025-04-28
+past-fb-B2097,Patrick Torres,past-b2097@imported.elenest.local,past-B2097,4,"The staff are very approachable and helpful.. In addition, Not bad for a short trip.",,2025-04-30T12:00:00+08:00,true,2025-04-28
+past-fb-B2098,Paolo Garcia,past-b2098@imported.elenest.local,past-B2098,4,"Solid ang experience rito.. In addition, Staff are very professional and accommodating.",,2025-04-30T12:00:00+08:00,true,2025-04-28
+past-fb-B2099,Michelle Rivera,past-b2099@imported.elenest.local,past-B2099,4,Solid ang experience rito.. The resort exceeded our expectations.,,2025-05-01T12:00:00+08:00,true,2025-04-28
+past-fb-B2100,Liza Flores,past-b2100@imported.elenest.local,past-B2100,4,Napakaganda ng inyong resort.,,2025-05-04T12:00:00+08:00,true,2025-04-28
+past-fb-B2101,Kevin Valencia,past-b2101@imported.elenest.local,past-B2101,4,"Legit na relaxing ang vibe.. Also, Tahimik naman ang paligid.",,2025-05-04T12:00:00+08:00,true,2025-04-28
+past-fb-B2102,Kristine Morales,past-b2102@imported.elenest.local,past-B2102,5,Not worth the price we paid. and Standard lang ang rooms but clean.,,2025-05-06T12:00:00+08:00,true,2025-05-05
+past-fb-B2103,Patrick Torres,past-b2103@imported.elenest.local,past-B2103,3,Facilities are a bit outdated.. A bit overpriced for the current state.,,2025-05-08T12:00:00+08:00,true,2025-05-05
+past-fb-B2104,Kevin Valencia,past-b2104@imported.elenest.local,past-B2104,4,Everything was as expected.. Standard na resort para sa presyo.,,2025-05-11T12:00:00+08:00,true,2025-05-05
+past-fb-B2105,Jerome Aguilar,past-b2105@imported.elenest.local,past-B2105,5,Facilities are a bit outdated.. Okay naman yung stay namin overall.,,2025-05-18T12:00:00+08:00,true,2025-05-12
+past-fb-B2106,Rafael Castillo,past-b2106@imported.elenest.local,past-B2106,4,"The room cleanliness was disappointing.. Also, Kailangang linisin pa ang mga kwarto.",,2025-05-25T12:00:00+08:00,true,2025-05-19
+past-fb-B2107,Kevin Valencia,past-b2107@imported.elenest.local,past-B2107,4,"The pool area is fine.. In addition, The facilities are wellmaintained.",,2025-05-27T12:00:00+08:00,true,2025-05-26
+past-fb-B2108,Rosemarie Ponce,past-b2108@imported.elenest.local,past-B2108,2,"A bit overpriced for the current state.. In addition, Walang masyadong naging problema.",,2025-05-30T12:00:00+08:00,true,2025-05-26
+past-fb-B2109,Bryan Navarro,past-b2109@imported.elenest.local,past-B2109,4,"Highly recommended itong resort na ito., The location is accessible.",,2025-05-31T12:00:00+08:00,true,2025-05-26
+past-fb-B2110,Paolo Garcia,past-b2110@imported.elenest.local,past-B2110,5,"The pool is clean and refreshing., Not worth the price we paid.",,2025-06-04T12:00:00+08:00,true,2025-06-02
+past-fb-B2111,Maria Santos,past-b2111@imported.elenest.local,past-B2111,4,"Not bad for a short trip.. Also, It was a decent experience overall.",,2025-06-12T12:00:00+08:00,true,2025-06-09
+past-fb-B2112,Jose Reyes,past-b2112@imported.elenest.local,past-B2112,5,"Staff are very professional and accommodating.. In addition, We had a wonderful and relaxing stay.",,2025-06-19T12:00:00+08:00,true,2025-06-16
+past-fb-B2113,Rosemarie Ponce,past-b2113@imported.elenest.local,past-B2113,4,"Everything was as expected.. In addition, Hassle yung process ng checkin.",,2025-06-22T12:00:00+08:00,true,2025-06-16
+past-fb-B2114,Patrick Torres,past-b2114@imported.elenest.local,past-B2114,2,A bit overpriced for the current state. and We encountered some issues with the water pressure.,,2025-07-02T12:00:00+08:00,true,2025-06-30
+past-fb-B2115,Kristine Morales,past-b2115@imported.elenest.local,past-B2115,4,"Medyo disappointing ang quality ng rooms.. In addition, The room cleanliness was disappointing.",,2025-07-02T12:00:00+08:00,true,2025-06-30
+past-fb-B2116,Arvin Mercado,past-b2116@imported.elenest.local,past-B2116,4,"Sakto lang ang price para sa amenities.. Also, Kailangang linisin pa ang mga kwarto.",,2025-07-05T12:00:00+08:00,true,2025-06-30
+past-fb-B2117,Angela Bautista,past-b2117@imported.elenest.local,past-B2117,4,"Napakaganda ng inyong resort., It was a decent experience overall.",,2025-07-12T12:00:00+08:00,true,2025-07-07
+past-fb-B2118,Ana Lopez,past-b2118@imported.elenest.local,past-B2118,3,"May ilang sira sa banyo.. In addition, The room was basic but functional.",,2025-07-19T12:00:00+08:00,true,2025-07-14
+past-fb-B2119,Mark Ramos,past-b2119@imported.elenest.local,past-B2119,4,"Naging masaya ang aming pamilya rito.. In addition, Average service during our stay.",,2025-07-20T12:00:00+08:00,true,2025-07-14
+past-fb-B2120,Erica Padilla,past-b2120@imported.elenest.local,past-B2120,4,Walang masyadong naging problema.. Standard lang ang rooms but clean.,,2025-07-20T12:00:00+08:00,true,2025-07-14
+past-fb-B2121,Arvin Mercado,past-b2121@imported.elenest.local,past-B2121,5,Madaling hanapin ang lokasyon.. Medyo okay naman ang experience.,,2025-07-26T12:00:00+08:00,true,2025-07-21
+past-fb-B2122,Liza Flores,past-b2122@imported.elenest.local,past-B2122,4,"Standard na resort para sa presyo.. Also, It was a decent experience overall.",,2025-08-01T12:00:00+08:00,true,2025-07-28
+past-fb-B2123,Nina Dominguez,past-b2123@imported.elenest.local,past-B2123,2,"Very peaceful ang environment., We encountered some issues with the water pressure.",,2025-08-02T12:00:00+08:00,true,2025-07-28
+past-fb-B2124,Danica Robles,past-b2124@imported.elenest.local,past-B2124,4,"The room cleanliness was disappointing.. Also, Not bad for a short trip.",,2025-08-12T12:00:00+08:00,true,2025-08-11
+past-fb-B2125,Jeffrey Salazar,past-b2125@imported.elenest.local,past-B2125,5,The room cleanliness was disappointing. and Mabait at magalang ang mga staff.,,2025-08-16T12:00:00+08:00,true,2025-08-11
+past-fb-B2126,Paolo Garcia,past-b2126@imported.elenest.local,past-B2126,4,"The resort exceeded our expectations.. In addition, Maayos naman ang pasilidad.",,2025-08-30T12:00:00+08:00,true,2025-08-25
+past-fb-B2127,Angel Aquino,past-b2127@imported.elenest.local,past-B2127,4,Staff are very professional and accommodating. and The room was basic but functional.,,2025-09-06T12:00:00+08:00,true,2025-09-01
+past-fb-B2128,Juan Dela Cruz,past-b2128@imported.elenest.local,past-B2128,3,"Service was slow and needs improvement.. Also, The room was basic but functional.",,2025-09-07T12:00:00+08:00,true,2025-09-01
+past-fb-B2129,Kristine Morales,past-b2129@imported.elenest.local,past-B2129,4,"Maayos ang pamamalakad sa lugar., Standard na resort para sa presyo.",,2025-09-20T12:00:00+08:00,true,2025-09-15
+past-fb-B2130,Walk-in,past-b2130@imported.elenest.local,past-B2130,4,The room was basic but functional. and The environment was too loud for relaxation.,,2025-09-27T12:00:00+08:00,true,2025-09-22
+past-fb-B2131,Nina Dominguez,past-b2131@imported.elenest.local,past-B2131,2,Service was slow and needs improvement. and We encountered some issues with the water pressure.,,2025-09-28T12:00:00+08:00,true,2025-09-22
+past-fb-B2132,Adrian Vargas,past-b2132@imported.elenest.local,past-B2132,3,Medyo madumi yung area nung dumating kami.. It was a decent experience overall.,,2025-10-04T12:00:00+08:00,true,2025-09-29
+past-fb-B2133,Mark Ramos,past-b2133@imported.elenest.local,past-B2133,5,The pool area is fine. and We had a wonderful and relaxing stay.,,2025-10-11T12:00:00+08:00,true,2025-10-06
+past-fb-B2134,Bryan Navarro,past-b2134@imported.elenest.local,past-B2134,4,"Maayos naman ang pasilidad.. In addition, Medyo madumi yung area nung dumating kami.",,2025-10-12T12:00:00+08:00,true,2025-10-06
+past-fb-B2135,Maria Santos,past-b2135@imported.elenest.local,past-B2135,4,"Highly recommended itong resort na ito.. In addition, Walang masyadong naging problema.",,2025-10-18T12:00:00+08:00,true,2025-10-13
+past-fb-B2136,Rafael Castillo,past-b2136@imported.elenest.local,past-B2136,5,"Masyadong maingay ang ibang mga bisita.. Also, We had a wonderful and relaxing stay.",,2025-10-19T12:00:00+08:00,true,2025-10-13
+past-fb-B2137,Rosemarie Ponce,past-b2137@imported.elenest.local,past-B2137,5,We had a wonderful and relaxing stay.,,2025-11-15T12:00:00+08:00,true,2025-11-10
+past-fb-B2138,Maria Santos,past-b2138@imported.elenest.local,past-B2138,4,"Goods na goods ang service.. Also, The staff were not that responsive.",,2025-11-30T12:00:00+08:00,true,2025-11-24
+past-fb-B2139,Erica Padilla,past-b2139@imported.elenest.local,past-B2139,5,"Napakaganda ng inyong resort.. Also, Sakto lang ang naging karanasan namin.",,2025-12-01T12:00:00+08:00,true,2025-12-01
+past-fb-B2140,Camille Herrera,past-b2140@imported.elenest.local,past-B2140,5,Average service during our stay.. Medyo okay naman ang experience.,,2025-12-05T12:00:00+08:00,true,2025-12-01
+past-fb-B2141,Rafael Castillo,past-b2141@imported.elenest.local,past-B2141,4,"Solid ang experience rito., Napakalinis ng swimming pool.",,2025-12-13T12:00:00+08:00,true,2025-12-08
+past-fb-B2142,Angela Bautista,past-b2142@imported.elenest.local,past-B2142,4,"It was a decent experience overall., The location is accessible.",,2025-12-14T12:00:00+08:00,true,2025-12-08
+past-fb-B2143,Jeffrey Salazar,past-b2143@imported.elenest.local,past-B2143,4,"Very peaceful ang environment.. Also, Goods na goods ang service.",,2025-12-16T12:00:00+08:00,true,2025-12-15
+past-fb-B2144,Walk-in,past-b2144@imported.elenest.local,past-B2144,4,"The resort exceeded our expectations., The service is quite fine.",,2025-12-18T12:00:00+08:00,true,2025-12-15
+past-fb-B2145,Carlo Mendoza,past-b2145@imported.elenest.local,past-B2145,4,It was a decent experience overall. and The service is quite fine.,,2025-12-22T12:00:00+08:00,true,2025-12-22
+past-fb-B2146,Patrick Torres,past-b2146@imported.elenest.local,past-B2146,3,"The staff are very approachable and helpful.. In addition, Walang masyadong naging problema.",,2025-12-23T12:00:00+08:00,true,2025-12-22
+past-fb-B2147,Angela Bautista,past-b2147@imported.elenest.local,past-B2147,4,"Maayos naman ang pasilidad., Tahimik naman ang paligid.",,2025-12-25T12:00:00+08:00,true,2025-12-22
+past-fb-B2148,Jerome Aguilar,past-b2148@imported.elenest.local,past-B2148,3,It was a decent experience overall.. May ilang sira sa banyo.,,2025-12-25T12:00:00+08:00,true,2025-12-22
+past-fb-B2149,Nina Dominguez,past-b2149@imported.elenest.local,past-B2149,4,Masarap ang pagkain sa inyong canteen. and Sulit na sulit ang booking namin.,,2025-12-27T12:00:00+08:00,true,2025-12-22
+past-fb-B2150,Melvin Torres,past-b2150@imported.elenest.local,past-B2150,4,"Panalo ang view, seryoso.. The room was basic but functional.",,2026-01-01T12:00:00+08:00,true,2025-12-29
+past-fb-B2151,Pedro Castro,past-b2151@imported.elenest.local,past-B2151,4,Madaling hanapin ang lokasyon.. The staff are very approachable and helpful.,,2026-01-01T12:00:00+08:00,true,2025-12-29
+past-fb-B2152,Mark Cruz,past-b2152@imported.elenest.local,past-B2152,4,"Legit na relaxing ang vibe.. In addition, Masyadong maingay ang ibang mga bisita.",,2026-01-01T12:00:00+08:00,true,2025-12-29
+past-fb-B2153,Carlos Mercado,past-b2153@imported.elenest.local,past-B2153,4,"Very peaceful ang environment.. In addition, Goods na goods ang service.",,2026-01-01T12:00:00+08:00,true,2025-12-29
+past-fb-B2154,Gloria Navarro,past-b2154@imported.elenest.local,past-B2154,4,It was a decent experience overall. and Masyadong maingay ang ibang mga bisita.,,2026-01-01T12:00:00+08:00,true,2025-12-29
+past-fb-B2155,Angel Flores,past-b2155@imported.elenest.local,past-B2155,4,"Sulit na sulit ang booking namin., Average service during our stay.",,2026-01-01T12:00:00+08:00,true,2025-12-29
+past-fb-B2156,Maria Garcia,past-b2156@imported.elenest.local,past-B2156,4,"Staff are very professional and accommodating., The room cleanliness was disappointing.",,2026-01-01T12:00:00+08:00,true,2025-12-29
+past-fb-B2157,Gloria Reyes,past-b2157@imported.elenest.local,past-B2157,4,"Standard na resort para sa presyo., The pool area is fine.",,2026-01-01T12:00:00+08:00,true,2025-12-29
+past-fb-B2158,Luis Del Rosario,past-b2158@imported.elenest.local,past-B2158,5,Average service during our stay. and We had a wonderful and relaxing stay.,,2026-01-01T12:00:00+08:00,true,2025-12-29
+past-fb-B2159,Josefina Dela Cruz,past-b2159@imported.elenest.local,past-B2159,4,Goods na goods ang service.. The resort exceeded our expectations.,,2026-01-01T12:00:00+08:00,true,2025-12-29
+past-fb-B2160,Josefina Dela Cruz,past-b2160@imported.elenest.local,past-B2160,4,"Facilities are a bit outdated., Napakaganda ng inyong resort.",,2026-01-01T12:00:00+08:00,true,2025-12-29
+past-fb-B2161,Josefina Pineda,past-b2161@imported.elenest.local,past-B2161,4,"Maayos naman ang pasilidad.. Also, Super ganda ng ambiance dito.",,2026-01-01T12:00:00+08:00,true,2025-12-29
+past-fb-B2162,Miguel Mendoza,past-b2162@imported.elenest.local,past-B2162,4,"Facilities are a bit outdated.. Also, Everything was as expected.",,2026-01-02T12:00:00+08:00,true,2025-12-29
+past-fb-B2163,Francisco Torres,past-b2163@imported.elenest.local,past-B2163,3,"Medyo disappointing ang quality ng rooms.. Also, The water in the pool was a bit cloudy.",,2026-01-02T12:00:00+08:00,true,2025-12-29
+past-fb-B2164,Kim Santos,past-b2164@imported.elenest.local,past-B2164,4,The staff were not that responsive.. Legit na relaxing ang vibe.,,2026-01-02T12:00:00+08:00,true,2025-12-29
+past-fb-B2165,Paolo Navarro,past-b2165@imported.elenest.local,past-B2165,4,"Madaling hanapin ang lokasyon.. In addition, The room cleanliness was disappointing.",,2026-01-02T12:00:00+08:00,true,2025-12-29
+past-fb-B2166,Pedro Reyes,past-b2166@imported.elenest.local,past-B2166,4,"It was a decent experience overall.. In addition, Average service during our stay.",,2026-01-02T12:00:00+08:00,true,2025-12-29
+past-fb-B2167,Danica Santos,past-b2167@imported.elenest.local,past-B2167,2,"We encountered some issues with the water pressure.. Also, Tahimik naman ang paligid.",,2026-01-02T12:00:00+08:00,true,2025-12-29
+past-fb-B2168,Carlos Castro,past-b2168@imported.elenest.local,past-B2168,2,"The staff were not that responsive., We encountered some issues with the water pressure.",,2026-01-02T12:00:00+08:00,true,2025-12-29
+past-fb-B2169,Rosa Pineda,past-b2169@imported.elenest.local,past-B2169,4,"Average service during our stay.. Also, Staff are very professional and accommodating.",,2026-01-02T12:00:00+08:00,true,2025-12-29
+past-fb-B2170,Gloria Dela Cruz,past-b2170@imported.elenest.local,past-B2170,4,The view from our room was breathtaking. and Hassle yung process ng checkin.,,2026-01-02T12:00:00+08:00,true,2025-12-29
+past-fb-B2171,Antonio Ramos,past-b2171@imported.elenest.local,past-B2171,4,"Very peaceful ang environment.. Also, The staff are very approachable and helpful.",,2026-01-02T12:00:00+08:00,true,2025-12-29
+past-fb-B2172,Liza Torres,past-b2172@imported.elenest.local,past-B2172,4,"Not bad for a short trip., Masyadong maingay ang ibang mga bisita.",,2026-01-03T12:00:00+08:00,true,2025-12-29
+past-fb-B2173,Liza Castro,past-b2173@imported.elenest.local,past-B2173,2,"We encountered some issues with the water pressure.. In addition, Madaling hanapin ang lokasyon.",,2026-01-03T12:00:00+08:00,true,2025-12-29
+past-fb-B2174,Aira Domingo,past-b2174@imported.elenest.local,past-B2174,3,"Service was slow and needs improvement.. Also, Hassle yung process ng checkin.",,2026-01-03T12:00:00+08:00,true,2025-12-29
+past-fb-B2175,Vicente Santos,past-b2175@imported.elenest.local,past-B2175,4,Masyadong maingay ang ibang mga bisita.. The environment was too loud for relaxation.,,2026-01-03T12:00:00+08:00,true,2025-12-29
+past-fb-B2176,Melvin Santos,past-b2176@imported.elenest.local,past-B2176,4,Staff are very professional and accommodating.. Highly recommended itong resort na ito.,,2026-01-03T12:00:00+08:00,true,2025-12-29
+past-fb-B2177,Kim Santos,past-b2177@imported.elenest.local,past-B2177,4,"Maayos ang pamamalakad sa lugar.. Panalo ang view, seryoso.",,2026-01-03T12:00:00+08:00,true,2025-12-29
+past-fb-B2178,Miguel Garcia,past-b2178@imported.elenest.local,past-B2178,4,"Standard na resort para sa presyo., Napakalinis ng swimming pool.",,2026-01-03T12:00:00+08:00,true,2025-12-29
+past-fb-B2179,Mary Castro,past-b2179@imported.elenest.local,past-B2179,4,"The room was basic but functional., The pool is clean and refreshing.",,2026-01-03T12:00:00+08:00,true,2025-12-29
+past-fb-B2180,John Santos,past-b2180@imported.elenest.local,past-B2180,4,Sakto lang ang price para sa amenities.. Kailangang linisin pa ang mga kwarto.,,2026-01-03T12:00:00+08:00,true,2025-12-29
+past-fb-B2181,Luis Del Rosario,past-b2181@imported.elenest.local,past-B2181,4,"Mabait at magalang ang mga staff., Walang masyadong naging problema.",,2026-01-03T12:00:00+08:00,true,2025-12-29
+past-fb-B2182,Kim Del Rosario,past-b2182@imported.elenest.local,past-B2182,4,"Kailangang linisin pa ang mga kwarto., The room cleanliness was disappointing.",,2026-01-03T12:00:00+08:00,true,2025-12-29
+past-fb-B2183,Manuel Torres,past-b2183@imported.elenest.local,past-B2183,4,"Napakalinis ng swimming pool., Hindi kami nasiyahan sa aming stay.",,2026-01-03T12:00:00+08:00,true,2025-12-29
+past-fb-B2184,Carlos Mendoza,past-b2184@imported.elenest.local,past-B2184,5,The pool is clean and refreshing. and Okay naman yung stay namin overall.,,2026-01-03T12:00:00+08:00,true,2025-12-29
+past-fb-B2185,Juan Del Rosario,past-b2185@imported.elenest.local,past-B2185,4,"The staff were not that responsive.. Also, The resort exceeded our expectations.",,2026-01-03T12:00:00+08:00,true,2025-12-29
+past-fb-B2186,Pedro Ramos,past-b2186@imported.elenest.local,past-B2186,3,Medyo disappointing ang quality ng rooms. and Kailangang linisin pa ang mga kwarto.,,2026-01-03T12:00:00+08:00,true,2025-12-29
+past-fb-B2187,Paolo Torres,past-b2187@imported.elenest.local,past-B2187,5,Sakto lang ang naging karanasan namin. and Solid ang experience rito.,,2026-01-04T12:00:00+08:00,true,2025-12-29
+past-fb-B2188,Jose Cruz,past-b2188@imported.elenest.local,past-B2188,5,Medyo okay naman ang experience.. The service is quite fine.,,2026-01-04T12:00:00+08:00,true,2025-12-29
+past-fb-B2189,Carmen Domingo,past-b2189@imported.elenest.local,past-B2189,4,"Sakto lang ang price para sa amenities.. In addition, Sakto lang ang naging karanasan namin.",,2026-01-04T12:00:00+08:00,true,2025-12-29
+past-fb-B2190,Rosa Castro,past-b2190@imported.elenest.local,past-B2190,4,Sakto lang ang price para sa amenities.,,2026-01-04T12:00:00+08:00,true,2025-12-29
+past-fb-B2191,Vicente Soriano,past-b2191@imported.elenest.local,past-B2191,4,"The staff were not that responsive.. In addition, Super ganda ng ambiance dito.",,2026-01-04T12:00:00+08:00,true,2025-12-29
+past-fb-B2192,Francisca Reyes,past-b2192@imported.elenest.local,past-B2192,3,Medyo disappointing ang quality ng rooms.. The facilities are wellmaintained.,,2026-01-04T12:00:00+08:00,true,2025-12-29
+past-fb-B2193,Miguel Reyes,past-b2193@imported.elenest.local,past-B2193,4,Highly recommended itong resort na ito.,,2026-01-04T12:00:00+08:00,true,2025-12-29
+past-fb-B2194,Ana Santos,past-b2194@imported.elenest.local,past-B2194,3,"The room was basic but functional.. Also, May ilang sira sa banyo.",,2026-01-04T12:00:00+08:00,true,2025-12-29
+past-fb-B2195,Joshua Domingo,past-b2195@imported.elenest.local,past-B2195,2,"Standard na resort para sa presyo., We encountered some issues with the water pressure.",,2026-01-04T12:00:00+08:00,true,2025-12-29
+past-fb-B2196,John Torres,past-b2196@imported.elenest.local,past-B2196,5,Not worth the price we paid. and Highly recommended itong resort na ito.,,2026-01-04T12:00:00+08:00,true,2025-12-29
+past-fb-B2197,Rosa Soriano,past-b2197@imported.elenest.local,past-B2197,2,The staff are very approachable and helpful.. We encountered some issues with the water pressure.,,2026-01-05T12:00:00+08:00,true,2026-01-05
+past-fb-B2198,Aira Navarro,past-b2198@imported.elenest.local,past-B2198,4,Hindi kami nasiyahan sa aming stay. and The resort exceeded our expectations.,,2026-01-05T12:00:00+08:00,true,2026-01-05
+past-fb-B2199,Kim Villanueva,past-b2199@imported.elenest.local,past-B2199,4,Very peaceful ang environment. and Tahimik naman ang paligid.,,2026-01-05T12:00:00+08:00,true,2026-01-05
+past-fb-B2200,Antonio Ramos,past-b2200@imported.elenest.local,past-B2200,4,"The location is accessible.. Also, The room cleanliness was disappointing.",,2026-01-05T12:00:00+08:00,true,2026-01-05
+past-fb-B2201,Francisco Soriano,past-b2201@imported.elenest.local,past-B2201,4,"Hassle yung process ng checkin., The room was basic but functional.",,2026-01-05T12:00:00+08:00,true,2026-01-05
+past-fb-B2202,Danica Dela Cruz,past-b2202@imported.elenest.local,past-B2202,3,"The staff are very approachable and helpful.. In addition, Medyo disappointing ang quality ng rooms.",,2026-01-05T12:00:00+08:00,true,2026-01-05
+past-fb-B2203,Paul Mendoza,past-b2203@imported.elenest.local,past-B2203,4,"Legit na relaxing ang vibe., Hindi kami nasiyahan sa aming stay.",,2026-01-05T12:00:00+08:00,true,2026-01-05
+past-fb-B2204,Jessa Mendoza,past-b2204@imported.elenest.local,past-B2204,4,"Standard na resort para sa presyo., The location is accessible.",,2026-01-05T12:00:00+08:00,true,2026-01-05
+past-fb-B2205,Paul Castro,past-b2205@imported.elenest.local,past-B2205,5,Mabait at magalang ang mga staff.. Masarap ang pagkain sa inyong canteen.,,2026-01-06T12:00:00+08:00,true,2026-01-05
+past-fb-B2206,Paul Garcia,past-b2206@imported.elenest.local,past-B2206,4,"May ilang sira sa banyo.. In addition, Sulit na sulit ang booking namin.",,2026-01-06T12:00:00+08:00,true,2026-01-05
+past-fb-B2207,Mary Torres,past-b2207@imported.elenest.local,past-B2207,5,"Okay naman yung stay namin overall.. In addition, Not worth the price we paid.",,2026-01-06T12:00:00+08:00,true,2026-01-05
+past-fb-B2208,Teresa Navarro,past-b2208@imported.elenest.local,past-B2208,4,Hindi kami nasiyahan sa aming stay. and The facilities are wellmaintained.,,2026-01-06T12:00:00+08:00,true,2026-01-05
+past-fb-B2209,Juan Santos,past-b2209@imported.elenest.local,past-B2209,4,"Walang kupas ang ganda ng pool., The environment was too loud for relaxation.",,2026-01-06T12:00:00+08:00,true,2026-01-05
+past-fb-B2210,Ryan Ramos,past-b2210@imported.elenest.local,past-B2210,5,"We had a wonderful and relaxing stay.. In addition, Very peaceful ang environment.",,2026-01-06T12:00:00+08:00,true,2026-01-05
+past-fb-B2211,Vicente Del Rosario,past-b2211@imported.elenest.local,past-B2211,4,Mabait at magalang ang mga staff.. May ilang sira sa banyo.,,2026-01-06T12:00:00+08:00,true,2026-01-05
+past-fb-B2212,John Santos,past-b2212@imported.elenest.local,past-B2212,4,"Maayos naman ang pasilidad.. In addition, The room was basic but functional.",,2026-01-06T12:00:00+08:00,true,2026-01-05
+past-fb-B2213,Ana Soriano,past-b2213@imported.elenest.local,past-B2213,5,Walang kupas ang ganda ng pool. and Great value for money.,,2026-01-06T12:00:00+08:00,true,2026-01-05
+past-fb-B2214,Miguel Dela Cruz,past-b2214@imported.elenest.local,past-B2214,4,"Service was slow and needs improvement., Legit na relaxing ang vibe.",,2026-01-06T12:00:00+08:00,true,2026-01-05
+past-fb-B2215,Mary Mercado,past-b2215@imported.elenest.local,past-B2215,4,Not bad for a short trip.. Very peaceful ang environment.,,2026-01-07T12:00:00+08:00,true,2026-01-05
+past-fb-B2216,Jessa Santos,past-b2216@imported.elenest.local,past-B2216,3,"Walang masyadong naging problema., The water in the pool was a bit cloudy.",,2026-01-07T12:00:00+08:00,true,2026-01-05
+past-fb-B2217,Liza Bautista,past-b2217@imported.elenest.local,past-B2217,4,"Masyadong maingay ang ibang mga bisita., The service is quite fine.",,2026-01-07T12:00:00+08:00,true,2026-01-05
+past-fb-B2218,Danica Torres,past-b2218@imported.elenest.local,past-B2218,4,"Average service during our stay.. Also, The facilities are wellmaintained.",,2026-01-07T12:00:00+08:00,true,2026-01-05
+past-fb-B2219,Ramon Flores,past-b2219@imported.elenest.local,past-B2219,4,"It was a decent experience overall.. Also, Legit na relaxing ang vibe.",,2026-01-07T12:00:00+08:00,true,2026-01-05
+past-fb-B2220,Josefina Torres,past-b2220@imported.elenest.local,past-B2220,5,"The environment was too loud for relaxation.. Also, Highly recommended itong resort na ito.",,2026-01-07T12:00:00+08:00,true,2026-01-05
+past-fb-B2221,Vicente Navarro,past-b2221@imported.elenest.local,past-B2221,4,"Not bad for a short trip., The room cleanliness was disappointing.",,2026-01-07T12:00:00+08:00,true,2026-01-05
+past-fb-B2222,John Aquino,past-b2222@imported.elenest.local,past-B2222,4,"Maayos naman ang pasilidad.. Also, Mahal ang presyo kumpara sa serbisyo.",,2026-01-07T12:00:00+08:00,true,2026-01-05
+past-fb-B2223,Ana Flores,past-b2223@imported.elenest.local,past-B2223,4,Facilities are a bit outdated. and Madaling hanapin ang lokasyon.,,2026-01-07T12:00:00+08:00,true,2026-01-05
+past-fb-B2224,Liza Del Rosario,past-b2224@imported.elenest.local,past-B2224,4,"The facilities are wellmaintained., The water in the pool was a bit cloudy.",,2026-01-07T12:00:00+08:00,true,2026-01-05
+past-fb-B2225,Rosa Garcia,past-b2225@imported.elenest.local,past-B2225,4,"Standard lang ang rooms but clean., Average service during our stay.",,2026-01-07T12:00:00+08:00,true,2026-01-05
+past-fb-B2226,Liza Navarro,past-b2226@imported.elenest.local,past-B2226,2,Hindi kami nasiyahan sa aming stay. and We encountered some issues with the water pressure.,,2026-01-07T12:00:00+08:00,true,2026-01-05
+past-fb-B2227,Melvin Mendoza,past-b2227@imported.elenest.local,past-B2227,4,"Mahal ang presyo kumpara sa serbisyo.. In addition, Hindi kami nasiyahan sa aming stay.",,2026-01-07T12:00:00+08:00,true,2026-01-05
+past-fb-B2228,Rosa Dela Cruz,past-b2228@imported.elenest.local,past-B2228,4,"Everything was as expected.. In addition, The staff were not that responsive.",,2026-01-07T12:00:00+08:00,true,2026-01-05
+past-fb-B2229,Antonio Domingo,past-b2229@imported.elenest.local,past-B2229,4,The water in the pool was a bit cloudy.. The facilities are wellmaintained.,,2026-01-07T12:00:00+08:00,true,2026-01-05
+past-fb-B2230,Angel Villanueva,past-b2230@imported.elenest.local,past-B2230,4,"Walang kupas ang ganda ng pool., Goods na goods ang service.",,2026-01-08T12:00:00+08:00,true,2026-01-05
+past-fb-B2231,Jose Navarro,past-b2231@imported.elenest.local,past-B2231,4,Napakaganda ng inyong resort. and Service was slow and needs improvement.,,2026-01-08T12:00:00+08:00,true,2026-01-05
+past-fb-B2232,John Bautista,past-b2232@imported.elenest.local,past-B2232,4,"The location is accessible., Average service during our stay.",,2026-01-08T12:00:00+08:00,true,2026-01-05
+past-fb-B2233,Carlos Mendoza,past-b2233@imported.elenest.local,past-B2233,5,Medyo okay naman ang experience.,,2026-01-08T12:00:00+08:00,true,2026-01-05
+past-fb-B2234,Ramon Aquino,past-b2234@imported.elenest.local,past-B2234,3,"The staff were not that responsive., A bit overpriced for the current state.",,2026-01-08T12:00:00+08:00,true,2026-01-05
+past-fb-B2235,Melvin Mercado,past-b2235@imported.elenest.local,past-B2235,5,Okay naman yung stay namin overall.. Super ganda ng ambiance dito.,,2026-01-08T12:00:00+08:00,true,2026-01-05
+past-fb-B2236,Liza Dela Cruz,past-b2236@imported.elenest.local,past-B2236,5,We had a wonderful and relaxing stay. and The facilities are wellmaintained.,,2026-01-08T12:00:00+08:00,true,2026-01-05
+past-fb-B2237,Vicente Torres,past-b2237@imported.elenest.local,past-B2237,4,"Madaling hanapin ang lokasyon.. In addition, The room was basic but functional.",,2026-01-08T12:00:00+08:00,true,2026-01-05
+past-fb-B2238,Jose Villanueva,past-b2238@imported.elenest.local,past-B2238,4,"Napakalinis ng swimming pool., Sakto lang ang naging karanasan namin.",,2026-01-08T12:00:00+08:00,true,2026-01-05
+past-fb-B2239,Teresa Santos,past-b2239@imported.elenest.local,past-B2239,4,"The resort exceeded our expectations., Madaling hanapin ang lokasyon.",,2026-01-08T12:00:00+08:00,true,2026-01-05
+past-fb-B2240,Ryan Ramos,past-b2240@imported.elenest.local,past-B2240,4,Average service during our stay.,,2026-01-08T12:00:00+08:00,true,2026-01-05
+past-fb-B2241,Carmen Santos,past-b2241@imported.elenest.local,past-B2241,4,"Maayos ang pamamalakad sa lugar.. In addition, Naging masaya ang aming pamilya rito.",,2026-01-08T12:00:00+08:00,true,2026-01-05
+past-fb-B2242,Luis Torres,past-b2242@imported.elenest.local,past-B2242,4,"Napakalinis ng swimming pool., The staff are very approachable and helpful.",,2026-01-08T12:00:00+08:00,true,2026-01-05
+past-fb-B2243,Ramon Mendoza,past-b2243@imported.elenest.local,past-B2243,5,Maayos naman ang pasilidad. and Mabait at magalang ang mga staff.,,2026-01-09T12:00:00+08:00,true,2026-01-05
+past-fb-B2244,Joshua Mercado,past-b2244@imported.elenest.local,past-B2244,3,"Medyo madumi yung area nung dumating kami.. Also, Very peaceful ang environment.",,2026-01-09T12:00:00+08:00,true,2026-01-05
+past-fb-B2245,Pedro Ramos,past-b2245@imported.elenest.local,past-B2245,4,The staff are very approachable and helpful.. The facilities are wellmaintained.,,2026-01-09T12:00:00+08:00,true,2026-01-05
+past-fb-B2246,Carmen Castro,past-b2246@imported.elenest.local,past-B2246,3,Naging masaya ang aming pamilya rito. and Walang masyadong naging problema.,,2026-01-09T12:00:00+08:00,true,2026-01-05
+past-fb-B2247,Juan Del Rosario,past-b2247@imported.elenest.local,past-B2247,4,"Kailangang linisin pa ang mga kwarto.. Also, The resort exceeded our expectations.",,2026-01-09T12:00:00+08:00,true,2026-01-05
+past-fb-B2248,Gloria Reyes,past-b2248@imported.elenest.local,past-B2248,4,"Maayos naman ang pasilidad.. In addition, Maayos ang pamamalakad sa lugar.",,2026-01-09T12:00:00+08:00,true,2026-01-05
+past-fb-B2249,Luis Navarro,past-b2249@imported.elenest.local,past-B2249,5,"We had a wonderful and relaxing stay., The water in the pool was a bit cloudy.",,2026-01-09T12:00:00+08:00,true,2026-01-05
+past-fb-B2250,Joshua Mercado,past-b2250@imported.elenest.local,past-B2250,2,"May ilang sira sa banyo.. In addition, A bit overpriced for the current state.",,2026-01-09T12:00:00+08:00,true,2026-01-05
+past-fb-B2251,Francisca Domingo,past-b2251@imported.elenest.local,past-B2251,4,"Napakaganda ng inyong resort.. In addition, Walang kupas ang ganda ng pool.",,2026-01-09T12:00:00+08:00,true,2026-01-05
+past-fb-B2252,Miguel Flores,past-b2252@imported.elenest.local,past-B2252,4,"Masarap ang pagkain sa inyong canteen.. In addition, Masyadong maingay ang ibang mga bisita.",,2026-01-09T12:00:00+08:00,true,2026-01-05
+past-fb-B2253,Paolo Domingo,past-b2253@imported.elenest.local,past-B2253,4,The pool is clean and refreshing. and Masyadong maingay ang ibang mga bisita.,,2026-01-10T12:00:00+08:00,true,2026-01-05
+past-fb-B2254,Angel Santos,past-b2254@imported.elenest.local,past-B2254,3,The facilities are wellmaintained. and Service was slow and needs improvement.,,2026-01-10T12:00:00+08:00,true,2026-01-05
+past-fb-B2255,Joshua Santos,past-b2255@imported.elenest.local,past-B2255,4,Solid ang experience rito.. Mahal ang presyo kumpara sa serbisyo.,,2026-01-10T12:00:00+08:00,true,2026-01-05
+past-fb-B2256,Pedro Santos,past-b2256@imported.elenest.local,past-B2256,4,"Maayos ang pamamalakad sa lugar.. Also, A bit overpriced for the current state.",,2026-01-10T12:00:00+08:00,true,2026-01-05
+past-fb-B2257,Francisca Domingo,past-b2257@imported.elenest.local,past-B2257,4,"Standard lang ang rooms but clean., The staff were not that responsive.",,2026-01-10T12:00:00+08:00,true,2026-01-05
+past-fb-B2258,Francisco Santos,past-b2258@imported.elenest.local,past-B2258,3,"May ilang sira sa banyo.. In addition, Goods na goods ang service.",,2026-01-10T12:00:00+08:00,true,2026-01-05
+past-fb-B2259,Francisco Mendoza,past-b2259@imported.elenest.local,past-B2259,4,"The room cleanliness was disappointing.. In addition, The environment was too loud for relaxation.",,2026-01-10T12:00:00+08:00,true,2026-01-05
+past-fb-B2260,Aira Reyes,past-b2260@imported.elenest.local,past-B2260,3,"Medyo disappointing ang quality ng rooms.. Also, Walang kupas ang ganda ng pool.",,2026-01-10T12:00:00+08:00,true,2026-01-05
+past-fb-B2261,Pedro Pineda,past-b2261@imported.elenest.local,past-B2261,4,"Standard lang ang rooms but clean., Tahimik naman ang paligid.",,2026-01-10T12:00:00+08:00,true,2026-01-05
+past-fb-B2262,Mark Reyes,past-b2262@imported.elenest.local,past-B2262,4,"Legit na relaxing ang vibe., Masarap ang pagkain sa inyong canteen.",,2026-01-11T12:00:00+08:00,true,2026-01-05
+past-fb-B2263,Jessa Reyes,past-b2263@imported.elenest.local,past-B2263,5,"Mabait at magalang ang mga staff., The pool is clean and refreshing.",,2026-01-11T12:00:00+08:00,true,2026-01-05
+past-fb-B2264,Mary Mendoza,past-b2264@imported.elenest.local,past-B2264,4,Everything was as expected. and Sulit na sulit ang booking namin.,,2026-01-11T12:00:00+08:00,true,2026-01-05
+past-fb-B2265,Gloria Mercado,past-b2265@imported.elenest.local,past-B2265,3,"Medyo madumi yung area nung dumating kami. and Panalo ang view, seryoso.",,2026-01-11T12:00:00+08:00,true,2026-01-05
+past-fb-B2266,Carmen Pineda,past-b2266@imported.elenest.local,past-B2266,4,"Average service during our stay.. Also, Super ganda ng ambiance dito.",,2026-01-11T12:00:00+08:00,true,2026-01-05
+past-fb-B2267,Angel Flores,past-b2267@imported.elenest.local,past-B2267,4,Mabagal ang serbisyo sa reception. and Goods na goods ang service.,,2026-01-11T12:00:00+08:00,true,2026-01-05
+past-fb-B2268,Francisco Soriano,past-b2268@imported.elenest.local,past-B2268,4,"Hassle yung process ng checkin.. Also, The resort exceeded our expectations.",,2026-01-11T12:00:00+08:00,true,2026-01-05
+past-fb-B2269,Pedro Ramos,past-b2269@imported.elenest.local,past-B2269,3,A bit overpriced for the current state. and Average service during our stay.,,2026-01-11T12:00:00+08:00,true,2026-01-05
+past-fb-B2270,Liza Pineda,past-b2270@imported.elenest.local,past-B2270,5,Mabait at magalang ang mga staff.. Mahal ang presyo kumpara sa serbisyo.,,2026-01-11T12:00:00+08:00,true,2026-01-05
+past-fb-B2271,Jessa Aquino,past-b2271@imported.elenest.local,past-B2271,4,Goods na goods ang service.. Tahimik naman ang paligid.,,2026-01-11T12:00:00+08:00,true,2026-01-05
+past-fb-B2272,Francisco Pineda,past-b2272@imported.elenest.local,past-B2272,4,"Panalo ang view, seryoso. and Not worth the price we paid.",,2026-01-11T12:00:00+08:00,true,2026-01-05
+past-fb-B2273,Jessa Soriano,past-b2273@imported.elenest.local,past-B2273,4,Walang kupas ang ganda ng pool.. Sulit na sulit ang booking namin.,,2026-01-12T12:00:00+08:00,true,2026-01-12
+past-fb-B2274,Liza Aquino,past-b2274@imported.elenest.local,past-B2274,4,"The room cleanliness was disappointing.. In addition, The pool is clean and refreshing.",,2026-01-12T12:00:00+08:00,true,2026-01-12
+past-fb-B2275,Angel Aquino,past-b2275@imported.elenest.local,past-B2275,4,Legit na relaxing ang vibe. and Super ganda ng ambiance dito.,,2026-01-12T12:00:00+08:00,true,2026-01-12
+past-fb-B2276,Paolo Villanueva,past-b2276@imported.elenest.local,past-B2276,4,"Walang masyadong naging problema., Mabait at magalang ang mga staff.",,2026-01-12T12:00:00+08:00,true,2026-01-12
+past-fb-B2277,Antonio Aquino,past-b2277@imported.elenest.local,past-B2277,4,Sulit na sulit ang booking namin. and The pool area is fine.,,2026-01-12T12:00:00+08:00,true,2026-01-12
+past-fb-B2278,Luis Pineda,past-b2278@imported.elenest.local,past-B2278,5,"Great value for money.. Also, Average service during our stay.",,2026-01-12T12:00:00+08:00,true,2026-01-12
+past-fb-B2279,Ana Mendoza,past-b2279@imported.elenest.local,past-B2279,4,"Mahal ang presyo kumpara sa serbisyo., Solid ang experience rito.",,2026-01-12T12:00:00+08:00,true,2026-01-12
+past-fb-B2280,Ana Mendoza,past-b2280@imported.elenest.local,past-B2280,4,"Kailangang linisin pa ang mga kwarto.. In addition, Tahimik naman ang paligid.",,2026-01-12T12:00:00+08:00,true,2026-01-12
+past-fb-B2281,Rosa Mercado,past-b2281@imported.elenest.local,past-B2281,4,"The room cleanliness was disappointing., Sakto lang ang price para sa amenities.",,2026-01-12T12:00:00+08:00,true,2026-01-12
+past-fb-B2282,Paolo Villanueva,past-b2282@imported.elenest.local,past-B2282,5,Standard lang ang rooms but clean.. The environment was too loud for relaxation.,,2026-01-12T12:00:00+08:00,true,2026-01-12
+past-fb-B2283,Jose Cruz,past-b2283@imported.elenest.local,past-B2283,4,Staff are very professional and accommodating.. Hassle yung process ng checkin.,,2026-01-12T12:00:00+08:00,true,2026-01-12
+past-fb-B2284,Mark Del Rosario,past-b2284@imported.elenest.local,past-B2284,4,"Everything was as expected.. Also, Sakto lang ang price para sa amenities.",,2026-01-12T12:00:00+08:00,true,2026-01-12
+past-fb-B2285,Carmen Domingo,past-b2285@imported.elenest.local,past-B2285,4,"The staff were not that responsive., The staff are very approachable and helpful.",,2026-01-12T12:00:00+08:00,true,2026-01-12
+past-fb-B2286,Teresa Del Rosario,past-b2286@imported.elenest.local,past-B2286,5,The resort exceeded our expectations.. Okay naman yung stay namin overall.,,2026-01-12T12:00:00+08:00,true,2026-01-12
+past-fb-B2287,Paolo Bautista,past-b2287@imported.elenest.local,past-B2287,4,"Highly recommended itong resort na ito.. Also, The staff are very approachable and helpful.",,2026-01-12T12:00:00+08:00,true,2026-01-12
+past-fb-B2288,Rosa Aquino,past-b2288@imported.elenest.local,past-B2288,4,Walang kupas ang ganda ng pool. and Very peaceful ang environment.,,2026-01-12T12:00:00+08:00,true,2026-01-12
+past-fb-B2289,Juan Domingo,past-b2289@imported.elenest.local,past-B2289,4,"The room cleanliness was disappointing.. In addition, The location is accessible.",,2026-01-12T12:00:00+08:00,true,2026-01-12
+past-fb-B2290,Carlos Ramos,past-b2290@imported.elenest.local,past-B2290,4,Hindi kami nasiyahan sa aming stay. and Not worth the price we paid.,,2026-01-12T12:00:00+08:00,true,2026-01-12
+past-fb-B2291,Manuel Cruz,past-b2291@imported.elenest.local,past-B2291,5,"Maayos ang pamamalakad sa lugar., Mabait at magalang ang mga staff.",,2026-01-13T12:00:00+08:00,true,2026-01-12
+past-fb-B2292,Carmen Villanueva,past-b2292@imported.elenest.local,past-B2292,4,The location is accessible. and Hindi kami nasiyahan sa aming stay.,,2026-01-13T12:00:00+08:00,true,2026-01-12
+past-fb-B2293,Francisca Ramos,past-b2293@imported.elenest.local,past-B2293,5,"Sulit na sulit ang booking namin.. Also, Medyo okay naman ang experience.",,2026-01-13T12:00:00+08:00,true,2026-01-12
+past-fb-B2294,Mary Dela Cruz,past-b2294@imported.elenest.local,past-B2294,3,Walang masyadong naging problema. and Everything was as expected.,,2026-01-13T12:00:00+08:00,true,2026-01-12
+past-fb-B2295,Francisco Santos,past-b2295@imported.elenest.local,past-B2295,4,"Everything was as expected.. Also, Hindi kami nasiyahan sa aming stay.",,2026-01-13T12:00:00+08:00,true,2026-01-12
+past-fb-B2296,Francisca Cruz,past-b2296@imported.elenest.local,past-B2296,3,"Panalo ang view, seryoso.. Medyo disappointing ang quality ng rooms.",,2026-01-13T12:00:00+08:00,true,2026-01-12
+past-fb-B2297,Maria Garcia,past-b2297@imported.elenest.local,past-B2297,5,"The environment was too loud for relaxation.. Also, Madaling hanapin ang lokasyon.",,2026-01-13T12:00:00+08:00,true,2026-01-12
+past-fb-B2298,Pedro Castro,past-b2298@imported.elenest.local,past-B2298,4,Maayos naman ang pasilidad.. Medyo disappointing ang quality ng rooms.,,2026-01-13T12:00:00+08:00,true,2026-01-12
+past-fb-B2299,Jose Santos,past-b2299@imported.elenest.local,past-B2299,4,Standard lang ang rooms but clean. and Goods na goods ang service.,,2026-01-13T12:00:00+08:00,true,2026-01-12
+past-fb-B2300,Danica Mendoza,past-b2300@imported.elenest.local,past-B2300,5,Mabait at magalang ang mga staff. and Standard lang ang rooms but clean.,,2026-01-13T12:00:00+08:00,true,2026-01-12
+past-fb-B2301,Jose Flores,past-b2301@imported.elenest.local,past-B2301,4,"May ilang sira sa banyo.. In addition, Standard lang ang rooms but clean.",,2026-01-13T12:00:00+08:00,true,2026-01-12
+past-fb-B2302,Ramon Villanueva,past-b2302@imported.elenest.local,past-B2302,4,"The facilities are wellmaintained.. Also, Not bad for a short trip.",,2026-01-13T12:00:00+08:00,true,2026-01-12
+past-fb-B2303,Angel Villanueva,past-b2303@imported.elenest.local,past-B2303,3,The water in the pool was a bit cloudy.. May ilang sira sa banyo.,,2026-01-13T12:00:00+08:00,true,2026-01-12
+past-fb-B2304,Joshua Pineda,past-b2304@imported.elenest.local,past-B2304,4,"Panalo ang view, seryoso.",,2026-01-13T12:00:00+08:00,true,2026-01-12
+past-fb-B2305,Ana Flores,past-b2305@imported.elenest.local,past-B2305,4,"Medyo disappointing ang quality ng rooms.. In addition, The pool is clean and refreshing.",,2026-01-13T12:00:00+08:00,true,2026-01-12
+past-fb-B2306,Elena Flores,past-b2306@imported.elenest.local,past-B2306,4,"The view from our room was breathtaking.. In addition, The staff are very approachable and helpful.",,2026-01-13T12:00:00+08:00,true,2026-01-12
+past-fb-B2307,Mark Mercado,past-b2307@imported.elenest.local,past-B2307,4,"Masarap ang pagkain sa inyong canteen., Mahal ang presyo kumpara sa serbisyo.",,2026-01-13T12:00:00+08:00,true,2026-01-12
+past-fb-B2308,Francisca Navarro,past-b2308@imported.elenest.local,past-B2308,5,"We had a wonderful and relaxing stay., Mabagal ang serbisyo sa reception.",,2026-01-13T12:00:00+08:00,true,2026-01-12
+past-fb-B2309,Danica Bautista,past-b2309@imported.elenest.local,past-B2309,5,"The environment was too loud for relaxation.. Also, Medyo okay naman ang experience.",,2026-01-14T12:00:00+08:00,true,2026-01-12
+past-fb-B2310,Aira Santos,past-b2310@imported.elenest.local,past-B2310,4,The staff are very approachable and helpful.. Everything was as expected.,,2026-01-14T12:00:00+08:00,true,2026-01-12
+past-fb-B2311,Paolo Reyes,past-b2311@imported.elenest.local,past-B2311,4,"Highly recommended itong resort na ito.. Also, The location is accessible.",,2026-01-14T12:00:00+08:00,true,2026-01-12
+past-fb-B2312,Miguel Torres,past-b2312@imported.elenest.local,past-B2312,4,"Napakaganda ng inyong resort.. In addition, The location is accessible.",,2026-01-14T12:00:00+08:00,true,2026-01-12
+past-fb-B2313,Pedro Flores,past-b2313@imported.elenest.local,past-B2313,4,Kailangang linisin pa ang mga kwarto.. Average service during our stay.,,2026-01-14T12:00:00+08:00,true,2026-01-12
+past-fb-B2314,Ramon Bautista,past-b2314@imported.elenest.local,past-B2314,5,The pool is clean and refreshing. and Napakaganda ng inyong resort.,,2026-01-14T12:00:00+08:00,true,2026-01-12
+past-fb-B2315,Mary Cruz,past-b2315@imported.elenest.local,past-B2315,5,"Not worth the price we paid.. In addition, Medyo okay naman ang experience.",,2026-01-14T12:00:00+08:00,true,2026-01-12
+past-fb-B2316,Angel Santos,past-b2316@imported.elenest.local,past-B2316,3,"Service was slow and needs improvement., The room was basic but functional.",,2026-01-14T12:00:00+08:00,true,2026-01-12
+past-fb-B2317,Melvin Pineda,past-b2317@imported.elenest.local,past-B2317,5,The location is accessible.. Okay naman yung stay namin overall.,,2026-01-14T12:00:00+08:00,true,2026-01-12
+past-fb-B2318,Carmen Aquino,past-b2318@imported.elenest.local,past-B2318,4,Kailangang linisin pa ang mga kwarto. and The pool area is fine.,,2026-01-14T12:00:00+08:00,true,2026-01-12
+past-fb-B2319,Mark Santos,past-b2319@imported.elenest.local,past-B2319,4,"Napakalinis ng swimming pool.. In addition, Not bad for a short trip.",,2026-01-14T12:00:00+08:00,true,2026-01-12
+past-fb-B2320,Gloria Del Rosario,past-b2320@imported.elenest.local,past-B2320,3,"A bit overpriced for the current state.. Also, Naging masaya ang aming pamilya rito.",,2026-01-15T12:00:00+08:00,true,2026-01-12
+past-fb-B2321,Mark Santos,past-b2321@imported.elenest.local,past-B2321,5,Hassle yung process ng checkin. and Mabait at magalang ang mga staff.,,2026-01-15T12:00:00+08:00,true,2026-01-12
+past-fb-B2322,Carlos Villanueva,past-b2322@imported.elenest.local,past-B2322,4,"Madaling hanapin ang lokasyon.. In addition, Medyo disappointing ang quality ng rooms.",,2026-01-15T12:00:00+08:00,true,2026-01-12
+past-fb-B2323,Kim Flores,past-b2323@imported.elenest.local,past-B2323,4,Kailangang linisin pa ang mga kwarto.. Masyadong maingay ang ibang mga bisita.,,2026-01-15T12:00:00+08:00,true,2026-01-12
+past-fb-B2324,Antonio Flores,past-b2324@imported.elenest.local,past-B2324,4,"The pool area is fine.. In addition, The environment was too loud for relaxation.",,2026-01-15T12:00:00+08:00,true,2026-01-12
+past-fb-B2325,Antonio Ramos,past-b2325@imported.elenest.local,past-B2325,5,"Sakto lang ang naging karanasan namin.. In addition, Medyo okay naman ang experience.",,2026-01-15T12:00:00+08:00,true,2026-01-12
+past-fb-B2326,Melvin Reyes,past-b2326@imported.elenest.local,past-B2326,4,"Highly recommended itong resort na ito., Medyo disappointing ang quality ng rooms.",,2026-01-15T12:00:00+08:00,true,2026-01-12
+past-fb-B2327,Ana Aquino,past-b2327@imported.elenest.local,past-B2327,4,"Legit na relaxing ang vibe.. Also, Masyadong maingay ang ibang mga bisita.",,2026-01-15T12:00:00+08:00,true,2026-01-12
+past-fb-B2328,Elena Pineda,past-b2328@imported.elenest.local,past-B2328,4,"Staff are very professional and accommodating.. In addition, The facilities are wellmaintained.",,2026-01-16T12:00:00+08:00,true,2026-01-12
+past-fb-B2329,Ana Mercado,past-b2329@imported.elenest.local,past-B2329,4,"The room was basic but functional., Napakalinis ng swimming pool.",,2026-01-16T12:00:00+08:00,true,2026-01-12
+past-fb-B2330,Carlos Aquino,past-b2330@imported.elenest.local,past-B2330,5,"Madaling hanapin ang lokasyon.. Also, Okay naman yung stay namin overall.",,2026-01-16T12:00:00+08:00,true,2026-01-12
+past-fb-B2331,Rosa Castro,past-b2331@imported.elenest.local,past-B2331,4,"The water in the pool was a bit cloudy.. In addition, Highly recommended itong resort na ito.",,2026-01-16T12:00:00+08:00,true,2026-01-12
+past-fb-B2332,Kim Garcia,past-b2332@imported.elenest.local,past-B2332,4,"The location is accessible.. Also, Everything was as expected.",,2026-01-16T12:00:00+08:00,true,2026-01-12
+past-fb-B2333,Ramon Cruz,past-b2333@imported.elenest.local,past-B2333,3,"Tahimik naman ang paligid.. In addition, May ilang sira sa banyo.",,2026-01-16T12:00:00+08:00,true,2026-01-12
+past-fb-B2334,Joshua Torres,past-b2334@imported.elenest.local,past-B2334,3,"Service was slow and needs improvement.. Also, Panalo ang view, seryoso.",,2026-01-16T12:00:00+08:00,true,2026-01-12
+past-fb-B2335,Angel Domingo,past-b2335@imported.elenest.local,past-B2335,4,"Staff are very professional and accommodating.. Also, Very peaceful ang environment.",,2026-01-16T12:00:00+08:00,true,2026-01-12
+past-fb-B2336,Jessa Navarro,past-b2336@imported.elenest.local,past-B2336,4,Super ganda ng ambiance dito. and The room cleanliness was disappointing.,,2026-01-16T12:00:00+08:00,true,2026-01-12
+past-fb-B2337,Ryan Flores,past-b2337@imported.elenest.local,past-B2337,3,"Medyo madumi yung area nung dumating kami., Kailangang linisin pa ang mga kwarto.",,2026-01-16T12:00:00+08:00,true,2026-01-12
+past-fb-B2338,Maria Mercado,past-b2338@imported.elenest.local,past-B2338,4,Kailangang linisin pa ang mga kwarto. and Goods na goods ang service.,,2026-01-16T12:00:00+08:00,true,2026-01-12
+past-fb-B2339,Aira Flores,past-b2339@imported.elenest.local,past-B2339,5,"Medyo okay naman ang experience.. Also, Napakalinis ng swimming pool.",,2026-01-16T12:00:00+08:00,true,2026-01-12
+past-fb-B2340,Mark Mercado,past-b2340@imported.elenest.local,past-B2340,5,"We had a wonderful and relaxing stay.. In addition, Tahimik naman ang paligid.",,2026-01-17T12:00:00+08:00,true,2026-01-12
+past-fb-B2341,John Ramos,past-b2341@imported.elenest.local,past-B2341,5,"Okay naman yung stay namin overall.. In addition, Napakaganda ng inyong resort.",,2026-01-17T12:00:00+08:00,true,2026-01-12
+past-fb-B2342,John Villanueva,past-b2342@imported.elenest.local,past-B2342,5,"Okay naman yung stay namin overall., Medyo okay naman ang experience.",,2026-01-17T12:00:00+08:00,true,2026-01-12
+past-fb-B2343,Aira Castro,past-b2343@imported.elenest.local,past-B2343,4,"Not bad for a short trip., Walang kupas ang ganda ng pool.",,2026-01-17T12:00:00+08:00,true,2026-01-12
+past-fb-B2344,Liza Torres,past-b2344@imported.elenest.local,past-B2344,4,Napakaganda ng inyong resort.. Average service during our stay.,,2026-01-17T12:00:00+08:00,true,2026-01-12
+past-fb-B2345,Miguel Navarro,past-b2345@imported.elenest.local,past-B2345,3,"Naging masaya ang aming pamilya rito.. In addition, Medyo madumi yung area nung dumating kami.",,2026-01-17T12:00:00+08:00,true,2026-01-12
+past-fb-B2346,Melvin Aquino,past-b2346@imported.elenest.local,past-B2346,3,"The view from our room was breathtaking., A bit overpriced for the current state.",,2026-01-17T12:00:00+08:00,true,2026-01-12
+past-fb-B2347,Ryan Flores,past-b2347@imported.elenest.local,past-B2347,4,"The pool is clean and refreshing., The view from our room was breathtaking.",,2026-01-17T12:00:00+08:00,true,2026-01-12
+past-fb-B2348,Ramon Castro,past-b2348@imported.elenest.local,past-B2348,4,Not bad for a short trip. and The water in the pool was a bit cloudy.,,2026-01-17T12:00:00+08:00,true,2026-01-12
+past-fb-B2349,John Mendoza,past-b2349@imported.elenest.local,past-B2349,4,"Sakto lang ang price para sa amenities., Hassle yung process ng checkin.",,2026-01-18T12:00:00+08:00,true,2026-01-12
+past-fb-B2350,Danica Reyes,past-b2350@imported.elenest.local,past-B2350,4,The staff are very approachable and helpful. and Not worth the price we paid.,,2026-01-18T12:00:00+08:00,true,2026-01-12
+past-fb-B2351,Gloria Aquino,past-b2351@imported.elenest.local,past-B2351,4,Standard na resort para sa presyo. and Very peaceful ang environment.,,2026-01-18T12:00:00+08:00,true,2026-01-12
+past-fb-B2352,Jessa Dela Cruz,past-b2352@imported.elenest.local,past-B2352,5,"Mabait at magalang ang mga staff.. Also, Sakto lang ang naging karanasan namin.",,2026-01-18T12:00:00+08:00,true,2026-01-12
+past-fb-B2353,Rosa Dela Cruz,past-b2353@imported.elenest.local,past-B2353,4,"Masarap ang pagkain sa inyong canteen., It was a decent experience overall.",,2026-01-18T12:00:00+08:00,true,2026-01-12
+past-fb-B2354,Teresa Domingo,past-b2354@imported.elenest.local,past-B2354,4,The room cleanliness was disappointing. and Maayos ang pamamalakad sa lugar.,,2026-01-18T12:00:00+08:00,true,2026-01-12
+past-fb-B2355,Aira Castro,past-b2355@imported.elenest.local,past-B2355,4,"Hassle yung process ng checkin.. In addition, Solid ang experience rito.",,2026-01-18T12:00:00+08:00,true,2026-01-12
+past-fb-B2356,Antonio Dela Cruz,past-b2356@imported.elenest.local,past-B2356,5,Solid ang experience rito. and Not worth the price we paid.,,2026-01-18T12:00:00+08:00,true,2026-01-12
+past-fb-B2357,Angel Flores,past-b2357@imported.elenest.local,past-B2357,4,"The facilities are wellmaintained., Tahimik naman ang paligid.",,2026-01-19T12:00:00+08:00,true,2026-01-19
+past-fb-B2358,Manuel Pineda,past-b2358@imported.elenest.local,past-B2358,4,"Highly recommended itong resort na ito., Walang kupas ang ganda ng pool.",,2026-01-19T12:00:00+08:00,true,2026-01-19
+past-fb-B2359,Teresa Torres,past-b2359@imported.elenest.local,past-B2359,3,"The resort exceeded our expectations., Walang masyadong naging problema.",,2026-01-19T12:00:00+08:00,true,2026-01-19
+past-fb-B2360,Jessa Dela Cruz,past-b2360@imported.elenest.local,past-B2360,4,Standard na resort para sa presyo.. It was a decent experience overall.,,2026-01-19T12:00:00+08:00,true,2026-01-19
+past-fb-B2361,Kim Dela Cruz,past-b2361@imported.elenest.local,past-B2361,4,"Standard lang ang rooms but clean.. In addition, Super ganda ng ambiance dito.",,2026-01-19T12:00:00+08:00,true,2026-01-19
+past-fb-B2362,Aira Villanueva,past-b2362@imported.elenest.local,past-B2362,5,Madaling hanapin ang lokasyon. and Legit na relaxing ang vibe.,,2026-01-19T12:00:00+08:00,true,2026-01-19
+past-fb-B2363,Danica Cruz,past-b2363@imported.elenest.local,past-B2363,4,"Tahimik naman ang paligid., Not worth the price we paid.",,2026-01-19T12:00:00+08:00,true,2026-01-19
+past-fb-B2364,Elena Flores,past-b2364@imported.elenest.local,past-B2364,4,"The staff were not that responsive.. Also, Sulit na sulit ang booking namin.",,2026-01-19T12:00:00+08:00,true,2026-01-19
+past-fb-B2365,Ryan Torres,past-b2365@imported.elenest.local,past-B2365,4,"Mabagal ang serbisyo sa reception.. In addition, Masarap ang pagkain sa inyong canteen.",,2026-01-19T12:00:00+08:00,true,2026-01-19
+past-fb-B2366,Mary Del Rosario,past-b2366@imported.elenest.local,past-B2366,4,The room cleanliness was disappointing.. Sulit na sulit ang booking namin.,,2026-01-19T12:00:00+08:00,true,2026-01-19
+past-fb-B2367,Ramon Pineda,past-b2367@imported.elenest.local,past-B2367,5,"Great value for money., Staff are very professional and accommodating.",,2026-01-20T12:00:00+08:00,true,2026-01-19
+past-fb-B2368,Rosa Flores,past-b2368@imported.elenest.local,past-B2368,5,Medyo okay naman ang experience. and Everything was as expected.,,2026-01-20T12:00:00+08:00,true,2026-01-19
+past-fb-B2369,Ryan Del Rosario,past-b2369@imported.elenest.local,past-B2369,4,"Sakto lang ang price para sa amenities.. In addition, Very peaceful ang environment.",,2026-01-20T12:00:00+08:00,true,2026-01-19
+past-fb-B2370,Gloria Villanueva,past-b2370@imported.elenest.local,past-B2370,5,"Not worth the price we paid., We had a wonderful and relaxing stay.",,2026-01-20T12:00:00+08:00,true,2026-01-19
+past-fb-B2371,Maria Domingo,past-b2371@imported.elenest.local,past-B2371,4,Highly recommended itong resort na ito. and Medyo disappointing ang quality ng rooms.,,2026-01-20T12:00:00+08:00,true,2026-01-19
+past-fb-B2372,Mary Dela Cruz,past-b2372@imported.elenest.local,past-B2372,5,"Okay naman yung stay namin overall.. Also, Masyadong maingay ang ibang mga bisita.",,2026-01-20T12:00:00+08:00,true,2026-01-19
+past-fb-B2373,Maria Flores,past-b2373@imported.elenest.local,past-B2373,5,"We had a wonderful and relaxing stay.. In addition, Not bad for a short trip.",,2026-01-20T12:00:00+08:00,true,2026-01-19
+past-fb-B2374,Francisca Mercado,past-b2374@imported.elenest.local,past-B2374,4,Napakalinis ng swimming pool. and The view from our room was breathtaking.,,2026-01-20T12:00:00+08:00,true,2026-01-19
+past-fb-B2375,Miguel Navarro,past-b2375@imported.elenest.local,past-B2375,4,The view from our room was breathtaking. and Naging masaya ang aming pamilya rito.,,2026-01-20T12:00:00+08:00,true,2026-01-19
+past-fb-B2376,Teresa Mendoza,past-b2376@imported.elenest.local,past-B2376,4,"Not worth the price we paid., The service is quite fine.",,2026-01-20T12:00:00+08:00,true,2026-01-19
+past-fb-B2377,Teresa Del Rosario,past-b2377@imported.elenest.local,past-B2377,4,"Everything was as expected.. Also, The room was basic but functional.",,2026-01-20T12:00:00+08:00,true,2026-01-19
+past-fb-B2378,Ana Navarro,past-b2378@imported.elenest.local,past-B2378,4,A bit overpriced for the current state. and Sakto lang ang naging karanasan namin.,,2026-01-20T12:00:00+08:00,true,2026-01-19
+past-fb-B2379,Manuel Aquino,past-b2379@imported.elenest.local,past-B2379,4,"Legit na relaxing ang vibe.. In addition, A bit overpriced for the current state.",,2026-01-20T12:00:00+08:00,true,2026-01-19
+past-fb-B2380,Jose Dela Cruz,past-b2380@imported.elenest.local,past-B2380,4,"The environment was too loud for relaxation., Service was slow and needs improvement.",,2026-01-20T12:00:00+08:00,true,2026-01-19
+past-fb-B2381,Francisco Soriano,past-b2381@imported.elenest.local,past-B2381,4,"Masarap ang pagkain sa inyong canteen.. Also, The environment was too loud for relaxation.",,2026-01-21T12:00:00+08:00,true,2026-01-19
+past-fb-B2382,Mary Navarro,past-b2382@imported.elenest.local,past-B2382,5,"Great value for money.. In addition, Average service during our stay.",,2026-01-21T12:00:00+08:00,true,2026-01-19
+past-fb-B2383,Carlos Navarro,past-b2383@imported.elenest.local,past-B2383,3,Service was slow and needs improvement.. Goods na goods ang service.,,2026-01-21T12:00:00+08:00,true,2026-01-19
+past-fb-B2384,Paolo Villanueva,past-b2384@imported.elenest.local,past-B2384,4,Staff are very professional and accommodating. and Mabagal ang serbisyo sa reception.,,2026-01-21T12:00:00+08:00,true,2026-01-19
+past-fb-B2385,Josefina Aquino,past-b2385@imported.elenest.local,past-B2385,4,"The staff are very approachable and helpful.. Also, Panalo ang view, seryoso.",,2026-01-21T12:00:00+08:00,true,2026-01-19
+past-fb-B2386,Miguel Aquino,past-b2386@imported.elenest.local,past-B2386,4,Medyo disappointing ang quality ng rooms. and Solid ang experience rito.,,2026-01-21T12:00:00+08:00,true,2026-01-19
+past-fb-B2387,Jose Castro,past-b2387@imported.elenest.local,past-B2387,4,"Masyadong maingay ang ibang mga bisita., Facilities are a bit outdated.",,2026-01-21T12:00:00+08:00,true,2026-01-19
+past-fb-B2388,John Del Rosario,past-b2388@imported.elenest.local,past-B2388,4,"The staff are very approachable and helpful., The service is quite fine.",,2026-01-21T12:00:00+08:00,true,2026-01-19
+past-fb-B2389,Carmen Garcia,past-b2389@imported.elenest.local,past-B2389,5,"Maayos ang pamamalakad sa lugar., The environment was too loud for relaxation.",,2026-01-21T12:00:00+08:00,true,2026-01-19
+past-fb-B2390,Jessa Santos,past-b2390@imported.elenest.local,past-B2390,3,"Tahimik naman ang paligid., Service was slow and needs improvement.",,2026-01-21T12:00:00+08:00,true,2026-01-19
+past-fb-B2391,Mark Santos,past-b2391@imported.elenest.local,past-B2391,5,Okay naman yung stay namin overall. and Medyo okay naman ang experience.,,2026-01-22T12:00:00+08:00,true,2026-01-19
+past-fb-B2392,Francisca Torres,past-b2392@imported.elenest.local,past-B2392,4,"The water in the pool was a bit cloudy.. Also, The room cleanliness was disappointing.",,2026-01-22T12:00:00+08:00,true,2026-01-19
+past-fb-B2393,John Garcia,past-b2393@imported.elenest.local,past-B2393,4,"The view from our room was breathtaking., The pool area is fine.",,2026-01-22T12:00:00+08:00,true,2026-01-19
+past-fb-B2394,John Domingo,past-b2394@imported.elenest.local,past-B2394,4,Medyo madumi yung area nung dumating kami.. Maayos ang pamamalakad sa lugar.,,2026-01-22T12:00:00+08:00,true,2026-01-19
+past-fb-B2395,Liza Mendoza,past-b2395@imported.elenest.local,past-B2395,5,"Great value for money., Everything was as expected.",,2026-01-22T12:00:00+08:00,true,2026-01-19
+past-fb-B2396,Rosa Torres,past-b2396@imported.elenest.local,past-B2396,4,May ilang sira sa banyo.. The environment was too loud for relaxation.,,2026-01-22T12:00:00+08:00,true,2026-01-19
+past-fb-B2397,Kim Domingo,past-b2397@imported.elenest.local,past-B2397,3,"Medyo madumi yung area nung dumating kami., Everything was as expected.",,2026-01-22T12:00:00+08:00,true,2026-01-19
+past-fb-B2398,Pedro Reyes,past-b2398@imported.elenest.local,past-B2398,4,"Hassle yung process ng checkin.. In addition, Sakto lang ang naging karanasan namin.",,2026-01-22T12:00:00+08:00,true,2026-01-19
+past-fb-B2399,Josefina Villanueva,past-b2399@imported.elenest.local,past-B2399,4,"Sakto lang ang naging karanasan namin.. Also, The resort exceeded our expectations.",,2026-01-22T12:00:00+08:00,true,2026-01-19
+past-fb-B2400,Jessa Cruz,past-b2400@imported.elenest.local,past-B2400,4,The room was basic but functional. and The pool area is fine.,,2026-01-22T12:00:00+08:00,true,2026-01-19
+past-fb-B2401,Danica Mercado,past-b2401@imported.elenest.local,past-B2401,4,"Hindi kami nasiyahan sa aming stay.. Also, The staff are very approachable and helpful.",,2026-01-22T12:00:00+08:00,true,2026-01-19
+past-fb-B2402,Carmen Torres,past-b2402@imported.elenest.local,past-B2402,2,"Walang masyadong naging problema.. Also, May ilang sira sa banyo.",,2026-01-22T12:00:00+08:00,true,2026-01-19
+past-fb-B2403,Joshua Dela Cruz,past-b2403@imported.elenest.local,past-B2403,5,"Goods na goods ang service.. Also, Medyo okay naman ang experience.",,2026-01-22T12:00:00+08:00,true,2026-01-19
+past-fb-B2404,Miguel Cruz,past-b2404@imported.elenest.local,past-B2404,4,"Mabagal ang serbisyo sa reception., Maayos ang pamamalakad sa lugar.",,2026-01-22T12:00:00+08:00,true,2026-01-19
+past-fb-B2405,Pedro Navarro,past-b2405@imported.elenest.local,past-B2405,5,"Not worth the price we paid.. In addition, Not bad for a short trip.",,2026-01-22T12:00:00+08:00,true,2026-01-19
+past-fb-B2406,John Mendoza,past-b2406@imported.elenest.local,past-B2406,4,Sulit na sulit ang booking namin. and Masarap ang pagkain sa inyong canteen.,,2026-01-22T12:00:00+08:00,true,2026-01-19
+past-fb-B2407,Rosa Domingo,past-b2407@imported.elenest.local,past-B2407,2,"Walang masyadong naging problema., Medyo madumi yung area nung dumating kami.",,2026-01-23T12:00:00+08:00,true,2026-01-19
+past-fb-B2408,Mary Pineda,past-b2408@imported.elenest.local,past-B2408,3,"Medyo madumi yung area nung dumating kami.. Also, Mahal ang presyo kumpara sa serbisyo.",,2026-01-23T12:00:00+08:00,true,2026-01-19
+past-fb-B2409,Juan Reyes,past-b2409@imported.elenest.local,past-B2409,4,"The staff were not that responsive., The water in the pool was a bit cloudy.",,2026-01-23T12:00:00+08:00,true,2026-01-19
+past-fb-B2410,Antonio Santos,past-b2410@imported.elenest.local,past-B2410,5,"The service is quite fine., Mabait at magalang ang mga staff.",,2026-01-23T12:00:00+08:00,true,2026-01-19
+past-fb-B2411,Gloria Reyes,past-b2411@imported.elenest.local,past-B2411,5,"We had a wonderful and relaxing stay.. In addition, Legit na relaxing ang vibe.",,2026-01-23T12:00:00+08:00,true,2026-01-19
+past-fb-B2412,Jessa Garcia,past-b2412@imported.elenest.local,past-B2412,4,Everything was as expected.,,2026-01-23T12:00:00+08:00,true,2026-01-19
+past-fb-B2413,Paul Torres,past-b2413@imported.elenest.local,past-B2413,5,"Panalo ang view, seryoso.. In addition, We had a wonderful and relaxing stay.",,2026-01-23T12:00:00+08:00,true,2026-01-19
+past-fb-B2414,Mark Garcia,past-b2414@imported.elenest.local,past-B2414,4,"The staff were not that responsive.. Also, Kailangang linisin pa ang mga kwarto.",,2026-01-23T12:00:00+08:00,true,2026-01-19
+past-fb-B2415,Aira Del Rosario,past-b2415@imported.elenest.local,past-B2415,5,"Madaling hanapin ang lokasyon., Not worth the price we paid.",,2026-01-23T12:00:00+08:00,true,2026-01-19
+past-fb-B2416,Maria Castro,past-b2416@imported.elenest.local,past-B2416,4,Medyo madumi yung area nung dumating kami. and The pool is clean and refreshing.,,2026-01-23T12:00:00+08:00,true,2026-01-19
+past-fb-B2417,Miguel Aquino,past-b2417@imported.elenest.local,past-B2417,4,"Hassle yung process ng checkin.. Panalo ang view, seryoso.",,2026-01-23T12:00:00+08:00,true,2026-01-19
+past-fb-B2418,Pedro Mercado,past-b2418@imported.elenest.local,past-B2418,4,The water in the pool was a bit cloudy. and Tahimik naman ang paligid.,,2026-01-24T12:00:00+08:00,true,2026-01-19
+past-fb-B2419,Carlos Navarro,past-b2419@imported.elenest.local,past-B2419,4,"Kailangang linisin pa ang mga kwarto.. Also, The water in the pool was a bit cloudy.",,2026-01-24T12:00:00+08:00,true,2026-01-19
+past-fb-B2420,Joshua Aquino,past-b2420@imported.elenest.local,past-B2420,4,"Medyo disappointing ang quality ng rooms.. Also, The room cleanliness was disappointing.",,2026-01-24T12:00:00+08:00,true,2026-01-19
+past-fb-B2421,Maria Ramos,past-b2421@imported.elenest.local,past-B2421,4,"Mahal ang presyo kumpara sa serbisyo., Masarap ang pagkain sa inyong canteen.",,2026-01-24T12:00:00+08:00,true,2026-01-19
+past-fb-B2422,Antonio Castro,past-b2422@imported.elenest.local,past-B2422,5,Napakalinis ng swimming pool. and Okay naman yung stay namin overall.,,2026-01-24T12:00:00+08:00,true,2026-01-19
+past-fb-B2423,Angel Del Rosario,past-b2423@imported.elenest.local,past-B2423,3,"Walang kupas ang ganda ng pool., A bit overpriced for the current state.",,2026-01-24T12:00:00+08:00,true,2026-01-19
+past-fb-B2424,Mary Garcia,past-b2424@imported.elenest.local,past-B2424,4,The staff were not that responsive.,,2026-01-24T12:00:00+08:00,true,2026-01-19
+past-fb-B2425,Elena Torres,past-b2425@imported.elenest.local,past-B2425,4,"Napakalinis ng swimming pool., The resort exceeded our expectations.",,2026-01-24T12:00:00+08:00,true,2026-01-19
+past-fb-B2426,Josefina Bautista,past-b2426@imported.elenest.local,past-B2426,4,"The water in the pool was a bit cloudy.. In addition, Napakalinis ng swimming pool.",,2026-01-24T12:00:00+08:00,true,2026-01-19
+past-fb-B2427,Francisco Navarro,past-b2427@imported.elenest.local,past-B2427,4,Okay naman yung stay namin overall.. A bit overpriced for the current state.,,2026-01-24T12:00:00+08:00,true,2026-01-19
+past-fb-B2428,Mark Garcia,past-b2428@imported.elenest.local,past-B2428,5,"Great value for money.. Also, Madaling hanapin ang lokasyon.",,2026-01-24T12:00:00+08:00,true,2026-01-19
+past-fb-B2429,Jose Mercado,past-b2429@imported.elenest.local,past-B2429,4,"The room cleanliness was disappointing., The staff were not that responsive.",,2026-01-24T12:00:00+08:00,true,2026-01-19
+past-fb-B2430,Luis Domingo,past-b2430@imported.elenest.local,past-B2430,4,"May ilang sira sa banyo.. In addition, Great value for money.",,2026-01-24T12:00:00+08:00,true,2026-01-19
+past-fb-B2431,Antonio Mendoza,past-b2431@imported.elenest.local,past-B2431,3,"Hindi kami nasiyahan sa aming stay.. In addition, A bit overpriced for the current state.",,2026-01-25T12:00:00+08:00,true,2026-01-19
+past-fb-B2432,Paul Reyes,past-b2432@imported.elenest.local,past-B2432,4,"Panalo ang view, seryoso.. In addition, Super ganda ng ambiance dito.",,2026-01-25T12:00:00+08:00,true,2026-01-19
+past-fb-B2433,Joshua Pineda,past-b2433@imported.elenest.local,past-B2433,3,Medyo disappointing ang quality ng rooms.. Facilities are a bit outdated.,,2026-01-25T12:00:00+08:00,true,2026-01-19
+past-fb-B2434,John Soriano,past-b2434@imported.elenest.local,past-B2434,3,Service was slow and needs improvement.,,2026-01-25T12:00:00+08:00,true,2026-01-19
+past-fb-B2435,Rosa Flores,past-b2435@imported.elenest.local,past-B2435,4,The location is accessible.. Hassle yung process ng checkin.,,2026-01-25T12:00:00+08:00,true,2026-01-19
+past-fb-B2436,Mark Bautista,past-b2436@imported.elenest.local,past-B2436,4,"The staff are very approachable and helpful., The location is accessible.",,2026-01-25T12:00:00+08:00,true,2026-01-19
+past-fb-B2437,Gloria Garcia,past-b2437@imported.elenest.local,past-B2437,4,"Very peaceful ang environment.. In addition, Madaling hanapin ang lokasyon.",,2026-01-25T12:00:00+08:00,true,2026-01-19
+past-fb-B2438,Elena Soriano,past-b2438@imported.elenest.local,past-B2438,2,"Walang masyadong naging problema.. In addition, We encountered some issues with the water pressure.",,2026-01-25T12:00:00+08:00,true,2026-01-19
+past-fb-B2439,Mark Cruz,past-b2439@imported.elenest.local,past-B2439,4,"The room cleanliness was disappointing., Medyo disappointing ang quality ng rooms.",,2026-01-25T12:00:00+08:00,true,2026-01-19
+past-fb-B2440,Joshua Bautista,past-b2440@imported.elenest.local,past-B2440,4,"Very peaceful ang environment., Sulit na sulit ang booking namin.",,2026-01-25T12:00:00+08:00,true,2026-01-19
+past-fb-B2441,Aira Cruz,past-b2441@imported.elenest.local,past-B2441,5,"The pool area is fine.. Also, Great value for money.",,2026-01-26T12:00:00+08:00,true,2026-01-26
+past-fb-B2442,Juan Castro,past-b2442@imported.elenest.local,past-B2442,4,Hassle yung process ng checkin. and The facilities are wellmaintained.,,2026-01-26T12:00:00+08:00,true,2026-01-26
+past-fb-B2443,Juan Castro,past-b2443@imported.elenest.local,past-B2443,4,"The pool is clean and refreshing., May ilang sira sa banyo.",,2026-01-26T12:00:00+08:00,true,2026-01-26
+past-fb-B2444,Paul Flores,past-b2444@imported.elenest.local,past-B2444,4,Masarap ang pagkain sa inyong canteen.. Average service during our stay.,,2026-01-26T12:00:00+08:00,true,2026-01-26
+past-fb-B2445,Aira Pineda,past-b2445@imported.elenest.local,past-B2445,4,"Facilities are a bit outdated.. In addition, Mahal ang presyo kumpara sa serbisyo.",,2026-01-26T12:00:00+08:00,true,2026-01-26
+past-fb-B2446,Francisco Domingo,past-b2446@imported.elenest.local,past-B2446,3,"The location is accessible.. Also, Walang masyadong naging problema.",,2026-01-26T12:00:00+08:00,true,2026-01-26
+past-fb-B2447,Mark Castro,past-b2447@imported.elenest.local,past-B2447,4,Standard na resort para sa presyo. and The staff were not that responsive.,,2026-01-26T12:00:00+08:00,true,2026-01-26
+past-fb-B2448,Danica Castro,past-b2448@imported.elenest.local,past-B2448,4,"Maayos naman ang pasilidad.. Also, The staff are very approachable and helpful.",,2026-01-27T12:00:00+08:00,true,2026-01-26
+past-fb-B2449,Francisco Castro,past-b2449@imported.elenest.local,past-B2449,4,The resort exceeded our expectations.. Kailangang linisin pa ang mga kwarto.,,2026-01-27T12:00:00+08:00,true,2026-01-26
+past-fb-B2450,Ana Del Rosario,past-b2450@imported.elenest.local,past-B2450,3,"Medyo madumi yung area nung dumating kami., Hindi kami nasiyahan sa aming stay.",,2026-01-27T12:00:00+08:00,true,2026-01-26
+past-fb-B2451,Vicente Dela Cruz,past-b2451@imported.elenest.local,past-B2451,2,"We encountered some issues with the water pressure., Hassle yung process ng checkin.",,2026-01-27T12:00:00+08:00,true,2026-01-26
+past-fb-B2452,Gloria Mercado,past-b2452@imported.elenest.local,past-B2452,5,"Sulit na sulit ang booking namin.. In addition, We had a wonderful and relaxing stay.",,2026-01-27T12:00:00+08:00,true,2026-01-26
+past-fb-B2453,Kim Bautista,past-b2453@imported.elenest.local,past-B2453,5,"The pool is clean and refreshing.. Also, Sulit na sulit ang booking namin.",,2026-01-27T12:00:00+08:00,true,2026-01-26
+past-fb-B2454,Paul Flores,past-b2454@imported.elenest.local,past-B2454,4,"The pool is clean and refreshing.. In addition, Average service during our stay.",,2026-01-27T12:00:00+08:00,true,2026-01-26
+past-fb-B2455,Elena Domingo,past-b2455@imported.elenest.local,past-B2455,4,"Naging masaya ang aming pamilya rito.. Also, Masyadong maingay ang ibang mga bisita.",,2026-01-27T12:00:00+08:00,true,2026-01-26
+past-fb-B2456,Josefina Villanueva,past-b2456@imported.elenest.local,past-B2456,4,"Super ganda ng ambiance dito., Average service during our stay.",,2026-01-27T12:00:00+08:00,true,2026-01-26
+past-fb-B2457,Paolo Reyes,past-b2457@imported.elenest.local,past-B2457,4,"Hindi kami nasiyahan sa aming stay.. Also, Napakalinis ng swimming pool.",,2026-01-27T12:00:00+08:00,true,2026-01-26
+past-fb-B2458,Ryan Bautista,past-b2458@imported.elenest.local,past-B2458,3,"Tahimik naman ang paligid.. In addition, Walang masyadong naging problema.",,2026-01-27T12:00:00+08:00,true,2026-01-26
+past-fb-B2459,Josefina Ramos,past-b2459@imported.elenest.local,past-B2459,5,Very peaceful ang environment.. Okay naman yung stay namin overall.,,2026-01-27T12:00:00+08:00,true,2026-01-26
+past-fb-B2460,Elena Santos,past-b2460@imported.elenest.local,past-B2460,4,"Tahimik naman ang paligid.. Also, Mahal ang presyo kumpara sa serbisyo.",,2026-01-27T12:00:00+08:00,true,2026-01-26
+past-fb-B2461,Joshua Bautista,past-b2461@imported.elenest.local,past-B2461,4,"The pool is clean and refreshing.. Also, Facilities are a bit outdated.",,2026-01-27T12:00:00+08:00,true,2026-01-26
+past-fb-B2462,Joshua Ramos,past-b2462@imported.elenest.local,past-B2462,4,"Hassle yung process ng checkin.. In addition, Maayos naman ang pasilidad.",,2026-01-28T12:00:00+08:00,true,2026-01-26
+past-fb-B2463,Jessa Castro,past-b2463@imported.elenest.local,past-B2463,4,"The service is quite fine.. In addition, The environment was too loud for relaxation.",,2026-01-28T12:00:00+08:00,true,2026-01-26
+past-fb-B2464,Josefina Soriano,past-b2464@imported.elenest.local,past-B2464,4,"The view from our room was breathtaking.. Also, The service is quite fine.",,2026-01-28T12:00:00+08:00,true,2026-01-26
+past-fb-B2465,Pedro Pineda,past-b2465@imported.elenest.local,past-B2465,4,Goods na goods ang service. and The room was basic but functional.,,2026-01-28T12:00:00+08:00,true,2026-01-26
+past-fb-B2466,Joshua Ramos,past-b2466@imported.elenest.local,past-B2466,4,"Standard na resort para sa presyo.. Also, Legit na relaxing ang vibe.",,2026-01-28T12:00:00+08:00,true,2026-01-26
+past-fb-B2467,Miguel Torres,past-b2467@imported.elenest.local,past-B2467,3,"The staff are very approachable and helpful.. Also, May ilang sira sa banyo.",,2026-01-28T12:00:00+08:00,true,2026-01-26
+past-fb-B2468,Mark Cruz,past-b2468@imported.elenest.local,past-B2468,4,"Masyadong maingay ang ibang mga bisita.. Also, The room cleanliness was disappointing.",,2026-01-28T12:00:00+08:00,true,2026-01-26
+past-fb-B2469,Ramon Garcia,past-b2469@imported.elenest.local,past-B2469,4,"The view from our room was breathtaking.. Also, The staff were not that responsive.",,2026-01-28T12:00:00+08:00,true,2026-01-26
+past-fb-B2470,Melvin Ramos,past-b2470@imported.elenest.local,past-B2470,5,"The room cleanliness was disappointing., Medyo okay naman ang experience.",,2026-01-28T12:00:00+08:00,true,2026-01-26
+past-fb-B2471,Aira Domingo,past-b2471@imported.elenest.local,past-B2471,4,"May ilang sira sa banyo.. Also, The pool is clean and refreshing.",,2026-01-28T12:00:00+08:00,true,2026-01-26
+past-fb-B2472,Juan Castro,past-b2472@imported.elenest.local,past-B2472,4,"The water in the pool was a bit cloudy.. Also, The service is quite fine.",,2026-01-28T12:00:00+08:00,true,2026-01-26
+past-fb-B2473,Aira Soriano,past-b2473@imported.elenest.local,past-B2473,4,Legit na relaxing ang vibe. and The pool area is fine.,,2026-01-28T12:00:00+08:00,true,2026-01-26
+past-fb-B2474,Francisca Reyes,past-b2474@imported.elenest.local,past-B2474,4,"Facilities are a bit outdated., The water in the pool was a bit cloudy.",,2026-01-28T12:00:00+08:00,true,2026-01-26
+past-fb-B2475,Melvin Bautista,past-b2475@imported.elenest.local,past-B2475,4,"Service was slow and needs improvement.. Also, Maayos ang pamamalakad sa lugar.",,2026-01-28T12:00:00+08:00,true,2026-01-26
+past-fb-B2476,Paul Villanueva,past-b2476@imported.elenest.local,past-B2476,4,"Legit na relaxing ang vibe., Very peaceful ang environment.",,2026-01-28T12:00:00+08:00,true,2026-01-26
+past-fb-B2477,Vicente Ramos,past-b2477@imported.elenest.local,past-B2477,2,"We encountered some issues with the water pressure., The resort exceeded our expectations.",,2026-01-29T12:00:00+08:00,true,2026-01-26
+past-fb-B2478,Joshua Castro,past-b2478@imported.elenest.local,past-B2478,4,"Hassle yung process ng checkin.. Also, The room cleanliness was disappointing.",,2026-01-29T12:00:00+08:00,true,2026-01-26
+past-fb-B2479,Vicente Cruz,past-b2479@imported.elenest.local,past-B2479,4,Maayos ang pamamalakad sa lugar.. The room was basic but functional.,,2026-01-29T12:00:00+08:00,true,2026-01-26
+past-fb-B2480,Jessa Aquino,past-b2480@imported.elenest.local,past-B2480,4,The room was basic but functional.. Maayos ang pamamalakad sa lugar.,,2026-01-29T12:00:00+08:00,true,2026-01-26
+past-fb-B2481,Francisco Soriano,past-b2481@imported.elenest.local,past-B2481,4,Service was slow and needs improvement. and Mabait at magalang ang mga staff.,,2026-01-29T12:00:00+08:00,true,2026-01-26
+past-fb-B2482,Danica Reyes,past-b2482@imported.elenest.local,past-B2482,5,Not worth the price we paid.. Not bad for a short trip.,,2026-01-29T12:00:00+08:00,true,2026-01-26
+past-fb-B2483,Mary Torres,past-b2483@imported.elenest.local,past-B2483,3,"Medyo disappointing ang quality ng rooms.. Also, Masyadong maingay ang ibang mga bisita.",,2026-01-29T12:00:00+08:00,true,2026-01-26
+past-fb-B2484,Mark Garcia,past-b2484@imported.elenest.local,past-B2484,4,"The room cleanliness was disappointing., Sakto lang ang naging karanasan namin.",,2026-01-29T12:00:00+08:00,true,2026-01-26
+past-fb-B2485,Danica Torres,past-b2485@imported.elenest.local,past-B2485,3,May ilang sira sa banyo.. The room cleanliness was disappointing.,,2026-01-29T12:00:00+08:00,true,2026-01-26
+past-fb-B2486,Jessa Torres,past-b2486@imported.elenest.local,past-B2486,5,"Great value for money.. In addition, Maayos ang pamamalakad sa lugar.",,2026-01-29T12:00:00+08:00,true,2026-01-26
+past-fb-B2487,Luis Castro,past-b2487@imported.elenest.local,past-B2487,4,Madaling hanapin ang lokasyon.. Naging masaya ang aming pamilya rito.,,2026-01-29T12:00:00+08:00,true,2026-01-26
+past-fb-B2488,Carlos Cruz,past-b2488@imported.elenest.local,past-B2488,3,"Staff are very professional and accommodating.. In addition, A bit overpriced for the current state.",,2026-01-29T12:00:00+08:00,true,2026-01-26
+past-fb-B2489,Carlos Mendoza,past-b2489@imported.elenest.local,past-B2489,4,"Staff are very professional and accommodating.. Also, The water in the pool was a bit cloudy.",,2026-01-29T12:00:00+08:00,true,2026-01-26
+past-fb-B2490,Teresa Navarro,past-b2490@imported.elenest.local,past-B2490,4,"Super ganda ng ambiance dito., The room was basic but functional.",,2026-01-29T12:00:00+08:00,true,2026-01-26
+past-fb-B2491,Aira Navarro,past-b2491@imported.elenest.local,past-B2491,4,"Standard na resort para sa presyo.. Also, The location is accessible.",,2026-01-30T12:00:00+08:00,true,2026-01-26
+past-fb-B2492,Joshua Domingo,past-b2492@imported.elenest.local,past-B2492,5,"We had a wonderful and relaxing stay.. In addition, Mahal ang presyo kumpara sa serbisyo.",,2026-01-30T12:00:00+08:00,true,2026-01-26
+past-fb-B2493,Francisca Domingo,past-b2493@imported.elenest.local,past-B2493,4,The facilities are wellmaintained.. Sulit na sulit ang booking namin.,,2026-01-30T12:00:00+08:00,true,2026-01-26
+past-fb-B2494,Ana Del Rosario,past-b2494@imported.elenest.local,past-B2494,5,"Kailangang linisin pa ang mga kwarto.. In addition, Medyo okay naman ang experience.",,2026-01-30T12:00:00+08:00,true,2026-01-26
+past-fb-B2495,Carlos Castro,past-b2495@imported.elenest.local,past-B2495,5,"Sulit na sulit ang booking namin., Not worth the price we paid.",,2026-01-30T12:00:00+08:00,true,2026-01-26
+past-fb-B2496,Juan Castro,past-b2496@imported.elenest.local,past-B2496,4,The resort exceeded our expectations. and The service is quite fine.,,2026-01-30T12:00:00+08:00,true,2026-01-26
+past-fb-B2497,Melvin Aquino,past-b2497@imported.elenest.local,past-B2497,4,"Staff are very professional and accommodating., Maayos naman ang pasilidad.",,2026-01-30T12:00:00+08:00,true,2026-01-26
+past-fb-B2498,Ana Torres,past-b2498@imported.elenest.local,past-B2498,4,"The room cleanliness was disappointing.. Also, Madaling hanapin ang lokasyon.",,2026-01-30T12:00:00+08:00,true,2026-01-26
+past-fb-B2499,Ana Del Rosario,past-b2499@imported.elenest.local,past-B2499,4,Mabagal ang serbisyo sa reception.. Legit na relaxing ang vibe.,,2026-01-30T12:00:00+08:00,true,2026-01-26
+past-fb-B2500,Melvin Torres,past-b2500@imported.elenest.local,past-B2500,4,Facilities are a bit outdated.. Legit na relaxing ang vibe.,,2026-01-30T12:00:00+08:00,true,2026-01-26
+past-fb-B2501,Vicente Santos,past-b2501@imported.elenest.local,past-B2501,4,"Maayos ang pamamalakad sa lugar., Super ganda ng ambiance dito.",,2026-01-30T12:00:00+08:00,true,2026-01-26
+past-fb-B2502,Melvin Bautista,past-b2502@imported.elenest.local,past-B2502,4,"Panalo ang view, seryoso. and Solid ang experience rito.",,2026-01-30T12:00:00+08:00,true,2026-01-26
+past-fb-B2503,Carmen Soriano,past-b2503@imported.elenest.local,past-B2503,2,"The facilities are wellmaintained., We encountered some issues with the water pressure.",,2026-01-30T12:00:00+08:00,true,2026-01-26
+past-fb-B2504,Manuel Garcia,past-b2504@imported.elenest.local,past-B2504,4,"Sakto lang ang price para sa amenities.. Also, Hassle yung process ng checkin.",,2026-01-30T12:00:00+08:00,true,2026-01-26
+past-fb-B2505,Gloria Torres,past-b2505@imported.elenest.local,past-B2505,4,Super ganda ng ambiance dito.,,2026-01-30T12:00:00+08:00,true,2026-01-26
+past-fb-B2506,Francisca Soriano,past-b2506@imported.elenest.local,past-B2506,4,Average service during our stay.. The room was basic but functional.,,2026-01-31T12:00:00+08:00,true,2026-01-26
+past-fb-B2507,Kim Navarro,past-b2507@imported.elenest.local,past-B2507,4,Super ganda ng ambiance dito. and Naging masaya ang aming pamilya rito.,,2026-01-31T12:00:00+08:00,true,2026-01-26
+past-fb-B2508,Luis Aquino,past-b2508@imported.elenest.local,past-B2508,4,Legit na relaxing ang vibe.. Service was slow and needs improvement.,,2026-01-31T12:00:00+08:00,true,2026-01-26
+past-fb-B2509,John Aquino,past-b2509@imported.elenest.local,past-B2509,2,Medyo disappointing ang quality ng rooms. and We encountered some issues with the water pressure.,,2026-01-31T12:00:00+08:00,true,2026-01-26
+past-fb-B2510,Aira Soriano,past-b2510@imported.elenest.local,past-B2510,5,"Sakto lang ang naging karanasan namin.. Also, The environment was too loud for relaxation.",,2026-01-31T12:00:00+08:00,true,2026-01-26
+past-fb-B2511,Juan Flores,past-b2511@imported.elenest.local,past-B2511,4,"The environment was too loud for relaxation.. Also, Super ganda ng ambiance dito.",,2026-01-31T12:00:00+08:00,true,2026-01-26
+past-fb-B2512,Ramon Domingo,past-b2512@imported.elenest.local,past-B2512,4,"The service is quite fine., Facilities are a bit outdated.",,2026-01-31T12:00:00+08:00,true,2026-01-26
+past-fb-B2513,Angel Reyes,past-b2513@imported.elenest.local,past-B2513,3,The service is quite fine. and May ilang sira sa banyo.,,2026-01-31T12:00:00+08:00,true,2026-01-26
+past-fb-B2514,Ramon Pineda,past-b2514@imported.elenest.local,past-B2514,5,Madaling hanapin ang lokasyon. and Mabait at magalang ang mga staff.,,2026-01-31T12:00:00+08:00,true,2026-01-26
+past-fb-B2515,Manuel Garcia,past-b2515@imported.elenest.local,past-B2515,5,"The resort exceeded our expectations.. Also, Mabait at magalang ang mga staff.",,2026-01-31T12:00:00+08:00,true,2026-01-26
+past-fb-B2516,Elena Santos,past-b2516@imported.elenest.local,past-B2516,4,Napakaganda ng inyong resort.. The resort exceeded our expectations.,,2026-01-31T12:00:00+08:00,true,2026-01-26
+past-fb-B2517,Joshua Garcia,past-b2517@imported.elenest.local,past-B2517,4,"Facilities are a bit outdated., Panalo ang view, seryoso.",,2026-01-31T12:00:00+08:00,true,2026-01-26
+past-fb-B2518,Aira Dela Cruz,past-b2518@imported.elenest.local,past-B2518,4,"Standard na resort para sa presyo.. In addition, Maayos naman ang pasilidad.",,2026-01-31T12:00:00+08:00,true,2026-01-26
+past-fb-B2519,Paolo Reyes,past-b2519@imported.elenest.local,past-B2519,3,"May ilang sira sa banyo.. In addition, The pool area is fine.",,2026-02-01T12:00:00+08:00,true,2026-01-26
+past-fb-B2520,Carlos Flores,past-b2520@imported.elenest.local,past-B2520,5,"Maayos ang pamamalakad sa lugar.. Also, Medyo okay naman ang experience.",,2026-02-01T12:00:00+08:00,true,2026-01-26
+past-fb-B2521,Mark Villanueva,past-b2521@imported.elenest.local,past-B2521,4,"Facilities are a bit outdated.. In addition, The environment was too loud for relaxation.",,2026-02-01T12:00:00+08:00,true,2026-01-26
+past-fb-B2522,Maria Cruz,past-b2522@imported.elenest.local,past-B2522,4,"Not bad for a short trip.. Also, Hindi kami nasiyahan sa aming stay.",,2026-02-01T12:00:00+08:00,true,2026-01-26
+past-fb-B2523,Antonio Navarro,past-b2523@imported.elenest.local,past-B2523,4,The environment was too loud for relaxation.. It was a decent experience overall.,,2026-02-01T12:00:00+08:00,true,2026-01-26
+past-fb-B2524,Melvin Navarro,past-b2524@imported.elenest.local,past-B2524,5,"Highly recommended itong resort na ito.. In addition, Legit na relaxing ang vibe.",,2026-02-01T12:00:00+08:00,true,2026-01-26
+past-fb-B2525,Gloria Soriano,past-b2525@imported.elenest.local,past-B2525,4,Goods na goods ang service.,,2026-02-01T12:00:00+08:00,true,2026-01-26
+past-fb-B2526,Vicente Navarro,past-b2526@imported.elenest.local,past-B2526,5,"The room was basic but functional., Okay naman yung stay namin overall.",,2026-02-01T12:00:00+08:00,true,2026-01-26
+past-fb-B2527,Kim Del Rosario,past-b2527@imported.elenest.local,past-B2527,4,"The water in the pool was a bit cloudy.. Also, Kailangang linisin pa ang mga kwarto.",,2026-02-01T12:00:00+08:00,true,2026-01-26
+past-fb-B2528,Elena Ramos,past-b2528@imported.elenest.local,past-B2528,3,Average service during our stay. and Walang masyadong naging problema.,,2026-02-01T12:00:00+08:00,true,2026-01-26
+past-fb-B2529,John Villanueva,past-b2529@imported.elenest.local,past-B2529,4,"Mahal ang presyo kumpara sa serbisyo.. In addition, The pool is clean and refreshing.",,2026-02-01T12:00:00+08:00,true,2026-01-26
+past-fb-B2530,Carlos Cruz,past-b2530@imported.elenest.local,past-B2530,4,"It was a decent experience overall.. Also, Maayos naman ang pasilidad.",,2026-02-01T12:00:00+08:00,true,2026-01-26
+past-fb-B2531,Jose Villanueva,past-b2531@imported.elenest.local,past-B2531,4,Standard na resort para sa presyo.. The pool area is fine.,,2026-02-02T12:00:00+08:00,true,2026-02-02
+past-fb-B2532,Ramon Flores,past-b2532@imported.elenest.local,past-B2532,4,We had a wonderful and relaxing stay. and Medyo madumi yung area nung dumating kami.,,2026-02-02T12:00:00+08:00,true,2026-02-02
+past-fb-B2533,Maria Dela Cruz,past-b2533@imported.elenest.local,past-B2533,4,"The room cleanliness was disappointing.. Also, Legit na relaxing ang vibe.",,2026-02-02T12:00:00+08:00,true,2026-02-02
+past-fb-B2534,Carlos Flores,past-b2534@imported.elenest.local,past-B2534,4,Not worth the price we paid.. Masyadong maingay ang ibang mga bisita.,,2026-02-02T12:00:00+08:00,true,2026-02-02
+past-fb-B2535,Juan Torres,past-b2535@imported.elenest.local,past-B2535,4,"Standard lang ang rooms but clean., Very peaceful ang environment.",,2026-02-02T12:00:00+08:00,true,2026-02-02
+past-fb-B2536,Teresa Domingo,past-b2536@imported.elenest.local,past-B2536,2,We encountered some issues with the water pressure.. Standard na resort para sa presyo.,,2026-02-02T12:00:00+08:00,true,2026-02-02
+past-fb-B2537,Angel Mendoza,past-b2537@imported.elenest.local,past-B2537,4,"Napakaganda ng inyong resort., Hassle yung process ng checkin.",,2026-02-02T12:00:00+08:00,true,2026-02-02
+past-fb-B2538,Paul Pineda,past-b2538@imported.elenest.local,past-B2538,5,"Highly recommended itong resort na ito.. In addition, Not bad for a short trip.",,2026-02-02T12:00:00+08:00,true,2026-02-02
+past-fb-B2539,Paul Mendoza,past-b2539@imported.elenest.local,past-B2539,3,Medyo madumi yung area nung dumating kami.. Tahimik naman ang paligid.,,2026-02-02T12:00:00+08:00,true,2026-02-02
+past-fb-B2540,John Navarro,past-b2540@imported.elenest.local,past-B2540,4,Super ganda ng ambiance dito. and The resort exceeded our expectations.,,2026-02-02T12:00:00+08:00,true,2026-02-02
+past-fb-B2541,Luis Bautista,past-b2541@imported.elenest.local,past-B2541,5,Maayos ang pamamalakad sa lugar. and Great value for money.,,2026-02-02T12:00:00+08:00,true,2026-02-02
+past-fb-B2542,Teresa Torres,past-b2542@imported.elenest.local,past-B2542,4,"Medyo madumi yung area nung dumating kami.. Also, Maayos ang pamamalakad sa lugar.",,2026-02-02T12:00:00+08:00,true,2026-02-02
+past-fb-B2543,Juan Bautista,past-b2543@imported.elenest.local,past-B2543,4,"The room cleanliness was disappointing., Maayos naman ang pasilidad.",,2026-02-02T12:00:00+08:00,true,2026-02-02
+past-fb-B2544,Manuel Castro,past-b2544@imported.elenest.local,past-B2544,4,"Walang kupas ang ganda ng pool.. Also, Everything was as expected.",,2026-02-02T12:00:00+08:00,true,2026-02-02
+past-fb-B2545,Francisca Bautista,past-b2545@imported.elenest.local,past-B2545,4,Everything was as expected. and Masyadong maingay ang ibang mga bisita.,,2026-02-03T12:00:00+08:00,true,2026-02-02
+past-fb-B2546,Miguel Soriano,past-b2546@imported.elenest.local,past-B2546,5,"Hassle yung process ng checkin.. Also, Great value for money.",,2026-02-03T12:00:00+08:00,true,2026-02-02
+past-fb-B2547,Manuel Aquino,past-b2547@imported.elenest.local,past-B2547,4,Maayos ang pamamalakad sa lugar. and It was a decent experience overall.,,2026-02-03T12:00:00+08:00,true,2026-02-02
+past-fb-B2548,Angel Pineda,past-b2548@imported.elenest.local,past-B2548,4,"Standard na resort para sa presyo.. In addition, Not bad for a short trip.",,2026-02-03T12:00:00+08:00,true,2026-02-02
+past-fb-B2549,Ana Mendoza,past-b2549@imported.elenest.local,past-B2549,4,It was a decent experience overall.. Facilities are a bit outdated.,,2026-02-03T12:00:00+08:00,true,2026-02-02
+past-fb-B2550,Elena Cruz,past-b2550@imported.elenest.local,past-B2550,3,"Medyo madumi yung area nung dumating kami., The resort exceeded our expectations.",,2026-02-03T12:00:00+08:00,true,2026-02-02
+past-fb-B2551,Pedro Mendoza,past-b2551@imported.elenest.local,past-B2551,4,Hassle yung process ng checkin. and Maayos naman ang pasilidad.,,2026-02-03T12:00:00+08:00,true,2026-02-02
+past-fb-B2552,Liza Reyes,past-b2552@imported.elenest.local,past-B2552,3,"The facilities are wellmaintained., Service was slow and needs improvement.",,2026-02-03T12:00:00+08:00,true,2026-02-02
+past-fb-B2553,Paul Dela Cruz,past-b2553@imported.elenest.local,past-B2553,4,"Madaling hanapin ang lokasyon., Medyo madumi yung area nung dumating kami.",,2026-02-03T12:00:00+08:00,true,2026-02-02
+past-fb-B2554,Angel Aquino,past-b2554@imported.elenest.local,past-B2554,4,"Kailangang linisin pa ang mga kwarto., Highly recommended itong resort na ito.",,2026-02-03T12:00:00+08:00,true,2026-02-02
+past-fb-B2555,Gloria Villanueva,past-b2555@imported.elenest.local,past-B2555,4,"Solid ang experience rito., Masyadong maingay ang ibang mga bisita.",,2026-02-04T12:00:00+08:00,true,2026-02-02
+past-fb-B2556,Gloria Garcia,past-b2556@imported.elenest.local,past-B2556,4,"Naging masaya ang aming pamilya rito.. Also, Madaling hanapin ang lokasyon.",,2026-02-04T12:00:00+08:00,true,2026-02-02
+past-fb-B2557,Joshua Navarro,past-b2557@imported.elenest.local,past-B2557,2,"May ilang sira sa banyo., Service was slow and needs improvement.",,2026-02-04T12:00:00+08:00,true,2026-02-02
+past-fb-B2558,Josefina Santos,past-b2558@imported.elenest.local,past-B2558,4,The staff were not that responsive. and Mahal ang presyo kumpara sa serbisyo.,,2026-02-04T12:00:00+08:00,true,2026-02-02
+past-fb-B2559,Vicente Del Rosario,past-b2559@imported.elenest.local,past-B2559,4,Facilities are a bit outdated.. Hindi kami nasiyahan sa aming stay.,,2026-02-04T12:00:00+08:00,true,2026-02-02
+past-fb-B2560,Teresa Mendoza,past-b2560@imported.elenest.local,past-B2560,4,"Maayos naman ang pasilidad.. Also, Maayos ang pamamalakad sa lugar.",,2026-02-04T12:00:00+08:00,true,2026-02-02
+past-fb-B2561,Francisca Flores,past-b2561@imported.elenest.local,past-B2561,4,Mahal ang presyo kumpara sa serbisyo. and Mabagal ang serbisyo sa reception.,,2026-02-04T12:00:00+08:00,true,2026-02-02
+past-fb-B2562,Miguel Pineda,past-b2562@imported.elenest.local,past-B2562,4,"Staff are very professional and accommodating.. Also, Maayos ang pamamalakad sa lugar.",,2026-02-04T12:00:00+08:00,true,2026-02-02
+past-fb-B2563,Manuel Garcia,past-b2563@imported.elenest.local,past-B2563,5,"Not worth the price we paid., Medyo okay naman ang experience.",,2026-02-05T12:00:00+08:00,true,2026-02-02
+past-fb-B2564,Vicente Santos,past-b2564@imported.elenest.local,past-B2564,4,"Staff are very professional and accommodating., Madaling hanapin ang lokasyon.",,2026-02-05T12:00:00+08:00,true,2026-02-02
+past-fb-B2565,Francisca Santos,past-b2565@imported.elenest.local,past-B2565,5,We had a wonderful and relaxing stay.. The water in the pool was a bit cloudy.,,2026-02-05T12:00:00+08:00,true,2026-02-02
+past-fb-B2566,Carlos Cruz,past-b2566@imported.elenest.local,past-B2566,5,Not worth the price we paid.. Great value for money.,,2026-02-05T12:00:00+08:00,true,2026-02-02
+past-fb-B2567,Ryan Flores,past-b2567@imported.elenest.local,past-B2567,3,Hindi kami nasiyahan sa aming stay. and Medyo madumi yung area nung dumating kami.,,2026-02-05T12:00:00+08:00,true,2026-02-02
+past-fb-B2568,Teresa Pineda,past-b2568@imported.elenest.local,past-B2568,4,Masyadong maingay ang ibang mga bisita. and Mahal ang presyo kumpara sa serbisyo.,,2026-02-05T12:00:00+08:00,true,2026-02-02
+past-fb-B2569,Francisco Villanueva,past-b2569@imported.elenest.local,past-B2569,3,"A bit overpriced for the current state.. In addition, The pool area is fine.",,2026-02-05T12:00:00+08:00,true,2026-02-02
+past-fb-B2570,Jose Villanueva,past-b2570@imported.elenest.local,past-B2570,5,Mabait at magalang ang mga staff.. The service is quite fine.,,2026-02-05T12:00:00+08:00,true,2026-02-02
+past-fb-B2571,Gloria Mendoza,past-b2571@imported.elenest.local,past-B2571,4,"Goods na goods ang service.. In addition, Mabagal ang serbisyo sa reception.",,2026-02-05T12:00:00+08:00,true,2026-02-02
+past-fb-B2572,Danica Flores,past-b2572@imported.elenest.local,past-B2572,4,"Everything was as expected.. In addition, Masyadong maingay ang ibang mga bisita.",,2026-02-05T12:00:00+08:00,true,2026-02-02
+past-fb-B2573,Josefina Mercado,past-b2573@imported.elenest.local,past-B2573,2,Walang masyadong naging problema.. Medyo disappointing ang quality ng rooms.,,2026-02-05T12:00:00+08:00,true,2026-02-02
+past-fb-B2574,Carlos Ramos,past-b2574@imported.elenest.local,past-B2574,2,"Tahimik naman ang paligid.. In addition, We encountered some issues with the water pressure.",,2026-02-05T12:00:00+08:00,true,2026-02-02
+past-fb-B2575,Francisco Del Rosario,past-b2575@imported.elenest.local,past-B2575,3,"The location is accessible., May ilang sira sa banyo.",,2026-02-05T12:00:00+08:00,true,2026-02-02
+past-fb-B2576,Pedro Navarro,past-b2576@imported.elenest.local,past-B2576,4,"Everything was as expected.. Also, The resort exceeded our expectations.",,2026-02-05T12:00:00+08:00,true,2026-02-02
+past-fb-B2577,Danica Domingo,past-b2577@imported.elenest.local,past-B2577,4,Walang kupas ang ganda ng pool.. Napakaganda ng inyong resort.,,2026-02-05T12:00:00+08:00,true,2026-02-02
+past-fb-B2578,Ryan Ramos,past-b2578@imported.elenest.local,past-B2578,4,Highly recommended itong resort na ito. and Super ganda ng ambiance dito.,,2026-02-05T12:00:00+08:00,true,2026-02-02
+past-fb-B2579,Jessa Del Rosario,past-b2579@imported.elenest.local,past-B2579,5,"Standard lang ang rooms but clean., Mabait at magalang ang mga staff.",,2026-02-05T12:00:00+08:00,true,2026-02-02
+past-fb-B2580,Angel Dela Cruz,past-b2580@imported.elenest.local,past-B2580,4,"Standard na resort para sa presyo.. In addition, Sakto lang ang price para sa amenities.",,2026-02-05T12:00:00+08:00,true,2026-02-02
+past-fb-B2581,Mary Mendoza,past-b2581@imported.elenest.local,past-B2581,4,The pool is clean and refreshing.. The view from our room was breathtaking.,,2026-02-06T12:00:00+08:00,true,2026-02-02
+past-fb-B2582,Aira Pineda,past-b2582@imported.elenest.local,past-B2582,4,The resort exceeded our expectations. and Average service during our stay.,,2026-02-06T12:00:00+08:00,true,2026-02-02
+past-fb-B2583,Ryan Garcia,past-b2583@imported.elenest.local,past-B2583,4,"Highly recommended itong resort na ito.. In addition, The staff are very approachable and helpful.",,2026-02-06T12:00:00+08:00,true,2026-02-02
+past-fb-B2584,Miguel Soriano,past-b2584@imported.elenest.local,past-B2584,4,"Average service during our stay., The pool area is fine.",,2026-02-06T12:00:00+08:00,true,2026-02-02
+past-fb-B2585,Jose Castro,past-b2585@imported.elenest.local,past-B2585,4,The staff are very approachable and helpful.. Sakto lang ang naging karanasan namin.,,2026-02-06T12:00:00+08:00,true,2026-02-02
+past-fb-B2586,Rosa Villanueva,past-b2586@imported.elenest.local,past-B2586,4,"Napakaganda ng inyong resort., Tahimik naman ang paligid.",,2026-02-06T12:00:00+08:00,true,2026-02-02
+past-fb-B2587,Rosa Mendoza,past-b2587@imported.elenest.local,past-B2587,4,"The location is accessible.. Also, The environment was too loud for relaxation.",,2026-02-06T12:00:00+08:00,true,2026-02-02
+past-fb-B2588,Jessa Bautista,past-b2588@imported.elenest.local,past-B2588,5,"Napakaganda ng inyong resort., Sakto lang ang naging karanasan namin.",,2026-02-06T12:00:00+08:00,true,2026-02-02
+past-fb-B2589,Mark Soriano,past-b2589@imported.elenest.local,past-B2589,4,"It was a decent experience overall.. In addition, The environment was too loud for relaxation.",,2026-02-06T12:00:00+08:00,true,2026-02-02
+past-fb-B2590,Ramon Del Rosario,past-b2590@imported.elenest.local,past-B2590,4,"Masarap ang pagkain sa inyong canteen.. In addition, It was a decent experience overall.",,2026-02-06T12:00:00+08:00,true,2026-02-02
+past-fb-B2591,Maria Dela Cruz,past-b2591@imported.elenest.local,past-B2591,4,The service is quite fine. and The staff are very approachable and helpful.,,2026-02-06T12:00:00+08:00,true,2026-02-02
+past-fb-B2592,Mark Mendoza,past-b2592@imported.elenest.local,past-B2592,3,Great value for money. and We encountered some issues with the water pressure.,,2026-02-06T12:00:00+08:00,true,2026-02-02
+past-fb-B2593,Melvin Villanueva,past-b2593@imported.elenest.local,past-B2593,3,"A bit overpriced for the current state., Mahal ang presyo kumpara sa serbisyo.",,2026-02-06T12:00:00+08:00,true,2026-02-02
+past-fb-B2594,Paul Mendoza,past-b2594@imported.elenest.local,past-B2594,4,Mahal ang presyo kumpara sa serbisyo. and Solid ang experience rito.,,2026-02-06T12:00:00+08:00,true,2026-02-02
+past-fb-B2595,Manuel Flores,past-b2595@imported.elenest.local,past-B2595,4,The room cleanliness was disappointing. and Standard lang ang rooms but clean.,,2026-02-06T12:00:00+08:00,true,2026-02-02
+past-fb-B2596,Kim Torres,past-b2596@imported.elenest.local,past-B2596,4,The staff are very approachable and helpful.. Solid ang experience rito.,,2026-02-06T12:00:00+08:00,true,2026-02-02
+past-fb-B2597,Liza Villanueva,past-b2597@imported.elenest.local,past-B2597,4,Naging masaya ang aming pamilya rito.. The facilities are wellmaintained.,,2026-02-06T12:00:00+08:00,true,2026-02-02
+past-fb-B2598,Paolo Flores,past-b2598@imported.elenest.local,past-B2598,5,Sulit na sulit ang booking namin.. Legit na relaxing ang vibe.,,2026-02-06T12:00:00+08:00,true,2026-02-02
+past-fb-B2599,Mark Bautista,past-b2599@imported.elenest.local,past-B2599,4,Walang kupas ang ganda ng pool.. Naging masaya ang aming pamilya rito.,,2026-02-06T12:00:00+08:00,true,2026-02-02
+past-fb-B2600,Antonio Cruz,past-b2600@imported.elenest.local,past-B2600,3,The location is accessible.. May ilang sira sa banyo.,,2026-02-06T12:00:00+08:00,true,2026-02-02
+past-fb-B2601,Mark Flores,past-b2601@imported.elenest.local,past-B2601,4,"The staff were not that responsive.. Also, The staff are very approachable and helpful.",,2026-02-06T12:00:00+08:00,true,2026-02-02
+past-fb-B2602,Juan Domingo,past-b2602@imported.elenest.local,past-B2602,4,"Average service during our stay.. In addition, Mahal ang presyo kumpara sa serbisyo.",,2026-02-07T12:00:00+08:00,true,2026-02-02
+past-fb-B2603,Jose Reyes,past-b2603@imported.elenest.local,past-B2603,2,"Madaling hanapin ang lokasyon., We encountered some issues with the water pressure.",,2026-02-07T12:00:00+08:00,true,2026-02-02
+past-fb-B2604,Teresa Ramos,past-b2604@imported.elenest.local,past-B2604,3,"Average service during our stay.. In addition, A bit overpriced for the current state.",,2026-02-07T12:00:00+08:00,true,2026-02-02
+past-fb-B2605,Ana Aquino,past-b2605@imported.elenest.local,past-B2605,4,Masyadong maingay ang ibang mga bisita.. The pool area is fine.,,2026-02-07T12:00:00+08:00,true,2026-02-02
+past-fb-B2606,Luis Soriano,past-b2606@imported.elenest.local,past-B2606,4,Not bad for a short trip. and The pool area is fine.,,2026-02-07T12:00:00+08:00,true,2026-02-02
+past-fb-B2607,Carmen Santos,past-b2607@imported.elenest.local,past-B2607,4,"Very peaceful ang environment., Standard na resort para sa presyo.",,2026-02-07T12:00:00+08:00,true,2026-02-02
+past-fb-B2608,Paul Mercado,past-b2608@imported.elenest.local,past-B2608,4,"Sakto lang ang naging karanasan namin., Goods na goods ang service.",,2026-02-07T12:00:00+08:00,true,2026-02-02
+past-fb-B2609,Manuel Villanueva,past-b2609@imported.elenest.local,past-B2609,4,"The location is accessible., It was a decent experience overall.",,2026-02-07T12:00:00+08:00,true,2026-02-02
+past-fb-B2610,Pedro Garcia,past-b2610@imported.elenest.local,past-B2610,5,"Maayos naman ang pasilidad., We had a wonderful and relaxing stay.",,2026-02-07T12:00:00+08:00,true,2026-02-02
+past-fb-B2611,Carlos Villanueva,past-b2611@imported.elenest.local,past-B2611,4,"Masyadong maingay ang ibang mga bisita.. Also, The room was basic but functional.",,2026-02-07T12:00:00+08:00,true,2026-02-02
+past-fb-B2612,Joshua Domingo,past-b2612@imported.elenest.local,past-B2612,2,A bit overpriced for the current state.. Walang masyadong naging problema.,,2026-02-07T12:00:00+08:00,true,2026-02-02
+past-fb-B2613,Jessa Mercado,past-b2613@imported.elenest.local,past-B2613,4,Walang kupas ang ganda ng pool. and The view from our room was breathtaking.,,2026-02-07T12:00:00+08:00,true,2026-02-02
+past-fb-B2614,Miguel Dela Cruz,past-b2614@imported.elenest.local,past-B2614,4,"The view from our room was breathtaking.. In addition, Not worth the price we paid.",,2026-02-08T12:00:00+08:00,true,2026-02-02
+past-fb-B2615,Mary Santos,past-b2615@imported.elenest.local,past-B2615,4,"Not bad for a short trip.. In addition, Napakalinis ng swimming pool.",,2026-02-08T12:00:00+08:00,true,2026-02-02
+past-fb-B2616,Kim Ramos,past-b2616@imported.elenest.local,past-B2616,5,Okay naman yung stay namin overall.,,2026-02-08T12:00:00+08:00,true,2026-02-02
+past-fb-B2617,Ana Navarro,past-b2617@imported.elenest.local,past-B2617,4,"Highly recommended itong resort na ito.. Also, Very peaceful ang environment.",,2026-02-08T12:00:00+08:00,true,2026-02-02
+past-fb-B2618,Juan Mendoza,past-b2618@imported.elenest.local,past-B2618,4,"Goods na goods ang service.. In addition, The room cleanliness was disappointing.",,2026-02-08T12:00:00+08:00,true,2026-02-02
+past-fb-B2619,Maria Villanueva,past-b2619@imported.elenest.local,past-B2619,5,"Staff are very professional and accommodating.. In addition, Great value for money.",,2026-02-08T12:00:00+08:00,true,2026-02-02
+past-fb-B2620,Mary Navarro,past-b2620@imported.elenest.local,past-B2620,4,"Super ganda ng ambiance dito.. In addition, Very peaceful ang environment.",,2026-02-08T12:00:00+08:00,true,2026-02-02
+past-fb-B2621,Maria Navarro,past-b2621@imported.elenest.local,past-B2621,4,"Masarap ang pagkain sa inyong canteen.. In addition, Average service during our stay.",,2026-02-08T12:00:00+08:00,true,2026-02-02
+past-fb-B2622,John Bautista,past-b2622@imported.elenest.local,past-B2622,3,The room was basic but functional.. Medyo madumi yung area nung dumating kami.,,2026-02-08T12:00:00+08:00,true,2026-02-02
+past-fb-B2623,Luis Aquino,past-b2623@imported.elenest.local,past-B2623,4,"Naging masaya ang aming pamilya rito.. Also, The water in the pool was a bit cloudy.",,2026-02-08T12:00:00+08:00,true,2026-02-02
+past-fb-B2624,Aira Del Rosario,past-b2624@imported.elenest.local,past-B2624,5,"Not worth the price we paid.. Also, The environment was too loud for relaxation.",,2026-02-08T12:00:00+08:00,true,2026-02-02
+past-fb-B2625,Paul Pineda,past-b2625@imported.elenest.local,past-B2625,5,Solid ang experience rito.. Standard lang ang rooms but clean.,,2026-02-09T12:00:00+08:00,true,2026-02-09
+past-fb-B2626,Paul Del Rosario,past-b2626@imported.elenest.local,past-B2626,4,The room cleanliness was disappointing. and Sakto lang ang price para sa amenities.,,2026-02-09T12:00:00+08:00,true,2026-02-09
+past-fb-B2627,Juan Reyes,past-b2627@imported.elenest.local,past-B2627,4,"Service was slow and needs improvement.. Also, Medyo okay naman ang experience.",,2026-02-09T12:00:00+08:00,true,2026-02-09
+past-fb-B2628,Ryan Garcia,past-b2628@imported.elenest.local,past-B2628,5,"Mabait at magalang ang mga staff.. Panalo ang view, seryoso.",,2026-02-09T12:00:00+08:00,true,2026-02-09
+past-fb-B2629,Carmen Cruz,past-b2629@imported.elenest.local,past-B2629,3,"The resort exceeded our expectations.. Also, Walang masyadong naging problema.",,2026-02-09T12:00:00+08:00,true,2026-02-09
+past-fb-B2630,Carlos Pineda,past-b2630@imported.elenest.local,past-B2630,5,"Standard lang ang rooms but clean., Legit na relaxing ang vibe.",,2026-02-09T12:00:00+08:00,true,2026-02-09
+past-fb-B2631,Luis Bautista,past-b2631@imported.elenest.local,past-B2631,4,Not worth the price we paid. and The resort exceeded our expectations.,,2026-02-09T12:00:00+08:00,true,2026-02-09
+past-fb-B2632,Francisca Mendoza,past-b2632@imported.elenest.local,past-B2632,5,"Okay naman yung stay namin overall., Standard lang ang rooms but clean.",,2026-02-09T12:00:00+08:00,true,2026-02-09
+past-fb-B2633,Melvin Reyes,past-b2633@imported.elenest.local,past-B2633,5,"We had a wonderful and relaxing stay.. In addition, Highly recommended itong resort na ito.",,2026-02-09T12:00:00+08:00,true,2026-02-09
+past-fb-B2634,Francisca Aquino,past-b2634@imported.elenest.local,past-B2634,4,"Very peaceful ang environment.. In addition, Tahimik naman ang paligid.",,2026-02-09T12:00:00+08:00,true,2026-02-09
+past-fb-B2635,Gloria Dela Cruz,past-b2635@imported.elenest.local,past-B2635,4,Walang masyadong naging problema. and Legit na relaxing ang vibe.,,2026-02-09T12:00:00+08:00,true,2026-02-09
+past-fb-B2636,Juan Ramos,past-b2636@imported.elenest.local,past-B2636,4,"Walang kupas ang ganda ng pool., The room was basic but functional.",,2026-02-09T12:00:00+08:00,true,2026-02-09
+past-fb-B2637,Joshua Mendoza,past-b2637@imported.elenest.local,past-B2637,4,"The environment was too loud for relaxation.. In addition, Medyo madumi yung area nung dumating kami.",,2026-02-09T12:00:00+08:00,true,2026-02-09
+past-fb-B2638,John Soriano,past-b2638@imported.elenest.local,past-B2638,5,Great value for money.. Not bad for a short trip.,,2026-02-09T12:00:00+08:00,true,2026-02-09
+past-fb-B2639,Danica Navarro,past-b2639@imported.elenest.local,past-B2639,4,"Maayos naman ang pasilidad.. In addition, A bit overpriced for the current state.",,2026-02-09T12:00:00+08:00,true,2026-02-09
+past-fb-B2640,Pedro Santos,past-b2640@imported.elenest.local,past-B2640,4,"Sakto lang ang price para sa amenities.. Also, The pool area is fine.",,2026-02-09T12:00:00+08:00,true,2026-02-09
+past-fb-B2641,Mary Dela Cruz,past-b2641@imported.elenest.local,past-B2641,5,"Legit na relaxing ang vibe.. In addition, Not bad for a short trip.",,2026-02-09T12:00:00+08:00,true,2026-02-09
+past-fb-B2642,Antonio Reyes,past-b2642@imported.elenest.local,past-B2642,4,Sakto lang ang price para sa amenities. and The room cleanliness was disappointing.,,2026-02-09T12:00:00+08:00,true,2026-02-09
+past-fb-B2643,Mark Ramos,past-b2643@imported.elenest.local,past-B2643,4,"Not worth the price we paid.. In addition, The water in the pool was a bit cloudy.",,2026-02-09T12:00:00+08:00,true,2026-02-09
+past-fb-B2644,Ryan Soriano,past-b2644@imported.elenest.local,past-B2644,5,"Mabagal ang serbisyo sa reception.. Also, Great value for money.",,2026-02-09T12:00:00+08:00,true,2026-02-09
+past-fb-B2645,Paolo Aquino,past-b2645@imported.elenest.local,past-B2645,4,"The room was basic but functional., It was a decent experience overall.",,2026-02-09T12:00:00+08:00,true,2026-02-09
+past-fb-B2646,Danica Villanueva,past-b2646@imported.elenest.local,past-B2646,4,The environment was too loud for relaxation.. Kailangang linisin pa ang mga kwarto.,,2026-02-10T12:00:00+08:00,true,2026-02-09
+past-fb-B2647,Rosa Mercado,past-b2647@imported.elenest.local,past-B2647,4,Mahal ang presyo kumpara sa serbisyo.. Hassle yung process ng checkin.,,2026-02-10T12:00:00+08:00,true,2026-02-09
+past-fb-B2648,Teresa Aquino,past-b2648@imported.elenest.local,past-B2648,4,"Solid ang experience rito., The room was basic but functional.",,2026-02-10T12:00:00+08:00,true,2026-02-09
+past-fb-B2649,Angel Del Rosario,past-b2649@imported.elenest.local,past-B2649,4,"Standard na resort para sa presyo.. In addition, The room was basic but functional.",,2026-02-10T12:00:00+08:00,true,2026-02-09
+past-fb-B2650,Ana Flores,past-b2650@imported.elenest.local,past-B2650,4,Walang kupas ang ganda ng pool. and Not bad for a short trip.,,2026-02-10T12:00:00+08:00,true,2026-02-09
+past-fb-B2651,Francisca Castro,past-b2651@imported.elenest.local,past-B2651,4,"Very peaceful ang environment.. In addition, Everything was as expected.",,2026-02-10T12:00:00+08:00,true,2026-02-09
+past-fb-B2652,Gloria Flores,past-b2652@imported.elenest.local,past-B2652,4,The pool area is fine. and Facilities are a bit outdated.,,2026-02-10T12:00:00+08:00,true,2026-02-09
+past-fb-B2653,Angel Ramos,past-b2653@imported.elenest.local,past-B2653,5,"Mabait at magalang ang mga staff., Napakaganda ng inyong resort.",,2026-02-10T12:00:00+08:00,true,2026-02-09
+past-fb-B2654,Josefina Navarro,past-b2654@imported.elenest.local,past-B2654,5,"Great value for money.. Also, The view from our room was breathtaking.",,2026-02-11T12:00:00+08:00,true,2026-02-09
+past-fb-B2655,Kim Del Rosario,past-b2655@imported.elenest.local,past-B2655,4,"Sulit na sulit ang booking namin.. Also, Facilities are a bit outdated.",,2026-02-11T12:00:00+08:00,true,2026-02-09
+past-fb-B2656,Mary Reyes,past-b2656@imported.elenest.local,past-B2656,4,"Service was slow and needs improvement.. In addition, Not bad for a short trip.",,2026-02-11T12:00:00+08:00,true,2026-02-09
+past-fb-B2657,Juan Villanueva,past-b2657@imported.elenest.local,past-B2657,4,"Panalo ang view, seryoso. and Standard na resort para sa presyo.",,2026-02-11T12:00:00+08:00,true,2026-02-09
+past-fb-B2658,Elena Santos,past-b2658@imported.elenest.local,past-B2658,5,"Okay naman yung stay namin overall.. In addition, The view from our room was breathtaking.",,2026-02-11T12:00:00+08:00,true,2026-02-09
+past-fb-B2659,Luis Mercado,past-b2659@imported.elenest.local,past-B2659,3,"Panalo ang view, seryoso. and Medyo madumi yung area nung dumating kami.",,2026-02-11T12:00:00+08:00,true,2026-02-09
+past-fb-B2660,Rosa Santos,past-b2660@imported.elenest.local,past-B2660,5,"Great value for money.. Also, The room was basic but functional.",,2026-02-11T12:00:00+08:00,true,2026-02-09
+past-fb-B2661,Mary Cruz,past-b2661@imported.elenest.local,past-B2661,4,"Standard lang ang rooms but clean.. Also, Service was slow and needs improvement.",,2026-02-12T12:00:00+08:00,true,2026-02-09
+past-fb-B2662,Melvin Torres,past-b2662@imported.elenest.local,past-B2662,4,"The room cleanliness was disappointing., Maayos ang pamamalakad sa lugar.",,2026-02-12T12:00:00+08:00,true,2026-02-09
+past-fb-B2663,Mary Santos,past-b2663@imported.elenest.local,past-B2663,4,Not bad for a short trip.. The room was basic but functional.,,2026-02-12T12:00:00+08:00,true,2026-02-09
+past-fb-B2664,Kim Domingo,past-b2664@imported.elenest.local,past-B2664,5,"We had a wonderful and relaxing stay., Naging masaya ang aming pamilya rito.",,2026-02-12T12:00:00+08:00,true,2026-02-09
+past-fb-B2665,Mark Navarro,past-b2665@imported.elenest.local,past-B2665,4,The resort exceeded our expectations. and Napakalinis ng swimming pool.,,2026-02-12T12:00:00+08:00,true,2026-02-09
+past-fb-B2666,Manuel Reyes,past-b2666@imported.elenest.local,past-B2666,2,"The service is quite fine.. Also, We encountered some issues with the water pressure.",,2026-02-12T12:00:00+08:00,true,2026-02-09
+past-fb-B2667,Paolo Del Rosario,past-b2667@imported.elenest.local,past-B2667,4,Average service during our stay. and Walang kupas ang ganda ng pool.,,2026-02-12T12:00:00+08:00,true,2026-02-09
+past-fb-B2668,Josefina Torres,past-b2668@imported.elenest.local,past-B2668,4,"Maayos naman ang pasilidad., It was a decent experience overall.",,2026-02-12T12:00:00+08:00,true,2026-02-09
+past-fb-B2669,John Bautista,past-b2669@imported.elenest.local,past-B2669,5,Medyo okay naman ang experience. and The room cleanliness was disappointing.,,2026-02-12T12:00:00+08:00,true,2026-02-09
+past-fb-B2670,Teresa Navarro,past-b2670@imported.elenest.local,past-B2670,4,Staff are very professional and accommodating.. The pool is clean and refreshing.,,2026-02-12T12:00:00+08:00,true,2026-02-09
+past-fb-B2671,Kim Bautista,past-b2671@imported.elenest.local,past-B2671,4,The view from our room was breathtaking. and Goods na goods ang service.,,2026-02-12T12:00:00+08:00,true,2026-02-09
+past-fb-B2672,Francisca Castro,past-b2672@imported.elenest.local,past-B2672,5,"Mabait at magalang ang mga staff.. Also, Hindi kami nasiyahan sa aming stay.",,2026-02-12T12:00:00+08:00,true,2026-02-09
+past-fb-B2673,Melvin Del Rosario,past-b2673@imported.elenest.local,past-B2673,4,"It was a decent experience overall.. Also, Mabagal ang serbisyo sa reception.",,2026-02-12T12:00:00+08:00,true,2026-02-09
+past-fb-B2674,Elena Villanueva,past-b2674@imported.elenest.local,past-B2674,5,Not bad for a short trip.. Not worth the price we paid.,,2026-02-12T12:00:00+08:00,true,2026-02-09
+past-fb-B2675,Angel Bautista,past-b2675@imported.elenest.local,past-B2675,4,"Masyadong maingay ang ibang mga bisita., Solid ang experience rito.",,2026-02-12T12:00:00+08:00,true,2026-02-09
+past-fb-B2676,Carmen Domingo,past-b2676@imported.elenest.local,past-B2676,4,The environment was too loud for relaxation. and A bit overpriced for the current state.,,2026-02-12T12:00:00+08:00,true,2026-02-09
+past-fb-B2677,Juan Dela Cruz,past-b2677@imported.elenest.local,past-B2677,5,"Great value for money.. Also, Super ganda ng ambiance dito.",,2026-02-12T12:00:00+08:00,true,2026-02-09
+past-fb-B2678,Jose Castro,past-b2678@imported.elenest.local,past-B2678,4,"Sakto lang ang price para sa amenities.. Also, It was a decent experience overall.",,2026-02-12T12:00:00+08:00,true,2026-02-09
+past-fb-B2679,Jose Mendoza,past-b2679@imported.elenest.local,past-B2679,4,"Legit na relaxing ang vibe.. In addition, Medyo disappointing ang quality ng rooms.",,2026-02-12T12:00:00+08:00,true,2026-02-09
+past-fb-B2680,John Mendoza,past-b2680@imported.elenest.local,past-B2680,4,"Walang kupas ang ganda ng pool.. Also, Mabagal ang serbisyo sa reception.",,2026-02-12T12:00:00+08:00,true,2026-02-09
+past-fb-B2681,Danica Villanueva,past-b2681@imported.elenest.local,past-B2681,4,Maayos naman ang pasilidad. and The facilities are wellmaintained.,,2026-02-12T12:00:00+08:00,true,2026-02-09
+past-fb-B2682,Kim Domingo,past-b2682@imported.elenest.local,past-B2682,4,"The staff were not that responsive.. Also, Not worth the price we paid.",,2026-02-13T12:00:00+08:00,true,2026-02-09
+past-fb-B2683,Luis Mercado,past-b2683@imported.elenest.local,past-B2683,4,"Hassle yung process ng checkin.. In addition, Sulit na sulit ang booking namin.",,2026-02-13T12:00:00+08:00,true,2026-02-09
+past-fb-B2684,Aira Soriano,past-b2684@imported.elenest.local,past-B2684,4,"A bit overpriced for the current state., Sulit na sulit ang booking namin.",,2026-02-13T12:00:00+08:00,true,2026-02-09
+past-fb-B2685,Elena Torres,past-b2685@imported.elenest.local,past-B2685,3,"May ilang sira sa banyo.. Also, Kailangang linisin pa ang mga kwarto.",,2026-02-13T12:00:00+08:00,true,2026-02-09
+past-fb-B2686,Liza Cruz,past-b2686@imported.elenest.local,past-B2686,4,"Maayos ang pamamalakad sa lugar. and Panalo ang view, seryoso.",,2026-02-13T12:00:00+08:00,true,2026-02-09
+past-fb-B2687,Luis Mercado,past-b2687@imported.elenest.local,past-B2687,4,Walang masyadong naging problema. and Solid ang experience rito.,,2026-02-13T12:00:00+08:00,true,2026-02-09
+past-fb-B2688,Ana Domingo,past-b2688@imported.elenest.local,past-B2688,5,"Medyo okay naman ang experience.. In addition, Panalo ang view, seryoso.",,2026-02-13T12:00:00+08:00,true,2026-02-09
+past-fb-B2689,John Cruz,past-b2689@imported.elenest.local,past-B2689,3,The resort exceeded our expectations. and A bit overpriced for the current state.,,2026-02-13T12:00:00+08:00,true,2026-02-09
+past-fb-B2690,Juan Domingo,past-b2690@imported.elenest.local,past-B2690,4,The room was basic but functional.. Sulit na sulit ang booking namin.,,2026-02-13T12:00:00+08:00,true,2026-02-09
+past-fb-B2691,Danica Dela Cruz,past-b2691@imported.elenest.local,past-B2691,4,The room cleanliness was disappointing.. Everything was as expected.,,2026-02-13T12:00:00+08:00,true,2026-02-09
+past-fb-B2692,Antonio Mendoza,past-b2692@imported.elenest.local,past-B2692,3,"The resort exceeded our expectations.. Also, Medyo disappointing ang quality ng rooms.",,2026-02-13T12:00:00+08:00,true,2026-02-09
+past-fb-B2693,Vicente Navarro,past-b2693@imported.elenest.local,past-B2693,4,"Super ganda ng ambiance dito.. In addition, Facilities are a bit outdated.",,2026-02-13T12:00:00+08:00,true,2026-02-09
+past-fb-B2694,Paul Cruz,past-b2694@imported.elenest.local,past-B2694,4,"Medyo madumi yung area nung dumating kami.. Also, Not bad for a short trip.",,2026-02-13T12:00:00+08:00,true,2026-02-09
+past-fb-B2695,Carlos Castro,past-b2695@imported.elenest.local,past-B2695,4,"Facilities are a bit outdated.. In addition, Panalo ang view, seryoso.",,2026-02-13T12:00:00+08:00,true,2026-02-09
+past-fb-B2696,Elena Ramos,past-b2696@imported.elenest.local,past-B2696,4,"Napakaganda ng inyong resort.. Also, The service is quite fine.",,2026-02-13T12:00:00+08:00,true,2026-02-09
+past-fb-B2697,Luis Garcia,past-b2697@imported.elenest.local,past-B2697,4,It was a decent experience overall. and The environment was too loud for relaxation.,,2026-02-14T12:00:00+08:00,true,2026-02-09
+past-fb-B2698,Josefina Bautista,past-b2698@imported.elenest.local,past-B2698,4,"The view from our room was breathtaking., Goods na goods ang service.",,2026-02-14T12:00:00+08:00,true,2026-02-09
+past-fb-B2699,Melvin Pineda,past-b2699@imported.elenest.local,past-B2699,4,Not bad for a short trip.. Staff are very professional and accommodating.,,2026-02-14T12:00:00+08:00,true,2026-02-09
+past-fb-B2700,Ana Reyes,past-b2700@imported.elenest.local,past-B2700,5,Hassle yung process ng checkin. and Medyo okay naman ang experience.,,2026-02-14T12:00:00+08:00,true,2026-02-09
+past-fb-B2701,Carmen Flores,past-b2701@imported.elenest.local,past-B2701,2,"A bit overpriced for the current state.. In addition, Medyo madumi yung area nung dumating kami.",,2026-02-14T12:00:00+08:00,true,2026-02-09
+past-fb-B2702,Gloria Cruz,past-b2702@imported.elenest.local,past-B2702,4,"Napakalinis ng swimming pool.. Also, The staff were not that responsive.",,2026-02-14T12:00:00+08:00,true,2026-02-09
+past-fb-B2703,Josefina Navarro,past-b2703@imported.elenest.local,past-B2703,5,"Great value for money., Okay naman yung stay namin overall.",,2026-02-14T12:00:00+08:00,true,2026-02-09
+past-fb-B2704,Ryan Cruz,past-b2704@imported.elenest.local,past-B2704,3,The resort exceeded our expectations.. Service was slow and needs improvement.,,2026-02-14T12:00:00+08:00,true,2026-02-09
+past-fb-B2705,Francisca Mercado,past-b2705@imported.elenest.local,past-B2705,4,"Masarap ang pagkain sa inyong canteen., Not bad for a short trip.",,2026-02-14T12:00:00+08:00,true,2026-02-09
+past-fb-B2706,Antonio Torres,past-b2706@imported.elenest.local,past-B2706,2,"We encountered some issues with the water pressure., The view from our room was breathtaking.",,2026-02-14T12:00:00+08:00,true,2026-02-09
+past-fb-B2707,Francisco Santos,past-b2707@imported.elenest.local,past-B2707,4,The water in the pool was a bit cloudy.. Very peaceful ang environment.,,2026-02-14T12:00:00+08:00,true,2026-02-09
+past-fb-B2708,Carlos Del Rosario,past-b2708@imported.elenest.local,past-B2708,4,Legit na relaxing ang vibe.,,2026-02-14T12:00:00+08:00,true,2026-02-09
+past-fb-B2709,Rosa Dela Cruz,past-b2709@imported.elenest.local,past-B2709,5,We had a wonderful and relaxing stay. and Mabait at magalang ang mga staff.,,2026-02-15T12:00:00+08:00,true,2026-02-09
+past-fb-B2710,John Navarro,past-b2710@imported.elenest.local,past-B2710,4,"The pool is clean and refreshing.. Also, The pool area is fine.",,2026-02-15T12:00:00+08:00,true,2026-02-09
+past-fb-B2711,Melvin Pineda,past-b2711@imported.elenest.local,past-B2711,2,"The facilities are wellmaintained.. Also, We encountered some issues with the water pressure.",,2026-02-15T12:00:00+08:00,true,2026-02-09
+past-fb-B2712,Angel Ramos,past-b2712@imported.elenest.local,past-B2712,5,Hindi kami nasiyahan sa aming stay.. Mabait at magalang ang mga staff.,,2026-02-15T12:00:00+08:00,true,2026-02-09
+past-fb-B2713,Mary Domingo,past-b2713@imported.elenest.local,past-B2713,4,"The environment was too loud for relaxation.. In addition, Hindi kami nasiyahan sa aming stay.",,2026-02-15T12:00:00+08:00,true,2026-02-09
+past-fb-B2714,Ryan Aquino,past-b2714@imported.elenest.local,past-B2714,4,Napakalinis ng swimming pool. and Maayos naman ang pasilidad.,,2026-02-15T12:00:00+08:00,true,2026-02-09
+past-fb-B2715,Miguel Navarro,past-b2715@imported.elenest.local,past-B2715,4,"Panalo ang view, seryoso.. Also, The location is accessible.",,2026-02-15T12:00:00+08:00,true,2026-02-09
+past-fb-B2716,Luis Castro,past-b2716@imported.elenest.local,past-B2716,4,"Sulit na sulit ang booking namin.. In addition, Mahal ang presyo kumpara sa serbisyo.",,2026-02-15T12:00:00+08:00,true,2026-02-09
+past-fb-B2717,Aira Dela Cruz,past-b2717@imported.elenest.local,past-B2717,5,"The staff were not that responsive.. In addition, Mabait at magalang ang mga staff.",,2026-02-15T12:00:00+08:00,true,2026-02-09
+past-fb-B2718,Paul Del Rosario,past-b2718@imported.elenest.local,past-B2718,4,"Sulit na sulit ang booking namin.. In addition, Medyo disappointing ang quality ng rooms.",,2026-02-15T12:00:00+08:00,true,2026-02-09
+past-fb-B2719,Manuel Cruz,past-b2719@imported.elenest.local,past-B2719,4,"Madaling hanapin ang lokasyon.. Also, The resort exceeded our expectations.",,2026-02-15T12:00:00+08:00,true,2026-02-09
+past-fb-B2720,Ryan Garcia,past-b2720@imported.elenest.local,past-B2720,4,"Legit na relaxing ang vibe.. In addition, Naging masaya ang aming pamilya rito.",,2026-02-15T12:00:00+08:00,true,2026-02-09
+past-fb-B2721,Josefina Del Rosario,past-b2721@imported.elenest.local,past-B2721,4,"Maayos ang pamamalakad sa lugar.. Also, It was a decent experience overall.",,2026-02-15T12:00:00+08:00,true,2026-02-09
+past-fb-B2722,Liza Villanueva,past-b2722@imported.elenest.local,past-B2722,4,"Masarap ang pagkain sa inyong canteen.. In addition, Kailangang linisin pa ang mga kwarto.",,2026-02-15T12:00:00+08:00,true,2026-02-09
+past-fb-B2723,Angel Cruz,past-b2723@imported.elenest.local,past-B2723,4,"Facilities are a bit outdated., Sakto lang ang naging karanasan namin.",,2026-02-15T12:00:00+08:00,true,2026-02-09
+past-fb-B2724,Antonio Cruz,past-b2724@imported.elenest.local,past-B2724,4,"The resort exceeded our expectations.. In addition, Super ganda ng ambiance dito.",,2026-02-15T12:00:00+08:00,true,2026-02-09
+past-fb-B2725,Paolo Aquino,past-b2725@imported.elenest.local,past-B2725,4,Sulit na sulit ang booking namin.. Super ganda ng ambiance dito.,,2026-02-15T12:00:00+08:00,true,2026-02-09
+past-fb-B2726,Jose Villanueva,past-b2726@imported.elenest.local,past-B2726,4,Sulit na sulit ang booking namin.. Medyo disappointing ang quality ng rooms.,,2026-02-15T12:00:00+08:00,true,2026-02-09
+past-fb-B2727,John Del Rosario,past-b2727@imported.elenest.local,past-B2727,4,The facilities are wellmaintained.. Madaling hanapin ang lokasyon.,,2026-02-15T12:00:00+08:00,true,2026-02-09
+past-fb-B2728,John Pineda,past-b2728@imported.elenest.local,past-B2728,4,Everything was as expected. and Naging masaya ang aming pamilya rito.,,2026-02-15T12:00:00+08:00,true,2026-02-09
+past-fb-B2729,Francisca Navarro,past-b2729@imported.elenest.local,past-B2729,4,"Super ganda ng ambiance dito.. Also, Not bad for a short trip.",,2026-02-15T12:00:00+08:00,true,2026-02-09
+past-fb-B2730,Mark Castro,past-b2730@imported.elenest.local,past-B2730,4,"Sulit na sulit ang booking namin., Masarap ang pagkain sa inyong canteen.",,2026-02-15T12:00:00+08:00,true,2026-02-09
+past-fb-B2731,Gloria Mercado,past-b2731@imported.elenest.local,past-B2731,4,"Facilities are a bit outdated.. Also, It was a decent experience overall.",,2026-02-15T12:00:00+08:00,true,2026-02-09
+past-fb-B2732,Jessa Garcia,past-b2732@imported.elenest.local,past-B2732,4,The service is quite fine.. Masarap ang pagkain sa inyong canteen.,,2026-02-16T12:00:00+08:00,true,2026-02-16
+past-fb-B2733,Mary Garcia,past-b2733@imported.elenest.local,past-B2733,4,Tahimik naman ang paligid.. Maayos ang pamamalakad sa lugar.,,2026-02-16T12:00:00+08:00,true,2026-02-16
+past-fb-B2734,John Dela Cruz,past-b2734@imported.elenest.local,past-B2734,4,Masarap ang pagkain sa inyong canteen. and The room cleanliness was disappointing.,,2026-02-16T12:00:00+08:00,true,2026-02-16
+past-fb-B2735,Luis Bautista,past-b2735@imported.elenest.local,past-B2735,4,The location is accessible.. The room was basic but functional.,,2026-02-16T12:00:00+08:00,true,2026-02-16
+past-fb-B2736,Mary Cruz,past-b2736@imported.elenest.local,past-B2736,4,"Staff are very professional and accommodating.. Also, Highly recommended itong resort na ito.",,2026-02-16T12:00:00+08:00,true,2026-02-16
+past-fb-B2737,Francisco Soriano,past-b2737@imported.elenest.local,past-B2737,4,"The service is quite fine., The room was basic but functional.",,2026-02-16T12:00:00+08:00,true,2026-02-16
+past-fb-B2738,Melvin Navarro,past-b2738@imported.elenest.local,past-B2738,5,Everything was as expected. and Mabait at magalang ang mga staff.,,2026-02-16T12:00:00+08:00,true,2026-02-16
+past-fb-B2739,Josefina Castro,past-b2739@imported.elenest.local,past-B2739,4,"Goods na goods ang service.. In addition, Maayos ang pamamalakad sa lugar.",,2026-02-17T12:00:00+08:00,true,2026-02-16
+past-fb-B2740,Rosa Aquino,past-b2740@imported.elenest.local,past-B2740,4,Masarap ang pagkain sa inyong canteen.. The environment was too loud for relaxation.,,2026-02-17T12:00:00+08:00,true,2026-02-16
+past-fb-B2741,Francisca Bautista,past-b2741@imported.elenest.local,past-B2741,5,The environment was too loud for relaxation. and Maayos ang pamamalakad sa lugar.,,2026-02-17T12:00:00+08:00,true,2026-02-16
+past-fb-B2742,Ramon Domingo,past-b2742@imported.elenest.local,past-B2742,4,"Mahal ang presyo kumpara sa serbisyo.. Also, Naging masaya ang aming pamilya rito.",,2026-02-17T12:00:00+08:00,true,2026-02-16
+past-fb-B2743,Rosa Garcia,past-b2743@imported.elenest.local,past-B2743,4,"The service is quite fine., Solid ang experience rito.",,2026-02-17T12:00:00+08:00,true,2026-02-16
+past-fb-B2744,Miguel Torres,past-b2744@imported.elenest.local,past-B2744,5,"The pool is clean and refreshing.. Also, Medyo okay naman ang experience.",,2026-02-17T12:00:00+08:00,true,2026-02-16
+past-fb-B2745,Carlos Domingo,past-b2745@imported.elenest.local,past-B2745,5,"Mabagal ang serbisyo sa reception., Great value for money.",,2026-02-17T12:00:00+08:00,true,2026-02-16
+past-fb-B2746,Mark Flores,past-b2746@imported.elenest.local,past-B2746,5,Sulit na sulit ang booking namin.. Okay naman yung stay namin overall.,,2026-02-17T12:00:00+08:00,true,2026-02-16
+past-fb-B2747,Miguel Castro,past-b2747@imported.elenest.local,past-B2747,2,Sakto lang ang price para sa amenities.. We encountered some issues with the water pressure.,,2026-02-17T12:00:00+08:00,true,2026-02-16
+past-fb-B2748,Aira Reyes,past-b2748@imported.elenest.local,past-B2748,4,"Legit na relaxing ang vibe.. In addition, The location is accessible.",,2026-02-17T12:00:00+08:00,true,2026-02-16
+past-fb-B2749,Elena Mercado,past-b2749@imported.elenest.local,past-B2749,4,"The facilities are wellmaintained., Facilities are a bit outdated.",,2026-02-17T12:00:00+08:00,true,2026-02-16
+past-fb-B2750,Teresa Ramos,past-b2750@imported.elenest.local,past-B2750,3,The staff were not that responsive.. A bit overpriced for the current state.,,2026-02-18T12:00:00+08:00,true,2026-02-16
+past-fb-B2751,Manuel Mercado,past-b2751@imported.elenest.local,past-B2751,4,"The resort exceeded our expectations.. In addition, Solid ang experience rito.",,2026-02-18T12:00:00+08:00,true,2026-02-16
+past-fb-B2752,Josefina Navarro,past-b2752@imported.elenest.local,past-B2752,4,Everything was as expected. and Staff are very professional and accommodating.,,2026-02-18T12:00:00+08:00,true,2026-02-16
+past-fb-B2753,John Aquino,past-b2753@imported.elenest.local,past-B2753,4,"The room cleanliness was disappointing.. In addition, Kailangang linisin pa ang mga kwarto.",,2026-02-18T12:00:00+08:00,true,2026-02-16
+past-fb-B2754,Angel Aquino,past-b2754@imported.elenest.local,past-B2754,2,A bit overpriced for the current state. and Service was slow and needs improvement.,,2026-02-18T12:00:00+08:00,true,2026-02-16
+past-fb-B2755,Melvin Navarro,past-b2755@imported.elenest.local,past-B2755,4,"Mabagal ang serbisyo sa reception., Walang kupas ang ganda ng pool.",,2026-02-18T12:00:00+08:00,true,2026-02-16
+past-fb-B2756,Josefina Reyes,past-b2756@imported.elenest.local,past-B2756,5,Medyo okay naman ang experience. and Okay naman yung stay namin overall.,,2026-02-18T12:00:00+08:00,true,2026-02-16
+past-fb-B2757,Luis Domingo,past-b2757@imported.elenest.local,past-B2757,3,A bit overpriced for the current state.. Hindi kami nasiyahan sa aming stay.,,2026-02-18T12:00:00+08:00,true,2026-02-16
+past-fb-B2758,Ryan Mendoza,past-b2758@imported.elenest.local,past-B2758,4,The room cleanliness was disappointing.. The facilities are wellmaintained.,,2026-02-18T12:00:00+08:00,true,2026-02-16
+past-fb-B2759,Francisca Santos,past-b2759@imported.elenest.local,past-B2759,4,"Madaling hanapin ang lokasyon., Kailangang linisin pa ang mga kwarto.",,2026-02-18T12:00:00+08:00,true,2026-02-16
+past-fb-B2760,Jose Pineda,past-b2760@imported.elenest.local,past-B2760,3,"We encountered some issues with the water pressure.. In addition, Mabait at magalang ang mga staff.",,2026-02-18T12:00:00+08:00,true,2026-02-16
+past-fb-B2761,Vicente Garcia,past-b2761@imported.elenest.local,past-B2761,4,Sulit na sulit ang booking namin.,,2026-02-19T12:00:00+08:00,true,2026-02-16
+past-fb-B2762,Ramon Soriano,past-b2762@imported.elenest.local,past-B2762,3,"Medyo disappointing ang quality ng rooms.. In addition, Goods na goods ang service.",,2026-02-19T12:00:00+08:00,true,2026-02-16
+past-fb-B2763,Manuel Villanueva,past-b2763@imported.elenest.local,past-B2763,5,"Everything was as expected., Mabait at magalang ang mga staff.",,2026-02-19T12:00:00+08:00,true,2026-02-16
+past-fb-B2764,Ana Villanueva,past-b2764@imported.elenest.local,past-B2764,5,"Not bad for a short trip.. In addition, Standard lang ang rooms but clean.",,2026-02-19T12:00:00+08:00,true,2026-02-16
+past-fb-B2765,Melvin Domingo,past-b2765@imported.elenest.local,past-B2765,4,"Mabagal ang serbisyo sa reception.. Also, Goods na goods ang service.",,2026-02-19T12:00:00+08:00,true,2026-02-16
+past-fb-B2766,Pedro Cruz,past-b2766@imported.elenest.local,past-B2766,5,"Sakto lang ang price para sa amenities., Standard lang ang rooms but clean.",,2026-02-19T12:00:00+08:00,true,2026-02-16
+past-fb-B2767,Luis Cruz,past-b2767@imported.elenest.local,past-B2767,4,Napakalinis ng swimming pool. and The environment was too loud for relaxation.,,2026-02-19T12:00:00+08:00,true,2026-02-16
+past-fb-B2768,Pedro Navarro,past-b2768@imported.elenest.local,past-B2768,4,Average service during our stay. and The facilities are wellmaintained.,,2026-02-19T12:00:00+08:00,true,2026-02-16
+past-fb-B2769,Pedro Cruz,past-b2769@imported.elenest.local,past-B2769,5,"The service is quite fine.. In addition, We had a wonderful and relaxing stay.",,2026-02-19T12:00:00+08:00,true,2026-02-16
+past-fb-B2770,Mary Domingo,past-b2770@imported.elenest.local,past-B2770,4,Medyo madumi yung area nung dumating kami.. Great value for money.,,2026-02-19T12:00:00+08:00,true,2026-02-16
+past-fb-B2771,Pedro Torres,past-b2771@imported.elenest.local,past-B2771,3,The pool area is fine.. May ilang sira sa banyo.,,2026-02-20T12:00:00+08:00,true,2026-02-16
+past-fb-B2772,Ramon Santos,past-b2772@imported.elenest.local,past-B2772,5,The service is quite fine.. Medyo okay naman ang experience.,,2026-02-20T12:00:00+08:00,true,2026-02-16
+past-fb-B2773,Juan Castro,past-b2773@imported.elenest.local,past-B2773,5,The service is quite fine.. Mabait at magalang ang mga staff.,,2026-02-20T12:00:00+08:00,true,2026-02-16
+past-fb-B2774,Manuel Garcia,past-b2774@imported.elenest.local,past-B2774,3,Service was slow and needs improvement.. Everything was as expected.,,2026-02-20T12:00:00+08:00,true,2026-02-16
+past-fb-B2775,Angel Navarro,past-b2775@imported.elenest.local,past-B2775,4,"Hassle yung process ng checkin.. Also, Mahal ang presyo kumpara sa serbisyo.",,2026-02-20T12:00:00+08:00,true,2026-02-16
+past-fb-B2776,Ramon Del Rosario,past-b2776@imported.elenest.local,past-B2776,4,The room was basic but functional. and Walang kupas ang ganda ng pool.,,2026-02-20T12:00:00+08:00,true,2026-02-16
+past-fb-B2777,Gloria Pineda,past-b2777@imported.elenest.local,past-B2777,4,"Kailangang linisin pa ang mga kwarto.. Also, Masyadong maingay ang ibang mga bisita.",,2026-02-20T12:00:00+08:00,true,2026-02-16
+past-fb-B2778,John Mendoza,past-b2778@imported.elenest.local,past-B2778,4,Mahal ang presyo kumpara sa serbisyo. and Standard lang ang rooms but clean.,,2026-02-20T12:00:00+08:00,true,2026-02-16
+past-fb-B2779,Aira Reyes,past-b2779@imported.elenest.local,past-B2779,5,Sulit na sulit ang booking namin. and The pool is clean and refreshing.,,2026-02-20T12:00:00+08:00,true,2026-02-16
+past-fb-B2780,Pedro Santos,past-b2780@imported.elenest.local,past-B2780,4,"Panalo ang view, seryoso.. In addition, Highly recommended itong resort na ito.",,2026-02-21T12:00:00+08:00,true,2026-02-16
+past-fb-B2781,Kim Santos,past-b2781@imported.elenest.local,past-B2781,5,"Great value for money., Mahal ang presyo kumpara sa serbisyo.",,2026-02-21T12:00:00+08:00,true,2026-02-16
+past-fb-B2782,Antonio Cruz,past-b2782@imported.elenest.local,past-B2782,4,"The staff are very approachable and helpful.. Also, The resort exceeded our expectations.",,2026-02-21T12:00:00+08:00,true,2026-02-16
+past-fb-B2783,Josefina Cruz,past-b2783@imported.elenest.local,past-B2783,5,Medyo okay naman ang experience.. The location is accessible.,,2026-02-21T12:00:00+08:00,true,2026-02-16
+past-fb-B2784,Joshua Navarro,past-b2784@imported.elenest.local,past-B2784,2,"Staff are very professional and accommodating., We encountered some issues with the water pressure.",,2026-02-21T12:00:00+08:00,true,2026-02-16
+past-fb-B2785,Teresa Mendoza,past-b2785@imported.elenest.local,past-B2785,2,"Solid ang experience rito.. In addition, We encountered some issues with the water pressure.",,2026-02-21T12:00:00+08:00,true,2026-02-16
+past-fb-B2786,Francisco Santos,past-b2786@imported.elenest.local,past-B2786,4,Napakaganda ng inyong resort. and The facilities are wellmaintained.,,2026-02-21T12:00:00+08:00,true,2026-02-16
+past-fb-B2787,Miguel Garcia,past-b2787@imported.elenest.local,past-B2787,4,The room cleanliness was disappointing.. Walang kupas ang ganda ng pool.,,2026-02-21T12:00:00+08:00,true,2026-02-16
+past-fb-B2788,Antonio Domingo,past-b2788@imported.elenest.local,past-B2788,4,"Super ganda ng ambiance dito., Legit na relaxing ang vibe.",,2026-02-21T12:00:00+08:00,true,2026-02-16
+past-fb-B2789,Gloria Flores,past-b2789@imported.elenest.local,past-B2789,3,"Medyo disappointing ang quality ng rooms.. In addition, The staff are very approachable and helpful.",,2026-02-21T12:00:00+08:00,true,2026-02-16
+past-fb-B2790,Gloria Torres,past-b2790@imported.elenest.local,past-B2790,4,"The staff were not that responsive.. Also, Walang kupas ang ganda ng pool.",,2026-02-21T12:00:00+08:00,true,2026-02-16
+past-fb-B2791,Francisco Santos,past-b2791@imported.elenest.local,past-B2791,3,"Medyo madumi yung area nung dumating kami.. In addition, Facilities are a bit outdated.",,2026-02-21T12:00:00+08:00,true,2026-02-16
+past-fb-B2792,Gloria Bautista,past-b2792@imported.elenest.local,past-B2792,2,Medyo madumi yung area nung dumating kami.. We encountered some issues with the water pressure.,,2026-02-21T12:00:00+08:00,true,2026-02-16
+past-fb-B2793,Gloria Navarro,past-b2793@imported.elenest.local,past-B2793,4,"Hindi kami nasiyahan sa aming stay., Hassle yung process ng checkin.",,2026-02-21T12:00:00+08:00,true,2026-02-16
+past-fb-B2794,Paul Domingo,past-b2794@imported.elenest.local,past-B2794,5,Medyo okay naman ang experience. and Hindi kami nasiyahan sa aming stay.,,2026-02-21T12:00:00+08:00,true,2026-02-16
+past-fb-B2795,Josefina Dela Cruz,past-b2795@imported.elenest.local,past-B2795,5,"Okay naman yung stay namin overall., The service is quite fine.",,2026-02-21T12:00:00+08:00,true,2026-02-16
+past-fb-B2796,Manuel Navarro,past-b2796@imported.elenest.local,past-B2796,5,"The service is quite fine.. Also, Okay naman yung stay namin overall.",,2026-02-21T12:00:00+08:00,true,2026-02-16
+past-fb-B2797,Teresa Santos,past-b2797@imported.elenest.local,past-B2797,2,"A bit overpriced for the current state.. Also, Medyo disappointing ang quality ng rooms.",,2026-02-21T12:00:00+08:00,true,2026-02-16
+past-fb-B2798,Pedro Navarro,past-b2798@imported.elenest.local,past-B2798,4,"Sulit na sulit ang booking namin.. In addition, May ilang sira sa banyo.",,2026-02-21T12:00:00+08:00,true,2026-02-16
+past-fb-B2799,Paolo Mercado,past-b2799@imported.elenest.local,past-B2799,4,"Very peaceful ang environment.. In addition, Facilities are a bit outdated.",,2026-02-21T12:00:00+08:00,true,2026-02-16
+past-fb-B2800,Luis Cruz,past-b2800@imported.elenest.local,past-B2800,5,Great value for money.. Napakaganda ng inyong resort.,,2026-02-21T12:00:00+08:00,true,2026-02-16
+past-fb-B2801,Miguel Bautista,past-b2801@imported.elenest.local,past-B2801,4,Facilities are a bit outdated.. Madaling hanapin ang lokasyon.,,2026-02-22T12:00:00+08:00,true,2026-02-16
+past-fb-B2802,Luis Navarro,past-b2802@imported.elenest.local,past-B2802,3,Medyo disappointing ang quality ng rooms.. The resort exceeded our expectations.,,2026-02-22T12:00:00+08:00,true,2026-02-16
+past-fb-B2803,Jessa Mendoza,past-b2803@imported.elenest.local,past-B2803,5,Great value for money.. The staff were not that responsive.,,2026-02-22T12:00:00+08:00,true,2026-02-16
+past-fb-B2804,Elena Dela Cruz,past-b2804@imported.elenest.local,past-B2804,4,Very peaceful ang environment.. The resort exceeded our expectations.,,2026-02-22T12:00:00+08:00,true,2026-02-16
+past-fb-B2805,Liza Navarro,past-b2805@imported.elenest.local,past-B2805,4,"Masarap ang pagkain sa inyong canteen., Staff are very professional and accommodating.",,2026-02-22T12:00:00+08:00,true,2026-02-16
+past-fb-B2806,Miguel Del Rosario,past-b2806@imported.elenest.local,past-B2806,4,Not bad for a short trip.. Standard na resort para sa presyo.,,2026-02-22T12:00:00+08:00,true,2026-02-16
+past-fb-B2807,Joshua Dela Cruz,past-b2807@imported.elenest.local,past-B2807,5,"Not bad for a short trip., Medyo okay naman ang experience.",,2026-02-22T12:00:00+08:00,true,2026-02-16
+past-fb-B2808,Luis Cruz,past-b2808@imported.elenest.local,past-B2808,4,"Great value for money.. Also, May ilang sira sa banyo.",,2026-02-22T12:00:00+08:00,true,2026-02-16
+past-fb-B2809,Rosa Navarro,past-b2809@imported.elenest.local,past-B2809,3,Kailangang linisin pa ang mga kwarto.. May ilang sira sa banyo.,,2026-02-22T12:00:00+08:00,true,2026-02-16
+past-fb-B2810,Juan Dela Cruz,past-b2810@imported.elenest.local,past-B2810,4,"Maayos naman ang pasilidad.. Also, The view from our room was breathtaking.",,2026-02-22T12:00:00+08:00,true,2026-02-16
+past-fb-B2811,Angel Torres,past-b2811@imported.elenest.local,past-B2811,4,"The service is quite fine.. In addition, Not worth the price we paid.",,2026-02-22T12:00:00+08:00,true,2026-02-16
+past-fb-B2812,Melvin Reyes,past-b2812@imported.elenest.local,past-B2812,5,"Not worth the price we paid.. Also, Sakto lang ang price para sa amenities.",,2026-02-22T12:00:00+08:00,true,2026-02-16
+past-fb-B2813,Pedro Mendoza,past-b2813@imported.elenest.local,past-B2813,4,"The facilities are wellmaintained.. Also, Standard lang ang rooms but clean.",,2026-02-22T12:00:00+08:00,true,2026-02-16
+past-fb-B2814,Kim Cruz,past-b2814@imported.elenest.local,past-B2814,3,"Medyo madumi yung area nung dumating kami.. Also, Tahimik naman ang paligid.",,2026-02-22T12:00:00+08:00,true,2026-02-16
+past-fb-B2815,Carlos Aquino,past-b2815@imported.elenest.local,past-B2815,4,"Napakalinis ng swimming pool.. Also, The service is quite fine.",,2026-02-22T12:00:00+08:00,true,2026-02-16
+past-fb-B2816,Paolo Domingo,past-b2816@imported.elenest.local,past-B2816,4,It was a decent experience overall.. The environment was too loud for relaxation.,,2026-02-23T12:00:00+08:00,true,2026-02-23
+past-fb-B2817,Manuel Pineda,past-b2817@imported.elenest.local,past-B2817,4,"Average service during our stay.. In addition, The pool area is fine.",,2026-02-23T12:00:00+08:00,true,2026-02-23
+past-fb-B2818,Ramon Castro,past-b2818@imported.elenest.local,past-B2818,4,"Not bad for a short trip., Everything was as expected.",,2026-02-23T12:00:00+08:00,true,2026-02-23
+past-fb-B2819,Mary Aquino,past-b2819@imported.elenest.local,past-B2819,5,"Medyo okay naman ang experience.. In addition, The resort exceeded our expectations.",,2026-02-23T12:00:00+08:00,true,2026-02-23
+past-fb-B2820,Luis Pineda,past-b2820@imported.elenest.local,past-B2820,4,"Solid ang experience rito.. Also, Standard na resort para sa presyo.",,2026-02-23T12:00:00+08:00,true,2026-02-23
+past-fb-B2821,Danica Del Rosario,past-b2821@imported.elenest.local,past-B2821,3,Walang masyadong naging problema.,,2026-02-23T12:00:00+08:00,true,2026-02-23
+past-fb-B2822,Aira Mercado,past-b2822@imported.elenest.local,past-B2822,4,"Not bad for a short trip., Hassle yung process ng checkin.",,2026-02-23T12:00:00+08:00,true,2026-02-23
+past-fb-B2823,Ana Reyes,past-b2823@imported.elenest.local,past-B2823,4,The staff are very approachable and helpful.. Napakaganda ng inyong resort.,,2026-02-23T12:00:00+08:00,true,2026-02-23
+past-fb-B2824,Pedro Dela Cruz,past-b2824@imported.elenest.local,past-B2824,5,"Medyo okay naman ang experience.. In addition, We had a wonderful and relaxing stay.",,2026-02-23T12:00:00+08:00,true,2026-02-23
+past-fb-B2825,Juan Del Rosario,past-b2825@imported.elenest.local,past-B2825,4,"The room was basic but functional.. In addition, Masyadong maingay ang ibang mga bisita.",,2026-02-23T12:00:00+08:00,true,2026-02-23
+past-fb-B2826,Kim Soriano,past-b2826@imported.elenest.local,past-B2826,4,"Panalo ang view, seryoso. and The pool is clean and refreshing.",,2026-02-23T12:00:00+08:00,true,2026-02-23
+past-fb-B2827,Ryan Navarro,past-b2827@imported.elenest.local,past-B2827,4,"Legit na relaxing ang vibe.. In addition, The resort exceeded our expectations.",,2026-02-24T12:00:00+08:00,true,2026-02-23
+past-fb-B2828,Jessa Flores,past-b2828@imported.elenest.local,past-B2828,4,The pool is clean and refreshing. and Hindi kami nasiyahan sa aming stay.,,2026-02-24T12:00:00+08:00,true,2026-02-23
+past-fb-B2829,Angel Aquino,past-b2829@imported.elenest.local,past-B2829,4,"Standard na resort para sa presyo.. Also, Masyadong maingay ang ibang mga bisita.",,2026-02-24T12:00:00+08:00,true,2026-02-23
+past-fb-B2830,Gloria Ramos,past-b2830@imported.elenest.local,past-B2830,4,"Average service during our stay., Masarap ang pagkain sa inyong canteen.",,2026-02-24T12:00:00+08:00,true,2026-02-23
+past-fb-B2831,Maria Reyes,past-b2831@imported.elenest.local,past-B2831,4,"The service is quite fine., The room cleanliness was disappointing.",,2026-02-24T12:00:00+08:00,true,2026-02-23
+past-fb-B2832,Pedro Mercado,past-b2832@imported.elenest.local,past-B2832,4,"Service was slow and needs improvement.. Also, Sakto lang ang price para sa amenities.",,2026-02-24T12:00:00+08:00,true,2026-02-23
+past-fb-B2833,Luis Soriano,past-b2833@imported.elenest.local,past-B2833,4,Sakto lang ang naging karanasan namin.. The location is accessible.,,2026-02-24T12:00:00+08:00,true,2026-02-23
+past-fb-B2834,Miguel Santos,past-b2834@imported.elenest.local,past-B2834,5,"Super ganda ng ambiance dito., Okay naman yung stay namin overall.",,2026-02-24T12:00:00+08:00,true,2026-02-23
+past-fb-B2835,Mary Pineda,past-b2835@imported.elenest.local,past-B2835,5,Tahimik naman ang paligid. and Okay naman yung stay namin overall.,,2026-02-24T12:00:00+08:00,true,2026-02-23
+past-fb-B2836,John Ramos,past-b2836@imported.elenest.local,past-B2836,4,The room cleanliness was disappointing.. Madaling hanapin ang lokasyon.,,2026-02-25T12:00:00+08:00,true,2026-02-23
+past-fb-B2837,Vicente Pineda,past-b2837@imported.elenest.local,past-B2837,4,Sulit na sulit ang booking namin.. It was a decent experience overall.,,2026-02-25T12:00:00+08:00,true,2026-02-23
+past-fb-B2838,Josefina Mendoza,past-b2838@imported.elenest.local,past-B2838,3,"Napakalinis ng swimming pool.. In addition, A bit overpriced for the current state.",,2026-02-25T12:00:00+08:00,true,2026-02-23
+past-fb-B2839,Ana Castro,past-b2839@imported.elenest.local,past-B2839,4,"The facilities are wellmaintained.. Also, Everything was as expected.",,2026-02-25T12:00:00+08:00,true,2026-02-23
+past-fb-B2840,John Aquino,past-b2840@imported.elenest.local,past-B2840,4,"The environment was too loud for relaxation.. In addition, A bit overpriced for the current state.",,2026-02-25T12:00:00+08:00,true,2026-02-23
+past-fb-B2841,Teresa Garcia,past-b2841@imported.elenest.local,past-B2841,4,"The service is quite fine.. Also, Masyadong maingay ang ibang mga bisita.",,2026-02-25T12:00:00+08:00,true,2026-02-23
+past-fb-B2842,Antonio Reyes,past-b2842@imported.elenest.local,past-B2842,4,"Staff are very professional and accommodating.. Also, Sakto lang ang price para sa amenities.",,2026-02-25T12:00:00+08:00,true,2026-02-23
+past-fb-B2843,Miguel Garcia,past-b2843@imported.elenest.local,past-B2843,4,Naging masaya ang aming pamilya rito. and Staff are very professional and accommodating.,,2026-02-25T12:00:00+08:00,true,2026-02-23
+past-fb-B2844,Mary Pineda,past-b2844@imported.elenest.local,past-B2844,4,The staff were not that responsive. and The staff are very approachable and helpful.,,2026-02-25T12:00:00+08:00,true,2026-02-23
+past-fb-B2845,Vicente Dela Cruz,past-b2845@imported.elenest.local,past-B2845,3,"Tahimik naman ang paligid., May ilang sira sa banyo.",,2026-02-25T12:00:00+08:00,true,2026-02-23
+past-fb-B2846,Pedro Navarro,past-b2846@imported.elenest.local,past-B2846,2,"We encountered some issues with the water pressure., Facilities are a bit outdated.",,2026-02-25T12:00:00+08:00,true,2026-02-23
+past-fb-B2847,Mary Garcia,past-b2847@imported.elenest.local,past-B2847,4,"The pool is clean and refreshing.. Also, It was a decent experience overall.",,2026-02-26T12:00:00+08:00,true,2026-02-23
+past-fb-B2848,Jessa Villanueva,past-b2848@imported.elenest.local,past-B2848,4,"Legit na relaxing ang vibe.. Also, Mahal ang presyo kumpara sa serbisyo.",,2026-02-26T12:00:00+08:00,true,2026-02-23
+past-fb-B2849,Mary Reyes,past-b2849@imported.elenest.local,past-B2849,4,"Napakaganda ng inyong resort.. Also, The resort exceeded our expectations.",,2026-02-26T12:00:00+08:00,true,2026-02-23
+past-fb-B2850,Ryan Ramos,past-b2850@imported.elenest.local,past-B2850,4,"Tahimik naman ang paligid.. In addition, Masarap ang pagkain sa inyong canteen.",,2026-02-26T12:00:00+08:00,true,2026-02-23
+past-fb-B2851,Rosa Dela Cruz,past-b2851@imported.elenest.local,past-B2851,4,Mabagal ang serbisyo sa reception.,,2026-02-26T12:00:00+08:00,true,2026-02-23
+past-fb-B2852,Francisca Dela Cruz,past-b2852@imported.elenest.local,past-B2852,5,Medyo okay naman ang experience. and Staff are very professional and accommodating.,,2026-02-26T12:00:00+08:00,true,2026-02-23
+past-fb-B2853,Juan Mendoza,past-b2853@imported.elenest.local,past-B2853,4,"The room was basic but functional.. Also, The pool area is fine.",,2026-02-26T12:00:00+08:00,true,2026-02-23
+past-fb-B2854,Angel Aquino,past-b2854@imported.elenest.local,past-B2854,4,"The room was basic but functional.. Also, The pool is clean and refreshing.",,2026-02-27T12:00:00+08:00,true,2026-02-23
+past-fb-B2855,Jessa Bautista,past-b2855@imported.elenest.local,past-B2855,4,Napakaganda ng inyong resort.. Kailangang linisin pa ang mga kwarto.,,2026-02-27T12:00:00+08:00,true,2026-02-23
+past-fb-B2856,Angel Soriano,past-b2856@imported.elenest.local,past-B2856,4,"Standard na resort para sa presyo.. In addition, Average service during our stay.",,2026-02-27T12:00:00+08:00,true,2026-02-23
+past-fb-B2857,Kim Villanueva,past-b2857@imported.elenest.local,past-B2857,5,Standard lang ang rooms but clean. and Great value for money.,,2026-02-27T12:00:00+08:00,true,2026-02-23
+past-fb-B2858,Angel Santos,past-b2858@imported.elenest.local,past-B2858,4,"Walang kupas ang ganda ng pool.. Also, Hassle yung process ng checkin.",,2026-02-27T12:00:00+08:00,true,2026-02-23
+past-fb-B2859,Ramon Mendoza,past-b2859@imported.elenest.local,past-B2859,4,"Legit na relaxing ang vibe.. Also, Napakalinis ng swimming pool.",,2026-02-27T12:00:00+08:00,true,2026-02-23
+past-fb-B2860,Jose Navarro,past-b2860@imported.elenest.local,past-B2860,5,"Standard lang ang rooms but clean.. Also, Highly recommended itong resort na ito.",,2026-02-27T12:00:00+08:00,true,2026-02-23
+past-fb-B2861,Ryan Del Rosario,past-b2861@imported.elenest.local,past-B2861,4,Staff are very professional and accommodating.. Sakto lang ang price para sa amenities.,,2026-02-27T12:00:00+08:00,true,2026-02-23
+past-fb-B2862,Jose Flores,past-b2862@imported.elenest.local,past-B2862,4,"The room cleanliness was disappointing.. Also, Solid ang experience rito.",,2026-02-27T12:00:00+08:00,true,2026-02-23
+past-fb-B2863,John Mendoza,past-b2863@imported.elenest.local,past-B2863,4,Napakalinis ng swimming pool.. Very peaceful ang environment.,,2026-02-27T12:00:00+08:00,true,2026-02-23
+past-fb-B2864,Ryan Mercado,past-b2864@imported.elenest.local,past-B2864,4,"Tahimik naman ang paligid., Standard na resort para sa presyo.",,2026-02-28T12:00:00+08:00,true,2026-02-23
+past-fb-B2865,Francisca Navarro,past-b2865@imported.elenest.local,past-B2865,3,A bit overpriced for the current state.,,2026-02-28T12:00:00+08:00,true,2026-02-23
+past-fb-B2866,Maria Bautista,past-b2866@imported.elenest.local,past-B2866,4,"Not worth the price we paid.. In addition, Super ganda ng ambiance dito.",,2026-02-28T12:00:00+08:00,true,2026-02-23
+past-fb-B2867,Carmen Castro,past-b2867@imported.elenest.local,past-B2867,4,The service is quite fine.. Goods na goods ang service.,,2026-02-28T12:00:00+08:00,true,2026-02-23
+past-fb-B2868,Carmen Aquino,past-b2868@imported.elenest.local,past-B2868,4,"It was a decent experience overall.. In addition, Sulit na sulit ang booking namin.",,2026-02-28T12:00:00+08:00,true,2026-02-23
+past-fb-B2869,Jose Pineda,past-b2869@imported.elenest.local,past-B2869,4,"Legit na relaxing ang vibe.. Also, Average service during our stay.",,2026-02-28T12:00:00+08:00,true,2026-02-23
+past-fb-B2870,Francisco Dela Cruz,past-b2870@imported.elenest.local,past-B2870,4,Hassle yung process ng checkin.. Napakalinis ng swimming pool.,,2026-02-28T12:00:00+08:00,true,2026-02-23
+past-fb-B2871,Paul Reyes,past-b2871@imported.elenest.local,past-B2871,4,Very peaceful ang environment.,,2026-02-28T12:00:00+08:00,true,2026-02-23
+past-fb-B2872,Pedro Del Rosario,past-b2872@imported.elenest.local,past-B2872,4,"Everything was as expected., The water in the pool was a bit cloudy.",,2026-02-28T12:00:00+08:00,true,2026-02-23
+past-fb-B2873,Mary Reyes,past-b2873@imported.elenest.local,past-B2873,4,Super ganda ng ambiance dito.. Napakalinis ng swimming pool.,,2026-02-28T12:00:00+08:00,true,2026-02-23
+past-fb-B2874,Jessa Mendoza,past-b2874@imported.elenest.local,past-B2874,4,Sakto lang ang naging karanasan namin.. Tahimik naman ang paligid.,,2026-02-28T12:00:00+08:00,true,2026-02-23
+past-fb-B2875,Vicente Mendoza,past-b2875@imported.elenest.local,past-B2875,4,"The pool is clean and refreshing.. Also, Walang masyadong naging problema.",,2026-02-28T12:00:00+08:00,true,2026-02-23
+past-fb-B2876,Angel Del Rosario,past-b2876@imported.elenest.local,past-B2876,4,"Napakaganda ng inyong resort.. Also, Hassle yung process ng checkin.",,2026-02-28T12:00:00+08:00,true,2026-02-23
+past-fb-B2877,Ana Castro,past-b2877@imported.elenest.local,past-B2877,4,"Hindi kami nasiyahan sa aming stay.. In addition, Hassle yung process ng checkin.",,2026-02-28T12:00:00+08:00,true,2026-02-23
+past-fb-B2878,Jessa Cruz,past-b2878@imported.elenest.local,past-B2878,4,Hassle yung process ng checkin.. The resort exceeded our expectations.,,2026-02-28T12:00:00+08:00,true,2026-02-23
+past-fb-B2879,Manuel Santos,past-b2879@imported.elenest.local,past-B2879,4,"Goods na goods ang service., The water in the pool was a bit cloudy.",,2026-03-01T12:00:00+08:00,true,2026-02-23
+past-fb-B2880,Jessa Torres,past-b2880@imported.elenest.local,past-B2880,4,"Hindi kami nasiyahan sa aming stay.. In addition, Super ganda ng ambiance dito.",,2026-03-01T12:00:00+08:00,true,2026-02-23
+past-fb-B2881,Manuel Pineda,past-b2881@imported.elenest.local,past-B2881,4,"Masyadong maingay ang ibang mga bisita., Sakto lang ang price para sa amenities.",,2026-03-01T12:00:00+08:00,true,2026-02-23
+past-fb-B2882,Vicente Aquino,past-b2882@imported.elenest.local,past-B2882,4,"Super ganda ng ambiance dito.. Also, The resort exceeded our expectations.",,2026-03-01T12:00:00+08:00,true,2026-02-23
+past-fb-B2883,Carlos Reyes,past-b2883@imported.elenest.local,past-B2883,4,"Everything was as expected., The staff were not that responsive.",,2026-03-01T12:00:00+08:00,true,2026-02-23
+past-fb-B2884,Liza Del Rosario,past-b2884@imported.elenest.local,past-B2884,4,The view from our room was breathtaking. and Walang kupas ang ganda ng pool.,,2026-03-01T12:00:00+08:00,true,2026-02-23
+past-fb-B2885,Carlos Domingo,past-b2885@imported.elenest.local,past-B2885,4,Hassle yung process ng checkin.. Everything was as expected.,,2026-03-01T12:00:00+08:00,true,2026-02-23
+past-fb-B2886,Liza Castro,past-b2886@imported.elenest.local,past-B2886,4,The facilities are wellmaintained.. Standard na resort para sa presyo.,,2026-03-01T12:00:00+08:00,true,2026-02-23
+past-fb-B2887,Paolo Domingo,past-b2887@imported.elenest.local,past-B2887,4,"A bit overpriced for the current state., Madaling hanapin ang lokasyon.",,2026-03-01T12:00:00+08:00,true,2026-02-23
+past-fb-B2888,Joshua Aquino,past-b2888@imported.elenest.local,past-B2888,4,Mahal ang presyo kumpara sa serbisyo. and Hindi kami nasiyahan sa aming stay.,,2026-03-02T12:00:00+08:00,true,2026-03-02
+past-fb-B2889,Luis Del Rosario,past-b2889@imported.elenest.local,past-B2889,4,"Service was slow and needs improvement., Medyo okay naman ang experience.",,2026-03-02T12:00:00+08:00,true,2026-03-02
+past-fb-B2890,Carlos Pineda,past-b2890@imported.elenest.local,past-B2890,4,"Masarap ang pagkain sa inyong canteen., Maayos ang pamamalakad sa lugar.",,2026-03-02T12:00:00+08:00,true,2026-03-02
+past-fb-B2891,Teresa Del Rosario,past-b2891@imported.elenest.local,past-B2891,5,Not bad for a short trip. and Medyo okay naman ang experience.,,2026-03-02T12:00:00+08:00,true,2026-03-02
+past-fb-B2892,Rosa Del Rosario,past-b2892@imported.elenest.local,past-B2892,4,"Mabagal ang serbisyo sa reception., The water in the pool was a bit cloudy.",,2026-03-02T12:00:00+08:00,true,2026-03-02
+past-fb-B2893,Francisca Bautista,past-b2893@imported.elenest.local,past-B2893,4,"Kailangang linisin pa ang mga kwarto.. Also, The staff were not that responsive.",,2026-03-02T12:00:00+08:00,true,2026-03-02
+past-fb-B2894,Danica Bautista,past-b2894@imported.elenest.local,past-B2894,5,"Sakto lang ang naging karanasan namin., Napakaganda ng inyong resort.",,2026-03-02T12:00:00+08:00,true,2026-03-02
+past-fb-B2895,Mark Ramos,past-b2895@imported.elenest.local,past-B2895,3,The staff were not that responsive. and Service was slow and needs improvement.,,2026-03-02T12:00:00+08:00,true,2026-03-02
+past-fb-B2896,Gloria Pineda,past-b2896@imported.elenest.local,past-B2896,4,"Super ganda ng ambiance dito.. In addition, Napakalinis ng swimming pool.",,2026-03-02T12:00:00+08:00,true,2026-03-02
+past-fb-B2897,Joshua Pineda,past-b2897@imported.elenest.local,past-B2897,5,"Naging masaya ang aming pamilya rito.. In addition, Medyo okay naman ang experience.",,2026-03-02T12:00:00+08:00,true,2026-03-02
+past-fb-B2898,Luis Bautista,past-b2898@imported.elenest.local,past-B2898,4,"Walang kupas ang ganda ng pool., The room cleanliness was disappointing.",,2026-03-02T12:00:00+08:00,true,2026-03-02
+past-fb-B2899,Ryan Cruz,past-b2899@imported.elenest.local,past-B2899,4,Naging masaya ang aming pamilya rito.. It was a decent experience overall.,,2026-03-02T12:00:00+08:00,true,2026-03-02
+past-fb-B2900,Josefina Mendoza,past-b2900@imported.elenest.local,past-B2900,5,Staff are very professional and accommodating.. Medyo okay naman ang experience.,,2026-03-03T12:00:00+08:00,true,2026-03-02
+past-fb-B2901,Ryan Cruz,past-b2901@imported.elenest.local,past-B2901,4,"Hassle yung process ng checkin.. In addition, Everything was as expected.",,2026-03-03T12:00:00+08:00,true,2026-03-02
+past-fb-B2902,Mark Cruz,past-b2902@imported.elenest.local,past-B2902,2,"We encountered some issues with the water pressure.. In addition, The room was basic but functional.",,2026-03-03T12:00:00+08:00,true,2026-03-02
+past-fb-B2903,Josefina Cruz,past-b2903@imported.elenest.local,past-B2903,4,It was a decent experience overall.. Tahimik naman ang paligid.,,2026-03-03T12:00:00+08:00,true,2026-03-02
+past-fb-B2904,Carmen Dela Cruz,past-b2904@imported.elenest.local,past-B2904,3,"Walang masyadong naging problema., Goods na goods ang service.",,2026-03-03T12:00:00+08:00,true,2026-03-02
+past-fb-B2905,Vicente Bautista,past-b2905@imported.elenest.local,past-B2905,5,Solid ang experience rito.. The pool is clean and refreshing.,,2026-03-03T12:00:00+08:00,true,2026-03-02
+past-fb-B2906,Teresa Villanueva,past-b2906@imported.elenest.local,past-B2906,4,"Kailangang linisin pa ang mga kwarto., Not worth the price we paid.",,2026-03-03T12:00:00+08:00,true,2026-03-02
+past-fb-B2907,Paolo Torres,past-b2907@imported.elenest.local,past-B2907,4,"It was a decent experience overall.. In addition, Not worth the price we paid.",,2026-03-03T12:00:00+08:00,true,2026-03-02
+past-fb-B2908,Ana Navarro,past-b2908@imported.elenest.local,past-B2908,4,"Maayos ang pamamalakad sa lugar.. In addition, The staff were not that responsive.",,2026-03-03T12:00:00+08:00,true,2026-03-02
+past-fb-B2909,Luis Aquino,past-b2909@imported.elenest.local,past-B2909,4,"Everything was as expected.. Also, The water in the pool was a bit cloudy.",,2026-03-03T12:00:00+08:00,true,2026-03-02
+past-fb-B2910,Jessa Del Rosario,past-b2910@imported.elenest.local,past-B2910,4,The water in the pool was a bit cloudy.. Masyadong maingay ang ibang mga bisita.,,2026-03-03T12:00:00+08:00,true,2026-03-02
+past-fb-B2911,Maria Santos,past-b2911@imported.elenest.local,past-B2911,5,"Legit na relaxing ang vibe.. Also, Madaling hanapin ang lokasyon.",,2026-03-03T12:00:00+08:00,true,2026-03-02
+past-fb-B2912,John Reyes,past-b2912@imported.elenest.local,past-B2912,3,"Walang masyadong naging problema.. In addition, The location is accessible.",,2026-03-03T12:00:00+08:00,true,2026-03-02
+past-fb-B2913,Paul Bautista,past-b2913@imported.elenest.local,past-B2913,4,"The location is accessible.. Also, Super ganda ng ambiance dito.",,2026-03-03T12:00:00+08:00,true,2026-03-02
+past-fb-B2914,Antonio Mercado,past-b2914@imported.elenest.local,past-B2914,4,Medyo disappointing ang quality ng rooms.. Sakto lang ang price para sa amenities.,,2026-03-03T12:00:00+08:00,true,2026-03-02
+past-fb-B2915,Elena Pineda,past-b2915@imported.elenest.local,past-B2915,5,"The pool is clean and refreshing.. In addition, Madaling hanapin ang lokasyon.",,2026-03-03T12:00:00+08:00,true,2026-03-02
+past-fb-B2916,Gloria Del Rosario,past-b2916@imported.elenest.local,past-B2916,4,"Sakto lang ang price para sa amenities.. In addition, Goods na goods ang service.",,2026-03-04T12:00:00+08:00,true,2026-03-02
+past-fb-B2917,Aira Ramos,past-b2917@imported.elenest.local,past-B2917,4,"Facilities are a bit outdated., Hassle yung process ng checkin.",,2026-03-04T12:00:00+08:00,true,2026-03-02
+past-fb-B2918,Paolo Ramos,past-b2918@imported.elenest.local,past-B2918,3,Walang masyadong naging problema. and Tahimik naman ang paligid.,,2026-03-04T12:00:00+08:00,true,2026-03-02
+past-fb-B2919,Mary Dela Cruz,past-b2919@imported.elenest.local,past-B2919,4,"Mabagal ang serbisyo sa reception., Hassle yung process ng checkin.",,2026-03-04T12:00:00+08:00,true,2026-03-02
+past-fb-B2920,Miguel Ramos,past-b2920@imported.elenest.local,past-B2920,4,"Napakaganda ng inyong resort.. Also, Super ganda ng ambiance dito.",,2026-03-04T12:00:00+08:00,true,2026-03-02
+past-fb-B2921,Juan Garcia,past-b2921@imported.elenest.local,past-B2921,5,"We had a wonderful and relaxing stay.. In addition, Solid ang experience rito.",,2026-03-04T12:00:00+08:00,true,2026-03-02
+past-fb-B2922,Pedro Garcia,past-b2922@imported.elenest.local,past-B2922,4,"The staff are very approachable and helpful.. In addition, Everything was as expected.",,2026-03-04T12:00:00+08:00,true,2026-03-02
+past-fb-B2923,Rosa Flores,past-b2923@imported.elenest.local,past-B2923,4,"Legit na relaxing ang vibe.. Also, Medyo disappointing ang quality ng rooms.",,2026-03-04T12:00:00+08:00,true,2026-03-02
+past-fb-B2924,Ryan Bautista,past-b2924@imported.elenest.local,past-B2924,4,The water in the pool was a bit cloudy. and Not worth the price we paid.,,2026-03-04T12:00:00+08:00,true,2026-03-02
+past-fb-B2925,Juan Dela Cruz,past-b2925@imported.elenest.local,past-B2925,5,Maayos ang pamamalakad sa lugar.. Madaling hanapin ang lokasyon.,,2026-03-04T12:00:00+08:00,true,2026-03-02
+past-fb-B2926,Carlos Cruz,past-b2926@imported.elenest.local,past-B2926,5,"Sakto lang ang naging karanasan namin.. Also, Legit na relaxing ang vibe.",,2026-03-04T12:00:00+08:00,true,2026-03-02
+past-fb-B2927,Manuel Reyes,past-b2927@imported.elenest.local,past-B2927,4,Everything was as expected.. Hassle yung process ng checkin.,,2026-03-04T12:00:00+08:00,true,2026-03-02
+past-fb-B2928,Gloria Del Rosario,past-b2928@imported.elenest.local,past-B2928,4,"It was a decent experience overall.. Also, Very peaceful ang environment.",,2026-03-04T12:00:00+08:00,true,2026-03-02
+past-fb-B2929,Paul Reyes,past-b2929@imported.elenest.local,past-B2929,4,The room was basic but functional. and Highly recommended itong resort na ito.,,2026-03-04T12:00:00+08:00,true,2026-03-02
+past-fb-B2930,Joshua Santos,past-b2930@imported.elenest.local,past-B2930,5,Mabait at magalang ang mga staff.. The water in the pool was a bit cloudy.,,2026-03-04T12:00:00+08:00,true,2026-03-02
+past-fb-B2931,Angel Bautista,past-b2931@imported.elenest.local,past-B2931,4,Walang kupas ang ganda ng pool.,,2026-03-05T12:00:00+08:00,true,2026-03-02
+past-fb-B2932,Gloria Mendoza,past-b2932@imported.elenest.local,past-B2932,4,"The room was basic but functional.. In addition, Masarap ang pagkain sa inyong canteen.",,2026-03-05T12:00:00+08:00,true,2026-03-02
+past-fb-B2933,Kim Flores,past-b2933@imported.elenest.local,past-B2933,3,"The water in the pool was a bit cloudy.. In addition, Medyo madumi yung area nung dumating kami.",,2026-03-05T12:00:00+08:00,true,2026-03-02
+past-fb-B2934,Jose Soriano,past-b2934@imported.elenest.local,past-B2934,4,"Legit na relaxing ang vibe., Service was slow and needs improvement.",,2026-03-05T12:00:00+08:00,true,2026-03-02
+past-fb-B2935,Juan Dela Cruz,past-b2935@imported.elenest.local,past-B2935,4,"Very peaceful ang environment., Facilities are a bit outdated.",,2026-03-05T12:00:00+08:00,true,2026-03-02
+past-fb-B2936,Josefina Navarro,past-b2936@imported.elenest.local,past-B2936,4,Kailangang linisin pa ang mga kwarto. and The service is quite fine.,,2026-03-05T12:00:00+08:00,true,2026-03-02
+past-fb-B2937,Rosa Del Rosario,past-b2937@imported.elenest.local,past-B2937,3,"Okay naman yung stay namin overall., We encountered some issues with the water pressure.",,2026-03-05T12:00:00+08:00,true,2026-03-02
+past-fb-B2938,Juan Reyes,past-b2938@imported.elenest.local,past-B2938,2,We encountered some issues with the water pressure. and Napakaganda ng inyong resort.,,2026-03-05T12:00:00+08:00,true,2026-03-02
+past-fb-B2939,Ryan Reyes,past-b2939@imported.elenest.local,past-B2939,4,"Medyo okay naman ang experience.. Also, May ilang sira sa banyo.",,2026-03-05T12:00:00+08:00,true,2026-03-02
+past-fb-B2940,Gloria Aquino,past-b2940@imported.elenest.local,past-B2940,4,"Facilities are a bit outdated., The view from our room was breathtaking.",,2026-03-05T12:00:00+08:00,true,2026-03-02
+past-fb-B2941,Pedro Del Rosario,past-b2941@imported.elenest.local,past-B2941,5,"Medyo okay naman ang experience.. Also, The resort exceeded our expectations.",,2026-03-05T12:00:00+08:00,true,2026-03-02
+past-fb-B2942,Ramon Reyes,past-b2942@imported.elenest.local,past-B2942,4,Standard na resort para sa presyo. and Not worth the price we paid.,,2026-03-05T12:00:00+08:00,true,2026-03-02
+past-fb-B2943,Ramon Soriano,past-b2943@imported.elenest.local,past-B2943,4,"Mabagal ang serbisyo sa reception.. In addition, The location is accessible.",,2026-03-05T12:00:00+08:00,true,2026-03-02
+past-fb-B2944,Rosa Mercado,past-b2944@imported.elenest.local,past-B2944,4,"Staff are very professional and accommodating.. Also, Tahimik naman ang paligid.",,2026-03-06T12:00:00+08:00,true,2026-03-02
+past-fb-B2945,Maria Bautista,past-b2945@imported.elenest.local,past-B2945,4,Naging masaya ang aming pamilya rito. and Napakalinis ng swimming pool.,,2026-03-06T12:00:00+08:00,true,2026-03-02
+past-fb-B2946,Luis Navarro,past-b2946@imported.elenest.local,past-B2946,3,"Walang masyadong naging problema.. Also, The room was basic but functional.",,2026-03-06T12:00:00+08:00,true,2026-03-02
+past-fb-B2947,Francisco Cruz,past-b2947@imported.elenest.local,past-B2947,5,"Maayos ang pamamalakad sa lugar.. In addition, Sakto lang ang naging karanasan namin.",,2026-03-06T12:00:00+08:00,true,2026-03-02
+past-fb-B2948,Luis Torres,past-b2948@imported.elenest.local,past-B2948,4,We had a wonderful and relaxing stay.. Medyo madumi yung area nung dumating kami.,,2026-03-06T12:00:00+08:00,true,2026-03-02
+past-fb-B2949,John Ramos,past-b2949@imported.elenest.local,past-B2949,4,Service was slow and needs improvement.. Great value for money.,,2026-03-06T12:00:00+08:00,true,2026-03-02
+past-fb-B2950,Antonio Domingo,past-b2950@imported.elenest.local,past-B2950,4,It was a decent experience overall.. Standard na resort para sa presyo.,,2026-03-06T12:00:00+08:00,true,2026-03-02
+past-fb-B2951,Angel Soriano,past-b2951@imported.elenest.local,past-B2951,4,The pool area is fine. and The facilities are wellmaintained.,,2026-03-06T12:00:00+08:00,true,2026-03-02
+past-fb-B2952,Miguel Mercado,past-b2952@imported.elenest.local,past-B2952,4,"Masarap ang pagkain sa inyong canteen.. Also, The room was basic but functional.",,2026-03-06T12:00:00+08:00,true,2026-03-02
+past-fb-B2953,Josefina Garcia,past-b2953@imported.elenest.local,past-B2953,5,"Mabait at magalang ang mga staff.. Also, Super ganda ng ambiance dito.",,2026-03-06T12:00:00+08:00,true,2026-03-02
+past-fb-B2954,Maria Soriano,past-b2954@imported.elenest.local,past-B2954,2,Medyo disappointing ang quality ng rooms. and Walang masyadong naging problema.,,2026-03-06T12:00:00+08:00,true,2026-03-02
+past-fb-B2955,Luis Villanueva,past-b2955@imported.elenest.local,past-B2955,5,Okay naman yung stay namin overall.. The location is accessible.,,2026-03-06T12:00:00+08:00,true,2026-03-02
+past-fb-B2956,Gloria Soriano,past-b2956@imported.elenest.local,past-B2956,4,The staff were not that responsive. and Standard na resort para sa presyo.,,2026-03-07T12:00:00+08:00,true,2026-03-02
+past-fb-B2957,Paolo Aquino,past-b2957@imported.elenest.local,past-B2957,4,"The pool area is fine., Masarap ang pagkain sa inyong canteen.",,2026-03-07T12:00:00+08:00,true,2026-03-02
+past-fb-B2958,Ramon Navarro,past-b2958@imported.elenest.local,past-B2958,4,Solid ang experience rito. and Hindi kami nasiyahan sa aming stay.,,2026-03-07T12:00:00+08:00,true,2026-03-02
+past-fb-B2959,Jose Castro,past-b2959@imported.elenest.local,past-B2959,5,Sakto lang ang price para sa amenities.. Madaling hanapin ang lokasyon.,,2026-03-07T12:00:00+08:00,true,2026-03-02
+past-fb-B2960,Paolo Dela Cruz,past-b2960@imported.elenest.local,past-B2960,4,"It was a decent experience overall.. Also, The facilities are wellmaintained.",,2026-03-07T12:00:00+08:00,true,2026-03-02
+past-fb-B2961,Ana Garcia,past-b2961@imported.elenest.local,past-B2961,5,Okay naman yung stay namin overall. and Great value for money.,,2026-03-07T12:00:00+08:00,true,2026-03-02
+past-fb-B2962,Melvin Reyes,past-b2962@imported.elenest.local,past-B2962,4,The pool area is fine. and The service is quite fine.,,2026-03-07T12:00:00+08:00,true,2026-03-02
+past-fb-B2963,Miguel Villanueva,past-b2963@imported.elenest.local,past-B2963,4,"The environment was too loud for relaxation.. In addition, The facilities are wellmaintained.",,2026-03-07T12:00:00+08:00,true,2026-03-02
+past-fb-B2964,Jessa Pineda,past-b2964@imported.elenest.local,past-B2964,5,"The pool is clean and refreshing.. In addition, Not bad for a short trip.",,2026-03-07T12:00:00+08:00,true,2026-03-02
+past-fb-B2965,Ramon Bautista,past-b2965@imported.elenest.local,past-B2965,4,"Sakto lang ang price para sa amenities.. Also, Standard na resort para sa presyo.",,2026-03-07T12:00:00+08:00,true,2026-03-02
+past-fb-B2966,Aira Del Rosario,past-b2966@imported.elenest.local,past-B2966,3,"May ilang sira sa banyo., Panalo ang view, seryoso.",,2026-03-07T12:00:00+08:00,true,2026-03-02
+past-fb-B2967,Rosa Mendoza,past-b2967@imported.elenest.local,past-B2967,5,Solid ang experience rito.. Sakto lang ang naging karanasan namin.,,2026-03-07T12:00:00+08:00,true,2026-03-02
+past-fb-B2968,Elena Mercado,past-b2968@imported.elenest.local,past-B2968,4,"Solid ang experience rito.. In addition, Service was slow and needs improvement.",,2026-03-08T12:00:00+08:00,true,2026-03-02
+past-fb-B2969,Elena Castro,past-b2969@imported.elenest.local,past-B2969,4,"Walang masyadong naging problema.. Also, We had a wonderful and relaxing stay.",,2026-03-08T12:00:00+08:00,true,2026-03-02
+past-fb-B2970,Jose Torres,past-b2970@imported.elenest.local,past-B2970,4,Medyo madumi yung area nung dumating kami.. Standard lang ang rooms but clean.,,2026-03-08T12:00:00+08:00,true,2026-03-02
+past-fb-B2971,Joshua Santos,past-b2971@imported.elenest.local,past-B2971,3,"Medyo madumi yung area nung dumating kami.. In addition, Napakalinis ng swimming pool.",,2026-03-08T12:00:00+08:00,true,2026-03-02
+past-fb-B2972,Miguel Santos,past-b2972@imported.elenest.local,past-B2972,4,Standard na resort para sa presyo.. Staff are very professional and accommodating.,,2026-03-08T12:00:00+08:00,true,2026-03-02
+past-fb-B2973,Manuel Santos,past-b2973@imported.elenest.local,past-B2973,4,"Sakto lang ang naging karanasan namin.. In addition, The facilities are wellmaintained.",,2026-03-08T12:00:00+08:00,true,2026-03-02
+past-fb-B2974,Aira Santos,past-b2974@imported.elenest.local,past-B2974,4,Very peaceful ang environment. and The environment was too loud for relaxation.,,2026-03-08T12:00:00+08:00,true,2026-03-02
+past-fb-B2975,Ryan Mercado,past-b2975@imported.elenest.local,past-B2975,4,"A bit overpriced for the current state.. Also, Maayos naman ang pasilidad.",,2026-03-08T12:00:00+08:00,true,2026-03-02
+past-fb-B2976,Miguel Soriano,past-b2976@imported.elenest.local,past-B2976,4,"Sulit na sulit ang booking namin.. In addition, Panalo ang view, seryoso.",,2026-03-08T12:00:00+08:00,true,2026-03-02
+past-fb-B2977,Juan Torres,past-b2977@imported.elenest.local,past-B2977,4,"Staff are very professional and accommodating.. In addition, Solid ang experience rito.",,2026-03-08T12:00:00+08:00,true,2026-03-02
+past-fb-B2978,Paolo Torres,past-b2978@imported.elenest.local,past-B2978,5,"Sulit na sulit ang booking namin.. In addition, Great value for money.",,2026-03-08T12:00:00+08:00,true,2026-03-02
+past-fb-B2979,Juan Bautista,past-b2979@imported.elenest.local,past-B2979,4,Mahal ang presyo kumpara sa serbisyo.. Masyadong maingay ang ibang mga bisita.,,2026-03-08T12:00:00+08:00,true,2026-03-02
+past-fb-B2980,Jessa Cruz,past-b2980@imported.elenest.local,past-B2980,2,"Medyo disappointing ang quality ng rooms.. Also, Walang masyadong naging problema.",,2026-03-08T12:00:00+08:00,true,2026-03-02
+past-fb-B2981,Luis Bautista,past-b2981@imported.elenest.local,past-B2981,4,"The water in the pool was a bit cloudy., The location is accessible.",,2026-03-08T12:00:00+08:00,true,2026-03-02
+past-fb-B2982,Ramon Ramos,past-b2982@imported.elenest.local,past-B2982,5,Standard na resort para sa presyo. and Mabait at magalang ang mga staff.,,2026-03-08T12:00:00+08:00,true,2026-03-02
+past-fb-B2983,Kim Flores,past-b2983@imported.elenest.local,past-B2983,4,"Mabagal ang serbisyo sa reception., Sulit na sulit ang booking namin.",,2026-03-08T12:00:00+08:00,true,2026-03-02
+past-fb-B2984,Luis Villanueva,past-b2984@imported.elenest.local,past-B2984,4,"Not worth the price we paid.. In addition, Panalo ang view, seryoso.",,2026-03-08T12:00:00+08:00,true,2026-03-02
+past-fb-B2985,Liza Ramos,past-b2985@imported.elenest.local,past-B2985,4,The view from our room was breathtaking. and Legit na relaxing ang vibe.,,2026-03-08T12:00:00+08:00,true,2026-03-02
+past-fb-B2986,Carmen Mercado,past-b2986@imported.elenest.local,past-B2986,5,"Napakaganda ng inyong resort.. In addition, Sakto lang ang price para sa amenities.",,2026-03-08T12:00:00+08:00,true,2026-03-02
+past-fb-B2987,Francisco Bautista,past-b2987@imported.elenest.local,past-B2987,4,Highly recommended itong resort na ito. and Masyadong maingay ang ibang mga bisita.,,2026-03-08T12:00:00+08:00,true,2026-03-02
+past-fb-B2988,Francisco Del Rosario,past-b2988@imported.elenest.local,past-B2988,4,"Mahal ang presyo kumpara sa serbisyo.. Also, Tahimik naman ang paligid.",,2026-03-08T12:00:00+08:00,true,2026-03-02
+past-fb-B2989,Ana Mendoza,past-b2989@imported.elenest.local,past-B2989,4,It was a decent experience overall.,,2026-03-09T12:00:00+08:00,true,2026-03-09
+past-fb-B2990,Jessa Dela Cruz,past-b2990@imported.elenest.local,past-B2990,5,Standard lang ang rooms but clean. and The environment was too loud for relaxation.,,2026-03-09T12:00:00+08:00,true,2026-03-09
+past-fb-B2991,Liza Flores,past-b2991@imported.elenest.local,past-B2991,3,"The room cleanliness was disappointing.. In addition, Walang masyadong naging problema.",,2026-03-09T12:00:00+08:00,true,2026-03-09
+past-fb-B2992,Teresa Bautista,past-b2992@imported.elenest.local,past-B2992,4,"It was a decent experience overall.. In addition, Masarap ang pagkain sa inyong canteen.",,2026-03-09T12:00:00+08:00,true,2026-03-09
+past-fb-B2993,Angel Torres,past-b2993@imported.elenest.local,past-B2993,4,Very peaceful ang environment.. Staff are very professional and accommodating.,,2026-03-09T12:00:00+08:00,true,2026-03-09
+past-fb-B2994,Ramon Villanueva,past-b2994@imported.elenest.local,past-B2994,4,Naging masaya ang aming pamilya rito.. Mabagal ang serbisyo sa reception.,,2026-03-09T12:00:00+08:00,true,2026-03-09
+past-fb-B2995,Vicente Torres,past-b2995@imported.elenest.local,past-B2995,4,"Tahimik naman ang paligid.. Also, Super ganda ng ambiance dito.",,2026-03-09T12:00:00+08:00,true,2026-03-09
+past-fb-B2996,Ryan Domingo,past-b2996@imported.elenest.local,past-B2996,4,"The pool is clean and refreshing.. Also, The location is accessible.",,2026-03-09T12:00:00+08:00,true,2026-03-09
+past-fb-B2997,Gloria Pineda,past-b2997@imported.elenest.local,past-B2997,4,"Maayos naman ang pasilidad., Kailangang linisin pa ang mga kwarto.",,2026-03-09T12:00:00+08:00,true,2026-03-09
+past-fb-B2998,Ramon Bautista,past-b2998@imported.elenest.local,past-B2998,4,"Panalo ang view, seryoso., The environment was too loud for relaxation.",,2026-03-09T12:00:00+08:00,true,2026-03-09
+past-fb-B2999,Carmen Domingo,past-b2999@imported.elenest.local,past-B2999,2,"Napakaganda ng inyong resort., We encountered some issues with the water pressure.",,2026-03-09T12:00:00+08:00,true,2026-03-09
+past-fb-B3000,Ana Reyes,past-b3000@imported.elenest.local,past-B3000,5,"Solid ang experience rito.. In addition, Maayos ang pamamalakad sa lugar.",,2026-03-09T12:00:00+08:00,true,2026-03-09

@@ -1,0 +1,11 @@
+api/config.local.php
+api/config.local.json
+api/python.path
+sql/
+archive/
+Screenshots/
+_tmp_*/
+_tmp_*
+*.tmp
+**/__pycache__/
+*.pyc

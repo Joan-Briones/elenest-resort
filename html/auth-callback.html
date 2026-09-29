@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Signing in… | Elenest Resort</title>
+  <link rel="icon" type="image/png" href="../Images/icon.png">
+  <link rel="stylesheet" href="../css/style.css?v=20260922-menu3">
+  <script src="../js/supabase-config.js"></script>
+  <script src="../js/site-boot.js"></script>
+</head>
+<body class="subpage">
+  <main class="container">
+    <section class="hero">
+      <h1>Signing you in</h1>
+      <p>Completing social authentication. Please wait…</p>
+    </section>
+    <section class="section">
+      <article class="card auth-card auth-callback-card">
+        <div class="auth-callback-spinner" aria-hidden="true"></div>
+        <p id="authCallbackStatus" class="auth-lead">Verifying your account…</p>
+        <p id="authCallbackMsg" class="auth-msg" hidden></p>
+        <p class="note auth-switch" id="authCallbackBack" hidden>
+          <a href="book.html">Go to booking</a>
+          —
+          <a href="login.html">Back to sign in</a>
+        </p>
+      </article>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-config.js"></script>
+  <script src="../js/supabase-client.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/auth-oauth.js"></script>
+  <script>
+    (function () {
+      var statusEl = document.getElementById("authCallbackStatus");
+      var msgEl = document.getElementById("authCallbackMsg");
+      var backEl = document.getElementById("authCallbackBack");
+      var params = new URLSearchParams(window.location.search);
+      var next = params.get("next");
+      try {
+        if (!next) next = sessionStorage.getItem("elenest_oauth_next") || "book.html";
+      } catch (e) {
+        next = next || "book.html";
+      }
+      var started = false;
+
+      function showError(text) {
+        if (statusEl) statusEl.textContent = "Sign-in could not be completed";
+        if (msgEl) {
+          msgEl.hidden = false;
+          msgEl.className = "auth-msg auth-msg--err";
+          msgEl.textContent = text;
+        }
+        if (backEl) backEl.hidden = false;
+        var spinner = document.querySelector(".auth-callback-spinner");
+        if (spinner) spinner.hidden = true;
+      }
+
+      function finishAuth() {
+        if (started) return;
+        started = true;
+
+        var Auth = window.ElenestAuth;
+        if (!Auth || typeof Auth.handleOAuthCallback !== "function") {
+          showError("Authentication module failed to load.");
+          return;
+        }
+
+        Auth.handleOAuthCallback({ next: next }).then(function (result) {
+          if (result.ok && result.redirectTo) {
+            if (statusEl) statusEl.textContent = "Success! Taking you to your account…";
+            window.location.replace(result.redirectTo);
+            return;
+          }
+
+          var message = (result && result.message) || "Social sign-in failed.";
+          if (/site url|improperly formatted/i.test(message)) {
+            message =
+              "Supabase Site URL is wrong. Open Supabase ? Authentication ? URL Configuration and set Site URL to exactly: http://localhost/Elenest_Resort/html/ (do NOT use elenest:// there). Then Save and try again.";
+          } else if (/provider is not enabled|Google/i.test(message) && /enable|Client ID|Secret/i.test(message)) {
+            message =
+              "Enable Google in Supabase ? Authentication ? Providers, then paste your Google Cloud OAuth Client ID and Client Secret. Redirect URI must be https://wstgqfcdpfifkqyrclkx.supabase.co/auth/v1/callback";
+          } else if (/session|redirect|url/i.test(message)) {
+            message +=
+              " In Supabase ? Authentication ? URL Configuration, set Site URL to http://localhost/Elenest_Resort/html/ and keep Redirect URL http://localhost/Elenest_Resort/html/auth-callback.html";
+          }
+          showError(message);
+        });
+      }
+
+      setTimeout(finishAuth, 250);
+    })();
+  </script>
+</body>
+</html>

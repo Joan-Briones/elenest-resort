@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verify Phone | Elenest Resort</title>
+  <link rel="icon" type="image/png" href="../Images/icon.png">
+  <link rel="stylesheet" href="../css/style.css?v=20260922-menu3">
+</head>
+<body class="subpage">
+  <header>
+    <div class="content flex_space">
+      <div class="logo">
+        <a href="index.html" class="site-logo-link" aria-label="Elenest Resort home">
+          <img class="site-logo" src="../Images/elenest_logo_pink.png" alt="Elenest Event Center">
+        </a>
+      </div>
+      <div class="navlinks">
+        <ul id="menulist" class="site-nav-list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="register.html">Back to register</a></li>
+        </ul>
+        <button type="button" class="nav-menu-toggle" id="navMenuToggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="menulist">
+          <span class="nav-menu-toggle__bar" aria-hidden="true"></span>
+          <span class="nav-menu-toggle__bar" aria-hidden="true"></span>
+          <span class="nav-menu-toggle__bar" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Verify your phone</h1>
+      <p id="regVerifyLead">Enter the code we sent to your phone to finish creating your account.</p>
+    </section>
+
+    <section class="section">
+      <article class="card auth-card">
+        <h3>SMS verification</h3>
+        <p class="auth-lead">Check your text messages for a one-time code. It expires in a few minutes.</p>
+        <p class="note">Supported networks: <strong>Globe, TM, DITO, GOMO</strong>. Smart/TNT usually do not receive iProg SMS. During testing you can also view the OTP in your <a href="https://www.iprogsms.com/dashboard" target="_blank" rel="noopener">iProg dashboard</a>.</p>
+        <p id="regVerifyMsg" class="auth-msg" hidden></p>
+        <form id="regVerifyForm" class="form-grid auth-form-single" autocomplete="one-time-code">
+          <div class="full">
+            <label for="regOtpCode">Verification code</label>
+            <input
+              id="regOtpCode"
+              name="otp"
+              type="text"
+              inputmode="numeric"
+              autocomplete="one-time-code"
+              required
+              maxlength="8"
+              pattern="[0-9]{4,8}"
+              placeholder="Enter OTP from SMS"
+            >
+          </div>
+          <div class="full">
+            <button class="btn" type="submit" id="regVerifySubmit">Verify &amp; create account</button>
+          </div>
+          <div class="full">
+            <button class="btn btn--outline" type="button" id="regResendBtn">Resend code</button>
+          </div>
+        </form>
+        <p class="note auth-switch">
+          Wrong number? <a href="register.html">Go back to registration</a>.
+        </p>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>Copyright 2026 Elenest Resort. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-config.js"></script>
+  <script src="../js/supabase-client.js"></script>
+  <script src="../js/ui-button-loading.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/otp-verification.js"></script>
+  <script src="../js/header-nav.js?v=20260922-menu2"></script>
+  <script>
+    (function () {
+      var Otp = window.ElenestOtp;
+      var Auth = window.ElenestAuth;
+      var params = new URLSearchParams(window.location.search);
+      var nextPage = params.get("next") || "book.html";
+      var loginAfterRegister =
+        "login.html?registered=1&next=" + encodeURIComponent(nextPage);
+
+      var pending = Otp.getPendingRegistration();
+      var savedPhone = Otp.getSavedPhone();
+
+      if (!pending || !savedPhone) {
+        window.location.replace("register.html?next=" + encodeURIComponent(nextPage));
+        return;
+      }
+
+      var form = document.getElementById("regVerifyForm");
+      var msg = document.getElementById("regVerifyMsg");
+      var lead = document.getElementById("regVerifyLead");
+      var otpInput = document.getElementById("regOtpCode");
+      var submitBtn = document.getElementById("regVerifySubmit");
+      var resendBtn = document.getElementById("regResendBtn");
+
+      if (lead) {
+        lead.textContent =
+          "We sent a verification code to " + savedPhone + ". Enter it below to create your account.";
+      }
+
+      function showMsg(text, isOk) {
+        msg.hidden = false;
+        msg.className = "auth-msg " + (isOk ? "auth-msg--ok" : "auth-msg--err");
+        msg.textContent = text;
+      }
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var BL = window.ElenestButtonLoading;
+        if (BL) BL.set(submitBtn, true);
+        msg.hidden = true;
+
+        Otp.verifyOtp(savedPhone, otpInput ? otpInput.value : "").then(function (verifyResult) {
+          if (!verifyResult.ok) {
+            if (BL) BL.set(submitBtn, false);
+            showMsg(verifyResult.message, false);
+            return;
+          }
+
+          showMsg("Phone verified. Creating your account…", true);
+
+          return Auth.register(pending).then(function (regResult) {
+            if (regResult.ok) {
+              Otp.clearOtpSession();
+              window.location.href = loginAfterRegister;
+              return;
+            }
+            if (BL) BL.set(submitBtn, false);
+            showMsg(regResult.message, false);
+          });
+        });
+      });
+
+      if (resendBtn) {
+        resendBtn.addEventListener("click", function () {
+          var BL = window.ElenestButtonLoading;
+          if (BL) BL.set(resendBtn, true);
+          msg.hidden = true;
+          Otp.sendOtp(savedPhone).then(function (result) {
+            if (BL) BL.set(resendBtn, false);
+            showMsg(
+              result.ok ? "A new code was sent to your phone." : result.message,
+              result.ok
+            );
+          });
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

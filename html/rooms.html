@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Facilities | Elenest Resort</title>
+  <link rel="icon" type="image/png" href="../Images/icon.png">
+  <link rel="stylesheet" href="../css/style.css?v=20260925-fachero1">
+</head>
+<body class="subpage facilities-page">
+  <header>
+    <div class="content flex_space">
+      <div class="logo">
+        <a href="index.html" class="site-logo-link" aria-label="Elenest Resort home">
+          <img class="site-logo" src="../Images/elenest_logo_pink.png" alt="Elenest Event Center">
+        </a>
+      </div>
+      <div class="navlinks">
+        <ul id="menulist" class="site-nav-list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="reviews.html">Reviews</a></li>
+          <li><a class="active" href="rooms.html">Facilities</a></li>
+          <li><a href="policies.html">Policies</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="activities.html">Activities</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+          <li class="role-login-nav" id="roleLoginNav">
+            <a href="login.html" class="role-login-trigger staff-access-btn" id="roleLoginTrigger" aria-label="Sign In">Sign In</a>
+          </li>
+        </ul>
+        <button type="button" class="nav-menu-toggle" id="navMenuToggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="menulist">
+          <span class="nav-menu-toggle__bar" aria-hidden="true"></span>
+          <span class="nav-menu-toggle__bar" aria-hidden="true"></span>
+          <span class="nav-menu-toggle__bar" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Our Facilities</h1>
+      <p>Explore our rooms, cottages, and event hall options with complete photos, capacity counts, and price details.</p>
+    </section>
+
+    <section class="section facilities-tabs-section">
+      <nav class="facilities-tabs" role="tablist" aria-label="Facility type">
+        <button type="button" class="facilities-tab facilities-tab--active" data-facility-tab="rooms" role="tab" aria-selected="true" aria-controls="facilityPanelRooms" id="facilityTabRooms">Rooms</button>
+        <button type="button" class="facilities-tab" data-facility-tab="cottages" role="tab" aria-selected="false" aria-controls="facilityPanelCottages" id="facilityTabCottages">Cottages</button>
+        <button type="button" class="facilities-tab" data-facility-tab="halls" role="tab" aria-selected="false" aria-controls="facilityPanelHalls" id="facilityTabHalls">Event Hall</button>
+      </nav>
+
+      <div class="facilities-tab-panel" id="facilityPanelRooms" data-facility-panel="rooms" role="tabpanel" aria-labelledby="facilityTabRooms">
+        <div id="facilityRoomsGrid" class="grid"></div>
+      </div>
+
+      <div class="facilities-tab-panel" id="facilityPanelCottages" data-facility-panel="cottages" role="tabpanel" aria-labelledby="facilityTabCottages" hidden>
+        <div id="facilityCottagesGrid" class="grid"></div>
+      </div>
+
+      <div class="facilities-tab-panel" id="facilityPanelHalls" data-facility-panel="halls" role="tabpanel" aria-labelledby="facilityTabHalls" hidden>
+        <div id="facilityHallsGrid" class="grid"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>Copyright 2026 Elenest Resort. All rights reserved.</p>
+    </div>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-config.js"></script>
+  <script src="../js/supabase-client.js"></script>
+  <script src="../js/content-store.js?v=20260916-lightbox1"></script>
+  <script src="../js/unit-availability.js?v=20260914-bigroom2"></script>
+  <script src="../js/header-nav.js?v=20260922-menu2"></script>
+  <script src="../js/facilities-page.js?v=20260918-facview9"></script>
+  <script src="../js/role-login.js"></script>
+</body>
+</html>

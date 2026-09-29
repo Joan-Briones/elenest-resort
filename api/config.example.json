@@ -1,0 +1,11 @@
+{
+  "iprog_sms_api_token": "YOUR_IPROG_API_TOKEN",
+  "supabase_url": "https://wstgqfcdpfifkqyrclkx.supabase.co",
+  "supabase_service_role_key": "YOUR_SUPABASE_SECRET_OR_SERVICE_ROLE_KEY",
+  "smtp_host": "smtp.gmail.com",
+  "smtp_port": 465,
+  "smtp_username": "YOUR_GMAIL@gmail.com",
+  "smtp_password": "YOUR_GMAIL_APP_PASSWORD",
+  "smtp_from_name": "Elenest Resort",
+  "smtp_from_email": "YOUR_GMAIL@gmail.com"
+}

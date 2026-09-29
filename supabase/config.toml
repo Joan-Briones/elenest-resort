@@ -1,0 +1,9 @@
+# Supabase local/deploy config for OTP Edge Functions.
+# Deploy: supabase functions deploy send-otp verify-otp
+# Secret:  supabase secrets set IPROG_SMS_API_TOKEN=your_token_here
+
+[functions.send-otp]
+verify_jwt = false
+
+[functions.verify-otp]
+verify_jwt = false

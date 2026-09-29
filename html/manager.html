@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manager Dashboard | Elenest Resort</title>
+  <link rel="icon" type="image/png" href="../Images/icon.png">
+  <link rel="stylesheet" href="../css/style.css?v=20260929-mobile6">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+</head>
+<body class="subpage elenest-role-gated" data-staff-portal="manager" data-required-role="manager">
+  <div id="staffBootLoading" class="staff-boot-loading staff-boot-loading--active" aria-busy="true" aria-live="polite" aria-label="Loading Manager Portal">
+    <div class="staff-boot-loading__card" role="status">
+      <div class="staff-boot-loading__spinner" aria-hidden="true">
+        <span class="staff-boot-loading__ring"></span>
+        <span class="staff-boot-loading__ring staff-boot-loading__ring--soft"></span>
+      </div>
+      <p class="staff-boot-loading__kicker">Elenest Resort</p>
+      <p class="staff-boot-loading__title">Manager Portal</p>
+      <p class="staff-boot-loading__sub">Preparing your workspace</p>
+      <div class="staff-boot-loading__bar" aria-hidden="true"><span></span></div>
+    </div>
+  </div>
+  <header>
+    <div class="content flex_space">
+      <div class="logo">
+        <a href="index.html" class="site-logo-link" aria-label="Elenest Resort home">
+          <img class="site-logo" src="../Images/elenest_logo_pink.png" alt="Elenest Event Center">
+        </a>
+      </div>
+      <div class="navlinks">
+        <ul id="menulist" class="site-nav-list">
+          <li><a href="#section-dashboard">Dashboard</a></li>
+          <li class="admin-nav-dropdown" id="managerNavEventManagement">
+            <button
+              type="button"
+              class="admin-nav-dropdown-toggle"
+              id="managerNavEventToggle"
+              aria-haspopup="true"
+              aria-expanded="false"
+              aria-controls="managerNavEventMenu"
+            >Event Management</button>
+            <div id="managerNavEventMenu" class="admin-nav-dropdown-menu" role="menu">
+              <a href="#section-messages" class="admin-nav-dropdown-item" role="menuitem">Customer Message</a>
+              <a href="#section-content" class="admin-nav-dropdown-item" role="menuitem">Website Content</a>
+              <a href="#section-manage" class="admin-nav-dropdown-item" role="menuitem">Reservation Information</a>
+              <a href="#section-calendar" class="admin-nav-dropdown-item" role="menuitem">Calendar</a>
+              <a href="#section-recommendations" class="admin-nav-dropdown-item" role="menuitem">Recommendation</a>
+            </div>
+          </li>
+          <li><a href="#section-analytics">Analytics</a></li>
+          <li id="staffAuthNav" class="admin-auth-nav">
+            <a
+              id="staffSettingsToggle"
+              href="#"
+              aria-haspopup="true"
+              aria-expanded="false"
+              aria-controls="staffSettingsMenu"
+              hidden
+            >Settings</a>
+            <div id="staffSettingsMenu" class="admin-settings-menu" role="menu" hidden>
+              <button type="button" id="staffMenuProfile" class="admin-settings-item" role="menuitem">
+                Manager Profile
+              </button>
+              <button type="button" id="staffMenuLogout" class="admin-settings-item admin-settings-item--danger" role="menuitem">
+                Logout
+              </button>
+            </div>
+          </li>
+        </ul>
+        <div id="staffHeaderRoleItem" class="staff-header-user" hidden>
+          <div id="staffHeaderRole" class="staff-header-user__inner"></div>
+        </div>
+        <button type="button" class="nav-menu-toggle" id="navMenuToggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="menulist">
+          <span class="nav-menu-toggle__bar" aria-hidden="true"></span>
+          <span class="nav-menu-toggle__bar" aria-hidden="true"></span>
+          <span class="nav-menu-toggle__bar" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="section admin-section" id="section-dashboard">
+      <div class="split-2" style="margin-top: 18px;">
+        <article class="card kpi">
+          <h4 id="managerDashNetIncome">?0</h4>
+          <p>Total net income (approved)</p>
+        </article>
+        <article class="card kpi">
+          <h4 id="managerDashTotalBookings">0</h4>
+          <p>Total reservations</p>
+        </article>
+      </div>
+      <div class="split-2 manager-chart-row">
+        <article class="card manager-chart-card">
+          <div class="manager-chart-card__head">
+            <h3 class="manager-chart-card__title">Booking status</h3>
+            <span class="manager-chart-live" aria-live="polite">Live</span>
+          </div>
+          <p class="manager-chart-card__sub" id="managerDashStatusSub">
+            Share of pending, confirmed, cancelled, and completed bookings from live records.
+          </p>
+          <div class="manager-donut-layout">
+            <canvas id="managerDashStatusChart" width="280" height="220" class="manager-pro-chart manager-donut-chart" aria-label="Booking status donut chart"></canvas>
+            <ul class="manager-donut-legend" id="managerDashStatusLegend" aria-live="polite"></ul>
+          </div>
+          <div class="manager-chart-insights" id="managerDashStatusInsights" aria-live="polite">
+            <h4 class="manager-chart-insights__title">Interpretation</h4>
+            <ul class="manager-chart-insights__list" id="managerDashStatusInsightsList"></ul>
+          </div>
+        </article>
+        <article class="card manager-chart-card">
+          <div class="manager-chart-card__head">
+            <h3 class="manager-chart-card__title">Bookings &amp; revenue</h3>
+            <span class="manager-chart-live" aria-live="polite">Live</span>
+          </div>
+          <p class="manager-chart-card__sub" id="managerDashTrendSub">
+            Monthly reservation counts and confirmed earnings (last 6 months).
+          </p>
+          <div class="manager-chart-legend" aria-label="Trend legend">
+            <span class="manager-chart-legend__item">
+              <span class="manager-chart-legend__swatch manager-chart-legend__swatch--green" aria-hidden="true"></span>
+              Bookings
+            </span>
+            <span class="manager-chart-legend__item">
+              <span class="manager-chart-legend__swatch manager-chart-legend__swatch--pink" aria-hidden="true"></span>
+              Confirmed revenue
+            </span>
+          </div>
+          <div class="manager-chart-wrap">
+            <canvas id="managerDashTrendChart" width="640" height="260" class="manager-pro-chart" aria-label="Bookings and revenue trend chart"></canvas>
+            <div class="manager-chart-tooltip" id="managerDashTrendTip" hidden></div>
+          </div>
+          <div class="manager-chart-insights" id="managerDashTrendInsights" aria-live="polite">
+            <h4 class="manager-chart-insights__title">Interpretation</h4>
+            <ul class="manager-chart-insights__list" id="managerDashTrendInsightsList"></ul>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section admin-section" id="section-messages" hidden>
+      <div class="appointments-strip">
+        <div class="appointments-strip__head">
+          <h2 class="appointments-strip__title">Customer Message</h2>
+        </div>
+      </div>
+      <article class="card manager-messages-card">
+        <div id="managerMessagesList" class="manager-messages-list"></div>
+        <div id="managerMessagesPagination" class="admin-pagination" hidden></div>
+        <p id="managerMessagesEmpty" class="section-lead manager-messages-empty" hidden>No customer messages yet.</p>
+        <p id="managerMessagesStatus" class="auth-msg manager-messages-status" hidden></p>
+      </article>
+    </section>
+
+    <section class="section admin-section" id="section-content" hidden>
+      <div class="appointments-strip">
+        <div class="appointments-strip__head">
+          <h2 class="appointments-strip__title">Website Content</h2>
+        </div>
+        <p class="appointments-strip__lead">
+          Update the words and photos guests see on the website. Choose a tab below, then add or edit items one at a time.
+        </p>
+      </div>
+
+      <nav class="content-mgmt-tabs" role="tablist" aria-label="Website content pages">
+        <button type="button" class="content-mgmt-tab" role="tab" data-content-tab="about" aria-selected="false">About Us</button>
+        <button type="button" class="content-mgmt-tab" role="tab" data-content-tab="facilities" aria-selected="false">Facilities</button>
+        <button type="button" class="content-mgmt-tab" role="tab" data-content-tab="policies" aria-selected="false">Policies</button>
+        <button type="button" class="content-mgmt-tab" role="tab" data-content-tab="faqs" aria-selected="false">FAQ</button>
+        <button type="button" class="content-mgmt-tab" role="tab" data-content-tab="activities" aria-selected="false">Activities</button>
+        <button type="button" class="content-mgmt-tab" role="tab" data-content-tab="events" aria-selected="false">Events</button>
+      </nav>
+
+      <div class="content-mgmt-panels">
+        <div class="content-mgmt-panel" data-content-panel="about" hidden>
+          <article class="card content-mgmt-card">
+            <h3 class="content-mgmt-card__title">About page text</h3>
+            <p class="content-mgmt-card__lead">Fill in the main headings and short introductions shown on the About Us page.</p>
+            <form id="cmAboutHeroForm" class="content-mgmt-form" autocomplete="off">
+              <div class="manager-msg-table-wrap">
+                <table class="manager-msg-table">
+                  <thead>
+                    <tr>
+                      <th>Main heading</th>
+                      <th>Short introduction</th>
+                      <th>Awards section intro</th>
+                      <th>Location section intro</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="manager-msg-row">
+                      <td><input id="cmAboutHeroTitle" type="text" required placeholder="e.g. Welcome to Elenest Resort"></td>
+                      <td><input id="cmAboutHeroLead" type="text" required placeholder="A short welcome message"></td>
+                      <td><input id="cmAboutCredLead" type="text" placeholder="Optional short intro"></td>
+                      <td><input id="cmAboutFindLead" type="text" placeholder="Optional short intro"></td>
+                    </tr>
+                    <tr class="manager-msg-row">
+                      <th>Google Maps link</th>
+                      <td colspan="3"><input id="cmAboutMapEmbed" type="text" placeholder="Paste the Google Maps link here (optional)"></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="content-mgmt-actions">
+                <button type="submit" class="btn">Save Changes</button>
+                <p id="cmAboutHeroMsg" class="auth-msg" hidden></p>
+              </div>
+            </form>
+          </article>
+          <article class="card content-mgmt-card">
+            <h3 class="content-mgmt-card__title">Stories &amp; highlights</h3>
+            <p class="content-mgmt-card__lead">Add a story, mission, vision, or award/highlight shown on the About Us page.</p>
+            <form id="cmAboutCardForm" class="content-mgmt-form" autocomplete="off">
+              <div class="manager-msg-table-wrap">
+                <table class="manager-msg-table">
+                  <thead>
+                    <tr>
+                      <th>What to add</th>
+                      <th>Title</th>
+                      <th>Details</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="manager-msg-row">
+                      <td>
+                        <select id="cmAboutCardKind">
+                          <option value="story">Story, mission, or vision</option>
+                          <option value="credential">Award or highlight</option>
+                        </select>
+                      </td>
+                      <td><input id="cmAboutCardTitle" type="text" required placeholder="Short title"></td>
+                      <td><input id="cmAboutCardBody" type="text" required placeholder="Write the details here"></td>
+                    </tr>
+                  </tbody>
+                  <tbody id="cmAboutCardImageRow" hidden>
+                    <tr>
+                      <th>Photo link (optional)</th>
+                      <th>Upload photo</th>
+                      <th>Short photo description</th>
+                    </tr>
+                    <tr class="manager-msg-row">
+                      <td><input id="cmAboutCardImage" type="text" placeholder="Paste a photo link, or upload below"></td>
+                      <td><input id="cmAboutCardImageUpload" type="file" accept="image/*"></td>
+                      <td><input id="cmAboutCardImageAlt" type="text" placeholder="e.g. Resort award plaque"></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="content-mgmt-actions">
+                <button type="submit" class="btn" id="cmAboutCardSubmit">Add Item</button>
+                <button type="button" class="btn btn--outline" id="cmAboutCardCancel">Clear Form</button>
+                <p id="cmAboutCardMsg" class="auth-msg" hidden></p>
+              </div>
+            </form>
+              <h4 class="content-mgmt-card__title">Saved stories</h4>
+              <div id="cmAboutStoryList"></div>
+              <h4 class="content-mgmt-card__title">Saved awards &amp; highlights</h4>
+              <div id="cmAboutCredList"></div>
+          </article>
+        </div>
+
+        <div class="content-mgmt-panel" data-content-panel="faqs" hidden>
+          <article class="card content-mgmt-card">
+            <h3 class="content-mgmt-card__title">Frequently Asked Questions (FAQ)</h3>
+            <p class="content-mgmt-card__lead">Add or edit common questions guests ask. These appear on the FAQ page of the website.</p>
+            <form id="cmFaqForm" class="content-mgmt-form" autocomplete="off">
+              <input type="hidden" id="cmFaqEditId" value="">
+              <div class="manager-msg-table-wrap">
+                <table class="manager-msg-table">
+                  <thead>
+                    <tr>
+                      <th>Question</th>
+                      <th>Answer</th>
+                      <th>Order on page</th>
+                      <th>Button text (optional)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="manager-msg-row">
+                      <td><input id="cmFaqQuestion" type="text" required placeholder="e.g. What time is check-in?"></td>
+                      <td><input id="cmFaqAnswer" type="text" required placeholder="Write a clear answer"></td>
+                      <td><input id="cmFaqSort" type="number" min="1" step="1" placeholder="1"></td>
+                      <td><input id="cmFaqCtaLabel" type="text" placeholder="e.g. Book now"></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="content-mgmt-actions">
+                <button type="submit" class="btn" id="cmFaqSubmit">Add FAQ</button>
+                <button type="button" class="btn btn--outline" id="cmFaqCancel" hidden>Cancel</button>
+                <p id="cmFaqMsg" class="auth-msg" hidden></p>
+              </div>
+            </form>
+            <h3 class="content-mgmt-card__title">Saved FAQs</h3>
+            <div id="cmFaqList"></div>
+          </article>
+        </div>
+
+        <div class="content-mgmt-panel" data-content-panel="activities" hidden>
+          <article class="card content-mgmt-card">
+            <h3 class="content-mgmt-card__title">Add Activity</h3>
+            <p class="content-mgmt-card__lead">Add an activity or promotion guests will see on the Activities page. You can also send them a notice.</p>
+            <form id="cmActivityForm" class="content-mgmt-form" autocomplete="off">
+              <input type="hidden" id="cmActivityEditId" value="">
+              <div class="manager-msg-table-wrap">
+                <table class="manager-msg-table">
+                  <thead>
+                    <tr>
+                      <th>Activity type</th>
+                      <th>Title</th>
+                      <th>Date or validity</th>
+                      <th>Small label</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="manager-msg-row">
+                      <td><input id="cmActivityType" type="text" placeholder="Wedding, Birthday, Corporate"></td>
+                      <td><input id="cmActivityTitle" type="text" required placeholder="Name of the activity"></td>
+                      <td><input id="cmActivityDate" type="text" placeholder="e.g. March 2025"></td>
+                      <td><input id="cmActivityBadge" type="text" placeholder="e.g. Promotion"></td>
+                    </tr>
+                    <tr class="manager-msg-row">
+                      <th>Description</th>
+                      <td colspan="3"><input id="cmActivityDescription" type="text" required placeholder="Tell guests what this activity is about"></td>
+                    </tr>
+                    <tr>
+                      <th>Photo link (optional)</th>
+                      <th>Upload photo</th>
+                      <th>Short photo description</th>
+                      <th>Notify guests</th>
+                    </tr>
+                    <tr class="manager-msg-row">
+                      <td><input id="cmActivityImage" type="text" placeholder="Paste a photo link, or upload"></td>
+                      <td><input id="cmActivityImageUpload" type="file" accept="image/*"></td>
+                      <td><input id="cmActivityImageAlt" type="text" placeholder="e.g. Pool party photo"></td>
+                      <td class="content-mgmt-check">
+                        <label class="admin-toolbar__note" for="cmActivityNotify">
+                          <input type="checkbox" id="cmActivityNotify" value="1"> Send notice to guests
+                        </label>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="content-mgmt-actions">
+                <button type="submit" class="btn" id="cmActivitySubmit">Add Activity</button>
+                <button type="button" class="btn btn--outline" id="cmActivityCancel" hidden>Cancel</button>
+                <p id="cmActivityMsg" class="auth-msg" hidden></p>
+              </div>
+            </form>
+            <h3 class="content-mgmt-card__title">Saved activities</h3>
+            <div id="cmActivitiesList"></div>
+          </article>
+          <article class="card content-mgmt-card">
+            <h3 class="content-mgmt-card__title">Send a quick offer</h3>
+            <p class="content-mgmt-card__lead">Write a short offer notice. Guests will get a notification automatically when you save it.</p>
+            <form id="managerPromotionForm" class="content-mgmt-form" autocomplete="off">
+              <input type="hidden" id="managerPromotionEditId" value="">
+              <div class="manager-msg-table-wrap">
+                <table class="manager-msg-table">
+                  <thead>
+                    <tr>
+                      <th>Offer title</th>
+                      <th>Offer details</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="manager-msg-row">
+                      <td><input id="managerPromotionTitle" type="text" required placeholder="e.g. Summer stay discount"></td>
+                      <td><input id="managerPromotionMessage" type="text" required placeholder="Describe the offer..."></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="content-mgmt-actions">
+                <button type="submit" class="btn" id="managerPromotionSubmitBtn">Add Offer</button>
+                <button type="button" class="btn btn--outline" id="managerPromotionCancelBtn" hidden>Cancel</button>
+                <p id="managerPromotionMsg" class="auth-msg" hidden></p>
+              </div>
+            </form>
+            <h3 class="content-mgmt-card__title">Saved offers</h3>
+            <div id="managerPromotionsList"></div>
+          </article>
+        </div>
+
+        <div class="content-mgmt-panel" data-content-panel="events" hidden>
+          <article class="card content-mgmt-card">
+            <h3 class="content-mgmt-card__title">Add Past Event</h3>
+            <p class="content-mgmt-card__lead">Add a past celebration or event guests will see on the Events page.</p>
+            <form id="cmEventForm" class="content-mgmt-form" autocomplete="off">
+              <input type="hidden" id="cmEventEditId" value="">
+              <div class="manager-msg-table-wrap">
+                <table class="manager-msg-table">
+                  <thead>
+                    <tr>
+                      <th>Event type</th>
+                      <th>Title</th>
+                      <th>When it happened</th>
+                      <th>Small label</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="manager-msg-row">
+                      <td><input id="cmEventType" type="text" placeholder="Wedding, Birthday, Corporate"></td>
+                      <td><input id="cmEventTitle" type="text" required placeholder="Name of the event"></td>
+                      <td><input id="cmEventDate" type="text" placeholder="e.g. March 2025"></td>
+                      <td><input id="cmEventBadge" type="text" placeholder="e.g. Past event"></td>
+                    </tr>
+                    <tr class="manager-msg-row">
+                      <th>Description</th>
+                      <td colspan="3"><input id="cmEventDescription" type="text" required placeholder="Tell guests about this event"></td>
+                    </tr>
+                    <tr>
+                      <th>Photo link (optional)</th>
+                      <th>Upload photo</th>
+                      <th colspan="2">Short photo description</th>
+                    </tr>
+                    <tr class="manager-msg-row">
+                      <td><input id="cmEventImage" type="text" placeholder="Paste a photo link, or upload"></td>
+                      <td><input id="cmEventImageUpload" type="file" accept="image/*"></td>
+                      <td colspan="2"><input id="cmEventImageAlt" type="text" placeholder="e.g. Wedding reception photo"></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="content-mgmt-actions">
+                <button type="submit" class="btn" id="cmEventSubmit">Add Event</button>
+                <button type="button" class="btn btn--outline" id="cmEventCancel" hidden>Cancel</button>
+                <p id="cmEventMsg" class="auth-msg" hidden></p>
+              </div>
+            </form>
+            <h3 class="content-mgmt-card__title">Saved events</h3>
+            <div id="cmEventsList"></div>
+          </article>
+          <article class="card content-mgmt-card">
+            <h3 class="content-mgmt-card__title">Send a quick event notice</h3>
+            <p class="content-mgmt-card__lead">Write a short event notice. Guests will get a notification automatically when you save it.</p>
+            <form id="managerEventForm" class="content-mgmt-form" autocomplete="off">
+              <input type="hidden" id="managerEventEditId" value="">
+              <div class="manager-msg-table-wrap">
+                <table class="manager-msg-table">
+                  <thead>
+                    <tr>
+                      <th>Event title</th>
+                      <th>Event date</th>
+                      <th>Details</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="manager-msg-row">
+                      <td><input id="managerEventTitle" type="text" required placeholder="e.g. Pool party weekend"></td>
+                      <td><input id="managerEventDate" type="date"></td>
+                      <td><input id="managerEventMessage" type="text" required placeholder="What guests should know..."></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="content-mgmt-actions">
+                <button type="submit" class="btn" id="managerEventSubmitBtn">Add Notice</button>
+                <button type="button" class="btn btn--outline" id="managerEventCancelBtn" hidden>Cancel</button>
+                <p id="managerEventMsg" class="auth-msg" hidden></p>
+              </div>
+            </form>
+            <h3 class="content-mgmt-card__title">Saved notices</h3>
+            <div id="managerEventsList"></div>
+          </article>
+        </div>
+
+        <div class="content-mgmt-panel" data-content-panel="facilities" hidden>
+          <div class="card content-mgmt-card">
+            <h3 class="content-mgmt-card__title">Add Facility</h3>
+            <p class="content-mgmt-card__lead">Add or update a Room, Cottage, or Event Hall. Guests will see these on the Facilities page.</p>
+        <form id="managerRoomCatalogForm" class="content-mgmt-form" autocomplete="off">
+          <div class="manager-msg-table-wrap">
+            <table class="manager-msg-table">
+              <thead>
+                <tr>
+                  <th>Facility type</th>
+                  <th>Room size</th>
+                  <th>Facility name</th>
+                  <th>Price (PHP)</th>
+                  <th>Charged as</th>
+                  <th>Max guests</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="manager-msg-row">
+                  <td>
+                    <select id="managerRoomType" required>
+                      <option value="room">Room</option>
+                      <option value="cottage">Cottage</option>
+                      <option value="hall">Event Hall</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select id="managerRoomKind">
+                      <option value="">Select size</option>
+                      <option value="big">Big room</option>
+                      <option value="small">Small room</option>
+                      <option value="couple">Couple room</option>
+                    </select>
+                  </td>
+                  <td><input id="managerRoomName" type="text" required placeholder="e.g. Deluxe Family Room"></td>
+                  <td><input id="managerRoomPrice" type="number" min="0" step="1" required placeholder="e.g. 3500"></td>
+                  <td>
+                    <select id="managerRoomPriceUnit" required>
+                      <option value="night">Per night</option>
+                      <option value="day">Per day</option>
+                      <option value="event">Per event</option>
+                    </select>
+                  </td>
+                  <td><input id="managerRoomCapacity" type="number" min="1" step="1" placeholder="e.g. 4"></td>
+                </tr>
+                <tr class="manager-msg-row" id="managerRoomCapacityMinWrap" hidden>
+                  <th>Minimum guests (for halls)</th>
+                  <td><input id="managerRoomCapacityMin" type="number" min="1" step="1" placeholder="e.g. 60"></td>
+                  <td colspan="4"></td>
+                </tr>
+                <tr class="manager-msg-row">
+                  <td colspan="6">
+                    <div class="facility-photos-field">
+                      <label class="facility-photos-field__label" for="managerRoomImageUpload">Photos (add 5 or more if you can)</label>
+                      <div class="facility-photos-field__row">
+                        <input id="managerRoomImage" type="text" placeholder="Or paste a photo link here">
+                        <button type="button" class="btn btn--outline" id="managerRoomImageAddUrl">Add Photo Link</button>
+                        <input id="managerRoomImageUpload" type="file" accept="image/*" multiple>
+                      </div>
+                      <p class="facility-photos-field__hint">Use Choose File to pick photos from your computer. You can select several at once. Guests can swipe through them on the Facilities page.</p>
+                      <div id="managerRoomImagePreview" class="facility-photos-preview" aria-live="polite"></div>
+                    </div>
+                  </td>
+                </tr>
+                <tr class="manager-msg-row">
+                  <th>Short description</th>
+                  <td colspan="5"><input id="managerRoomDescription" type="text" required placeholder="Describe this facility in a few words"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="content-mgmt-actions">
+            <button class="btn" id="managerRoomSubmitBtn" type="submit">Add Facility</button>
+            <p id="managerRoomCatalogMsg" class="auth-msg" hidden></p>
+          </div>
+        </form>
+        <h3 class="content-mgmt-card__title">Saved facilities</h3>
+        <div id="managerRoomCatalogList" class="admin-users-list" style="margin-top: 14px;"></div>
+        <div id="managerRoomCatalogPagination" class="admin-pagination" hidden></div>
+      </div>
+        </div>
+
+        <div class="content-mgmt-panel" data-content-panel="policies" hidden>
+          <div class="card content-mgmt-card">
+            <h3 class="content-mgmt-card__title">Add Policy</h3>
+            <p class="content-mgmt-card__lead">Add or update a house rule or pool rule. Guests will see these on the Policies page.</p>
+            <form id="managerPolicyForm" class="content-mgmt-form" autocomplete="off">
+              <div class="manager-msg-table-wrap">
+                <table class="manager-msg-table">
+                  <thead>
+                    <tr>
+                      <th>Policy type</th>
+                      <th>Policy title</th>
+                      <th>Photo link (optional)</th>
+                      <th>Upload photo</th>
+                      <th>Details</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="manager-msg-row">
+                      <td>
+                        <select id="managerPolicyKind" required>
+                          <option value="general">General policy</option>
+                          <option value="pool">Swimming pool rules</option>
+                        </select>
+                      </td>
+                      <td><input id="managerPolicyTitle" type="text" required placeholder="e.g. Check-in &amp; Check-out"></td>
+                      <td><input id="managerPolicyImage" type="text" placeholder="Paste a photo link, or upload"></td>
+                      <td><input id="managerPolicyImageUpload" type="file" accept="image/*"></td>
+                      <td><input id="managerPolicyDescription" type="text" required placeholder="Write the policy details"></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="content-mgmt-actions">
+                <button class="btn" id="managerPolicySubmitBtn" type="submit">Add Policy</button>
+                <p id="managerPolicyMsg" class="auth-msg" hidden></p>
+              </div>
+            </form>
+            <h3 class="content-mgmt-card__title">Saved policies</h3>
+            <div id="managerPolicyList" class="admin-users-list" style="margin-top: 14px;"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section admin-section" id="section-manage" hidden>
+      <div class="appointments-strip">
+        <div class="appointments-strip__head appointments-strip__head--split">
+          <h2 class="appointments-strip__title">Reservation information</h2>
+          <div class="appointments-strip__tools">
+            <label for="managerManageSearch" class="admin-toolbar__note">Search</label>
+            <input id="managerManageSearch" type="search" placeholder="Name, email, record key, ID" autocomplete="off" style="max-width: 260px;">
+          </div>
+        </div>
+      </div>
+      <article class="card manager-messages-card">
+        <div id="managerManageList" class="manager-messages-list"></div>
+        <div id="managerManagePagination" class="admin-pagination" hidden></div>
+        <p id="managerManageEmpty" class="section-lead manager-messages-empty" hidden>No reservations found.</p>
+      </article>
+    </section>
+
+    <section class="section admin-section" id="section-calendar" hidden>
+      <div class="appointments-strip">
+        <div class="appointments-strip__head">
+          <h2 class="appointments-strip__title">Calendar management</h2>
+        </div>
+        <p class="appointments-strip__lead">
+          Select a date, then use <strong>Block</strong> / <strong>Unblock</strong>. Owner approval is required.
+        </p>
+      </div>
+
+      <div class="card manager-cal-panel">
+        <div class="manager-cal-selected">
+          <p class="manager-cal-selected__info">
+            Selected: <strong id="managerSelectedDateLabel">…</strong>
+            <span id="managerSelectedDateStatus" class="manager-cal-selected__status">…</span>
+          </p>
+          <div class="appointments-strip__tools manager-cal-actions">
+            <button type="button" class="btn btn--outline" id="managerBlockBtn">Block</button>
+            <button type="button" class="btn btn--outline" id="managerUnblockBtn">Unblock</button>
+            <button type="button" class="btn btn--outline" id="managerClearSelectedDate">Clear</button>
+          </div>
+        </div>
+
+        <div class="admin-dash-cal-layout manager-cal-layout">
+          <div class="admin-dash-cal-main">
+            <div class="book-flow-calendar-head admin-dash-cal-head manager-cal-head">
+              <button type="button" class="book-flow-cal-nav" id="managerCalPrev" aria-label="Previous month">&lsaquo;</button>
+              <h4 class="book-flow-cal-month" id="managerCalMonthLabel"></h4>
+              <button type="button" class="book-flow-cal-nav" id="managerCalNext" aria-label="Next month">&rsaquo;</button>
+            </div>
+            <div id="managerCalendarHost" class="book-flow-calendar manager-cal-grid admin-dash-cal-host" role="grid" aria-label="Manager calendar"></div>
+          </div>
+
+          <aside class="admin-dash-cal-notes manager-cal-notes" aria-label="Calendar notes">
+            <h3 class="admin-dash-cal-notes__title">Calendar Notes</h3>
+            <ul class="admin-dash-cal-legend">
+              <li>
+                <span class="avail-legend__swatch avail-legend__swatch--available" aria-hidden="true"></span>
+                <span class="admin-dash-cal-legend__text">
+                  <strong>Available</strong>
+                  <span>Open for new bookings.</span>
+                </span>
+              </li>
+              <li>
+                <span class="avail-legend__swatch avail-legend__swatch--booked" aria-hidden="true"></span>
+                <span class="admin-dash-cal-legend__text">
+                  <strong>Booked</strong>
+                  <span>Reserved by a guest stay — gray and not available to book.</span>
+                </span>
+              </li>
+              <li>
+                <span class="avail-legend__swatch avail-legend__swatch--unavailable" aria-hidden="true"></span>
+                <span class="admin-dash-cal-legend__text">
+                  <strong>Closed</strong>
+                  <span>Blocked on the official calendar.</span>
+                </span>
+              </li>
+            </ul>
+            <p class="admin-dash-cal-notes__hint">Block and Unblock send a request. Booked dates cannot be requested.</p>
+          </aside>
+        </div>
+      </div>
+
+      <div class="card manager-appt-panel">
+        <div class="manager-appt-panel__head">
+          <h3 class="manager-appt-panel__title">Appointment schedules</h3>
+        </div>
+        <div id="managerAppointmentsList" class="manager-appt-list"></div>
+        <p id="managerAppointmentsEmpty" class="section-lead manager-appt-empty" hidden>
+          Select a date to view appointments.
+        </p>
+      </div>
+
+      <div class="card admin-payment-feature-card" id="managerCalendarRequestsCard">
+        <div class="admin-status-group-head">
+          <h3 class="admin-pay-table-title">Your calendar requests</h3>
+          <div class="admin-pay-table-head-actions">
+            <button type="button" class="btn btn--outline btn--small" id="managerCalendarRequestsRefresh">Refresh</button>
+          </div>
+        </div>
+        <p class="admin-pay-table-lead">
+          Block and Unblock requests wait for Owner approval. Rejected requests leave the date unchanged.
+        </p>
+        <div id="managerCalendarRequestsList" class="admin-payment-verification-list"></div>
+        <div id="managerCalendarRequestsPagination" class="admin-pagination" hidden></div>
+      </div>
+    </section>
+
+    <section class="section admin-section" id="section-analytics" hidden>
+      <div class="appointments-strip">
+        <div class="appointments-strip__head appointments-strip__head--split">
+          <div class="manager-report-heading">
+            <h2 class="appointments-strip__title">Analytics &amp; Reports</h2>
+            <p class="manager-report-live" id="managerReportLiveStamp">
+              <span class="manager-report-live__dot" aria-hidden="true"></span>
+              <span id="managerReportLiveStampText">Connecting to live records…</span>
+            </p>
+          </div>
+          <div class="appointments-strip__tools manager-report-tools">
+            <label class="manager-report-tools__field">
+              <span>Period</span>
+              <select id="managerReportPreset" aria-label="Report period">
+                <option value="month">This month</option>
+                <option value="last6">Last 6 months</option>
+                <option value="ytd">Year to date</option>
+                <option value="all">All records</option>
+                <option value="custom">Custom range</option>
+              </select>
+            </label>
+            <label class="manager-report-tools__field">
+              <span>From</span>
+              <input id="managerReportFrom" type="date" aria-label="Report start date">
+            </label>
+            <label class="manager-report-tools__field">
+              <span>To</span>
+              <input id="managerReportTo" type="date" aria-label="Report end date">
+            </label>
+            <button type="button" class="btn btn--outline" id="managerApplyReportRange">
+              Apply range
+            </button>
+            <button type="button" class="btn btn--outline admin-refresh-btn" id="managerRefreshAnalytics">
+              Refresh
+            </button>
+            <button type="button" class="btn btn--outline" id="managerPrintReport">
+              Print report
+            </button>
+            <button type="button" class="btn btn--outline admin-refresh-btn" id="managerDownloadReport">
+              Download JSON report
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="split-2">
+        <article class="card kpi">
+          <h4 id="managerKpiMonthlyBookings">0</h4>
+          <p id="managerKpiBookingsLabel">Bookings this month</p>
+        </article>
+        <article class="card kpi">
+          <h4 id="managerKpiMonthlyApproved">0</h4>
+          <p id="managerKpiApprovedLabel">Approved this month</p>
+        </article>
+      </div>
+      <div class="split-2" style="margin-top: 18px;">
+        <article class="card kpi">
+          <h4 id="managerKpiMonthlyIncome">?0</h4>
+          <p id="managerKpiPeriodIncomeLabel">Monthly income (approved)</p>
+        </article>
+        <article class="card kpi">
+          <h4 id="managerKpiTotalIncome">?0</h4>
+          <p id="managerKpiTotalIncomeLabel">Total income (approved)</p>
+        </article>
+      </div>
+      <article class="card manager-report-card">
+        <h3 class="manager-report-card__title">Report summary</h3>
+        <div id="managerReportSummary" class="manager-report-summary">
+          <div class="manager-report-summary__empty">No report data yet.</div>
+        </div>
+      </article>
+
+      <div class="admin-app manager-admin-charts-mirror">
+        <div class="admin-reports-grid" id="managerReportsGrid">
+          <article class="card admin-report-chart-card">
+            <h3 class="admin-report-card-title">Booking trends</h3>
+            <p class="booking-card__sub admin-report-chart-sub">Reservations by month (last 12 months).</p>
+            <div class="admin-report-chart-legend" aria-label="Chart legend">
+              <span class="admin-report-chart-legend__item">
+                <span class="admin-report-chart-legend__swatch admin-report-chart-legend__swatch--green" aria-hidden="true"></span>
+                Reservations
+              </span>
+            </div>
+            <div class="admin-report-chart-wrap">
+              <canvas id="managerReportTrendChart" width="640" height="200" class="admin-pro-chart" aria-label="Booking trends line chart"></canvas>
+              <div class="admin-report-chart-months" id="managerReportTrendMonths" aria-hidden="true"></div>
+              <div class="admin-report-chart-tooltip" id="managerReportTrendTip" hidden></div>
+            </div>
+            <div class="admin-report-insights" id="managerReportTrendInsights" aria-live="polite">
+              <h4 class="admin-report-insights__title">Interpretation</h4>
+              <ul class="admin-report-insights__list" id="managerReportTrendInsightsList"></ul>
+            </div>
+          </article>
+
+          <article class="card admin-report-chart-card">
+            <h3 class="admin-report-card-title" id="managerReportStatusChartTitle">Booking status</h3>
+            <p class="booking-card__sub admin-report-chart-sub" id="managerReportStatusSub">
+              Share of pending, confirmed, and cancelled bookings.
+            </p>
+            <div class="admin-report-donut-layout">
+              <canvas id="managerReportStatusChart" width="280" height="200" class="admin-pro-chart admin-report-donut-chart" aria-label="Booking status donut chart"></canvas>
+              <ul class="admin-report-donut-legend" id="managerReportStatusLegend" aria-live="polite"></ul>
+            </div>
+          </article>
+
+          <article class="card admin-report-chart-card">
+            <h3 class="admin-report-card-title">Facility usage</h3>
+            <p class="booking-card__sub admin-report-chart-sub">Bookings by facility category from reservation records.</p>
+            <canvas id="managerReportFacilityChart" width="640" height="220" class="admin-pro-chart" aria-label="Facility usage bar chart"></canvas>
+          </article>
+
+          <article class="card admin-report-chart-card">
+            <h3 class="admin-report-card-title">Revenue</h3>
+            <p class="booking-card__sub admin-report-chart-sub" id="managerReportRevenueSub">Confirmed earnings by month (last 12 months).</p>
+            <div class="admin-report-chart-legend" aria-label="Revenue legend">
+              <span class="admin-report-chart-legend__item">
+                <span class="admin-report-chart-legend__swatch admin-report-chart-legend__swatch--pink" aria-hidden="true"></span>
+                Confirmed revenue
+              </span>
+            </div>
+            <div class="admin-report-chart-wrap admin-report-chart-wrap--revenue">
+              <canvas id="managerReportRevenueChart" width="640" height="240" class="admin-pro-chart" aria-label="Revenue bar chart"></canvas>
+              <div class="admin-report-chart-tooltip" id="managerReportRevenueTip" hidden></div>
+            </div>
+          </article>
+
+          <article class="card admin-report-chart-card admin-report-reviews-card" id="managerReportGuestReviewsCard">
+            <div class="admin-report-card-head">
+              <h3 class="admin-report-card-title">Guest Reviews</h3>
+              <span class="manager-chart-live" aria-live="polite">Live</span>
+            </div>
+            <p class="booking-card__sub admin-report-chart-sub" id="managerReportReviewsSub">
+              Live from guest feedback in the database.
+            </p>
+            <div class="admin-report-reviews-kpis" aria-live="polite">
+              <div class="admin-report-reviews-kpi">
+                <strong id="managerReportReviewsAvg">…</strong>
+                <hr>
+                <span>Average rating</span>
+              </div>
+              <div class="admin-report-reviews-kpi">
+                <strong id="managerReportReviewsPos">…</strong>
+                <hr>
+                <span>Would recommend</span>
+              </div>
+              <div class="admin-report-reviews-kpi">
+                <strong id="managerReportReviewsTotal">0</strong>
+                <hr>
+                <span>Total reviews</span>
+              </div>
+            </div>
+            <div class="admin-report-reviews-bars">
+              <div class="sentiment-row admin-report-sentiment-row">
+                <label class="admin-sentiment-label">Positive</label>
+                <div class="sentiment-bar"><span class="positive" id="managerReportBarPos" style="width: 0%;"></span></div>
+                <strong id="managerReportPctPos">0%</strong>
+              </div>
+              <div class="sentiment-row admin-report-sentiment-row">
+                <label class="admin-sentiment-label">Negative</label>
+                <div class="sentiment-bar"><span class="negative" id="managerReportBarNeg" style="width: 0%;"></span></div>
+                <strong id="managerReportPctNeg">0%</strong>
+              </div>
+              <div class="sentiment-row admin-report-sentiment-row" style="margin-bottom: 0;">
+                <label class="admin-sentiment-label">Neutral</label>
+                <div class="sentiment-bar"><span class="neutral" id="managerReportBarNeu" style="width: 0%;"></span></div>
+                <strong id="managerReportPctNeu">0%</strong>
+              </div>
+            </div>
+            <div class="admin-report-reviews-chart-block">
+              <div class="admin-report-reviews-chart-head">
+                <p class="admin-report-reviews-chart-title">Composition over time</p>
+                <div class="admin-report-chart-legend admin-report-reviews-legend" aria-label="Review sentiment legend">
+                  <span class="admin-report-chart-legend__item">
+                    <span class="admin-report-chart-legend__swatch admin-report-chart-legend__swatch--pos" aria-hidden="true"></span>
+                    Positive
+                  </span>
+                  <span class="admin-report-chart-legend__item">
+                    <span class="admin-report-chart-legend__swatch admin-report-chart-legend__swatch--neu" aria-hidden="true"></span>
+                    Neutral
+                  </span>
+                  <span class="admin-report-chart-legend__item">
+                    <span class="admin-report-chart-legend__swatch admin-report-chart-legend__swatch--neg" aria-hidden="true"></span>
+                    Negative
+                  </span>
+                </div>
+              </div>
+              <div class="admin-report-chart-wrap admin-report-reviews-chart-wrap">
+                <canvas
+                  id="managerReportReviewsChart"
+                  width="640"
+                  height="210"
+                  class="admin-pro-chart admin-report-reviews-chart"
+                  aria-label="Guest reviews composition over time"
+                ></canvas>
+                <div class="admin-report-chart-tooltip" id="managerReportReviewsTip" hidden></div>
+              </div>
+            </div>
+          </article>
+
+          <article class="card admin-model-eval admin-report-chart-card" id="managerModelEvaluation"></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section admin-section" id="section-recommendations" hidden>
+      <div class="appointments-strip manager-rec-strip">
+        <div class="appointments-strip__head">
+          <h2 class="appointments-strip__title">Recommendations</h2>
+        </div>
+        <div class="card manager-rec-panel">
+          <div id="managerRecommendationsList" class="manager-rec-grid"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="managerPrintSheet" class="manager-print-sheet" hidden aria-hidden="true"></div>
+
+  <div id="staffProfileOverlay" class="admin-settings-overlay" hidden>
+    <div class="admin-settings-modal" role="dialog" aria-modal="true" aria-labelledby="staffProfileTitle">
+      <h3 id="staffProfileTitle">Manager Profile</h3>
+
+      <form id="staffProfileForm" class="form-grid" autocomplete="off">
+        <div class="full">
+          <label for="staffProfileName">Name</label>
+          <input id="staffProfileName" type="text" required autocomplete="name" placeholder="Full name">
+        </div>
+        <div class="full">
+          <label for="staffProfileEmail">Email</label>
+          <input id="staffProfileEmail" type="email" required autocomplete="email" placeholder="manager@example.com">
+        </div>
+        <div class="full">
+          <button class="btn" type="submit">Save changes</button>
+          <p id="staffProfileMsg" class="auth-msg" hidden></p>
+        </div>
+      </form>
+
+      <div class="admin-settings-modal__actions">
+        <button type="button" id="staffProfileCloseBtn" class="btn btn--outline">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">
+      <p>Copyright 2026 Elenest Resort. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-config.js"></script>
+  <script src="../js/supabase-client.js"></script>
+  <script src="../js/ui-button-loading.js"></script>
+  <script src="../js/elenest-errors.js?v=20260922-ux1"></script>
+  <script src="../js/auth.js?v=20260922-ux3"></script>
+  <script src="../js/access-control.js?v=20260918-role2"></script>
+  <script src="../js/payment-flow.js?v=20260913-icons1"></script>
+  <script src="../js/historical-data.js?v=20260922-ux1"></script>
+  <script src="../js/bookings.js?v=20260929-queue1"></script>
+  <script src="../js/notifications.js?v=20260927-review1"></script>
+  <script src="../js/staff-notifications-ui.js?v=20260916-notifread1"></script>
+  <script src="../js/guest-feedback.js?v=20260927-review1"></script>
+  <script src="../js/contact-messages.js?v=customer-messages-2"></script>
+  <script src="../js/content-store.js?v=20260911-facphotos1"></script>
+  <script src="../js/unit-availability.js?v=20260917-fast1"></script>
+  <script src="../js/elenest-availability.js?v=20260908-calacl1"></script>
+  <script src="../js/elenest-calendar-widget.js?v=20260922-ux2"></script>
+  <script src="../js/calendar-access.js?v=20260922-ux2"></script>
+  <script src="../js/activity-logs.js?v=20260917-actlog1"></script>
+  <script src="../js/staff-portal.js?v=20260911-mgrprofile2"></script>
+  <script src="../js/cms-marketing.js?v=20260917-cms-plain1"></script>
+  <script src="../js/content-management.js?v=20260917-faq1"></script>
+  <script src="../js/model-evaluation.js?v=20260929-pa1"></script>
+  <script src="../js/staff-boot-loading.js?v=20260918-bootfix1"></script>
+  <script src="../js/manager.js?v=20260927-review1"></script>
+  <script src="../js/mobile-tables.js?v=20260929-mobile7"></script>
+
+  <div id="managerEditOverlay" class="admin-settings-overlay" hidden>
+    <div class="admin-settings-modal manager-edit-modal" role="dialog" aria-modal="true" aria-labelledby="managerEditTitle">
+      <div class="manager-edit-modal__head">
+        <div>
+          <h3 id="managerEditTitle" class="manager-edit-modal__title">Edit reservation</h3>
+          <p class="manager-edit-modal__sub">Update guest details, stay dates, facilities, and notes.</p>
+        </div>
+        <button type="button" class="manager-edit-modal__close" id="managerEditCloseBtn" aria-label="Close">×</button>
+      </div>
+      <form id="managerEditForm" class="form-grid manager-edit-form" autocomplete="off">
+        <p class="manager-edit-form__section full">Guest information</p>
+        <div>
+          <label for="managerEditFullName">Guest name</label>
+          <input id="managerEditFullName" type="text" required placeholder="Full name" autocomplete="name">
+        </div>
+        <div>
+          <label for="managerEditPhone">Phone</label>
+          <input id="managerEditPhone" type="tel" required placeholder="09XXXXXXXXX" autocomplete="tel">
+        </div>
+        <div class="full">
+          <label for="managerEditEmail">Email</label>
+          <input id="managerEditEmail" type="email" required placeholder="guest@example.com" autocomplete="email">
+        </div>
+
+        <p class="manager-edit-form__section full">Stay details</p>
+        <div>
+          <label for="managerEditStayType">Stay type</label>
+          <select id="managerEditStayType">
+            <option value="overnight">Overnight</option>
+            <option value="day_tour">Day tour</option>
+          </select>
+        </div>
+        <div>
+          <label for="managerEditStatus">Reservation status</label>
+          <select id="managerEditStatus">
+            <option value="Pending">Pending</option>
+            <option value="Approved">Approved</option>
+            <option value="Confirmed">Confirmed</option>
+            <option value="Cancelled">Cancelled</option>
+          </select>
+        </div>
+        <div>
+          <label for="managerEditCheckIn">Check-in date</label>
+          <input id="managerEditCheckIn" type="date" required>
+        </div>
+        <div>
+          <label for="managerEditCheckOut">Check-out date</label>
+          <input id="managerEditCheckOut" type="date" required>
+        </div>
+        <div>
+          <label for="managerEditCheckInTime">Check-in time</label>
+          <input id="managerEditCheckInTime" type="time">
+        </div>
+        <div>
+          <label for="managerEditCheckOutTime">Check-out time</label>
+          <input id="managerEditCheckOutTime" type="time">
+        </div>
+
+        <p class="manager-edit-form__section full">Guests</p>
+        <div>
+          <label for="managerEditAdults">Adults</label>
+          <input id="managerEditAdults" type="number" min="1" step="1" value="1" required>
+        </div>
+        <div>
+          <label for="managerEditChildren">Children (6–12)</label>
+          <input id="managerEditChildren" type="number" min="0" step="1" value="0">
+        </div>
+        <div>
+          <label for="managerEditChildrenUnder6">Children (0–5)</label>
+          <input id="managerEditChildrenUnder6" type="number" min="0" step="1" value="0">
+        </div>
+
+        <p class="manager-edit-form__section full">Facilities</p>
+        <div class="full">
+          <label for="managerEditRoomType">Room type</label>
+          <select id="managerEditRoomType" required>
+            <option value="couple">Couple room</option>
+            <option value="big">Big room</option>
+            <option value="small">Small room</option>
+            <option value="none">No room</option>
+          </select>
+        </div>
+        <div>
+          <label for="managerEditCottageQty">Cottages (quantity)</label>
+          <input id="managerEditCottageQty" type="number" min="0" step="1" value="0" required>
+        </div>
+        <div>
+          <label for="managerEditEventHall">Event hall</label>
+          <select id="managerEditEventHall" required>
+            <option value="none">No hall</option>
+            <option value="poolside">Event hall beside the pool</option>
+            <option value="upper">Upper hall</option>
+            <option value="new_function">New function hall</option>
+            <option value="ac">Air-conditioned event hall</option>
+          </select>
+        </div>
+
+        <p class="manager-edit-form__section full">Notes</p>
+        <div class="full">
+          <label for="managerEditRequest">Special requests</label>
+          <textarea id="managerEditRequest" rows="2" placeholder="Guest request or preference"></textarea>
+        </div>
+        <div class="full">
+          <label for="managerEditNote">Manager note (optional)</label>
+          <textarea id="managerEditNote" rows="2" placeholder="Internal note"></textarea>
+        </div>
+
+        <div class="full">
+          <div class="manager-edit-modal__actions">
+            <button class="btn btn--success" type="submit">Save changes</button>
+            <button class="btn btn--outline" type="button" id="managerEditCancelBtn">Cancel</button>
+          </div>
+          <p id="managerEditMsg" class="auth-msg" hidden></p>
+        </div>
+      </form>
+    </div>
+  </div>
+  <script src="../js/header-nav.js?v=20260922-menu2"></script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+<?php
+/**
+ * Optional pinned Python path for XAMPP/Apache.
+ * Copy to python.path and put ONE line: full path to python.exe
+ * Example:
+ * C:\Users\You\AppData\Local\Programs\Python\Python314\python.exe
+ */

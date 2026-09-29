@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register | Elenest Resort</title>
+  <link rel="icon" type="image/png" href="../Images/icon.png">
+  <link rel="stylesheet" href="../css/style.css?v=20260922-menu3">
+  <script src="../js/supabase-config.js?v=20260922-iphone13"></script>
+  <script src="../js/site-boot.js"></script>
+</head>
+<body class="subpage">
+  <header>
+    <div class="content flex_space">
+      <div class="logo">
+        <a href="index.html" class="site-logo-link" aria-label="Elenest Resort home">
+          <img class="site-logo" src="../Images/elenest_logo_pink.png" alt="Elenest Event Center">
+        </a>
+      </div>
+      <div class="navlinks">
+        <ul id="menulist" class="site-nav-list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="reviews.html">Reviews</a></li>
+          <li><a href="rooms.html">Facilities</a></li>
+          <li><a href="policies.html">Policies</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="activities.html">Activities</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+          <li class="role-login-nav" id="roleLoginNav">
+            <a href="login.html" class="role-login-trigger staff-access-btn" id="roleLoginTrigger" aria-label="Sign In">Sign In</a>
+          </li>
+        </ul>
+        <button type="button" class="nav-menu-toggle" id="navMenuToggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="menulist">
+          <span class="nav-menu-toggle__bar" aria-hidden="true"></span>
+          <span class="nav-menu-toggle__bar" aria-hidden="true"></span>
+          <span class="nav-menu-toggle__bar" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Create an Account</h1>
+      <p>Register with email (we verify your phone by SMS), or continue with Google to book right away.</p>
+    </section>
+
+    <section class="section">
+      <article class="card auth-card">
+        <h3>Register</h3>
+        <p id="regMsg" class="auth-msg" hidden></p>
+        <form id="regForm" class="form-grid">
+          <div>
+            <label for="regName">Full name</label>
+            <input id="regName" name="name" type="text" autocomplete="name" required placeholder="Your full name">
+          </div>
+          <div>
+            <label for="regGender">Gender (optional)</label>
+            <select id="regGender" name="gender" aria-label="Gender">
+              <option value="">Prefer not to say</option>
+              <option value="female">Female</option>
+              <option value="male">Male</option>
+            </select>
+          </div>
+          <div>
+            <label for="regPhone">Phone number</label>
+            <input id="regPhone" name="phone" type="tel" autocomplete="tel" required inputmode="numeric" minlength="11" maxlength="11" pattern="[0-9]{11}" placeholder="09XXXXXXXXX">
+            <p class="note">Use Globe, TM, DITO, or GOMO. Smart/TNT numbers may not receive SMS from iProg.</p>
+          </div>
+          <div>
+            <label for="regEmail">Email</label>
+            <input id="regEmail" name="email" type="email" autocomplete="email" required pattern="^[^\s@]+@gmail\.com$" placeholder="Your email">
+          </div>
+          <div>
+            <label for="regPassword">Password</label>
+            <input id="regPassword" name="password" type="password" autocomplete="new-password" required minlength="6" placeholder="At least 6 characters">
+            <p class="note">Use at least 6 characters (letters, numbers, or symbols).</p>
+          </div>
+          <div class="full">
+            <button class="btn" type="submit">Continue — verify phone</button>
+          </div>
+        </form>
+
+        <div class="auth-oauth">
+          <div class="auth-oauth-divider" role="presentation"><span>or</span></div>
+          <div class="auth-oauth-stack">
+            <button type="button" class="btn btn--google" id="googleRegisterBtn" aria-label="Continue with Google">
+              <svg class="btn-google-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+              </svg>
+              Continue with Google
+            </button>
+          </div>
+        </div>
+
+        <p class="note auth-switch">Already have an account? <a id="regLoginLink" href="login.html">Sign in</a>.</p>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>Copyright 2026 Elenest Resort. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-config.js?v=20260922-iphone13"></script>
+  <script src="../js/supabase-client.js"></script>
+  <script src="../js/ui-button-loading.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/auth-oauth.js?v=20260922-iphone13"></script>
+  <script src="../js/auth-social-ui.js?v=20260718-google3"></script>
+  <script src="../js/otp-verification.js"></script>
+  <script src="../js/password-toggle.js"></script>
+  <script src="../js/header-nav.js?v=20260922-menu2"></script>
+  <script src="../js/role-login.js"></script>
+  <script>
+    (function () {
+      var Auth = window.ElenestAuth;
+      var Otp = window.ElenestOtp;
+      var params = new URLSearchParams(window.location.search);
+      var nextPage = params.get("next") || "book.html";
+      var regLoginLink = document.getElementById("regLoginLink");
+      if (regLoginLink) {
+        regLoginLink.href = "login.html?next=" + encodeURIComponent(nextPage);
+      }
+
+      if (window.ElenestAuthSocialUi && window.ElenestAuthSocialUi.initRegister) {
+        window.ElenestAuthSocialUi.initRegister({ next: nextPage });
+      }
+
+      Auth.ready.then(function (user) {
+        if (user) {
+          window.location.replace(Auth.getPostLoginPath(user));
+        }
+      });
+
+      var form = document.getElementById("regForm");
+      var msg = document.getElementById("regMsg");
+      var submitBtn = form ? form.querySelector('button[type="submit"]') : null;
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var data = {
+          name: document.getElementById("regName").value,
+          phone: document.getElementById("regPhone").value,
+          email: document.getElementById("regEmail").value,
+          password: document.getElementById("regPassword").value,
+          gender: document.getElementById("regGender").value,
+          role: "guest"
+        };
+
+        var validated = Auth.validateRegister(data);
+        if (!validated.ok) {
+          msg.hidden = false;
+          msg.className = "auth-msg auth-msg--err";
+          msg.textContent = validated.message;
+          return;
+        }
+
+        var BL = window.ElenestButtonLoading;
+        if (BL) BL.set(submitBtn, true);
+        msg.hidden = true;
+
+        Otp.savePendingRegistration(validated);
+        Otp.sendOtp(validated.phone).then(function (result) {
+          if (result.ok) {
+            window.location.href =
+              "register-verify.html?next=" + encodeURIComponent(nextPage);
+            return;
+          }
+          if (BL) BL.set(submitBtn, false);
+          msg.hidden = false;
+          msg.className = "auth-msg auth-msg--err";
+          msg.textContent = result.message;
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

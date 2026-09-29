@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us | Elenest Resort</title>
+  <link rel="icon" type="image/png" href="../Images/icon.png">
+  <link rel="stylesheet" href="../css/style.css?v=20260922-menu3">
+</head>
+<body class="subpage">
+  <header>
+    <div class="content flex_space">
+      <div class="logo">
+        <a href="index.html" class="site-logo-link" aria-label="Elenest Resort home">
+          <img class="site-logo" src="../Images/elenest_logo_pink.png" alt="Elenest Event Center">
+        </a>
+      </div>
+      <div class="navlinks">
+        <ul id="menulist" class="site-nav-list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="reviews.html">Reviews</a></li>
+          <li><a href="rooms.html">Facilities</a></li>
+          <li><a href="policies.html">Policies</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="activities.html">Activities</a></li>
+          <li><a class="active" href="contact.html">Contact Us</a></li>
+          <li class="role-login-nav" id="roleLoginNav">
+            <a href="login.html" class="role-login-trigger staff-access-btn" id="roleLoginTrigger" aria-label="Sign In">Sign In</a>
+          </li>
+        </ul>
+        <button type="button" class="nav-menu-toggle" id="navMenuToggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="menulist">
+          <span class="nav-menu-toggle__bar" aria-hidden="true"></span>
+          <span class="nav-menu-toggle__bar" aria-hidden="true"></span>
+          <span class="nav-menu-toggle__bar" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Contact Us</h1>
+      <p>Have questions, event inquiries, or booking concerns? Our team is ready to assist you.</p>
+    </section>
+
+    <section class="section contact-grid">
+      <article class="card contact-info-card">
+        <h3>Resort Information</h3>
+        <ul class="list">
+          <li>Mataasnakahoy, Batangas</li>
+          <li>09177906661</li>
+          <li>elenest@gmail.com</li>
+          <li>Open daily: 8:00 AM - 9:00 PM</li>
+          <li>Reservation Desk: 9:00 AM - 6:00 PM</li>
+        </ul>
+        <div class="contact-location">
+          <h4 class="contact-location-title">Location &amp; Directions</h4>
+          <p class="note contact-location-lead">Elenest Resort, Mataasnakahoy, Batangas. Pan and zoom the map, then use Get Directions for a turn-by-turn route from where you are.</p>
+          <div class="map-wrap">
+            <iframe
+              id="contactMapFrame"
+              title="Elenest Resort location and directions map"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1934!2d121.1073418!3d13.9650558!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33bd6d73bf339e05%3A0x1b4067d2dfb55514!2sELENEST%20EVENT%20CENTER%20(ENTRANCE)!5e0!3m2!1sen!2sph"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              allowfullscreen>
+            </iframe>
+          </div>
+          <div class="contact-map-actions">
+            <a class="btn" href="https://www.google.com/maps/dir/?api=1&destination=ELENEST+EVENT+CENTER+(ENTRANCE)" target="_blank" rel="noopener noreferrer">Get Directions</a>
+            <a class="btn btn--outline" href="https://maps.app.goo.gl/kXd1WD9w6Q1kgAD56" target="_blank" rel="noopener noreferrer">Open Exact Location</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3>Send a Message</h3>
+        <form id="contactForm" autocomplete="off" novalidate>
+          <label for="name">Name</label>
+          <input id="name" name="name" type="text" placeholder="Your name">
+
+          <label for="email">Email <span class="req-mark" aria-hidden="true">*</span></label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            inputmode="email"
+            autocomplete="email"
+            pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
+            placeholder="you@example.com"
+            required
+            aria-required="true"
+            aria-describedby="contactEmailHint"
+            title="Enter a valid email. Required so we can reply to your inbox."
+          >
+          <p id="contactEmailHint" class="note" style="margin: 6px 0 12px;">
+            <span class="req-mark">*</span> Email is required. The manager will reply to this address — check your inbox for the response.
+          </p>
+
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="5" placeholder="Your message"></textarea>
+
+          <button class="btn" type="submit">Submit</button>
+        </form>
+        <p id="contactMsg" class="auth-msg" hidden></p>
+        <p class="note">For urgent reservation concerns, call our hotline for faster assistance.</p>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>Copyright 2026 Elenest Resort. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-config.js"></script>
+  <script src="../js/supabase-client.js"></script>
+  <script src="../js/ui-button-loading.js"></script>
+  <script src="../js/contact-messages.js?v=customer-messages-2"></script>
+  <script>
+    (function () {
+      var form = document.getElementById("contactForm");
+      var msg = document.getElementById("contactMsg");
+      if (!form) return;
+
+      function setMsg(ok, text) {
+        if (!msg) return;
+        msg.hidden = false;
+        msg.className = ok ? "auth-msg auth-msg--ok" : "auth-msg auth-msg--err";
+        msg.textContent = text;
+      }
+
+      function isValidEmail(value) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value || "").trim());
+      }
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var nameEl = document.getElementById("name");
+        var emailEl = document.getElementById("email");
+        var messageEl = document.getElementById("message");
+        var name = String(nameEl && nameEl.value || "").trim();
+        var email = String(emailEl && emailEl.value || "").trim();
+        var message = String(messageEl && messageEl.value || "").trim();
+
+        if (!email) {
+          setMsg(false, "Email is required so the manager can reply to your inbox.");
+          if (emailEl) emailEl.focus();
+          return;
+        }
+        if (!isValidEmail(email)) {
+          setMsg(false, "Please enter a valid email address (example: you@gmail.com).");
+          if (emailEl) emailEl.focus();
+          return;
+        }
+        var api = window.ElenestContactMessages;
+        if (!api || typeof api.submit !== "function") {
+          setMsg(false, "Messaging is unavailable. Please try again later.");
+          return;
+        }
+        var btn = form.querySelector('button[type="submit"]');
+        var BL = window.ElenestButtonLoading;
+        if (BL) BL.set(btn, true);
+        else if (btn) btn.disabled = true;
+        api
+          .submit({ name: name, email: email, message: message })
+          .then(function () {
+            form.reset();
+            setMsg(true, "Message sent. Thank you! Watch your email inbox for our reply.");
+          })
+          .catch(function (err) {
+            setMsg(false, (err && err.message) || "Could not send message. Please try again.");
+          })
+          .then(function () {
+            if (BL) BL.set(btn, false);
+            else if (btn) btn.disabled = false;
+          });
+      });
+    })();
+  </script>
+  <script src="../js/header-nav.js?v=20260922-menu2"></script>
+  <script src="../js/role-login.js"></script>
+</body>
+</html>
