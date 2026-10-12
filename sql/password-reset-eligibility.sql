@@ -1,4 +1,4 @@
--- Password reset is limited to Admin and Client (guest) accounts.
+-- Password reset is limited to Admin and Customer (guest) accounts.
 -- Run in Supabase → SQL Editor. Anonymous callers only learn
 -- eligible / denied / unknown — never the stored role.
 

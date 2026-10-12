@@ -75,6 +75,7 @@
       detectedBase + "auth-callback.html",
       "http://localhost/Elenest_Resort/html/**",
       "http://localhost/Elenest_Resort/html/auth-callback.html",
+      "http://localhost/Elenest_Resort/html/reset-password.html",
       "https://elenestresort.infinityfreeapp.com/html/**",
       "https://elenestresort.infinityfreeapp.com/html/auth-callback.html",
       "https://elenestresort.infinityfreeapp.com/html/reset-password.html",

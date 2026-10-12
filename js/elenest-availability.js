@@ -341,6 +341,17 @@
       typeof window.ElenestUnitAvailability.getUnitNightStatus === "function"
     ) {
       var unitStatus = window.ElenestUnitAvailability.getUnitNightStatus(unitCatalogId, iso);
+      if (unitStatus === "pending") {
+        var pendingLabel =
+          typeof window.ElenestUnitAvailability.pendingCalendarLabel === "function"
+            ? window.ElenestUnitAvailability.pendingCalendarLabel()
+            : "Pending Admin Confirmation";
+        return {
+          status: "pending",
+          kind: "pending",
+          label: pendingLabel
+        };
+      }
       if (unitStatus === "booked" || unitStatus === "hold") {
         return {
           status: "booked",
@@ -383,7 +394,20 @@
         : stats.available === 0
           ? "full"
           : "available";
+      var pendingLabel =
+        window.ElenestUnitAvailability &&
+        typeof window.ElenestUnitAvailability.pendingCalendarLabel === "function"
+          ? window.ElenestUnitAvailability.pendingCalendarLabel()
+          : "Pending Admin Confirmation";
       if (bookingStatus === "full") {
+        if (!stats || (stats.verified || 0) === 0) {
+          return {
+            status: "pending",
+            kind: "pending",
+            label: pendingLabel,
+            stats: stats
+          };
+        }
         return {
           status: "full",
           kind: "limited",
@@ -391,6 +415,16 @@
           stats: stats
         };
       }
+      if (stats && (stats.pending || 0) > 0) {
+        return {
+          status: "available",
+          kind: null,
+          label: pendingLabel,
+          stats: stats,
+          hasPending: true
+        };
+      }
+      return { status: "available", kind: null, label: "Available", stats: stats };
     }
 
     // Supabase-only: open dates stay available (no Google / legacy fake blocks).
@@ -401,7 +435,7 @@
     if (managerBlockedByIso[iso]) return true;
     if (googleBusyByIso[iso]) return true;
     var facility = getDateFacilityStatus(iso);
-    if (facility.status === "full") return true;
+    if (facility.status === "full" || facility.status === "pending") return true;
     if (useSupabaseOnly) return false;
     if (googleBusyLoaded && !googleBusyLoadError) return false;
     return legacyUnavailable(iso);
@@ -416,6 +450,7 @@
     var facility = getDateFacilityStatus(iso);
     if (facility.kind === "manager") return "manager";
     if (facility.kind === "google") return "google";
+    if (facility.kind === "pending") return "pending";
     if (facility.kind === "limited") return "limited";
     if (facility.kind === "booked") return "booked";
     if (facility.kind === "hold") return "hold";

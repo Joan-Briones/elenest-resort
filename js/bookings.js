@@ -45,12 +45,27 @@
     try {
       var days = Object.keys(publicFacilityBlocksByDate || {}).sort();
       var parts = days.map(function (d) {
-        return d + ":" + Object.keys(publicFacilityBlocksByDate[d] || {}).sort().join(",");
+        var map = publicFacilityBlocksByDate[d] || {};
+        return d + ":" + Object.keys(map).sort().map(function (id) {
+          return id + "=" + String(map[id]);
+        }).join(",");
       });
       var bookingBits = (availabilityBookings || [])
         .map(function (b) {
           if (!b) return "";
-          return String(b.id || "") + ":" + String(b.status || "") + ":" + String(b.holdExpiresAt || b.hold_expires_at || "");
+          return (
+            String(b.id || "") +
+            ":" +
+            String(b.status || "") +
+            ":" +
+            String(b.paymentVerifiedAt || b.payment_verified_at || "") +
+            ":" +
+            String(b.paymentVerified === true || b.payment_verified === true) +
+            ":" +
+            String(b.workflow || "") +
+            ":" +
+            String(b.holdExpiresAt || b.hold_expires_at || "")
+          );
         })
         .sort()
         .join(";");
@@ -195,14 +210,9 @@
   }
 
   function refreshAvailabilityAndNotify() {
-    return loadPublicAvailability()
-      .catch(function () {
-        return false;
-      })
-      .then(function () {
-        emitUpdated();
-        return true;
-      });
+    return loadPublicAvailability().catch(function () {
+      return false;
+    });
   }
 
   function teardownRealtimeAvailability() {
@@ -239,16 +249,13 @@
     onAvailabilityVersionChanged._timer = setTimeout(function () {
       onAvailabilityVersionChanged._timer = null;
       refreshAvailabilityAndNotify();
-      if (getCurrentUserFromAuth()) {
-        loadAllBookings();
-      }
       if (
         window.ElenestAvailability &&
         typeof window.ElenestAvailability.refreshManagerBlocks === "function"
       ) {
         window.ElenestAvailability.refreshManagerBlocks();
       }
-    }, 150);
+    }, 1200);
   }
 
   function setupRealtimeAvailability(force) {
@@ -316,8 +323,10 @@
         try {
           console.info("[Elenest Bookings] Live Supabase realtime connected");
         } catch (e3) {}
-        refreshAvailabilityAndNotify();
-        if (getCurrentUserFromAuth()) {
+        if (
+          getCurrentUserFromAuth() &&
+          (!lastLoadAllBookingsAt || Date.now() - lastLoadAllBookingsAt > 20000)
+        ) {
           loadAllBookings();
         }
       }
@@ -350,6 +359,7 @@
     if (s === "rejected" || s === "no show" || s === "no_show") return 40;
     if (s === "cancelled" || s === "canceled") return 30;
     if (s === "for verification" || s === "pending payment verification") return 20;
+    if (s === "awaiting payment" || s === "awaiting_payment") return 15;
     if (s === "pending") return 10;
     return 0;
   }
@@ -368,9 +378,19 @@
     if (s === "checked_in") return 70;
     if (s === "confirmed") return 60;
     if (s === "approved" || s === "verified_by_receptionist") return 50;
-    if (s === "rejected" || s === "cancelled" || s === "canceled") return 40;
-    if (s === "pending_payment" || s === "pending_verification") return 10;
+    if (
+      s === "rejected" ||
+      s === "cancelled" ||
+      s === "canceled" ||
+      s === "payment_expired" ||
+      s === "booking_declined"
+    ) {
+      return 40;
+    }
+    if (s === "pending_payment" || s === "pending_verification" || s === "awaiting_admin") return 12;
+    if (s === "awaiting_payment") return 8;
     if (s === "pending") return 5;
+    if (s === "awaiting_booking_review") return 3;
     return 0;
   }
 
@@ -392,6 +412,8 @@
       return 40;
     }
     if (s.indexOf("for verification") !== -1 || s.indexOf("pending") !== -1) return 10;
+    if (s.indexOf("awaiting payment") !== -1) return 4;
+    if (s.indexOf("awaiting admin") !== -1) return 2;
     return 0;
   }
 
@@ -447,6 +469,7 @@
     var stNow = String(out.status || "").toLowerCase();
     if (
       approvedLike &&
+      !isPrePaymentHold(out) &&
       (stNow === "for verification" || stNow === "pending" || stNow === "pending payment verification")
     ) {
       out.status = String(out.paymentType || "").toLowerCase() === "full" ? "Confirmed" : "Reserved";
@@ -470,6 +493,21 @@
 
   function isLinkedFacilityRow(booking) {
     return !!(booking && (booking.linkedFacilityBooking || booking.parentBookingId));
+  }
+
+  function isPrePaymentHold(booking) {
+    if (!booking) return false;
+    var wf = String(booking.workflow || "").toLowerCase();
+    var stage = String(booking.verificationStage || "").toLowerCase();
+    var st = String(booking.status || "").toLowerCase();
+    return (
+      wf === "awaiting_booking_review" ||
+      wf === "awaiting_payment" ||
+      stage === "awaiting_booking_review" ||
+      stage === "awaiting_payment" ||
+      st === "awaiting payment" ||
+      st === "awaiting_payment"
+    );
   }
 
   function bookingHasPaymentDecision(booking) {
@@ -498,6 +536,8 @@
     "workflow",
     "holdExpiresAt",
     "verificationExpiresAt",
+    "paymentDeadlineAt",
+    "bookingConfirmedAt",
     "slotLocked",
     "nonRefundable",
     "amountPaid",
@@ -1060,6 +1100,76 @@
     };
   }
 
+  function explicitPaymentVerifiedAt(row) {
+    if (!row) return "";
+    var payload = row.payload && typeof row.payload === "object" ? row.payload : {};
+    return (
+      row.payment_verified_at ||
+      row.paymentVerifiedAt ||
+      payload.paymentVerifiedAt ||
+      payload.payment_verified_at ||
+      ""
+    );
+  }
+
+  function rowCalendarPaymentVerified(row) {
+    if (!row) return false;
+    if (row.paymentRejectedAt || row.payment_rejected_at) return false;
+    var payload = row.payload && typeof row.payload === "object" ? row.payload : {};
+    if (payload.paymentRejectedAt || payload.payment_rejected_at) return false;
+    if (explicitPaymentVerifiedAt(row)) return true;
+    if (row.payment_verified === false || row.paymentVerified === false || payload.paymentVerified === false) {
+      return false;
+    }
+    if (row.payment_verified === true || row.paymentVerified === true || payload.paymentVerified === true) {
+      return true;
+    }
+    if (row.walkIn === true || payload.walkIn === true) return true;
+    var st = String(row.status || payload.status || "").trim().toLowerCase();
+    var wf = String(row.workflow || payload.workflow || payload.mobileWorkflow || "").trim().toLowerCase();
+    var stage = String(
+      row.verificationStage || row.verification_stage || payload.verificationStage || payload.verification_stage || ""
+    )
+      .trim()
+      .toLowerCase();
+    if (
+      wf === "awaiting_booking_review" ||
+      wf === "awaiting_payment" ||
+      wf === "pending_payment" ||
+      wf === "pending_verification" ||
+      wf === "pending" ||
+      st === "pending" ||
+      st === "awaiting payment" ||
+      st === "awaiting_payment" ||
+      st === "for verification" ||
+      st === "pending payment verification" ||
+      stage === "awaiting_booking_review" ||
+      stage === "awaiting_payment" ||
+      stage === "awaiting_admin"
+    ) {
+      return false;
+    }
+    if (
+      wf === "confirmed" ||
+      wf === "approved" ||
+      wf === "checked_in" ||
+      wf === "verified_by_receptionist" ||
+      stage === "approved" ||
+      st === "confirmed" ||
+      st === "reserved" ||
+      st === "approved" ||
+      st === "active" ||
+      st === "checked in" ||
+      st === "checked_in" ||
+      st === "checked out" ||
+      st === "checked_out" ||
+      st === "completed"
+    ) {
+      return true;
+    }
+    return false;
+  }
+
   function mapMobilePaymentType(raw) {
     var s = String(raw || "").toLowerCase();
     if (s.indexOf("full") !== -1) return "full";
@@ -1108,6 +1218,10 @@
     ) {
       return "For Verification";
     }
+    if (wf === "awaiting_booking_review") return "Pending";
+    if (wf === "awaiting_payment" || st === "awaiting payment" || st === "awaiting_payment") {
+      return "Awaiting Payment";
+    }
     if (st === "pending" || wf === "pending") return "Reserved";
     return row.status || "Reserved";
   }
@@ -1151,15 +1265,25 @@
         notes.indexOf("Proof:") !== -1 ||
         notes.indexOf("__payment_status__") !== -1 ||
         notes.indexOf("payment_proof") !== -1;
+      var calendarVerified = rowCalendarPaymentVerified(row);
+      var explicitVerified = explicitPaymentVerifiedAt(row);
       return {
         id: row.id || "",
         check_in: row.check_in,
         check_out: row.check_out,
         status: status,
+        workflow: row.workflow || (row.payload && row.payload.workflow) || "",
+        verification_stage:
+          row.verificationStage ||
+          row.verification_stage ||
+          (row.payload && (row.payload.verificationStage || row.payload.verification_stage)) ||
+          "",
+        walkIn: row.walkIn === true || (row.payload && row.payload.walkIn === true),
         payment_type: paymentType,
         hold_expires_at: row.hold_expires_at || null,
-        payment_verified_at: null,
-        payment_rejected_at: null,
+        payment_verified_at: calendarVerified ? explicitVerified || null : null,
+        payment_verified: calendarVerified,
+        payment_rejected_at: row.payment_rejected_at || row.paymentRejectedAt || null,
         slot_locked:
           status === "Confirmed" ||
           status === "Reserved" ||
@@ -1188,6 +1312,15 @@
           eventHall: units.eventHall,
           paymentType: paymentType,
           status: status,
+          workflow: row.workflow || (row.payload && row.payload.workflow) || "",
+          verificationStage:
+            row.verificationStage ||
+            row.verification_stage ||
+            (row.payload && (row.payload.verificationStage || row.payload.verification_stage)) ||
+            "",
+          paymentVerified: calendarVerified,
+          paymentVerifiedAt: calendarVerified ? explicitVerified || null : null,
+          walkIn: row.walkIn === true || (row.payload && row.payload.walkIn === true),
           slotLocked: true,
           hasPaymentProof: hasProof,
           paymentProof: hasProof ? "mobile-proof" : "",
@@ -1371,19 +1504,31 @@
         payload.check_out_time ||
         "",
       status: row.status || payload.status || "Pending",
+      workflow: row.workflow || payload.workflow || payload.mobileWorkflow || "",
+      verificationStage:
+        row.verificationStage ||
+        row.verification_stage ||
+        payload.verificationStage ||
+        payload.verification_stage ||
+        "",
+      walkIn: row.walkIn === true || row.walk_in === true || payload.walkIn === true,
       paymentType: row.payment_type || row.paymentType || payload.paymentType || "down",
       holdExpiresAt: row.hold_expires_at || row.holdExpiresAt || payload.holdExpiresAt || null,
+      paymentVerified:
+        row.payment_verified === true ||
+        row.paymentVerified === true ||
+        payload.paymentVerified === true,
       paymentVerifiedAt: row.payment_verified_at || row.paymentVerifiedAt || payload.paymentVerifiedAt || null,
       paymentRejectedAt: row.payment_rejected_at || row.paymentRejectedAt || payload.paymentRejectedAt || null,
       slotLocked:
         row.slot_locked === true ||
         row.slotLocked === true ||
         payload.slotLocked === true,
-      paymentProof: row.paymentProof || payload.paymentProof || "",
+      paymentProof: "",
       hasPaymentProof:
         row.hasPaymentProof === true ||
         payload.hasPaymentProof === true ||
-        !!(row.paymentProof || payload.paymentProof),
+        !!(row.paymentProofUrl || payload.paymentProofUrl || row.paymentProof || payload.paymentProof),
       room_id:
         units.roomCatalogId ||
         (units.cottageCatalogIds && units.cottageCatalogIds[0]) ||
@@ -1676,9 +1821,15 @@
       if (!ids.length && row.room_id) ids = [row.room_id];
       if (!ids.length) return;
       if (!next[day]) next[day] = {};
+      var pendingSet = {};
+      parseJsonArray(row.pending_room_ids).forEach(function (raw) {
+        var pendingId = canonicalizeUnitId(raw);
+        if (pendingId) pendingSet[pendingId] = true;
+      });
       ids.forEach(function (raw) {
         var id = canonicalizeUnitId(raw);
-        if (id) next[day][id] = true;
+        if (!id) return;
+        next[day][id] = pendingSet[id] ? "pending" : "booked";
       });
     });
     publicFacilityBlocksByDate = next;
@@ -1700,12 +1851,22 @@
     return Object.keys(map);
   }
 
-  function isFacilityBlockedOnDate(unitId, iso) {
+  function facilityBlockValue(unitId, iso) {
     var id = canonicalizeUnitId(unitId);
     var day = normalizeDateField(iso);
-    if (!id || !day) return false;
+    if (!id || !day) return "";
     var map = publicFacilityBlocksByDate[day] || {};
-    return !!(map[id] || map[String(unitId || "").trim()]);
+    return map[id] || map[String(unitId || "").trim()] || "";
+  }
+
+  function isFacilityBlockedOnDate(unitId, iso) {
+    return !!facilityBlockValue(unitId, iso);
+  }
+
+  function getFacilityBlockKindOnDate(unitId, iso) {
+    var value = facilityBlockValue(unitId, iso);
+    if (!value) return "";
+    return value === "pending" ? "pending" : "booked";
   }
 
   function forEachBlockedFacilityInRange(checkIn, checkOut, fn) {
@@ -2009,7 +2170,7 @@
       pay.indexOf("down payment received") !== -1 ||
       pay.indexOf("payment approved") !== -1;
     var stNow = String(booking.status || "").toLowerCase();
-    if (approvedLike) {
+    if (approvedLike && !isPrePaymentHold(booking)) {
       if (stNow === "for verification" || stNow === "pending" || stNow === "pending payment verification") {
         if (mapped && mapped !== "For Verification") {
           booking.status = mapped;
@@ -2029,6 +2190,26 @@
             : "Down Payment Received";
       }
       delete booking.verificationExpiresAt;
+    }
+    if (isPrePaymentHold(booking) && !row.payment_verified_at) {
+      var holdHasProof = !!(
+        booking.paymentProof ||
+        booking.paymentProofUrl ||
+        booking.paymentSubmittedAt ||
+        booking.hasPaymentProof
+      );
+      if (!holdHasProof) {
+        booking.paymentVerifiedAt = "";
+        var holdWf = String(booking.workflow || "").toLowerCase();
+        var holdStage = String(booking.verificationStage || "").toLowerCase();
+        if (holdWf === "awaiting_payment" || holdStage === "awaiting_payment") {
+          booking.status = "Awaiting Payment";
+          booking.workflow = "awaiting_payment";
+        } else {
+          booking.status = "Pending";
+          booking.workflow = "awaiting_booking_review";
+        }
+      }
     }
     var units = extractUnitFields(row);
     if (units) {
@@ -2059,6 +2240,10 @@
     }
     applyRememberedVerification(booking, booking.email || row.user_email);
     applyDownPaymentHoldShape(booking);
+    if (booking.paymentProof && String(booking.paymentProof).length > 1500) {
+      booking.hasPaymentProof = true;
+      delete booking.paymentProof;
+    }
     return booking;
   }
 
@@ -2353,25 +2538,55 @@
       return Promise.resolve();
     }
 
-    function fetchBookingsPage(from, pageSize, acc) {
-      return sb
+    function dropInlineProof(row) {
+      if (!row) return;
+      var payload = row.payload;
+      if (typeof payload === "string") {
+        if (payload.indexOf("paymentProof") === -1) return;
+        try {
+          payload = JSON.parse(payload);
+        } catch (e) {
+          return;
+        }
+        row.payload = payload;
+      }
+      if (!payload || typeof payload !== "object" || !payload.paymentProof) return;
+      var proof = String(payload.paymentProof);
+      if (proof.length > 1500) {
+        payload.hasPaymentProof = true;
+        delete payload.paymentProof;
+      }
+    }
+
+    function fetchBookingsPage(from, pageSize, acc, seen) {
+      if (from > pageSize * 40) return Promise.resolve({ data: acc, error: null });
+      var query = sb
         .from("bookings")
         .select("*")
         .not("id", "like", "past-%")
         .order("submitted_at", { ascending: false })
-        .range(from, from + pageSize - 1)
-        .then(function (res) {
-          if (res.error) throw res.error;
-          var rows = res.data || [];
-          var all = acc.concat(rows);
-          if (rows.length === pageSize) {
-            return fetchBookingsPage(from + pageSize, pageSize, all);
-          }
-          return { data: all, error: null };
-        });
+        .range(from, from + pageSize - 1);
+      var viewer = getCurrentUserFromAuth();
+      if (viewer && viewer.email && !isStaffUser(viewer)) {
+        query = query.eq("user_email", normalizeEmail(viewer.email));
+      }
+      return query.then(function (res) {
+        if (res.error) throw res.error;
+        var rows = res.data || [];
+        if (!rows.length) return { data: acc, error: null };
+        var firstId = rows[0] && rows[0].id ? String(rows[0].id) : "";
+        if (firstId && seen[firstId]) return { data: acc, error: null };
+        if (firstId) seen[firstId] = true;
+        rows.forEach(dropInlineProof);
+        var all = acc.concat(rows);
+        if (rows.length === pageSize) {
+          return fetchBookingsPage(from + pageSize, pageSize, all, seen);
+        }
+        return { data: all, error: null };
+      });
     }
 
-    loadAllBookingsPromise = fetchBookingsPage(0, 200, [])
+    loadAllBookingsPromise = fetchBookingsPage(0, 200, [], {})
       .then(function (res) {
         if (res.error) throw res.error;
         var rows = res.data || [];
@@ -3107,7 +3322,23 @@
     for (var email in cache) {
       if (!Object.prototype.hasOwnProperty.call(cache, email)) continue;
       (cache[email] || []).forEach(function (b) {
-        if (b && b.id && !isHistoricalBooking(b)) ids.push(b.id);
+        if (!b || !b.id || isHistoricalBooking(b)) return;
+        if (b.linkedFacilityBooking || b.parentBookingId) return;
+        if (String(b.id).indexOf("__") !== -1) return;
+        var st = String(b.status || "").toLowerCase();
+        if (
+          st === "cancelled" ||
+          st === "canceled" ||
+          st === "rejected" ||
+          st === "no show" ||
+          st === "no_show" ||
+          st === "checked out" ||
+          st === "checked_out" ||
+          st === "completed"
+        ) {
+          return;
+        }
+        ids.push(b.id);
       });
     }
     return ids;
@@ -3131,7 +3362,7 @@
       return sb
         .from("bookings")
         .select(
-          "id,status,payment_status,payment_verified_at,payment_verified_by,payment_rejected_at,payment_rejected_by,check_in,check_out,full_name,user_email,hold_expires_at,arrival_status,payload,payment_type"
+          "id,status,payment_status,payment_verified_at,payment_verified_by,payment_rejected_at,payment_rejected_by,check_in,check_out,full_name,user_email,hold_expires_at,arrival_status,payment_type"
         )
         .in("id", chunk)
         .then(function (res) {
@@ -3423,6 +3654,9 @@
           } else if (PF.shouldAutoNoShow && PF.shouldAutoNoShow(b)) {
             patch = PF.buildNoShowPatch();
             kind = "no_show";
+          } else if (PF.shouldAutoExpireUnpaidBooking && PF.shouldAutoExpireUnpaidBooking(b) && !isLinkedFacilityRow(b)) {
+            patch = PF.buildPaymentDeadlineExpiredPatch();
+            kind = "payment_expired";
           } else if (PF.shouldAutoCancelExpiredHold && PF.shouldAutoCancelExpiredHold(b)) {
             patch = PF.buildExpiredHoldPatch();
             kind = "expired_hold";
@@ -3432,10 +3666,35 @@
             if (Object.prototype.hasOwnProperty.call(patch, k)) b[k] = patch[k];
           }
           list[i] = b;
-          persistRow(email, b, { skipAvailabilityRefresh: kind === "deferred_hold" });
-          rememberVerifiedBooking(b, email);
+          if (kind === "payment_expired") {
+            var expireGroup = getBookingGroupId(b);
+            for (var expireEmail in cache) {
+              if (!Object.prototype.hasOwnProperty.call(cache, expireEmail)) continue;
+              var expireList = cache[expireEmail];
+              if (!Array.isArray(expireList)) continue;
+              for (var expireIndex = 0; expireIndex < expireList.length; expireIndex++) {
+                var expireRow = expireList[expireIndex];
+                if (!expireRow || expireRow === b) continue;
+                if (expireGroup && getBookingGroupId(expireRow) === expireGroup) {
+                  for (var expireKey in patch) {
+                    if (Object.prototype.hasOwnProperty.call(patch, expireKey)) expireRow[expireKey] = patch[expireKey];
+                  }
+                }
+              }
+            }
+            persistBookingLikeMobile(email, b, { skipAvailabilityRefresh: true });
+            if (
+              window.ElenestNotifications &&
+              typeof window.ElenestNotifications.notifyPaymentWindowExpired === "function"
+            ) {
+              window.ElenestNotifications.notifyPaymentWindowExpired(email, b);
+            }
+          } else {
+            persistRow(email, b, { skipAvailabilityRefresh: kind === "deferred_hold" });
+          }
+          if (kind !== "payment_expired") rememberVerifiedBooking(b, email);
           // Avoid broadcast storms on timer activation — payment was already verified earlier.
-          if (kind !== "deferred_hold") {
+          if (kind !== "deferred_hold" && kind !== "payment_expired") {
             broadcastPaymentVerified(b, email);
           }
           changed = true;
@@ -3660,7 +3919,7 @@
         paymentSyncBusy = false;
       }
     );
-  }, 10000);
+  }, 30000);
   window.addEventListener("storage", function (e) {
     if (!e || e.key !== VERIFIED_STORE_KEY) return;
     applyRememberedVerificationToCache();
@@ -3715,6 +3974,7 @@
     /** Mobile calendar sync helpers (booked_room_ids / unavailable facility ids). */
     getBlockedFacilityIdsOnDate: getBlockedFacilityIdsOnDate,
     isFacilityBlockedOnDate: isFacilityBlockedOnDate,
+    getFacilityBlockKindOnDate: getFacilityBlockKindOnDate,
     forEachBlockedFacilityInRange: forEachBlockedFacilityInRange,
     prefetchUnavailableFacilitiesForRange: prefetchUnavailableFacilitiesForRange,
 

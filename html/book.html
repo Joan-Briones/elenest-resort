@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/style.css?v=20260929-unavail1">
+  <link rel="stylesheet" href="../css/style.css?v=20261012-pay2">
   <script src="../js/supabase-config.js?v=20260922-iphone13"></script>
   <script src="../js/site-boot.js"></script>
 </head>
@@ -141,12 +141,12 @@
               <li class="book-flow-stepper__connector" data-after="2" aria-hidden="true"></li>
               <li class="book-flow__step" data-step="3">
                 <span class="book-flow-stepper__marker" aria-hidden="true">3</span>
-                <span class="book-flow-stepper__label">Payment</span>
+                <span class="book-flow-stepper__label">Booking confirmation</span>
               </li>
               <li class="book-flow-stepper__connector" data-after="3" aria-hidden="true"></li>
               <li class="book-flow__step" data-step="4">
                 <span class="book-flow-stepper__marker" aria-hidden="true">4</span>
-                <span class="book-flow-stepper__label">Confirmation</span>
+                <span class="book-flow-stepper__label">Payment</span>
               </li>
             </ol>
           </nav>
@@ -159,12 +159,12 @@
                 <span class="reception-walkin-stay-bar__label">Booking type</span>
                 <div class="reception-walkin-stay-bar__toggle">
                   <label class="reception-walkin-stay-bar__option">
-                    <input type="radio" name="bookStayType" value="day_tour" form="stepBookingForm" checked>
-                    <span>Day Tour</span>
+                    <input type="radio" name="bookStayType" value="overnight" form="stepBookingForm">
+                    <span>Overnight Book</span>
                   </label>
                   <label class="reception-walkin-stay-bar__option">
-                    <input type="radio" name="bookStayType" value="overnight" form="stepBookingForm">
-                    <span>Overnight</span>
+                    <input type="radio" name="bookStayType" value="day_tour" form="stepBookingForm" checked>
+                    <span>One-Day Book</span>
                   </label>
                 </div>
               </div>
@@ -349,15 +349,17 @@
                 </div>
                 <div class="full book-flow-actions book-flow-actions-split">
                   <button type="button" class="btn btn--outline" id="backFromCal">Back</button>
-                  <button type="submit" class="btn book-flow-btn-main">Continue to Payment</button>
+                  <button type="submit" class="btn book-flow-btn-main" id="submitBookingRequestBtn">Submit for confirmation</button>
                 </div>
               </form>
             </div>
 
-            <div class="book-flow__panel" id="bookPanel3" data-step="3" role="tabpanel" hidden>
-              <h3 class="book-flow__panel-title">Step 3 - Payment</h3>
+            <div class="book-flow__panel" id="bookPanel3" data-step="4" role="tabpanel" hidden>
+              <h3 class="book-flow__panel-title">Step 4 - Payment</h3>
+              <div id="paymentFlowStepper" class="book-status-stepper-host"></div>
+              <div id="paymentDeadlineAlert" class="pay-deadline-alert" hidden role="status" aria-live="polite"></div>
               <p class="book-flow__panel-lead" id="paymentStepLead">
-                Choose how you want to pay, scan a QR code (GCash, Maya, or bank transfer), then upload your receipt.
+                Online payment opens after an admin confirms your booking details.
               </p>
 
               <fieldset class="payment-type-choice" id="paymentTypeFieldset">
@@ -380,31 +382,44 @@
 
               <div id="paymentSummaryHost" class="payment-summary" aria-live="polite"></div>
               <div id="paymentMethodsHost" class="payment-methods-grid" role="radiogroup" aria-label="Select payment method"></div>
-              <div class="payment-proof-section">
+              <div class="payment-proof-section" id="paymentProofSection">
                 <label for="paymentProofFile">Proof of payment <span class="req-mark">*</span></label>
                 <input id="paymentProofFile" type="file" accept="image/*" aria-describedby="paymentProofHint">
                 <p id="paymentProofHint" class="booking-form-hint">Upload a screenshot or photo of your successful transfer receipt.</p>
                 <div id="paymentProofPreview" class="payment-proof-preview" hidden></div>
               </div>
               <p id="paymentStepError" class="auth-msg auth-msg--err" hidden></p>
-              <div class="full book-flow-actions book-flow-actions-split">
+              <div class="full book-flow-actions book-flow-actions-split" id="paymentStepActions">
                 <button type="button" class="btn btn--outline" id="backFromPayment">Back</button>
-                <button type="button" class="btn book-flow-btn-main" id="submitPaymentBtn">Submit payment &amp; confirm</button>
+                <button type="button" class="btn book-flow-btn-main" id="submitPaymentBtn">Submit proof of payment</button>
+              </div>
+              <div id="paymentSubmittedState" hidden>
+                <p class="book-flow__panel-lead" id="paymentSubmittedLead" role="status">Proof of payment submitted successfully. An admin will verify it in Reservation Management. This booking is not marked paid yet.</p>
+                <div id="bookFlowReceipt" class="book-flow-receipt" hidden></div>
+                <div class="book-flow-step4-cta">
+                  <button type="button" class="btn book-flow-btn-main" id="bookFlowReceiptDownloadBtn" hidden>Download JPG receipt</button>
+                  <button type="button" class="btn btn--outline" id="scrollToAppointmentsBtn">Go to appointments</button>
+                </div>
+                <div class="book-flow-actions">
+                  <button type="button" class="btn book-flow-btn-main" id="newBookingFlowBtn">Start a new booking</button>
+                </div>
               </div>
             </div>
 
-            <div class="book-flow__panel" id="bookPanel4" data-step="4" role="tabpanel" hidden>
-              <div class="book-flow-confirm-icon" aria-hidden="true"><svg class="status-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
-              <h3 class="book-flow__panel-title">Step 4 - All set</h3>
-              <p class="book-flow__panel-lead">Booking saved. Your payment was submitted successfully. Status is <strong>For Verification</strong> until the Owner confirms. View it in <strong>Appointments</strong> beside your name.</p>
-              <div id="bookFlowReceipt" class="book-flow-receipt" hidden></div>
-              <div class="book-flow-step4-cta">
-                <button type="button" class="btn book-flow-btn-main" id="bookFlowReceiptDownloadBtn" hidden>Download JPG receipt</button>
-                <button type="button" class="btn btn--outline" id="scrollToAppointmentsBtn">Go to appointments</button>
-              </div>
-              <div class="book-flow-actions">
-                <button type="button" class="btn book-flow-btn-main" id="newBookingFlowBtn">Start a new booking</button>
-              </div>
+            <div class="book-flow__panel" id="bookPanel4" data-step="3" role="tabpanel" hidden>
+              <h3 class="book-flow__panel-title">Step 3 - Booking confirmation</h3>
+              <article class="book-confirm-card">
+                <p id="bookingConfirmStatus" class="book-confirm-status">Waiting for admin</p>
+                <div id="bookingPaymentDeadlineAlert" class="pay-deadline-alert" hidden role="status" aria-live="polite"></div>
+                <p class="book-flow__panel-lead" id="bookingConfirmLead">Your booking details were submitted. An admin will confirm the facility, date, schedule, guests, and amount. You will be notified when payment is open.</p>
+                <div id="bookingConfirmSummary" class="book-confirm-summary" hidden></div>
+                <div class="book-flow-actions book-flow-actions-split">
+                  <button type="button" class="btn btn--outline" id="viewBookingsFromConfirmBtn">View my bookings</button>
+                  <button type="button" class="btn btn--outline" id="cancelBookingFromConfirmBtn" hidden>Cancel booking</button>
+                  <button type="button" class="btn btn--outline" id="startNewFromConfirmBtn">Start a new booking</button>
+                  <button type="button" class="btn book-flow-btn-main" id="continueToPaymentBtn" disabled>Waiting for admin confirmation</button>
+                </div>
+              </article>
             </div>
           </div>
         </article>
@@ -499,8 +514,13 @@
       <div id="bookUnitModalHost" class="book-unit-picker__groups"></div>
       <p id="bookUnitModalEmpty" class="book-unit-modal__empty" hidden>No units available for these dates.</p>
       <p id="bookUnitModalError" class="auth-msg auth-msg--err" hidden></p>
-      <div class="book-unit-modal__actions">
-        <button type="button" class="btn book-flow-btn-main" id="bookUnitModalDone" disabled aria-disabled="true">Confirm selection</button>
+      <div class="book-unit-modal__footer">
+        <section class="book-unit-confirm" id="bookUnitConfirmSection" hidden aria-label="Selected facilities">
+          <div id="bookUnitConfirmBody" class="book-unit-confirm__body" aria-live="polite"></div>
+        </section>
+        <div class="book-unit-modal__actions">
+          <button type="button" class="btn book-flow-btn-main" id="bookUnitModalDone" disabled aria-disabled="true">Confirm selection</button>
+        </div>
       </div>
       <div id="bookUnitInfoPopup" class="book-unit-info" hidden>
         <div class="book-unit-info__card" role="dialog" aria-modal="true" aria-labelledby="bookUnitInfoTitle">
@@ -520,7 +540,20 @@
       <button type="button" class="avail-modal__close" data-avail-close aria-label="Close availability calendar">&times;</button>
       <section class="avail-modal__calendar">
         <h3 id="availModalTitle" class="avail-modal__calendar-title">Select your dates</h3>
-        <p class="avail-modal__calendar-lead">Tap <strong>one date</strong> for a day visit, or a <strong>second later date</strong> for overnight. Then choose a facility.</p>
+        <div class="login-reserve-stay-bar avail-modal-stay-bar" role="radiogroup" aria-label="Booking type">
+          <span class="login-reserve-stay-bar__label">Booking type</span>
+          <div class="login-reserve-stay-bar__toggle">
+            <label class="login-reserve-stay-bar__option">
+              <input type="radio" name="availStayType" value="overnight" checked>
+              <span>Overnight Book</span>
+            </label>
+            <label class="login-reserve-stay-bar__option">
+              <input type="radio" name="availStayType" value="day_tour">
+              <span>One-Day Book</span>
+            </label>
+          </div>
+        </div>
+        <p id="availModalCalendarLead" class="avail-modal__calendar-lead">Overnight Book: tap <strong>check-in</strong>, then a later <strong>check-out</strong>. Then choose a facility.</p>
         <div class="admin-dash-cal-layout avail-modal-cal-layout">
           <div class="admin-dash-cal-main">
             <div class="book-flow-calendar-head admin-dash-cal-head">
@@ -565,8 +598,13 @@
           <div id="availModalFacilityHost" class="avail-facility-host"></div>
         </section>
         <div class="avail-modal__actions">
-          <button type="button" class="btn book-flow-btn-main" id="availModalReserveBtn" disabled aria-disabled="true">Select dates &amp; facility</button>
-          <button type="button" class="btn btn--outline" data-avail-close>Close</button>
+          <section class="book-unit-confirm" id="availModalConfirmSection" hidden aria-label="Selected facility">
+            <div id="availModalConfirmBody" class="book-unit-confirm__body" aria-live="polite"></div>
+          </section>
+          <div class="avail-modal__action-btns">
+            <button type="button" class="btn book-flow-btn-main" id="availModalReserveBtn" disabled aria-disabled="true">Select dates &amp; facility</button>
+            <button type="button" class="btn btn--outline" data-avail-close>Close</button>
+          </div>
         </div>
       </section>
     </div>
@@ -720,8 +758,8 @@
       <div class="payment-success-icon payment-success-icon--success" aria-hidden="true">
         <svg class="status-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
       </div>
-      <h2 class="payment-success-title" id="paymentSuccessTitle">Payment submitted</h2>
-      <p class="payment-success-lead">Your proof of payment was received. We will verify it shortly and update your booking status.</p>
+      <h2 class="payment-success-title" id="paymentSuccessTitle">Proof of payment submitted</h2>
+      <p class="payment-success-lead">Your proof of payment was submitted successfully. An admin will verify it in Reservation Management. This booking is not marked paid yet.</p>
       <div id="paymentSuccessReceipt" class="book-flow-receipt book-flow-receipt--modal" hidden></div>
       <div class="payment-success-actions">
         <button type="button" class="btn payment-success-btn" id="paymentSuccessDownloadBtn">Download JPG receipt</button>
@@ -825,33 +863,33 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="../js/supabase-config.js?v=20260922-iphone13"></script>
   <script src="../js/supabase-client.js"></script>
-  <script src="../js/ui-button-loading.js"></script>
+  <script src="../js/ui-button-loading.js?v=20261012-btns1"></script>
   <script src="../js/auth.js?v=20260918-role2"></script>
   <script src="../js/role-login.js?v=20260917-custnav3"></script>
   <script src="../js/auth-oauth.js?v=20260922-iphone13"></script>
   <script src="../js/auth-social-ui.js?v=20260718-google3"></script>
-  <script src="../js/payment-flow.js?v=20260929-queue3"></script>
+  <script src="../js/payment-flow.js?v=20261012-pending5"></script>
   <script src="../js/payment-proofs.js"></script>
-  <script src="../js/bookings.js?v=20260929-queue1"></script>
+  <script src="../js/bookings.js?v=20261012-pending5"></script>
   <script src="../js/content-store.js?v=20260916-lightbox1"></script>
-  <script src="../js/unit-availability.js?v=20260929-queue4"></script>
+  <script src="../js/unit-availability.js?v=20261012-pending5"></script>
   <script src="../js/payment-methods.js?v=20260914-step3orig1"></script>
-  <script src="../js/notifications.js?v=20260929-notify1"></script>
+  <script src="../js/notifications.js?v=20261010-paystay1"></script>
   <script src="../js/feedback-photos.js"></script>
   <script src="../js/guest-feedback.js?v=20260927-review1"></script>
   <script>
     // Live calendar uses Supabase bookings only (no Google Calendar).
     window.ElenestGoogleCalendarIcsUrl = "";
   </script>
-  <script src="../js/elenest-availability.js?v=20260718-ok"></script>
-  <script src="../js/elenest-calendar-widget.js?v=20260922-ux2"></script>
+  <script src="../js/elenest-availability.js?v=20261012-pending5"></script>
+  <script src="../js/elenest-calendar-widget.js?v=20261012-custcal1"></script>
   <script src="../js/guest-avatar.js?v=20260918-icons1"></script>
   <script src="../js/guest-profile.js"></script>
   <script src="../js/customer-notifications-ui.js?v=20260916-notifread1"></script>
-  <script src="../js/book-availability-modal.js?v=20260914-bookfac2"></script>
+  <script src="../js/book-availability-modal.js?v=20261012-pax1"></script>
   <script src="../js/home-reserve.js?v=20260718-ok"></script>
   <script src="../js/weather-widget.js?v=20260911-weather3"></script>
-  <script src="../js/book-flow.js?v=20260929-queue4"></script>
+  <script src="../js/book-flow.js?v=20261012-pay3"></script>
   <script>
     (function () {
       function bindSocial() {

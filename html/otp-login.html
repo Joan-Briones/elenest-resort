@@ -77,7 +77,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="../js/supabase-config.js"></script>
   <script src="../js/supabase-client.js"></script>
-  <script src="../js/ui-button-loading.js"></script>
+  <script src="../js/ui-button-loading.js?v=20261012-btns1"></script>
   <script src="../js/otp-verification.js"></script>
   <script src="../js/header-nav.js?v=20260922-menu2"></script>
   <script src="../js/role-login.js"></script>
@@ -96,6 +96,12 @@
 
       form.addEventListener("submit", function (e) {
         e.preventDefault();
+        if (!Otp || typeof Otp.sendOtp !== "function") {
+          msg.hidden = false;
+          msg.className = "auth-msg auth-msg--err";
+          msg.textContent = "Phone verification is unavailable. Refresh the page and try again.";
+          return;
+        }
         var BL = window.ElenestButtonLoading;
         if (BL) BL.set(submitBtn, true);
         msg.hidden = true;
@@ -109,6 +115,11 @@
           msg.hidden = false;
           msg.className = "auth-msg auth-msg--err";
           msg.textContent = result.message;
+        }).catch(function () {
+          if (BL) BL.set(submitBtn, false);
+          msg.hidden = false;
+          msg.className = "auth-msg auth-msg--err";
+          msg.textContent = "Could not send the code. Check your connection and try again.";
         });
       });
     })();

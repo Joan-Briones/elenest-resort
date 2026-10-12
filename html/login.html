@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login | Elenest Resort</title>
   <link rel="icon" type="image/png" href="../Images/icon.png">
-  <link rel="stylesheet" href="../css/style.css?v=20260925-reset1">
+  <link rel="stylesheet" href="../css/style.css?v=20261012-pax2">
   <script src="../js/supabase-config.js?v=20260922-iphone13"></script>
   <script src="../js/site-boot.js"></script>
 </head>
@@ -101,8 +101,8 @@
             <label for="loginPassword">Password</label>
             <input id="loginPassword" name="password" type="password" autocomplete="current-password" required placeholder="Your password">
           </div>
-          <div class="full auth-forgot">
-            <a href="forgot-password.html">Forgot Password?</a>
+          <div class="full auth-forgot" id="loginForgotWrap" hidden>
+            <button type="button" id="loginForgotBtn">Forgot Password?</button>
           </div>
           <div class="full">
             <button class="btn" type="submit" id="loginSubmitBtn">Sign in</button>
@@ -201,8 +201,13 @@
           <div id="availModalFacilityHost" class="avail-facility-host"></div>
         </section>
         <div class="avail-modal__actions">
-          <button type="button" class="btn book-flow-btn-main" id="availModalReserveBtn" disabled aria-disabled="true">Select dates &amp; facility</button>
-          <button type="button" class="btn btn--outline" data-avail-close>Close</button>
+          <section class="book-unit-confirm" id="availModalConfirmSection" hidden aria-label="Selected facility">
+            <div id="availModalConfirmBody" class="book-unit-confirm__body" aria-live="polite"></div>
+          </section>
+          <div class="avail-modal__action-btns">
+            <button type="button" class="btn book-flow-btn-main" id="availModalReserveBtn" disabled aria-disabled="true">Select dates &amp; facility</button>
+            <button type="button" class="btn btn--outline" data-avail-close>Close</button>
+          </div>
         </div>
       </section>
     </div>
@@ -220,23 +225,24 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="../js/supabase-config.js?v=20260922-iphone13"></script>
   <script src="../js/supabase-client.js"></script>
-  <script src="../js/ui-button-loading.js"></script>
+  <script src="../js/ui-button-loading.js?v=20261012-btns1"></script>
   <script src="../js/content-store.js?v=20260718-gallery"></script>
-  <script src="../js/auth.js?v=20260925-reset1"></script>
+  <script src="../js/auth.js?v=20261002-forgot4"></script>
   <script src="../js/activity-logs.js?v=20260917-actlog1"></script>
   <script src="../js/auth-oauth.js?v=20260922-iphone13"></script>
   <script src="../js/auth-social-ui.js?v=20260720-admin-google"></script>
   <script src="../js/password-toggle.js"></script>
   <script src="../js/header-nav.js?v=20260922-menu2"></script>
   <script src="../js/role-login.js"></script>
-  <script src="../js/bookings.js?v=20260917-nlag1"></script>
+  <script src="../js/payment-flow.js?v=20261012-pending5"></script>
+  <script src="../js/bookings.js?v=20261012-pending5"></script>
   <script>
     window.ElenestGoogleCalendarIcsUrl = "";
   </script>
-  <script src="../js/unit-availability.js?v=20260718-ok"></script>
-  <script src="../js/elenest-availability.js?v=20260718-ok"></script>
-  <script src="../js/elenest-calendar-widget.js?v=20260922-ux2"></script>
-  <script src="../js/book-availability-modal.js?v=20260902-factabs2"></script>
+  <script src="../js/unit-availability.js?v=20261012-pending5"></script>
+  <script src="../js/elenest-availability.js?v=20261012-pending5"></script>
+  <script src="../js/elenest-calendar-widget.js?v=20261012-custcal1"></script>
+  <script src="../js/book-availability-modal.js?v=20261012-pax1"></script>
   <script src="../js/home-reserve.js?v=20260902-loginreserve1"></script>
   <script src="../js/login-reserve.js?v=20260902-loginreserve1"></script>
   <script>
@@ -281,10 +287,85 @@
         msg.textContent = "Account created. Sign in with your email and password.";
       }
 
+      var forgotWrap = document.getElementById("loginForgotWrap");
+      var forgotBtn = document.getElementById("loginForgotBtn");
+      var forgotSeq = 0;
+      var forgotTimer = null;
+
+      function showLoginMsg(text, ok) {
+        msg.hidden = false;
+        msg.className = ok ? "auth-msg auth-msg--ok" : "auth-msg auth-msg--err";
+        msg.textContent = text;
+      }
+
+      function hideForgotOption() {
+        if (forgotWrap) forgotWrap.hidden = true;
+      }
+
+      function refreshForgotOption() {
+        if (!loginEmail || !Auth.checkPasswordResetEligibility) {
+          hideForgotOption();
+          return;
+        }
+        var seq = ++forgotSeq;
+        var typed = loginEmail.value;
+        Auth.checkPasswordResetEligibility(typed).then(function (result) {
+          if (seq !== forgotSeq) return;
+          if (!loginEmail || loginEmail.value !== typed) return;
+          if (forgotWrap) forgotWrap.hidden = !(result && result.eligible);
+        });
+      }
+
+      function scheduleForgotOption() {
+        hideForgotOption();
+        if (forgotTimer) window.clearTimeout(forgotTimer);
+        forgotTimer = window.setTimeout(refreshForgotOption, 400);
+      }
+
+      if (loginEmail) {
+        loginEmail.addEventListener("input", scheduleForgotOption);
+        loginEmail.addEventListener("change", refreshForgotOption);
+        loginEmail.addEventListener("blur", refreshForgotOption);
+        window.setTimeout(refreshForgotOption, 250);
+      }
+
+      if (forgotBtn) {
+        forgotBtn.addEventListener("click", function () {
+          var email = loginEmail ? loginEmail.value : "";
+          if (!Auth || typeof Auth.requestPasswordReset !== "function") {
+            showLoginMsg("Password reset is unavailable. Refresh the page and try again.", false);
+            return;
+          }
+          var BL = window.ElenestButtonLoading;
+          if (BL) BL.set(forgotBtn, true, "Sending…");
+          Auth.requestPasswordReset(email).then(function (result) {
+            if (BL) BL.set(forgotBtn, false);
+            showLoginMsg((result && result.message) || "Could not send the reset email.", !!(result && result.ok));
+            if (!result || !result.ok) return;
+            window.setTimeout(function () {
+              if (result.inboxUrl) {
+                window.location.assign(result.inboxUrl);
+                return;
+              }
+              if (Auth.openEmailInbox) Auth.openEmailInbox(email);
+            }, 900);
+          }).catch(function () {
+            if (BL) BL.set(forgotBtn, false);
+            showLoginMsg("Could not send the reset email. Check your connection and try again.", false);
+          });
+        });
+      }
+
       form.addEventListener("submit", function (e) {
         e.preventDefault();
         var email = loginEmail ? loginEmail.value : "";
         var password = loginPassword ? loginPassword.value : "";
+        if (!Auth || typeof Auth.login !== "function") {
+          msg.hidden = false;
+          msg.className = "auth-msg auth-msg--err";
+          msg.textContent = "Sign in is unavailable. Refresh the page and try again.";
+          return;
+        }
         var BL = window.ElenestButtonLoading;
         if (BL) BL.set(submitBtn, true);
         Auth.login(email, password).then(function (result) {
@@ -314,6 +395,11 @@
           msg.hidden = false;
           msg.className = "auth-msg auth-msg--err";
           msg.textContent = result.message;
+        }).catch(function () {
+          if (BL) BL.set(submitBtn, false);
+          msg.hidden = false;
+          msg.className = "auth-msg auth-msg--err";
+          msg.textContent = "Could not sign in. Check your connection and try again.";
         });
       });
     })();

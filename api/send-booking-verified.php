@@ -69,6 +69,7 @@ $facility = elenest_plain_line($body['facility'] ?? '');
 $stayLabel = elenest_plain_line($body['stay_label'] ?? '');
 $amount = elenest_plain_line($body['amount'] ?? '');
 $bookingId = elenest_plain_line($body['booking_id'] ?? '');
+$accountEmail = strtolower(trim((string) ($body['account_email'] ?? '')));
 
 if ($to === '' || !elenest_is_valid_email($to)) {
     http_response_code(400);
@@ -82,9 +83,68 @@ if ($guestName === '') {
 }
 
 $fromName = trim((string) ($smtp['from_name'] ?: 'Elenest Resort'));
-$subject = $isFull
-    ? 'Your Elenest Resort booking is confirmed'
-    : 'Your Elenest Resort payment has been verified';
+$subject = 'Your Elenest Resort payment has been approved';
+
+function elenest_insert_payment_approved_notice(array $config, string $email, bool $isFull, string $bookingId, string $facility, string $schedule): void
+{
+    $url = rtrim((string) ($config['supabase_url'] ?? ''), '/');
+    $key = trim((string) ($config['supabase_service_role_key'] ?? ''));
+    $email = strtolower(trim($email));
+    if ($url === '' || $key === '' || $email === '' || !elenest_is_valid_email($email)) {
+        return;
+    }
+    $title = $isFull ? 'Full Payment Approved' : 'Down Payment Approved';
+    $message = $isFull
+        ? 'Your full payment has been approved. Your booking is confirmed. Arrival stays Not Arrived until check-in.'
+        : 'Your down payment has been approved. Your booking is confirmed. Arrival stays Not Arrived.';
+    if ($facility !== '') {
+        $message .= ' Facility: ' . $facility . '.';
+    }
+    if ($schedule !== '') {
+        $message .= ' Schedule: ' . $schedule . '.';
+    }
+    $stableId = 'payok-' . substr(hash('sha256', $email . '|' . $bookingId), 0, 24);
+    $payload = json_encode([
+        'id' => $stableId,
+        'user_email' => $email,
+        'type' => 'payment_approved',
+        'title' => $title,
+        'message' => $message,
+        'read' => false,
+        'link' => 'book.html',
+        'booking_id' => $bookingId !== '' ? $bookingId : null,
+        'dedup_key' => 'payment_approved:' . ($bookingId !== '' ? $bookingId : $stableId),
+        'meta' => new stdClass(),
+        'created_at' => gmdate('c'),
+    ], JSON_UNESCAPED_UNICODE);
+    if (!is_string($payload)) {
+        return;
+    }
+    $context = stream_context_create([
+        'http' => [
+            'method' => 'POST',
+            'header' => implode("\r\n", [
+                'Content-Type: application/json',
+                'apikey: ' . $key,
+                'Authorization: Bearer ' . $key,
+                'Prefer: resolution=merge-duplicates',
+            ]),
+            'content' => $payload,
+            'timeout' => 12,
+            'ignore_errors' => true,
+        ],
+    ]);
+    @file_get_contents($url . '/rest/v1/notifications', false, $context);
+}
+
+$schedule = $checkIn;
+if ($checkOut !== '' && $checkOut !== $checkIn) {
+    $schedule = trim($checkIn . ' to ' . $checkOut);
+}
+elenest_insert_payment_approved_notice($config, $to, $isFull, $bookingId, $facility, $schedule);
+if ($accountEmail !== '' && $accountEmail !== strtolower($to)) {
+    elenest_insert_payment_approved_notice($config, $accountEmail, $isFull, $bookingId, $facility, $schedule);
+}
 
 $lines = [
     'Good day, ' . $guestName . '!',
@@ -116,6 +176,7 @@ if ($bookingId !== '') {
 }
 
 $lines[] = '';
+$lines[] = 'This message confirms that your payment has been approved.';
 if ($isFull) {
     $lines[] = 'This booking is non-refundable. Please keep this email for your records.';
     $lines[] = 'Payment: Approved · Booking: Confirmed · Arrival: Not Arrived until your check-in date.';

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Dashboard | Elenest Resort</title>
   <link rel="icon" type="image/png" href="../Images/icon.png">
-  <link rel="stylesheet" href="../css/style.css?v=20260929-notify2">
+  <link rel="stylesheet" href="../css/style.css?v=20261012-pending5">
   <link rel="stylesheet" href="../css/predictive-analytics.css?v=20260922-ux1">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -45,8 +45,7 @@
               aria-controls="adminNavManagementMenu"
             >Management</button>
             <div id="adminNavManagementMenu" class="admin-nav-dropdown-menu" role="menu">
-              <a href="#section-payments" class="admin-nav-dropdown-item" role="menuitem">Payment Management</a>
-              <a href="#section-reservation-queue" class="admin-nav-dropdown-item" role="menuitem">Reservation Queue</a>
+              <a href="#section-payments" class="admin-nav-dropdown-item" role="menuitem">Reservation Management</a>
               <a href="#section-calendar-access" class="admin-nav-dropdown-item" role="menuitem">Calendar Access Control</a>
               <a href="#section-activity-logs" class="admin-nav-dropdown-item" role="menuitem">Activity Logs</a>
               <a href="#section-manager-user" class="admin-nav-dropdown-item" role="menuitem">User administration</a>
@@ -184,6 +183,13 @@
                 <span class="admin-dash-cal-legend__text">
                   <strong>Available</strong>
                   <span>Open for new bookings.</span>
+                </span>
+              </li>
+              <li>
+                <span class="avail-legend__swatch avail-legend__swatch--pending" aria-hidden="true"></span>
+                <span class="admin-dash-cal-legend__text">
+                  <strong>Pending Admin Confirmation</strong>
+                  <span>Waiting for downpayment verification and not selectable.</span>
                 </span>
               </li>
               <li>
@@ -359,19 +365,30 @@
     <section class="section admin-section" id="section-payments" hidden>
       <div class="appointments-strip admin-payments-strip">
         <div class="appointments-strip__head admin-payments-strip__head">
-          <h2 class="appointments-strip__title admin-payments-strip__title">Payment Management</h2>
+          <h2 class="appointments-strip__title admin-payments-strip__title">Reservation Management</h2>
         </div>
       </div>
 
       <div class="card admin-payments-card">
-        <nav class="content-mgmt-tabs admin-payments-tabs" role="tablist" aria-label="Payment Management sections">
+        <nav class="content-mgmt-tabs admin-payments-tabs" role="tablist" aria-label="Reservation Management sections">
           <button
             type="button"
             class="content-mgmt-tab content-mgmt-tab--active"
             role="tab"
+            id="adminPaymentsTabBookings"
+            data-payments-tab="bookings"
+            aria-selected="true"
+            aria-controls="adminPaymentsPanelBookings"
+          >
+            Booking Management
+          </button>
+          <button
+            type="button"
+            class="content-mgmt-tab"
+            role="tab"
             id="adminPaymentsTabApproval"
             data-payments-tab="approval"
-            aria-selected="true"
+            aria-selected="false"
             aria-controls="adminPaymentsPanelApproval"
           >
             Payment Approval
@@ -392,11 +409,92 @@
         <div class="admin-payments-panels">
           <div
             class="admin-payments-panel"
+            id="adminPaymentsPanelBookings"
+            data-payments-panel="bookings"
+            role="tabpanel"
+            aria-labelledby="adminPaymentsTabBookings"
+          >
+            <div class="admin-booking-review-head">
+              <div>
+                <h3 class="admin-pay-table-title">Booking requests</h3>
+                <p class="admin-booking-review-lead">Confirm the facility, date, schedule, guests, total, and availability. Confirmation notifies the guest and opens online payment for 3 hours.</p>
+              </div>
+              <button type="button" class="btn btn--outline btn--small" id="adminBookingReviewRefresh">Refresh</button>
+            </div>
+            <div id="adminBookingReviewList" class="admin-booking-review-list"></div>
+          </div>
+          <div
+            class="admin-payments-panel"
             id="adminPaymentsPanelApproval"
             data-payments-panel="approval"
             role="tabpanel"
             aria-labelledby="adminPaymentsTabApproval"
+            hidden
           >
+            <div class="admin-payments-period" id="adminPaymentsPeriodFilters">
+              <div class="admin-payments-period__modes" role="group" aria-label="Filter payment records by period">
+                <button
+                  type="button"
+                  class="btn btn--outline btn--small admin-payments-period__mode admin-payments-period__mode--active"
+                  data-payment-period="all"
+                  aria-pressed="true"
+                >
+                  All
+                </button>
+                <button
+                  type="button"
+                  class="btn btn--outline btn--small admin-payments-period__mode"
+                  data-payment-period="week"
+                  aria-pressed="false"
+                >
+                  Week
+                </button>
+                <button
+                  type="button"
+                  class="btn btn--outline btn--small admin-payments-period__mode"
+                  data-payment-period="month"
+                  aria-pressed="false"
+                >
+                  Month
+                </button>
+                <button
+                  type="button"
+                  class="btn btn--outline btn--small admin-payments-period__mode"
+                  data-payment-period="year"
+                  aria-pressed="false"
+                >
+                  Year
+                </button>
+              </div>
+              <div class="admin-payments-period__fields" id="adminPaymentsPeriodFields" hidden>
+                <label class="admin-payments-period__field" id="adminPaymentsPeriodYearField">
+                  <span>Year</span>
+                  <select id="adminPaymentsPeriodYear"></select>
+                </label>
+                <label class="admin-payments-period__field" id="adminPaymentsPeriodMonthField" hidden>
+                  <span>Month</span>
+                  <select id="adminPaymentsPeriodMonth">
+                    <option value="0">January</option>
+                    <option value="1">February</option>
+                    <option value="2">March</option>
+                    <option value="3">April</option>
+                    <option value="4">May</option>
+                    <option value="5">June</option>
+                    <option value="6">July</option>
+                    <option value="7">August</option>
+                    <option value="8">September</option>
+                    <option value="9">October</option>
+                    <option value="10">November</option>
+                    <option value="11">December</option>
+                  </select>
+                </label>
+                <label class="admin-payments-period__field" id="adminPaymentsPeriodWeekField" hidden>
+                  <span>Week</span>
+                  <select id="adminPaymentsPeriodWeek"></select>
+                </label>
+              </div>
+              <p class="admin-payments-period__summary" id="adminPaymentsPeriodSummary" aria-live="polite" hidden></p>
+            </div>
             <div class="split-2 admin-payments-kpi-row">
               <article
                 class="card kpi admin-kpi-card admin-payment-kpi-card"
@@ -526,36 +624,6 @@
               </article>
             </div>
           </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section admin-section" id="section-reservation-queue" hidden>
-      <div class="rq-board">
-        <header class="rq-board__head">
-          <div>
-            <p class="rq-board__kicker">Management</p>
-            <h2 class="rq-board__title">Reservation Queue</h2>
-            <p class="rq-board__lead" id="adminReservationQueueLead">
-              Double bookings are marked on the calendar. The table below lists every one so you can review them in order.
-            </p>
-          </div>
-          <button type="button" class="btn btn--small" id="adminReservationQueueRefresh">Refresh</button>
-        </header>
-        <div class="rq-stack">
-          <section class="rq-calendar-card" aria-label="Reservation calendar">
-            <div class="rq-cal-nav">
-              <button type="button" class="rq-cal-nav__btn" id="rqCalPrev" aria-label="Previous month">‹</button>
-              <h3 class="rq-cal-nav__title" id="rqCalTitle">Calendar</h3>
-              <button type="button" class="rq-cal-nav__btn" id="rqCalNext" aria-label="Next month">›</button>
-              <button type="button" class="btn btn--outline btn--small" id="rqCalToday">Today</button>
-            </div>
-            <div class="rq-weekdays" aria-hidden="true">
-              <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
-            </div>
-            <div id="rqCalendar" class="rq-month"></div>
-          </section>
-          <section class="rq-panel" id="rqDoubles" aria-live="polite"></section>
         </div>
       </div>
     </section>
@@ -988,6 +1056,7 @@
           <div id="adminAccessCalendarHost" class="book-flow-calendar manager-cal-grid" role="grid" aria-label="Owner calendar"></div>
           <ul class="list calendar-legend manager-cal-legend">
             <li><strong>Available</strong> — open for new bookings (green).</li>
+            <li><strong>Pending Admin Confirmation</strong> — waiting for downpayment verification; not available to book.</li>
             <li><strong>Booked</strong> — reserved stay; gray and not available to book.</li>
             <li><strong>Blocked</strong> — closed on the official calendar (Owner control).</li>
           </ul>
@@ -1361,35 +1430,34 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="../js/supabase-config.js?v=20260922-ux1"></script>
   <script src="../js/supabase-client.js"></script>
-  <script src="../js/ui-button-loading.js"></script>
+  <script src="../js/ui-button-loading.js?v=20261012-btns1"></script>
   <script src="../js/elenest-errors.js?v=20260922-ux1"></script>
   <script src="../js/auth.js?v=20260922-ux3"></script>
   <script src="../js/access-control.js?v=20260918-role2"></script>
   <script src="../js/password-toggle.js"></script>
-  <script src="../js/payment-flow.js?v=20260929-queue3"></script>
+  <script src="../js/payment-flow.js?v=20261012-pending5"></script>
   <script src="../js/payment-proofs.js"></script>
-  <script src="../js/historical-data.js?v=20260922-ux1"></script>
-  <script src="../js/bookings.js?v=20260929-queue1"></script>
+  <script src="../js/historical-data.js?v=20261008-eval1"></script>
+  <script src="../js/bookings.js?v=20261012-pending5"></script>
   <script src="../js/payment-methods.js"></script>
-  <script src="../js/notifications.js?v=20260929-notify1"></script>
+  <script src="../js/notifications.js?v=20261013-adminspeed1"></script>
   <script src="../js/staff-notifications-ui.js?v=20260916-notifread1"></script>
   <script src="../js/contact-messages.js?v=20260911-staffnotif1"></script>
   <script src="../js/guest-feedback.js?v=20260927-review1"></script>
   <script src="../js/content-store.js?v=20260718-gallery"></script>
-  <script src="../js/unit-availability.js?v=20260929-queue4"></script>
+  <script src="../js/unit-availability.js?v=20261013-adminspeed1"></script>
   <script>
     // Live calendar uses Supabase bookings only (no Google Calendar).
     window.ElenestGoogleCalendarIcsUrl = "";
   </script>
-  <script src="../js/elenest-availability.js?v=20260908-calacl1"></script>
-  <script src="../js/elenest-calendar-widget.js?v=20260922-ux2"></script>
-  <script src="../js/calendar-access.js?v=20260922-ux2"></script>
+  <script src="../js/elenest-availability.js?v=20261012-pending5"></script>
+  <script src="../js/elenest-calendar-widget.js?v=20261012-pending5"></script>
+  <script src="../js/calendar-access.js?v=20261012-btns1"></script>
   <script src="../js/activity-logs.js?v=20260917-actlog3"></script>
   <!-- predictive-analytics.js is lazy-loaded when that section opens -->
-  <script src="../js/model-evaluation.js?v=20260929-pa1"></script>
-  <script src="../js/staff-boot-loading.js?v=20260918-bootfix1"></script>
-  <script src="../js/reservation-queue.js?v=20260929-queue12"></script>
-  <script src="../js/admin.js?v=20260929-queue3"></script>
+  <script src="../js/model-evaluation.js?v=20261013-evalfast1"></script>
+  <script src="../js/staff-boot-loading.js?v=20261008-boot2"></script>
+  <script src="../js/admin.js?v=20261013-evalfast1"></script>
   <script src="../js/mobile-tables.js?v=20260929-mobile7"></script>
 </body>
 </html>

@@ -73,7 +73,14 @@
           return finish(result, false);
         },
         function (err) {
-          return finish(err, true);
+          var tagged = err;
+          if (!tagged || typeof tagged !== "object") {
+            tagged = new Error(tagged ? String(tagged) : "Something went wrong. Please try again.");
+          }
+          try {
+            tagged.__elenestToast = true;
+          } catch (e2) {}
+          return finish(tagged, true);
         }
       );
   }
@@ -87,10 +94,28 @@
     return run(btn, work, label);
   }
 
+  function releaseLoadingButtons() {
+    var nodes = document.querySelectorAll("button.is-loading, input.is-loading, a.is-loading");
+    for (var i = 0; i < nodes.length; i++) setButtonLoading(nodes[i], false);
+    return nodes.length;
+  }
+
+  var recoveryToastAt = 0;
+  window.addEventListener("unhandledrejection", function () {
+    if (!releaseLoadingButtons()) return;
+    var now = Date.now();
+    if (now - recoveryToastAt < 1200) return;
+    recoveryToastAt = now;
+    var Errors = window.ElenestErrors;
+    var message = "Something went wrong. Please try again.";
+    if (Errors && typeof Errors.toast === "function") Errors.toast(message);
+  });
+
   window.ElenestButtonLoading = {
     DEFAULT_LABEL: DEFAULT_LABEL,
     set: setButtonLoading,
     run: run,
-    runForm: runForm
+    runForm: runForm,
+    release: releaseLoadingButtons
   };
 })();

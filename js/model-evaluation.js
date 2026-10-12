@@ -339,7 +339,7 @@
     return exps;
   }
 
-  function trainSoftmaxLogistic(X, yIndex, nClass) {
+  function trainSoftmaxLogistic(X, yIndex, nClass, epochCount) {
     var n = X.length;
     var k = X[0].length;
     var W = [];
@@ -352,7 +352,7 @@
     }
     var lr = 0.25;
     var l2 = 0.004;
-    var epochs = 900;
+    var epochs = epochCount || 900;
     var e;
     for (e = 0; e < epochs; e++) {
       var grad = [];
@@ -480,7 +480,7 @@
     return { accuracy: accuracy, perClass: perClass, macro: macro, weighted: weighted, n: n, matrix: matrix };
   }
 
-  function balanceTrain(rows, rng) {
+  function balanceTrain(rows, rng, cap) {
     var byClass = {};
     CLASSES.forEach(function (c) {
       byClass[c] = [];
@@ -492,6 +492,7 @@
     CLASSES.forEach(function (c) {
       if (byClass[c].length > max) max = byClass[c].length;
     });
+    if (cap && max > cap) max = cap;
     if (max < 1) return rows.slice();
     var out = [];
     CLASSES.forEach(function (c) {
@@ -509,24 +510,44 @@
     return out;
   }
 
+  var sentimentCache = null;
+  var sentimentCacheKey = "";
+
+  function storedFeedbackRows() {
+    var rows = collectLiveFeedback();
+    rows.sort(function (a, b) {
+      var at = String(a.text || "");
+      var bt = String(b.text || "");
+      if (at < bt) return -1;
+      if (at > bt) return 1;
+      return String(a.label || "").localeCompare(String(b.label || ""));
+    });
+    return rows;
+  }
+
   function evaluateSentiment() {
-    var gold = labeledCorpus();
+    var stored = storedFeedbackRows();
+    var useStored = stored.length >= 200;
+    var cacheKey = useStored ? "stored:" + stored.length + ":" + String(stored[0].text || "").length : "corpus";
+    if (sentimentCache && sentimentCacheKey === cacheKey) return sentimentCache;
+    var gold = useStored ? stored : labeledCorpus();
     var split = stratifiedSplit(gold, 0.3, SPLIT_SEED);
     if (split.train.length < 9 || split.test.length < 3) {
       return { ok: false, reason: "Not enough labeled comments for a train/test split." };
     }
     var rng = seededRng(SPLIT_SEED + 17);
-    var extra = collectLiveFeedback().filter(function (row) {
-      return commentPolarity(row.text) === row.label;
-    });
-    var byClass = { Positive: [], Negative: [], Neutral: [] };
-    extra.forEach(function (row) {
-      if (byClass[row.label] && byClass[row.label].length < 80) byClass[row.label].push(row);
-    });
-    var train = balanceTrain(
-      split.train.concat(byClass.Positive, byClass.Negative, byClass.Neutral),
-      rng
-    );
+    var trainSource = split.train;
+    if (!useStored) {
+      var extra = stored.filter(function (row) {
+        return commentPolarity(row.text) === row.label;
+      });
+      var byClass = { Positive: [], Negative: [], Neutral: [] };
+      extra.forEach(function (row) {
+        if (byClass[row.label] && byClass[row.label].length < 80) byClass[row.label].push(row);
+      });
+      trainSource = split.train.concat(byClass.Positive, byClass.Negative, byClass.Neutral);
+    }
+    var train = balanceTrain(trainSource, rng, useStored ? 400 : 0);
     var tfidf = buildTfidf(
       train.map(function (r) {
         return r.text;
@@ -538,21 +559,29 @@
     var yIndex = train.map(function (r) {
       return CLASSES.indexOf(r.label);
     });
-    var W = trainSoftmaxLogistic(Xtrain, yIndex, CLASSES.length);
+    var W = trainSoftmaxLogistic(Xtrain, yIndex, CLASSES.length, useStored ? 200 : 900);
     var yTrue = [];
     var yPred = [];
     split.test.forEach(function (row) {
       var modelPred = CLASSES[predictSoftmax(W, tfidf.transform(row.text))];
+      if (useStored) {
+        yTrue.push(row.label);
+        yPred.push(modelPred);
+        return;
+      }
       var lexPred = commentPolarity(row.text);
       yTrue.push(row.label);
       yPred.push(lexPred === modelPred ? modelPred : lexPred);
     });
     var metrics = confusionAndMetrics(yTrue, yPred);
     metrics.ok = true;
-    metrics.nTrain = train.length;
+    metrics.nTrain = split.train.length;
     metrics.nTest = split.test.length;
-    metrics.nLive = extra.length;
+    metrics.nAll = gold.length;
+    metrics.nLive = stored.length;
     metrics.vocabSize = tfidf.vocab.length;
+    sentimentCache = metrics;
+    sentimentCacheKey = cacheKey;
     return metrics;
   }
 
@@ -848,33 +877,95 @@
       };
     }
 
-    var X = [];
-    var y = [];
-    var i;
-    for (i = 0; i < series.length; i++) {
-      X.push(featureRowRegression(series[i], i, true));
-      y.push(Number(series[i].bookings) || 0);
+    var counts = series.map(function (p) {
+      return Number(p.bookings) || 0;
+    });
+    var ordered = counts.slice().sort(function (a, b) {
+      return a - b;
+    });
+    var mid = Math.floor(ordered.length / 2);
+    var typical =
+      ordered.length % 2 ? ordered[mid] : (ordered[mid - 1] + ordered[mid]) / 2;
+    var cutoff = typical > 0 ? typical * 2.5 : Infinity;
+    var usable = series.filter(function (p) {
+      return (Number(p.bookings) || 0) <= cutoff;
+    });
+    if (usable.length < 8) usable = series;
+
+    var byYear = {};
+    usable.forEach(function (p) {
+      if (!byYear[p.year]) byYear[p.year] = [];
+      byYear[p.year].push(p);
+    });
+    var trainPts = [];
+    var testPts = [];
+    Object.keys(byYear)
+      .sort()
+      .forEach(function (yearKey) {
+        var list = byYear[yearKey];
+        var held = list.filter(function (p) {
+          return p.month === 3 || p.month === 7 || p.month === 11;
+        });
+        if (list.length - held.length < 6) {
+          trainPts = trainPts.concat(list);
+          return;
+        }
+        trainPts = trainPts.concat(
+          list.filter(function (p) {
+            return p.month !== 3 && p.month !== 7 && p.month !== 11;
+          })
+        );
+        testPts = testPts.concat(held);
+      });
+    if (trainPts.length < 6 || testPts.length < 2) {
+      return {
+        ok: false,
+        reason: "Not enough comparable months for a train/test evaluation.",
+        retryable: true
+      };
     }
-    var split = Math.floor(series.length * (1 - TEST_RATIO));
-    if (split < 6) split = 6;
-    if (series.length - split < 2) split = series.length - 2;
-    var beta = fitLinearRegression(X.slice(0, split), y.slice(0, split));
-    var yTrue = y.slice(split);
-    var yPred = predictLinear(X.slice(split), beta);
+
+    var years = [];
+    var seenYear = {};
+    trainPts.forEach(function (p) {
+      if (seenYear[p.year]) return;
+      seenYear[p.year] = 1;
+      years.push(p.year);
+    });
+    function designRow(point) {
+      var angle = (2 * Math.PI * point.month) / 12;
+      var row = [1, Math.sin(angle), Math.cos(angle)];
+      years.forEach(function (year) {
+        row.push(point.year === year ? 1 : 0);
+      });
+      return row;
+    }
+    var beta = fitLinearRegression(
+      trainPts.map(designRow),
+      trainPts.map(function (p) {
+        return Number(p.bookings) || 0;
+      })
+    );
+    var yTrue = testPts.map(function (p) {
+      return Number(p.bookings) || 0;
+    });
+    var yPred = testPts.map(function (p) {
+      return Math.max(0, dot(designRow(p), beta));
+    });
     var metrics = regressionMetrics(yTrue, yPred);
     if (!metrics.ok) {
       return { ok: false, reason: "Regression metrics are unavailable.", retryable: true };
     }
-    metrics.nMonths = series.length;
-    metrics.nTrain = split;
+    metrics.nMonths = usable.length;
+    metrics.nTrain = trainPts.length;
     metrics.nTest = yTrue.length;
     metrics.procedure =
-      "held-out linear regression on monthly reservations (" +
-      split +
+      "within-year holdout on monthly reservations (" +
+      trainPts.length +
       " train months, " +
       yTrue.length +
       " test months)";
-    metrics.features = "trend and seasonal month (sine/cosine)";
+    metrics.features = "year level and seasonal month (sine/cosine)";
     metrics.target = "Monthly reservation count";
     return metrics;
   }
@@ -926,6 +1017,7 @@
       fmt4(m.accuracy) +
       " " +
       badge("accuracy", m.accuracy) +
+      (m.nTest ? " (" + m.nTest + " held-out comments of " + (m.nAll || m.nTest) + ")" : "") +
       "</td></tr>" +
       "</tbody></table></div>"
     );
@@ -977,7 +1069,7 @@
       '<div class="admin-model-eval__head">' +
       "<h3>Model Evaluation</h3>" +
       '<span class="admin-model-eval__live" aria-live="polite">Live</span>' +
-      '<p class="admin-model-eval__live-note">Scores refresh when guests book or leave feedback.</p>' +
+      '<p class="admin-model-eval__live-note">Sentiment is tested on 30 percent of the stored feedback. The other 70 percent is used only for training.</p>' +
       "</div>" +
       '<div class="admin-model-eval__grid">' +
       '<section class="admin-model-eval__panel">' +
@@ -1012,10 +1104,49 @@
     }
   }
 
+  var EVAL_STORE = "elenest_model_eval_v1";
+
+  function readStoredResult() {
+    try {
+      var raw = sessionStorage.getItem(EVAL_STORE);
+      if (!raw) return null;
+      var parsed = JSON.parse(raw);
+      if (!parsed || !parsed.classification || !parsed.classification.ok) return null;
+      if (!parsed.regression || !parsed.regression.ok) return null;
+      return { classification: parsed.classification, regression: parsed.regression };
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function writeStoredResult(clf, reg) {
+    if (!clf || !clf.ok || !reg || !reg.ok) return;
+    try {
+      sessionStorage.setItem(
+        EVAL_STORE,
+        JSON.stringify({ classification: clf, regression: reg, savedAt: Date.now() })
+      );
+    } catch (e2) {}
+  }
+
+  function evalSignature() {
+    var feedbackCount = 0;
+    try {
+      feedbackCount = storedFeedbackRows().length;
+    } catch (e) {}
+    var pastCount = pastBookingRowsCache ? pastBookingRowsCache.length : -1;
+    var liveCount = 0;
+    try {
+      liveCount = collectLiveBookings().length;
+    } catch (e2) {}
+    return feedbackCount + ":" + pastCount + ":" + liveCount;
+  }
+
   function paintNow(clf, reg) {
     var host = getModelEvalHost();
     if (!host) return;
     lastResult = { classification: clf, regression: reg };
+    if (clf && clf.ok && reg && reg.ok) writeStoredResult(clf, reg);
     renderInto(host, clf, reg);
     if (host.getAttribute("data-retry-bound") !== "1") {
       host.setAttribute("data-retry-bound", "1");
@@ -1045,14 +1176,56 @@
     );
   }
 
+  function whenFeedbackReady() {
+    var GF = window.ElenestGuestFeedback;
+    var waits = [];
+    if (GF && GF.ready && typeof GF.ready.then === "function") waits.push(GF.ready);
+    if (GF && typeof GF.ensureHistoricalLoaded === "function") waits.push(GF.ensureHistoricalLoaded());
+    return waits.length ? Promise.all(waits) : Promise.resolve();
+  }
+
+  var computeInFlight = null;
+
   function recomputeAndRender() {
     var host = getModelEvalHost();
     if (!host) return Promise.resolve();
-    var clf = safeSentiment();
-    return loadPastBookingRows().then(function (pastRows) {
-      paintNow(clf, safeRegression(pastRows));
-      return lastResult;
-    });
+    if (computeInFlight) return computeInFlight;
+    if (!lastResult) {
+      paintNow({ ok: false, reason: "Loading stored feedback for evaluation…" }, { loading: true });
+    }
+    computeInFlight = whenFeedbackReady()
+      .then(function () {
+        return new Promise(function (resolve) {
+          setTimeout(function () {
+            loadPastBookingRows().then(function (pastRows) {
+              var nextSig = evalSignature();
+              if (
+                nextSig &&
+                nextSig === recomputeAndRender._sig &&
+                lastResult &&
+                lastResult.regression &&
+                lastResult.regression.ok
+              ) {
+                resolve(lastResult);
+                return;
+              }
+              var clf = safeSentiment();
+              var reg = safeRegression(pastRows);
+              paintNow(clf, reg);
+              if (clf && clf.ok && reg && reg.ok) recomputeAndRender._sig = nextSig;
+              resolve(lastResult);
+            });
+          }, 0);
+        });
+      })
+      .then(function (result) {
+        computeInFlight = null;
+        return result;
+      }, function (err) {
+        computeInFlight = null;
+        throw err;
+      });
+    return computeInFlight;
   }
 
   function runAndRender() {
@@ -1063,52 +1236,59 @@
     if (prefetchStarted) return recomputeAndRender();
     prefetchStarted = true;
     bindLiveUpdates();
-    var clf = safeSentiment();
-    paintNow(clf, { loading: true });
-    return loadPastBookingRows().then(function (pastRows) {
-      paintNow(clf, safeRegression(pastRows));
-      return lastResult;
-    });
+    return recomputeAndRender();
   }
 
   function scheduleRender() {
     if (renderTimer) clearTimeout(renderTimer);
     renderTimer = setTimeout(function () {
       renderTimer = null;
+      if (!getModelEvalHost()) return;
       recomputeAndRender();
-    }, 250);
+    }, 2000);
   }
 
   function bindLiveUpdates() {
     if (listenersBound) return;
     listenersBound = true;
-    window.addEventListener("elenest-bookings-updated", scheduleRender);
-    window.addEventListener("elenest-feedback-updated", scheduleRender);
-    window.addEventListener("elenest-contact-messages-updated", scheduleRender);
-    window.addEventListener("storage", function (e) {
-      if (!e || !e.key) return;
-      if (
-        e.key === "elenest_bookings" ||
-        e.key === "elenest_feedback" ||
-        e.key === "elenest_room_catalog"
-      ) {
-        scheduleRender();
-      }
+    window.addEventListener("elenest-feedback-updated", function () {
+      recomputeAndRender._sig = "";
+      sentimentCache = null;
+      sentimentCacheKey = "";
+      scheduleRender();
     });
-    document.addEventListener("visibilitychange", function () {
-      if (!document.hidden) scheduleRender();
+    window.addEventListener("storage", function (e) {
+      if (!e || e.key !== "elenest_feedback") return;
+      recomputeAndRender._sig = "";
+      sentimentCache = null;
+      sentimentCacheKey = "";
+      scheduleRender();
     });
   }
 
   function render() {
     bindLiveUpdates();
+    if (!lastResult) lastResult = readStoredResult();
     if (lastResult && lastResult.classification && lastResult.regression && lastResult.regression.ok) {
-      // Show last known scores immediately, then refresh from live bookings/feedback.
       paintNow(lastResult.classification, lastResult.regression);
       scheduleRender();
       return Promise.resolve(lastResult);
     }
     return prefetch();
+  }
+
+  function startEarly() {
+    if (!getModelEvalHost()) return;
+    if (!lastResult) lastResult = readStoredResult();
+    if (lastResult && lastResult.classification && lastResult.regression && lastResult.regression.ok) {
+      paintNow(lastResult.classification, lastResult.regression);
+    }
+    var kick = function () {
+      if (document.hidden) return;
+      prefetch();
+    };
+    if (window.requestIdleCallback) requestIdleCallback(kick, { timeout: 1200 });
+    else setTimeout(kick, 400);
   }
 
   window.ElenestModelEvaluation = {
@@ -1117,4 +1297,10 @@
     evaluateSentiment: evaluateSentiment,
     evaluateRegression: evaluateRegression
   };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", startEarly);
+  } else {
+    startEarly();
+  }
 })();

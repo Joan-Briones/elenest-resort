@@ -78,7 +78,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="../js/supabase-config.js"></script>
   <script src="../js/supabase-client.js"></script>
-  <script src="../js/ui-button-loading.js"></script>
+  <script src="../js/ui-button-loading.js?v=20261012-btns1"></script>
   <script src="../js/otp-verification.js"></script>
   <script src="../js/header-nav.js?v=20260922-menu2"></script>
   <script>
@@ -115,6 +115,10 @@
 
       form.addEventListener("submit", function (e) {
         e.preventDefault();
+        if (!Otp || typeof Otp.verifyOtp !== "function") {
+          showMsg("Verification is unavailable. Refresh the page and try again.", false);
+          return;
+        }
         var BL = window.ElenestButtonLoading;
         if (BL) BL.set(submitBtn, true);
         msg.hidden = true;
@@ -126,11 +130,18 @@
           }
           if (BL) BL.set(submitBtn, false);
           showMsg(result.message, false);
+        }).catch(function () {
+          if (BL) BL.set(submitBtn, false);
+          showMsg("Could not verify the code. Check your connection and try again.", false);
         });
       });
 
       if (resendBtn) {
         resendBtn.addEventListener("click", function () {
+          if (!Otp || typeof Otp.sendOtp !== "function") {
+            showMsg("Resend is unavailable. Refresh the page and try again.", false);
+            return;
+          }
           var BL = window.ElenestButtonLoading;
           if (BL) BL.set(resendBtn, true);
           msg.hidden = true;
@@ -140,6 +151,9 @@
               result.ok ? "A new code was sent to your phone." : result.message,
               result.ok
             );
+          }).catch(function () {
+            if (BL) BL.set(resendBtn, false);
+            showMsg("Could not resend the code. Check your connection and try again.", false);
           });
         });
       }

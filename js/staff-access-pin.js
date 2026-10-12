@@ -380,6 +380,10 @@
 
         close();
         if (onSuccess) onSuccess();
+      }).catch(function () {
+        if (BL) BL.set(submitBtn, false);
+        else if (submitBtn) submitBtn.disabled = false;
+        setMsg(false, "Could not check the PIN. Please try again.");
       });
     };
   }

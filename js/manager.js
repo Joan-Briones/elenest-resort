@@ -2016,10 +2016,20 @@
         return;
       }
       var kind = av.getUnavailableKind(selectedIsoDate);
+      var facility =
+        typeof av.getDateFacilityStatus === "function" ? av.getDateFacilityStatus(selectedIsoDate) : null;
       var isManagerBlocked = kind === "manager";
-      var isBooked = kind === "booked" || kind === "limited" || kind === "hold" || kind === "google";
+      var isPendingDate = kind === "pending" || !!(facility && facility.hasPending);
+      var isBooked = kind === "booked" || kind === "limited" || kind === "hold" || kind === "google" || kind === "pending";
       var label = "Available";
-      if (isBooked) label = "Booked";
+      if (isPendingDate) {
+        label =
+          (facility && facility.label) ||
+          (window.ElenestUnitAvailability &&
+          typeof window.ElenestUnitAvailability.pendingCalendarLabel === "function"
+            ? window.ElenestUnitAvailability.pendingCalendarLabel()
+            : "Pending Admin Confirmation");
+      } else if (isBooked) label = "Booked";
       else if (isManagerBlocked) label = "Block";
       else if (kind) label = "Unavailable";
       var pending =
@@ -4896,8 +4906,17 @@
           }
           renderCalendarSection();
         };
-        if (BL) BL.run(calRefresh, work);
-        else work();
+        if (BL) {
+          BL.run(calRefresh, work).catch(function () {
+            warnManagerCalendar("Could not refresh the calendar. Please try again.");
+          });
+        } else {
+          Promise.resolve()
+            .then(work)
+            .catch(function () {
+              warnManagerCalendar("Could not refresh the calendar. Please try again.");
+            });
+        }
       });
     }
     var clearSel = document.getElementById("managerClearSelectedDate");
@@ -4917,27 +4936,52 @@
         }
       });
     }
+
+    function warnManagerCalendar(text) {
+      var statusEl = document.getElementById("managerSelectedDateStatus");
+      if (statusEl) statusEl.textContent = text;
+      if (window.ElenestErrors && typeof window.ElenestErrors.toast === "function") {
+        window.ElenestErrors.toast(text);
+      }
+    }
+
     var blockBtn = document.getElementById("managerBlockBtn");
     if (blockBtn) {
       blockBtn.addEventListener("click", function () {
-        if (!selectedIsoDate) return;
+        if (!selectedIsoDate) {
+          warnManagerCalendar("Select a date on the calendar first.");
+          return;
+        }
         var CA = window.ElenestCalendarAccess;
-        if (!CA || typeof CA.promptManagerRequest !== "function") return;
+        if (!CA || typeof CA.promptManagerRequest !== "function") {
+          warnManagerCalendar("Calendar controls are still loading. Please try again.");
+          return;
+        }
         Promise.resolve(CA.promptManagerRequest(selectedIsoDate, "block")).then(function () {
           renderManagerCalendar();
           renderAppointmentsForSelectedDate();
+        }).catch(function () {
+          warnManagerCalendar("Could not send the block request. Please try again.");
         });
       });
     }
     var unblockBtn = document.getElementById("managerUnblockBtn");
     if (unblockBtn) {
       unblockBtn.addEventListener("click", function () {
-        if (!selectedIsoDate) return;
+        if (!selectedIsoDate) {
+          warnManagerCalendar("Select a date on the calendar first.");
+          return;
+        }
         var CA = window.ElenestCalendarAccess;
-        if (!CA || typeof CA.promptManagerRequest !== "function") return;
+        if (!CA || typeof CA.promptManagerRequest !== "function") {
+          warnManagerCalendar("Calendar controls are still loading. Please try again.");
+          return;
+        }
         Promise.resolve(CA.promptManagerRequest(selectedIsoDate, "unblock")).then(function () {
           renderManagerCalendar();
           renderAppointmentsForSelectedDate();
+        }).catch(function () {
+          warnManagerCalendar("Could not send the unblock request. Please try again.");
         });
       });
     }
@@ -5063,17 +5107,17 @@
       }
     }
 
-    var bootWaits = [];
+    bootDashboard();
+    function refreshAfterData() {
+      renderRecommendations();
+      renderDashboard();
+      pullLiveBookings();
+    }
     if (window.ElenestGuestFeedback && window.ElenestGuestFeedback.ready) {
-      bootWaits.push(window.ElenestGuestFeedback.ready);
+      window.ElenestGuestFeedback.ready.then(refreshAfterData);
     }
     if (window.ElenestBookings && window.ElenestBookings.ready) {
-      bootWaits.push(window.ElenestBookings.ready);
-    }
-    if (bootWaits.length) {
-      Promise.all(bootWaits).then(bootDashboard).catch(bootDashboard);
-    } else {
-      bootDashboard();
+      window.ElenestBookings.ready.then(refreshAfterData);
     }
 
     setInterval(function () {

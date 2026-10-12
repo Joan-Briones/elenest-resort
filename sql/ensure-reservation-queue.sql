@@ -617,10 +617,13 @@ as $$
         'approved',
         'confirmed',
         'checked_in',
-        'reserved'
+        'reserved',
+        'awaiting_booking_review',
+        'awaiting_payment'
       )
       or lower(coalesce(b.status::text, '')) in (
         'pending',
+        'awaiting payment',
         'for verification',
         'pending payment verification',
         'reserved',
@@ -639,7 +642,16 @@ as $$
       )
     )
     and coalesce(nullif(b.payload ->> 'paymentRejectedAt', ''), '') = ''
-    and coalesce(nullif(b.payload ->> 'payment_rejected_at', ''), '') = '';
+    and coalesce(nullif(b.payload ->> 'payment_rejected_at', ''), '') = ''
+    and not (
+      lower(coalesce(b.payload ->> 'workflow', '')) = 'awaiting_payment'
+      and coalesce(b.payload ->> 'paymentDeadlineAt', '') ~ '^[0-9]{4}-[0-9]{2}-[0-9]{2}'
+      and (b.payload ->> 'paymentDeadlineAt')::timestamptz <= now()
+      and coalesce(nullif(b.payload ->> 'paymentSubmittedAt', ''), '') = ''
+      and coalesce(nullif(b.payment_proof_url, ''), '') = ''
+      and coalesce(nullif(b.payload ->> 'paymentProofUrl', ''), '') = ''
+      and lower(coalesce(b.payload ->> 'hasPaymentProof', '')) not in ('true', '1')
+    );
 $$;
 
 notify pgrst, 'reload schema';

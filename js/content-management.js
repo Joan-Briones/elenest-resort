@@ -139,20 +139,63 @@
     el.textContent = text;
   }
 
+  function actionErrorText(err) {
+    var Errors = window.ElenestErrors;
+    if (Errors && typeof Errors.friendlyMessage === "function") {
+      return Errors.friendlyMessage(err, "Could not complete that action. Please try again.");
+    }
+    return "Could not complete that action. Please try again.";
+  }
+
+  function reportActionError(err, form) {
+    var text = actionErrorText(err);
+    var msg = form && form.querySelector ? form.querySelector(".auth-msg") : null;
+    if (!msg && form && form.id) {
+      msg = document.getElementById(String(form.id).replace(/Form$/, "Msg"));
+    }
+    if (msg) {
+      msg.hidden = false;
+      msg.className = "auth-msg auth-msg--err";
+      msg.textContent = text;
+      return;
+    }
+    if (window.ElenestErrors && typeof window.ElenestErrors.toast === "function") {
+      window.ElenestErrors.toast(text);
+    }
+  }
+
+  function storeOrWarn(msgId) {
+    var S = store();
+    if (!S) {
+      var text = "This action is unavailable right now. Refresh the page and try again.";
+      if (msgId) setMsg(msgId, false, text);
+      else if (window.ElenestErrors && typeof window.ElenestErrors.toast === "function") {
+        window.ElenestErrors.toast(text);
+      }
+    }
+    return S;
+  }
+
   function withFormLoading(form, work) {
     var BL = window.ElenestButtonLoading;
-    if (!BL || typeof BL.runForm !== "function" || !form) {
-      return Promise.resolve().then(work);
-    }
-    return BL.runForm(form, work);
+    var job =
+      !BL || typeof BL.runForm !== "function" || !form
+        ? Promise.resolve().then(work)
+        : BL.runForm(form, work);
+    return job.catch(function (err) {
+      reportActionError(err, form);
+    });
   }
 
   function withBtnLoading(btn, work) {
     var BL = window.ElenestButtonLoading;
-    if (!BL || typeof BL.run !== "function" || !btn) {
-      return Promise.resolve().then(work);
-    }
-    return BL.run(btn, work);
+    var job =
+      !BL || typeof BL.run !== "function" || !btn
+        ? Promise.resolve().then(work)
+        : BL.run(btn, work);
+    return job.catch(function (err) {
+      reportActionError(err, null);
+    });
   }
 
   function readFileAsDataUrl(file, cb) {
@@ -793,7 +836,7 @@
     if (aboutHeroForm) {
       aboutHeroForm.addEventListener("submit", function (e) {
         e.preventDefault();
-        var S = store();
+        var S = storeOrWarn("cmAboutHeroMsg");
         if (!S) return;
         var data = S.getAbout();
         data.heroTitle = document.getElementById("cmAboutHeroTitle").value.trim();
@@ -818,7 +861,7 @@
     if (cardForm) {
       cardForm.addEventListener("submit", function (e) {
         e.preventDefault();
-        var S = store();
+        var S = storeOrWarn("cmAboutCardMsg");
         if (!S) return;
         var data = S.getAbout();
         var kind = cardForm.getAttribute("data-card-kind") || document.getElementById("cmAboutCardKind").value;
@@ -901,7 +944,7 @@
     document.addEventListener("click", function (e) {
       var delBtn = e.target.closest("[data-del-about-card]");
       if (delBtn) {
-        var S = store();
+        var S = storeOrWarn("cmAboutCardMsg");
         if (!S) return;
         if (!confirm("Delete this item? This cannot be undone.")) return;
         var data = S.getAbout();
@@ -925,7 +968,7 @@
       }
       var editBtn = e.target.closest("[data-edit-about-card]");
       if (editBtn) {
-        var S2 = store();
+        var S2 = storeOrWarn("cmAboutCardMsg");
         if (!S2) return;
         var data2 = S2.getAbout();
         var id2 = editBtn.getAttribute("data-edit-about-card");
@@ -965,7 +1008,7 @@
     if (form) {
       form.addEventListener("submit", function (e) {
         e.preventDefault();
-        var S = store();
+        var S = storeOrWarn("cmFaqMsg");
         if (!S) return;
         var editId = document.getElementById("cmFaqEditId").value.trim();
         var question = document.getElementById("cmFaqQuestion").value.trim();
@@ -996,7 +1039,7 @@
     document.addEventListener("click", function (e) {
       var editBtn = e.target.closest("[data-edit-faq]");
       if (editBtn) {
-        var S = store();
+        var S = storeOrWarn("cmFaqMsg");
         if (!S) return;
         var item = S.getFaqs().find(function (f) {
           return String(f.id) === String(editBtn.getAttribute("data-edit-faq"));
@@ -1014,7 +1057,7 @@
       var delBtn = e.target.closest("[data-del-faq]");
       if (delBtn) {
         if (!confirm("Delete this FAQ? This cannot be undone.")) return;
-        var S2 = store();
+        var S2 = storeOrWarn("cmFaqMsg");
         if (!S2) return;
         withBtnLoading(delBtn, function () {
           return Promise.resolve(S2.deleteFaq(delBtn.getAttribute("data-del-faq"))).then(function () {
@@ -1032,7 +1075,7 @@
     if (form) {
       form.addEventListener("submit", function (e) {
         e.preventDefault();
-        var S = store();
+        var S = storeOrWarn("cmActivityMsg");
         if (!S) return;
         var editId = document.getElementById("cmActivityEditId").value.trim();
         var type = document.getElementById("cmActivityType").value.trim();
@@ -1094,7 +1137,7 @@
     document.addEventListener("click", function (e) {
       var editBtn = e.target.closest("[data-edit-activity]");
       if (editBtn) {
-        var S = store();
+        var S = storeOrWarn("cmActivityMsg");
         if (!S) return;
         var item = S.getActivities().find(function (a) {
           return String(a.id) === String(editBtn.getAttribute("data-edit-activity"));
@@ -1117,7 +1160,7 @@
       var delBtn = e.target.closest("[data-del-activity]");
       if (delBtn) {
         if (!confirm("Delete this activity? This cannot be undone.")) return;
-        var S2 = store();
+        var S2 = storeOrWarn("cmActivityMsg");
         if (!S2) return;
         withBtnLoading(delBtn, function () {
           return Promise.resolve(S2.deleteActivity(delBtn.getAttribute("data-del-activity"))).then(function () {
@@ -1135,7 +1178,7 @@
     if (form) {
       form.addEventListener("submit", function (e) {
         e.preventDefault();
-        var S = store();
+        var S = storeOrWarn("cmEventMsg");
         if (!S) return;
         var editId = document.getElementById("cmEventEditId").value.trim();
         var type = document.getElementById("cmEventType").value.trim();
@@ -1182,7 +1225,7 @@
     document.addEventListener("click", function (e) {
       var editBtn = e.target.closest("[data-edit-event]");
       if (editBtn) {
-        var S = store();
+        var S = storeOrWarn("cmEventMsg");
         if (!S) return;
         var item = S.getEvents().find(function (a) { return String(a.id) === String(editBtn.getAttribute("data-edit-event")); });
         if (!item) return;
@@ -1202,7 +1245,7 @@
       var delBtn = e.target.closest("[data-del-event]");
       if (delBtn) {
         if (!confirm("Delete this event? This cannot be undone.")) return;
-        var S2 = store();
+        var S2 = storeOrWarn("cmEventMsg");
         if (!S2) return;
         withBtnLoading(delBtn, function () {
           return Promise.resolve(S2.deleteEvent(delBtn.getAttribute("data-del-event"))).then(function () {
@@ -1294,7 +1337,7 @@
     }
     roomForm.addEventListener("submit", function (e) {
       e.preventDefault();
-      var S = store();
+      var S = storeOrWarn("managerRoomCatalogMsg");
       if (!S) return;
       var roomType = document.getElementById("managerRoomType");
       var roomKind = document.getElementById("managerRoomKind");
@@ -1391,7 +1434,7 @@
     if (!policyForm) return;
     policyForm.addEventListener("submit", function (e) {
       e.preventDefault();
-      var S = store();
+      var S = storeOrWarn("managerPolicyMsg");
       if (!S) return;
       var policyKind = document.getElementById("managerPolicyKind");
       var policyTitle = document.getElementById("managerPolicyTitle");

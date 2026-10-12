@@ -77,6 +77,83 @@
     };
   }
 
+  function readUnsyncedInbox() {
+    try {
+      var raw = localStorage.getItem("elenest_notifications_unsynced");
+      if (!raw) return {};
+      var parsed = JSON.parse(raw);
+      return parsed && typeof parsed === "object" ? parsed : {};
+    } catch (e) {
+      return {};
+    }
+  }
+
+  function writeUnsyncedInbox(all) {
+    try {
+      localStorage.setItem("elenest_notifications_unsynced", JSON.stringify(all || {}));
+    } catch (e) {}
+  }
+
+  function rememberUnsynced(email, item) {
+    if (!item) return;
+    var key = normalizeEmail(email);
+    if (!key) return;
+    var all = readUnsyncedInbox();
+    if (!Array.isArray(all[key])) all[key] = [];
+    all[key] = all[key].filter(function (n) {
+      if (!n) return false;
+      if (item.id && n.id === item.id) return false;
+      if (item.dedupKey && n.dedupKey === item.dedupKey) return false;
+      return true;
+    });
+    var copy = {};
+    for (var k in item) {
+      if (Object.prototype.hasOwnProperty.call(item, k)) copy[k] = item[k];
+    }
+    copy._unsynced = true;
+    all[key].unshift(copy);
+    writeUnsyncedInbox(all);
+  }
+
+  function forgetUnsynced(email, item) {
+    if (!item) return;
+    var key = normalizeEmail(email);
+    if (!key) return;
+    var all = readUnsyncedInbox();
+    if (!Array.isArray(all[key])) return;
+    all[key] = all[key].filter(function (n) {
+      if (!n) return false;
+      if (item.id && n.id === item.id) return false;
+      if (item.dedupKey && n.dedupKey === item.dedupKey) return false;
+      return true;
+    });
+    writeUnsyncedInbox(all);
+  }
+
+  function mergeKeptNotices(email, serverItems) {
+    var key = normalizeEmail(email);
+    var list = Array.isArray(serverItems) ? serverItems.slice() : [];
+    var seenId = {};
+    var seenDedup = {};
+    list.forEach(function (n) {
+      if (!n) return;
+      if (n.id) seenId[String(n.id)] = true;
+      if (n.dedupKey) seenDedup[String(n.dedupKey)] = true;
+    });
+    var extra = []
+      .concat((inboxCache[key] || []).filter(function (n) { return n && n._unsynced; }))
+      .concat(readUnsyncedInbox()[key] || []);
+    extra.forEach(function (n) {
+      if (!n) return;
+      if (n.id && seenId[String(n.id)]) return;
+      if (n.dedupKey && seenDedup[String(n.dedupKey)]) return;
+      if (n.id) seenId[String(n.id)] = true;
+      if (n.dedupKey) seenDedup[String(n.dedupKey)] = true;
+      list.unshift(n);
+    });
+    return list;
+  }
+
   function loadInboxFromSupabase(email) {
     var key = normalizeEmail(email);
     if (!key) return Promise.resolve();
@@ -93,7 +170,7 @@
       .order("created_at", { ascending: false })
       .then(function (res) {
         if (res.error) throw res.error;
-        inboxCache[key] = (res.data || []).map(rowToNotification);
+        inboxCache[key] = mergeKeptNotices(key, (res.data || []).map(rowToNotification));
         inboxLoaded[key] = true;
         inboxLoading[key] = null;
         emitChanged(key);
@@ -129,6 +206,7 @@
       .upsert(row, { onConflict: "id" })
       .then(function (res) {
         if (res.error) throw res.error;
+        forgetUnsynced(email, item);
         return true;
       })
       .catch(function () {
@@ -144,9 +222,13 @@
           .select("id")
           .then(function (res2) {
             if (res2.error) throw res2.error;
-            return !!(res2.data && res2.data.length);
+            var ok = !!(res2.data && res2.data.length);
+            if (ok) forgetUnsynced(email, item);
+            else rememberUnsynced(email, item);
+            return ok;
           })
           .catch(function () {
+            rememberUnsynced(email, item);
             return false;
           });
       });
@@ -410,9 +492,14 @@
       meta: notification.meta && typeof notification.meta === "object" ? notification.meta : {}
     };
     all[key].unshift(item);
+    item._unsynced = true;
     saveInboxAll(all);
+    rememberUnsynced(key, item);
     persistNotification(key, item).then(function (ok) {
-      if (!ok && getSb()) loadInboxFromSupabase(key);
+      if (ok) {
+        item._unsynced = false;
+        forgetUnsynced(key, item);
+      }
     });
     emitChanged(key);
     return item;
@@ -578,6 +665,48 @@
     });
   }
 
+  function notifyPaymentWindowOpened(email, booking, details) {
+    details = details || {};
+    var id = booking && booking.id ? booking.id : "";
+    var bits = [
+      "Your booking details have been confirmed. You can now complete the online payment."
+    ];
+    if (details.facility) bits.push("Facility: " + details.facility + ".");
+    if (details.when) bits.push("Schedule: " + details.when + ".");
+    if (details.guests) bits.push("Guests: " + details.guests + ".");
+    if (details.amount) bits.push("Amount due: " + details.amount + ".");
+    if (details.methodsText) bits.push("Payment methods: " + details.methodsText + ".");
+    bits.push(
+      "Open your booking, pay the amount due, and upload a photo of the receipt before the deadline. Uploading proof does not mark the booking as paid until an admin verifies it."
+    );
+    if (details.deadlineLabel) {
+      bits.push("Payment deadline: " + details.deadlineLabel + " (3 hours from confirmation).");
+    } else {
+      bits.push("Complete payment within 3 hours of this confirmation.");
+    }
+    return addForUser(email, {
+      type: TYPES.BOOKING_UPDATED,
+      title: "Booking confirmed — payment is now open",
+      message: bits.join(" "),
+      bookingId: id,
+      dedupKey: "payment_window:" + id + ":" + ((booking && booking.bookingConfirmedAt) || ""),
+      link: "book.html#pay-" + encodeURIComponent(id)
+    });
+  }
+
+  function notifyPaymentWindowExpired(email, booking) {
+    var id = booking && booking.id ? booking.id : "";
+    return addForUser(email, {
+      type: TYPES.BOOKING_UPDATED,
+      title: "Payment window expired",
+      message:
+        "Your booking was cancelled because payment was not submitted within 3 hours of admin confirmation. The reserved schedule has been released.",
+      bookingId: id,
+      dedupKey: "payment_window_expired:" + id,
+      link: "book.html"
+    });
+  }
+
   function notifyBookingConfirmed(email, booking) {
     var id = booking && booking.id ? booking.id : "";
     var ci = booking && booking.checkIn ? fmtDateLong(booking.checkIn) : "your selected dates";
@@ -722,6 +851,32 @@
           dedupKey: "payment_pending:" + b.id,
           link: "book.html",
           createdAt: b.paymentSubmittedAt
+        });
+      }
+
+      var pay = String(b.paymentStatus || "").toLowerCase();
+      var paymentApproved =
+        !b.paymentRejectedAt &&
+        !!(
+          b.paymentVerifiedAt ||
+          b.payment_verified_at ||
+          pay.indexOf("fully paid") !== -1 ||
+          pay.indexOf("down payment received") !== -1 ||
+          pay.indexOf("payment approved") !== -1
+        );
+      if (paymentApproved) {
+        var PF = window.ElenestPaymentFlow;
+        var isFull = PF && PF.normalizePaymentType && PF.normalizePaymentType(b.paymentType) === "full";
+        addForUser(key, {
+          type: TYPES.PAYMENT_APPROVED,
+          title: isFull ? "Full Payment Approved" : "Payment Approved",
+          message: isFull
+            ? "Your full payment has been approved. Your booking is confirmed. Arrival stays Not Arrived until check-in."
+            : "Your payment has been approved. Your booking is confirmed. Arrival stays Not Arrived until check-in.",
+          bookingId: b.id,
+          dedupKey: "payment_approved:" + b.id,
+          link: "book.html",
+          createdAt: b.paymentVerifiedAt || b.payment_verified_at || new Date().toISOString()
         });
       }
     });
@@ -900,6 +1055,11 @@
         return bid
           ? "admin.html#section-payments?booking=" + bid
           : "admin.html#section-payments";
+      }
+      if (kind === "new_booking") {
+        return bid
+          ? "admin.html#section-payments?tab=bookings&booking=" + bid
+          : "admin.html#section-payments?tab=bookings";
       }
       if (kind === "new_feedback") return "admin.html#section-sentiment";
       if (
@@ -1130,7 +1290,7 @@
         addStaffForUser(email, {
           staffKind: "payment_pending",
           title: "Payment awaiting verification",
-          message: guest + " submitted proof of payment. Review it in Payment Management.",
+          message: guest + " submitted proof of payment. Review it in Reservation Management.",
           bookingId: b.id,
           dedupKey: "staff_payment_pending:" + b.id,
           link: staffLinkFor(role, "payment_pending", b.id),
@@ -1308,6 +1468,11 @@
   }
 
   function processAutomaticForAllStaff() {
+    var now = Date.now();
+    if (processAutomaticForAllStaff._at && now - processAutomaticForAllStaff._at < 60000) {
+      return Promise.resolve();
+    }
+    processAutomaticForAllStaff._at = now;
     return loadStaffDirectory().then(function (map) {
       ["admin", "manager", "receptionist"].forEach(function (role) {
         (map[role] || []).forEach(function (em) {
@@ -1370,7 +1535,7 @@
       if (typeof document !== "undefined" && document.hidden) return;
       if (getSb()) loadInboxFromSupabase(key);
       if (staffInboxEmail && staffInboxRole) scheduleStaffScan();
-    }, 15000);
+    }, 45000);
   }
 
   function bindStaffInbox(email, role) {
@@ -1462,6 +1627,19 @@
   hookBookingUpdates();
   hookStaffLiveEvents();
 
+  window.addEventListener("elenest-bookings-updated", function () {
+    var user =
+      window.ElenestAuth && window.ElenestAuth.getCurrentUser
+        ? window.ElenestAuth.getCurrentUser()
+        : null;
+    if (!user || !user.email) return;
+    var role = window.ElenestAuth.normalizeRole ? window.ElenestAuth.normalizeRole(user.role) : user.role;
+    var staff =
+      window.ElenestAuth.isStaffRole && window.ElenestAuth.isStaffRole(role);
+    if (staff) return;
+    processAutomaticForUser(user.email);
+  });
+
   loadBroadcastsFromSupabase();
 
   if (window.ElenestAuth && window.ElenestAuth.ready) {
@@ -1492,6 +1670,8 @@
     clearForUser: clearForUser,
     clearAllForUser: clearAllForUser,
     notifyPaymentApproved: notifyPaymentApproved,
+    notifyPaymentWindowOpened: notifyPaymentWindowOpened,
+    notifyPaymentWindowExpired: notifyPaymentWindowExpired,
     notifyPaymentRejected: notifyPaymentRejected,
     notifyBookingConfirmed: notifyBookingConfirmed,
     notifyBookingUpdated: notifyBookingUpdated,

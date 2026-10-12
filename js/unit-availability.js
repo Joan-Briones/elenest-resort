@@ -29,7 +29,8 @@
     timeWindow = timeWindow || {};
     return {
       checkInTime: String(timeWindow.checkInTime || timeWindow.check_in_time || "").trim(),
-      checkOutTime: String(timeWindow.checkOutTime || timeWindow.check_out_time || "").trim()
+      checkOutTime: String(timeWindow.checkOutTime || timeWindow.check_out_time || "").trim(),
+      skipSnapshotBlocks: !!timeWindow.skipSnapshotBlocks
     };
   }
 
@@ -416,7 +417,21 @@
           : [];
     return rows.filter(function (item) {
       var b = item.booking || {};
-      if (excludeBookingId && String(b.id) === String(excludeBookingId)) return false;
+      if (excludeBookingId) {
+        var ex = String(excludeBookingId);
+        var bid = String(b.id || "");
+        var group = String(b.bookingGroupId || "");
+        var parent = String(b.parentBookingId || "");
+        if (
+          bid === ex ||
+          group === ex ||
+          parent === ex ||
+          bid.indexOf(ex + "__") === 0 ||
+          ex.indexOf(bid + "__") === 0
+        ) {
+          return false;
+        }
+      }
       if (!isActiveBooking(b)) return false;
       var bt = bookingTimeWindow(b);
       return staysOverlap(
@@ -535,7 +550,11 @@
     // Mobile public calendar: get_public_availability_snapshot.booked_room_ids[]
     // (and per-date unavailable facility ids) — marks every booked facility.
     var B = window.ElenestBookings;
-    if (B && typeof B.forEachBlockedFacilityInRange === "function") {
+    if (
+      !(timeWindow && timeWindow.skipSnapshotBlocks) &&
+      B &&
+      typeof B.forEachBlockedFacilityInRange === "function"
+    ) {
       B.forEachBlockedFacilityInRange(checkIn, checkOut, function (unitId) {
         markOccupiedUnit(byUnitId, unitId);
       });
@@ -592,7 +611,9 @@
       "|" +
       String(tw.checkInTime || "") +
       "|" +
-      String(tw.checkOutTime || "")
+      String(tw.checkOutTime || "") +
+      "|" +
+      (tw.skipSnapshotBlocks ? "nosnap" : "snap")
     );
   }
 
@@ -656,9 +677,15 @@
     var catalog = getCatalog();
     var occ = getOccupancyCached(checkIn, checkOut, excludeBookingId, timeWindow);
     return catalog.map(function (unit) {
+      var bookable = isUnitAvailableWithOcc(unit, occ, checkIn, checkOut);
+      var status = bookable
+        ? "available"
+        : getUnitStayStatus(unit.id, checkIn, checkOut, excludeBookingId, timeWindow);
+      if (!bookable && status === "available") status = "booked";
       return {
         unit: unit,
-        available: isUnitAvailableWithOcc(unit, occ, checkIn, checkOut)
+        available: bookable,
+        status: status
       };
     });
   }
@@ -1010,6 +1037,62 @@
     return false;
   }
 
+  var PENDING_CALENDAR_LABEL = "Pending Admin Confirmation";
+
+  function pendingCalendarLabel() {
+    var PF = window.ElenestPaymentFlow;
+    if (PF && PF.PENDING_CALENDAR_LABEL) return PF.PENDING_CALENDAR_LABEL;
+    return PENDING_CALENDAR_LABEL;
+  }
+
+  function occupancyDisplayLabel(kind) {
+    if (kind === "pending") return pendingCalendarLabel();
+    if (kind === "booked" || kind === "hold" || kind === "limited" || kind === "full") return "Booked";
+    return "";
+  }
+
+  function bookingCalendarKind(booking) {
+    var PF = window.ElenestPaymentFlow;
+    if (PF && typeof PF.calendarSlotKind === "function") {
+      var fromFlow = PF.calendarSlotKind(booking);
+      if (fromFlow === "booked" || fromFlow === "pending") return fromFlow;
+      if (!fromFlow) return null;
+    }
+    if (!booking) return null;
+    if (booking.paymentRejectedAt || booking.payment_rejected_at) return null;
+    if (
+      booking.paymentVerified === true ||
+      booking.payment_verified === true ||
+      booking.paymentVerifiedAt ||
+      booking.payment_verified_at ||
+      booking.walkIn === true
+    ) {
+      return "booked";
+    }
+    var st = String(booking.status || "").trim().toLowerCase();
+    if (
+      st === "checked in" ||
+      st === "checked_in" ||
+      st === "checked out" ||
+      st === "checked_out" ||
+      st === "completed"
+    ) {
+      return "booked";
+    }
+    return "pending";
+  }
+
+  function snapshotNightKind(unitId, iso) {
+    var B = window.ElenestBookings;
+    if (!B || typeof B.getFacilityBlockKindOnDate !== "function") {
+      if (B && typeof B.isFacilityBlockedOnDate === "function" && B.isFacilityBlockedOnDate(unitId, iso)) {
+        return "booked";
+      }
+      return "";
+    }
+    return B.getFacilityBlockKindOnDate(unitId, iso) || "";
+  }
+
   function getUnitNightStatus(unitId, iso, excludeBookingId, timeWindow) {
     if (!unitId || !iso) return "available";
     var catalog = getCatalog();
@@ -1021,24 +1104,42 @@
     d.setUTCDate(d.getUTCDate() + 1);
     var next = utcDateToIso(d);
     var overlapping = listOverlappingBookings(iso, next, excludeBookingId, timeWindow);
-    var hasHold = false;
+    var sawBooked = false;
+    var sawPending = false;
     overlapping.forEach(function (item) {
       var b = item.booking || {};
       if (!bookingOccupiesUnit(b, unitId)) return;
-      if (isTemporaryHoldBooking(b)) hasHold = true;
+      var kind = bookingCalendarKind(b);
+      if (kind === "booked") sawBooked = true;
+      else if (kind === "pending") sawPending = true;
     });
+    if (sawBooked) return "booked";
+    if (sawPending) return "pending";
     if (!isUnitAvailable(unit, iso, next, excludeBookingId, timeWindow)) {
-      return hasHold ? "hold" : "booked";
-    }
-    var B = window.ElenestBookings;
-    if (
-      !timeWindow &&
-      B &&
-      typeof B.isFacilityBlockedOnDate === "function" &&
-      B.isFacilityBlockedOnDate(unitId, iso)
-    ) {
+      var snap = snapshotNightKind(unitId, iso);
+      if (snap === "pending") return "pending";
       return "booked";
     }
+    var snapOnly = snapshotNightKind(unitId, iso);
+    if (snapOnly === "pending") return "pending";
+    if (snapOnly === "booked") return "booked";
+    return "available";
+  }
+
+  function getUnitStayStatus(unitId, checkIn, checkOut, excludeBookingId, timeWindow) {
+    if (!unitId || !checkIn || !checkOut) return "available";
+    var sawBooked = false;
+    var sawPending = false;
+    var cur = isoToUtcDate(checkIn);
+    var end = isoToUtcDate(checkOut);
+    while (cur < end) {
+      var st = getUnitNightStatus(unitId, utcDateToIso(cur), excludeBookingId, timeWindow);
+      if (st === "booked" || st === "hold") sawBooked = true;
+      else if (st === "pending") sawPending = true;
+      cur.setUTCDate(cur.getUTCDate() + 1);
+    }
+    if (sawBooked) return "booked";
+    if (sawPending) return "pending";
     return "available";
   }
 
@@ -1078,8 +1179,39 @@
     return getDateBookingStatus(iso) === "full";
   }
 
+  function paintNightKind(kindById, unitId, kind) {
+    if (!unitId || (kind !== "booked" && kind !== "pending")) return;
+    var keys = [canonicalizeUnitId(unitId), String(unitId).trim()];
+    for (var i = 0; i < keys.length; i++) {
+      var key = keys[i];
+      if (!key) continue;
+      if (kindById[key] === "booked") continue;
+      kindById[key] = kind;
+    }
+  }
+
+  function nightKindForBookingUnits(kindById, booking) {
+    if (!booking) return;
+    var kind = bookingCalendarKind(booking);
+    if (kind !== "booked" && kind !== "pending") return;
+    var lists = [
+      booking.roomCatalogIds,
+      booking.hallCatalogIds,
+      booking.cottageCatalogIds,
+      booking.room_ids,
+      booking.facilityIds
+    ];
+    var singles = [booking.roomCatalogId, booking.hallCatalogId];
+    var i;
+    for (i = 0; i < lists.length; i++) {
+      if (!Array.isArray(lists[i])) continue;
+      for (var j = 0; j < lists[i].length; j++) paintNightKind(kindById, lists[i][j], kind);
+    }
+    for (i = 0; i < singles.length; i++) paintNightKind(kindById, singles[i], kind);
+  }
+
   function getDateBookingStats(iso, excludeBookingId) {
-    if (!iso) return { total: 0, available: 0, booked: 0, dateOnly: 0 };
+    if (!iso) return { total: 0, available: 0, booked: 0, pending: 0, verified: 0, dateOnly: 0 };
     var cacheKey = occupancyCacheKey(iso, "stats", excludeBookingId);
     if (statsCache[cacheKey]) return statsCache[cacheKey];
 
@@ -1089,20 +1221,42 @@
     var catalog = getCatalog();
     var total = catalog.length;
     var occ = getOccupancyCached(iso, next, excludeBookingId);
-    var available = 0;
-    catalog.forEach(function (unit) {
-      if (isUnitAvailableWithOcc(unit, occ, iso, next)) available++;
+    var kindById = {};
+    listOverlappingBookings(iso, next, excludeBookingId).forEach(function (item) {
+      nightKindForBookingUnits(kindById, item && item.booking);
     });
-    var booked = Math.max(0, total - available);
+    var available = 0;
+    var pending = 0;
+    var verified = 0;
+    catalog.forEach(function (unit) {
+      var canon = canonicalizeUnitId(unit.id);
+      var st = (canon && kindById[canon]) || kindById[unit.id] || "";
+      if (!st && !isUnitAvailableWithOcc(unit, occ, iso, next)) {
+        st = snapshotNightKind(unit.id, iso);
+        if (st !== "pending") st = "booked";
+      }
+      if (st === "pending") pending++;
+      else if (!st || st === "available") available++;
+      else verified++;
+    });
+    var booked = pending + verified;
     // Date-only rows still count as occupancy for resort-wide legend colors.
     if (occ.dateOnlyCount > 0 && booked === 0) {
-      booked = Math.min(total, occ.dateOnlyCount);
+      var dateOnlyPending = listOverlappingBookings(iso, next, excludeBookingId).some(function (item) {
+        var b = item.booking || {};
+        return isDateOnlyOccupancyBooking(b) && bookingCalendarKind(b) === "pending";
+      });
+      if (dateOnlyPending) pending = Math.min(total, occ.dateOnlyCount);
+      else verified = Math.min(total, occ.dateOnlyCount);
+      booked = pending + verified;
       available = Math.max(0, total - booked);
     }
     var result = {
       total: total,
       available: available,
       booked: booked,
+      pending: pending,
+      verified: verified,
       dateOnly: occ.dateOnlyCount || 0
     };
     statsCache[cacheKey] = result;
@@ -1154,6 +1308,9 @@
     getDateHoldStats: getDateHoldStats,
     isTemporaryHoldBooking: isTemporaryHoldBooking,
     bookingOccupiesUnit: bookingOccupiesUnit,
+    pendingCalendarLabel: pendingCalendarLabel,
+    occupancyDisplayLabel: occupancyDisplayLabel,
+    getUnitStayStatus: getUnitStayStatus,
     getUnitNightStatus: getUnitNightStatus,
     dateHasDateOnlyOccupancy: dateHasDateOnlyOccupancy,
     isDateOnlyOccupancyBooking: isDateOnlyOccupancyBooking,

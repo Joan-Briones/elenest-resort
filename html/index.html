@@ -9,7 +9,7 @@
     try { if ("scrollRestoration" in history) history.scrollRestoration = "manual"; } catch (e) {}
   </script>
   <link rel="icon" type="image/png" href="../Images/icon.png">
-  <link rel="stylesheet" href="../css/style.css?v=20260925-policy1">
+  <link rel="stylesheet" href="../css/style.css?v=20261012-pax3">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.css" integrity="sha512-UTNP5BXLIptsaj5WdKFrkFov94lDx+eBvbKyoe1YAfjeRPC+gT5kyZ10kOHCfNZqEui1sxmqvodNUx3KbuYI/A==" crossorigin="anonymous"
     referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" integrity="sha512-sMXtMNL1zRzolHYKEujM2AqCLUR9F2C4/05cdbxjjLSRvMQIciEPCQZo++nk7go3BtSuK9kfa/s+a4f4i5pLkw=="
@@ -134,8 +134,6 @@
             <span class="book-date-trigger__text" data-date-label>Select dates</span>
             <span class="book-date-trigger__icon" aria-hidden="true"></span>
           </button>
-          <input type="number" name="adults" min="1" placeholder="Adults" aria-label="Number of adults" value="2">
-          <input type="number" name="children" min="0" placeholder="Children" aria-label="Number of children" value="0">
           <button type="button" class="book-reserve-submit" data-open-avail-cal>Check availability</button>
         </form>
       </div>
@@ -387,13 +385,26 @@
       <button type="button" class="avail-modal__close" data-avail-close aria-label="Close availability calendar">&times;</button>
       <section class="avail-modal__calendar">
         <h3 id="availModalTitle" class="avail-modal__calendar-title">Select your dates</h3>
-        <p class="avail-modal__calendar-lead">Tap <strong>one date</strong> for a day visit, or a <strong>second later date</strong> for overnight. Then choose a facility.</p>
+        <div class="login-reserve-stay-bar avail-modal-stay-bar" role="radiogroup" aria-label="Booking type">
+          <span class="login-reserve-stay-bar__label">Booking type</span>
+          <div class="login-reserve-stay-bar__toggle">
+            <label class="login-reserve-stay-bar__option">
+              <input type="radio" name="availStayType" value="overnight" checked>
+              <span>Overnight Book</span>
+            </label>
+            <label class="login-reserve-stay-bar__option">
+              <input type="radio" name="availStayType" value="day_tour">
+              <span>One-Day Book</span>
+            </label>
+          </div>
+        </div>
+        <p id="availModalCalendarLead" class="avail-modal__calendar-lead">Overnight Book: tap <strong>check-in</strong>, then a later <strong>check-out</strong>. Then choose a facility.</p>
         <div class="admin-dash-cal-layout avail-modal-cal-layout">
           <div class="admin-dash-cal-main">
             <div class="book-flow-calendar-head admin-dash-cal-head">
-              <button type="button" class="book-flow-cal-nav" id="availModalCalPrev" aria-label="Previous month">â¦</button>
+              <button type="button" class="book-flow-cal-nav" id="availModalCalPrev" aria-label="Previous month">&lsaquo;</button>
               <h4 class="book-flow-cal-month" id="availModalCalMonthLabel"></h4>
-              <button type="button" class="book-flow-cal-nav" id="availModalCalNext" aria-label="Next month">â¦</button>
+              <button type="button" class="book-flow-cal-nav" id="availModalCalNext" aria-label="Next month">&rsaquo;</button>
             </div>
             <div id="availModalCalendarHost" class="book-flow-calendar admin-dash-cal-host" role="grid" aria-label="Resort date availability"></div>
           </div>
@@ -432,8 +443,13 @@
           <div id="availModalFacilityHost" class="avail-facility-host"></div>
         </section>
         <div class="avail-modal__actions">
-          <button type="button" class="btn book-flow-btn-main" id="availModalReserveBtn" disabled aria-disabled="true">Select dates &amp; facility</button>
-          <button type="button" class="btn btn--outline" data-avail-close>Close</button>
+          <section class="book-unit-confirm" id="availModalConfirmSection" hidden aria-label="Selected facility">
+            <div id="availModalConfirmBody" class="book-unit-confirm__body" aria-live="polite"></div>
+          </section>
+          <div class="avail-modal__action-btns">
+            <button type="button" class="btn book-flow-btn-main" id="availModalReserveBtn" disabled aria-disabled="true">Select dates &amp; facility</button>
+            <button type="button" class="btn btn--outline" data-avail-close>Close</button>
+          </div>
         </div>
       </section>
     </div>
@@ -443,17 +459,17 @@
   <script src="../js/supabase-config.js"></script>
   <script src="../js/supabase-client.js"></script>
   <script src="../js/content-store.js?v=20260718-gallery"></script>
-  <script src="../js/payment-flow.js?v=20260913-icons1"></script>
+  <script src="../js/payment-flow.js?v=20261012-pending5"></script>
   <script src="../js/auth.js?v=20260918-role1"></script>
-  <script src="../js/bookings.js?v=20260917-nlag1"></script>
+  <script src="../js/bookings.js?v=20261012-pending5"></script>
   <script>
     // Live calendar uses Supabase bookings only (no Google Calendar).
     window.ElenestGoogleCalendarIcsUrl = "";
   </script>
-  <script src="../js/unit-availability.js?v=20260718-ok"></script>
-  <script src="../js/elenest-availability.js?v=20260718-ok"></script>
-  <script src="../js/elenest-calendar-widget.js?v=20260922-ux2"></script>
-  <script src="../js/book-availability-modal.js?v=20260902-factabs2"></script>
+  <script src="../js/unit-availability.js?v=20261012-pending5"></script>
+  <script src="../js/elenest-availability.js?v=20261012-pending5"></script>
+  <script src="../js/elenest-calendar-widget.js?v=20261012-custcal1"></script>
+  <script src="../js/book-availability-modal.js?v=20261012-pax1"></script>
   <script src="../js/home-reserve.js?v=20260718-ok"></script>
   <script src="https://kit.fontawesome.com/032d11eac3.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>

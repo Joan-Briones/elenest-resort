@@ -187,11 +187,14 @@ as $$
         'approved',
         'confirmed',
         'checked_in',
-        'reserved'
+        'reserved',
+        'awaiting_booking_review',
+        'awaiting_payment'
       )
       -- Website statuses (when workflow missing / different)
       or lower(coalesce(b.status::text, '')) in (
         'pending',
+        'awaiting payment',
         'for verification',
         'pending payment verification',
         'reserved',
@@ -212,7 +215,16 @@ as $$
     )
     -- Rejected payment releases the slot
     and coalesce(nullif(b.payload ->> 'paymentRejectedAt', ''), '') = ''
-    and coalesce(nullif(b.payload ->> 'payment_rejected_at', ''), '') = '';
+    and coalesce(nullif(b.payload ->> 'payment_rejected_at', ''), '') = ''
+    and not (
+      lower(coalesce(b.payload ->> 'workflow', '')) = 'awaiting_payment'
+      and coalesce(b.payload ->> 'paymentDeadlineAt', '') ~ '^[0-9]{4}-[0-9]{2}-[0-9]{2}'
+      and (b.payload ->> 'paymentDeadlineAt')::timestamptz <= now()
+      and coalesce(nullif(b.payload ->> 'paymentSubmittedAt', ''), '') = ''
+      and coalesce(nullif(b.payment_proof_url, ''), '') = ''
+      and coalesce(nullif(b.payload ->> 'paymentProofUrl', ''), '') = ''
+      and lower(coalesce(b.payload ->> 'hasPaymentProof', '')) not in ('true', '1')
+    );
 $$;
 
 -- Occupies calendar night/day (overnight: check_out exclusive; same-day: occupies check_in)
@@ -244,6 +256,65 @@ as $$
   end;
 $$;
 
+-- True only after admin payment verification (or a settled walk-in / checked-in stay).
+-- Pre-verification reservations stay pending on every calendar.
+create or replace function public._booking_calendar_payment_verified(b public.bookings)
+returns boolean
+language sql
+stable
+set search_path = public
+as $$
+  select case
+    when b.payment_verified_at is not null then true
+    when coalesce(
+      nullif(b.payload ->> 'paymentVerifiedAt', ''),
+      nullif(b.payload ->> 'payment_verified_at', ''),
+      ''
+    ) <> '' then true
+    when lower(coalesce(b.payload ->> 'walkIn', '')) in ('true', '1') then true
+    when lower(coalesce(b.payload ->> 'workflow', '')) in (
+      'awaiting_booking_review',
+      'awaiting_payment',
+      'pending_payment',
+      'pending_verification',
+      'pending'
+    ) then false
+    when lower(coalesce(b.status::text, '')) in (
+      'pending',
+      'awaiting payment',
+      'awaiting_payment',
+      'for verification',
+      'pending payment verification'
+    ) then false
+    when lower(coalesce(b.payload ->> 'verificationStage', b.payload ->> 'verification_stage', '')) in (
+      'awaiting_booking_review',
+      'awaiting_payment',
+      'awaiting_admin'
+    ) then false
+    when lower(coalesce(b.payload ->> 'workflow', '')) in (
+      'confirmed',
+      'approved',
+      'checked_in',
+      'verified_by_receptionist'
+    ) then true
+    when lower(coalesce(b.payload ->> 'verificationStage', b.payload ->> 'verification_stage', '')) = 'approved'
+      then true
+    when lower(coalesce(b.status::text, '')) in (
+      'confirmed',
+      'reserved',
+      'approved',
+      'active',
+      'checked in',
+      'checked_in',
+      'checked out',
+      'checked_out',
+      'checked-out',
+      'completed'
+    ) then true
+    else false
+  end;
+$$;
+
 -- ---------------------------------------------------------------------------
 -- 1. All public booking rows (calendar / month view) — no PII
 -- ---------------------------------------------------------------------------
@@ -260,7 +331,8 @@ returns table (
   workflow text,
   hold_expires_at text,
   payment_type text,
-  notes text
+  notes text,
+  payment_verified boolean
 )
 language sql
 security definer
@@ -310,7 +382,8 @@ as $$
         where line ~ '^__\w+__:'
       ),
       ''
-    ) as notes
+    ) as notes,
+    public._booking_calendar_payment_verified(b) as payment_verified
   from public.bookings b
   where public._booking_blocks_public_availability(b);
 $$;
@@ -499,7 +572,8 @@ returns table (
   status text,           -- available | fully_booked | blocked
   booked_count int,
   total_facilities int,
-  booked_room_ids text[]
+  booked_room_ids text[],
+  pending_room_ids text[]
 )
 language sql
 security definer
@@ -522,7 +596,8 @@ as $$
   booked as (
     select
       d::date as day,
-      fid as room_id
+      fid as room_id,
+      public._booking_calendar_payment_verified(b) as payment_verified
     from public.bookings b
     cross join lateral public._booking_facility_ids(b) as fid
     cross join lateral generate_series(
@@ -540,12 +615,24 @@ as $$
           and rc.active = true
       )
   ),
+  facility_day as (
+    select
+      day,
+      room_id,
+      bool_and(payment_verified) as payment_verified
+    from booked
+    group by day, room_id
+  ),
   booked_agg as (
     select
       day,
-      count(distinct room_id)::int as booked_count,
-      array_agg(distinct room_id order by room_id) as booked_room_ids
-    from booked
+      count(*)::int as booked_count,
+      array_agg(room_id order by room_id) as booked_room_ids,
+      coalesce(
+        array_agg(room_id order by room_id) filter (where not payment_verified),
+        '{}'::text[]
+      ) as pending_room_ids
+    from facility_day
     group by day
   )
   select
@@ -559,7 +646,8 @@ as $$
     end as status,
     coalesce(ba.booked_count, 0) as booked_count,
     t.total_facilities,
-    coalesce(ba.booked_room_ids, '{}'::text[]) as booked_room_ids
+    coalesce(ba.booked_room_ids, '{}'::text[]) as booked_room_ids,
+    coalesce(ba.pending_room_ids, '{}'::text[]) as pending_room_ids
   from days d
   cross join totals t
   left join blocked bl on bl.day = d.day

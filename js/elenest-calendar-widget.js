@@ -29,6 +29,20 @@
     return null;
   }
 
+  function occupancyStatusText(kind, facilityStatus) {
+    if (kind === "pending") {
+      if (facilityStatus && facilityStatus.label) return facilityStatus.label;
+      var UA = window.ElenestUnitAvailability;
+      if (UA && typeof UA.pendingCalendarLabel === "function") return UA.pendingCalendarLabel();
+      return "Pending Admin Confirmation";
+    }
+    return "Booked";
+  }
+
+  function isOccupiedCalendarKind(kind) {
+    return kind === "booked" || kind === "limited" || kind === "hold" || kind === "pending";
+  }
+
   function dateHasReservations(iso, unitCatalogId) {
     if (unitCatalogId) {
       var UA = window.ElenestUnitAvailability;
@@ -77,7 +91,20 @@
     var liveResortView = resortWideView || showLiveOccupancy;
     var extraIsUnavailable =
       typeof opts.extraIsUnavailable === "function" ? opts.extraIsUnavailable : null;
+    var extraUnavailableTitle = opts.extraUnavailableTitle
+      ? String(opts.extraUnavailableTitle)
+      : "";
+    var extraUnavailableStatus = opts.extraUnavailableStatus
+      ? String(opts.extraUnavailableStatus)
+      : "No fit";
     var selectedIso = opts.selectedIso ? String(opts.selectedIso) : "";
+    // Guest calendars hide the pending label. The date stays blocked when it is fully held.
+    var hidePendingStatus = opts.hidePendingStatus === true;
+
+    function dayStatusText(kind, facilityStatus) {
+      if (hidePendingStatus && kind === "pending") return "Booked";
+      return occupancyStatusText(kind, facilityStatus);
+    }
 
     var y = calView.y;
     var m = calView.m;
@@ -181,17 +208,16 @@
         blocked = false;
         kind = null;
       }
-      if (
+      var partyMiss =
         blocked &&
         extraIsUnavailable &&
         extraIsUnavailable(iso) &&
         kind !== "manager" &&
         kind !== "booked" &&
         kind !== "limited" &&
-        kind !== "hold"
-      ) {
-        kind = "booked";
-      }
+        kind !== "hold" &&
+        kind !== "pending";
+      if (partyMiss) kind = "party";
       if (past || blocked) {
         // Manager portal exception: allow unblocking manager-blocked dates.
         var isManagerBlocked = !past && kind === "manager";
@@ -206,20 +232,29 @@
         kind = past ? "past" : kind;
         if (past) {
           cell.classList.add("book-flow-cal-day--past");
-        } else if (kind === "booked" || kind === "limited" || kind === "hold") {
+        } else if (kind === "party" || isOccupiedCalendarKind(kind)) {
           cell.classList.add("book-flow-cal-day--booked");
+          if (kind === "pending" && !hidePendingStatus) cell.classList.add("book-flow-cal-day--pending");
         } else {
           cell.classList.add("book-flow-cal-day--unavailable");
         }
         if (past) {
           cell.title = "Past date";
-        } else if (kind === "booked" || kind === "limited" || kind === "hold") {
+        } else if (kind === "party") {
+          cell.title = extraUnavailableTitle || "No facility fits this guest count";
+        } else if (isOccupiedCalendarKind(kind)) {
           cell.title =
-            facilityStatus && facilityStatus.label
-              ? facilityStatus.label
-              : unitCatalogId
-                ? "Booked — this unit is reserved"
-                : "Booked — no units left for this date";
+            kind === "pending" && !hidePendingStatus
+              ? occupancyStatusText(kind, facilityStatus)
+              : hidePendingStatus && kind === "pending"
+                ? unitCatalogId
+                  ? "Booked — this unit is reserved"
+                  : "Booked — no units left for this date"
+              : facilityStatus && facilityStatus.label
+                ? facilityStatus.label
+                : unitCatalogId
+                  ? "Booked — this unit is reserved"
+                  : "Booked — no units left for this date";
         } else if (kind === "manager") {
           cell.title = "Blocked by manager — tap to unblock";
         } else {
@@ -231,13 +266,26 @@
         var statusPast = document.createElement("span");
         statusPast.className = "book-flow-cal-day__status";
         if (past) statusPast.textContent = "Past";
-        else if (kind === "booked" || kind === "limited" || kind === "hold") {
-          statusPast.textContent = "Booked";
+        else if (kind === "party") statusPast.textContent = extraUnavailableStatus;
+        else if (isOccupiedCalendarKind(kind)) {
+          statusPast.textContent = dayStatusText(kind, facilityStatus);
         } else if (kind === "manager") {
           statusPast.textContent = "Block";
         } else statusPast.textContent = "Closed";
         cell.appendChild(numPast);
         cell.appendChild(statusPast);
+        if (!past && highlightRange && kind === "party") {
+          if (wizardState.checkIn === iso) cell.classList.add("book-flow-cal-day--checkin");
+          if (wizardState.checkOut === iso) cell.classList.add("book-flow-cal-day--checkout");
+          if (
+            wizardState.checkIn &&
+            wizardState.checkOut &&
+            iso > wizardState.checkIn &&
+            iso < wizardState.checkOut
+          ) {
+            cell.classList.add("book-flow-cal-day--range");
+          }
+        }
 
         if (
           !allowAllDayClick &&
@@ -257,31 +305,45 @@
         var isFull =
           liveResortView &&
           !unitCatalogId &&
-          (liveStatus === "full" || liveKind === "limited" || liveKind === "booked");
+          (liveStatus === "full" ||
+            liveStatus === "pending" ||
+            liveKind === "limited" ||
+            liveKind === "booked" ||
+            liveKind === "pending");
         var isUnitBookedHint =
           !!unitCatalogId &&
           facilityStatus &&
           (facilityStatus.kind === "booked" ||
             facilityStatus.kind === "hold" ||
+            facilityStatus.kind === "pending" ||
             facilityStatus.status === "booked" ||
-            facilityStatus.status === "hold");
+            facilityStatus.status === "hold" ||
+            facilityStatus.status === "pending");
         // Fully booked nights / this unit already reserved — gray and unclickable.
         if (isFull || isUnitBookedHint) {
+          var fullKind = liveKind || (facilityStatus && facilityStatus.kind) || "booked";
           cell.classList.add("book-flow-cal-day--disabled");
           cell.classList.add("book-flow-cal-day--booked");
+          if (fullKind === "pending" && !hidePendingStatus) cell.classList.add("book-flow-cal-day--pending");
           cell.disabled = true;
           cell.title =
-            facilityStatus && facilityStatus.label
-              ? facilityStatus.label
-              : unitCatalogId
-                ? "Booked — this unit is reserved"
-                : "Booked — no units left for this date";
+            fullKind === "pending" && !hidePendingStatus
+              ? occupancyStatusText(fullKind, facilityStatus)
+              : hidePendingStatus && fullKind === "pending"
+                ? unitCatalogId
+                  ? "Booked — this unit is reserved"
+                  : "Booked — no units left for this date"
+              : facilityStatus && facilityStatus.label
+                ? facilityStatus.label
+                : unitCatalogId
+                  ? "Booked — this unit is reserved"
+                  : "Booked — no units left for this date";
           var numFull = document.createElement("span");
           numFull.className = "book-flow-cal-day__num";
           numFull.textContent = String(day);
           var statusFull = document.createElement("span");
           statusFull.className = "book-flow-cal-day__status";
-          statusFull.textContent = "Booked";
+          statusFull.textContent = dayStatusText(fullKind, facilityStatus);
           cell.appendChild(numFull);
           cell.appendChild(statusFull);
         } else {
@@ -290,7 +352,15 @@
           numOk.textContent = String(day);
           cell.appendChild(numOk);
           cell.classList.add("book-flow-cal-day--available");
-          cell.title = "Available — tap to select";
+          if (!hidePendingStatus && liveResortView && facilityStatus && facilityStatus.hasPending) {
+            var pendingOpen = document.createElement("span");
+            pendingOpen.className = "book-flow-cal-day__status book-flow-cal-day__status--pending";
+            pendingOpen.textContent = occupancyStatusText("pending", facilityStatus);
+            cell.appendChild(pendingOpen);
+            cell.title = occupancyStatusText("pending", facilityStatus);
+          } else {
+            cell.title = "Available — tap to select";
+          }
           if (highlightRange) {
             if (wizardState.checkIn === iso) cell.classList.add("book-flow-cal-day--checkin");
             if (wizardState.checkOut === iso) cell.classList.add("book-flow-cal-day--checkout");
@@ -330,7 +400,77 @@
     host.appendChild(grid);
   }
 
+  var dateNoticeLastFocus = null;
+
+  function closeDateNotice() {
+    var overlay = document.getElementById("dateRangeNotice");
+    if (!overlay || overlay.hidden) return;
+    overlay.classList.remove("is-open");
+    overlay.hidden = true;
+    overlay.setAttribute("aria-hidden", "true");
+    var back = dateNoticeLastFocus;
+    dateNoticeLastFocus = null;
+    if (back && typeof back.focus === "function") {
+      try {
+        back.focus();
+      } catch (e) {}
+    }
+  }
+
+  function showDateNotice(message) {
+    if (!document.body) return;
+    var overlay = document.getElementById("dateRangeNotice");
+    if (!overlay) {
+      overlay = document.createElement("div");
+      overlay.id = "dateRangeNotice";
+      overlay.className = "date-notice";
+      overlay.hidden = true;
+      overlay.setAttribute("role", "dialog");
+      overlay.setAttribute("aria-modal", "true");
+      overlay.setAttribute("aria-hidden", "true");
+      overlay.setAttribute("aria-labelledby", "dateRangeNoticeTitle");
+      overlay.innerHTML =
+        '<div class="date-notice__card">' +
+        '<div class="date-notice__glow" aria-hidden="true"></div>' +
+        '<div class="date-notice__inner">' +
+        '<span class="date-notice__mark" aria-hidden="true">' +
+        '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' +
+        '<rect x="3.5" y="5" width="17" height="15.5" rx="2.4"></rect>' +
+        '<path d="M3.5 9.5h17M8 3.2v3.2M16 3.2v3.2"></path>' +
+        '<path d="M9.2 13.1l5.6 5.6M14.8 13.1L9.2 18.7"></path>' +
+        "</svg></span>" +
+        '<p class="date-notice__eyebrow">Elenest Resort</p>' +
+        '<h2 class="date-notice__title" id="dateRangeNoticeTitle">Date blocked</h2>' +
+        '<p class="date-notice__text" id="dateRangeNoticeText"></p>' +
+        '<button type="button" class="date-notice__ok" id="dateRangeNoticeOk">Select another range</button>' +
+        "</div></div>";
+      document.body.appendChild(overlay);
+      var ok = overlay.querySelector("#dateRangeNoticeOk");
+      if (ok) ok.addEventListener("click", closeDateNotice);
+      overlay.addEventListener("click", function (e) {
+        if (e.target === overlay) closeDateNotice();
+      });
+      document.addEventListener("keydown", function (e) {
+        if ((e.key === "Escape" || e.key === "Esc") && overlay && !overlay.hidden) {
+          closeDateNotice();
+        }
+      });
+    }
+    var textEl = overlay.querySelector("#dateRangeNoticeText");
+    if (textEl) textEl.textContent = message || "";
+    dateNoticeLastFocus = document.activeElement;
+    overlay.hidden = false;
+    overlay.setAttribute("aria-hidden", "false");
+    requestAnimationFrame(function () {
+      overlay.classList.add("is-open");
+      var okBtn = overlay.querySelector("#dateRangeNoticeOk");
+      if (okBtn) okBtn.focus();
+    });
+  }
+
   window.ElenestCalendarWidget = {
-    render: render
+    render: render,
+    showDateNotice: showDateNotice,
+    hideDateNotice: closeDateNotice
   };
 })();

@@ -4,8 +4,8 @@
  */
 (function () {
   var OVERLAY_ID = "staffBootLoading";
-  var MIN_MS = 500;
-  var MAX_MS = 14000;
+  var MIN_MS = 180;
+  var MAX_MS = 1200;
   var startedAt = Date.now();
   var hidden = false;
   var hideTimer = null;
@@ -115,52 +115,30 @@
     );
   }
 
-  function collectDataWaits() {
-    var waits = [];
-    var body = document.body;
-    var portal = String((body && body.getAttribute("data-staff-portal")) || "").toLowerCase();
-    var role = String((body && body.getAttribute("data-required-role")) || "").toLowerCase();
-    var isAdmin = !!(body && body.classList.contains("admin-app")) || role === "admin";
-    var isManager = portal === "manager" || role === "manager";
-    var isReception = portal === "reception" || role === "receptionist" || role === "reception";
-
-    if (window.ElenestAuth && window.ElenestAuth.ready) {
-      waits.push(window.ElenestAuth.ready);
-    }
-    if (window.ElenestBookings && window.ElenestBookings.ready) {
-      waits.push(window.ElenestBookings.ready);
-    }
-    if ((isAdmin || isManager) && window.ElenestGuestFeedback && window.ElenestGuestFeedback.ready) {
-      waits.push(window.ElenestGuestFeedback.ready);
-    }
-    if ((isAdmin || isManager) && window.ElenestContactMessages && window.ElenestContactMessages.ready) {
-      waits.push(window.ElenestContactMessages.ready);
-    }
-    if (isReception) {
-      if (window.ElenestContentStore && window.ElenestContentStore.ready) {
-        waits.push(window.ElenestContentStore.ready);
+  function withCap(p, ms) {
+    return new Promise(function (resolve) {
+      var settled = false;
+      function done() {
+        if (settled) return;
+        settled = true;
+        resolve();
       }
-      if (window.ElenestAvailability && window.ElenestAvailability.ready) {
-        waits.push(window.ElenestAvailability.ready);
-      }
-    }
-    if (isAdmin && window.ElenestPaymentProofs && window.ElenestPaymentProofs.ready) {
-      waits.push(window.ElenestPaymentProofs.ready);
-    }
-    return waits;
+      window.setTimeout(done, ms);
+      asSettled(p).then(done, done);
+    });
   }
 
   function start() {
-    if (!isStaffPortalPage()) return;
+    if (!isStaffPortalPage() || hidden) return;
     ensureOverlay();
 
-    var waits = collectDataWaits();
-    if (!waits.length) {
-      hideAfterMin();
-      return;
-    }
-
-    Promise.all(waits.map(asSettled)).then(hideAfterMin);
+    // Sign-in is the only step worth covering. Bookings, reviews, and messages
+    // keep loading after the portal is on screen.
+    var authP =
+      window.ElenestAuth && window.ElenestAuth.ready
+        ? window.ElenestAuth.ready
+        : Promise.resolve();
+    withCap(authP, 700).then(hideAfterMin);
   }
 
   window.ElenestStaffBootLoading = {

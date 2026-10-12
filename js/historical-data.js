@@ -166,29 +166,29 @@
           lastError = null;
           return { ok: true, rows: [], base: pack.base };
         }
-        var acc = [];
-        var idx = 0;
-        function nextChunk() {
-          if (idx >= urls.length) {
-            cacheByKind[k] = acc;
-            lastError = null;
-            return { ok: true, rows: acc, base: pack.base };
-          }
-          var chunkUrl = rewriteChunkUrl(urls[idx++], pack.base);
-          return fetchJson(chunkUrl, "force-cache")
-            .then(function (rows) {
-              if (Array.isArray(rows)) acc = acc.concat(rows);
-              return nextChunk();
-            })
-            .catch(function (err) {
-              // One missing chunk should not wipe the rest; continue.
-              try {
-                console.warn("[Elenest HistoricalData] chunk failed:", chunkUrl, err);
-              } catch (e) {}
-              return nextChunk();
-            });
-        }
-        return nextChunk();
+        return Promise.all(
+          urls.map(function (url) {
+            var chunkUrl = rewriteChunkUrl(url, pack.base);
+            return fetchJson(chunkUrl, "force-cache")
+              .then(function (rows) {
+                return Array.isArray(rows) ? rows : [];
+              })
+              .catch(function (err) {
+                try {
+                  console.warn("[Elenest HistoricalData] chunk failed:", chunkUrl, err);
+                } catch (e) {}
+                return [];
+              });
+          })
+        ).then(function (parts) {
+          var acc = [];
+          (parts || []).forEach(function (rows) {
+            acc = acc.concat(rows);
+          });
+          cacheByKind[k] = acc;
+          lastError = null;
+          return { ok: true, rows: acc, base: pack.base };
+        });
       })
       .then(function (result) {
         inflightByKind[k] = null;

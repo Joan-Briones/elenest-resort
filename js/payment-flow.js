@@ -3,6 +3,7 @@
 
   var STATUS = {
     PENDING: "Pending",
+    AWAITING_PAYMENT: "Awaiting Payment",
     FOR_VERIFICATION: "For Verification",
     CONFIRMED: "Confirmed",
     RESERVED: "Reserved",
@@ -63,12 +64,21 @@
   /** Payment Status (canonical display): For Verification / Approved / Rejected */
   function paymentDisplayLabel(booking) {
     if (!booking) return "For Verification";
+    var payRaw = String(booking.paymentStatus || "").toLowerCase();
+    if (payRaw.indexOf("deadline") !== -1) return "Expired";
+    if (payRaw.indexOf("not confirmed") !== -1 || payRaw.indexOf("declined") !== -1) {
+      return "Not confirmed";
+    }
     if (
       booking.paymentRejectedAt ||
       booking.payment_rejected_at ||
       normalizeBookingStatus(booking.status) === STATUS.REJECTED
     ) {
       return "Rejected";
+    }
+    if (isAwaitingBookingReview(booking)) return "Not available yet";
+    if (isAwaitingCustomerPayment(booking)) {
+      return isPaymentWindowExpired(booking) ? "Expired" : "Awaiting payment";
     }
     var pay = String(booking.paymentStatus || "").toLowerCase();
     if (pay.indexOf("reject") !== -1) return "Rejected";
@@ -89,7 +99,9 @@
       return "Cancelled";
     }
     if (st === STATUS.CHECKED_OUT || st === STATUS.COMPLETED) return "Completed";
-    if (st === STATUS.PENDING || st === STATUS.FOR_VERIFICATION) return "Pending";
+    if (st === STATUS.PENDING || st === STATUS.AWAITING_PAYMENT || st === STATUS.FOR_VERIFICATION) {
+      return "Pending";
+    }
     // Reserved / Confirmed / Checked In stay as Confirmed until checkout completes the stay.
     return "Confirmed";
   }
@@ -145,6 +157,7 @@
       st === STATUS.CHECKED_OUT ||
       st === STATUS.COMPLETED ||
       st === STATUS.PENDING ||
+      st === STATUS.AWAITING_PAYMENT ||
       st === STATUS.FOR_VERIFICATION
     ) {
       return false;
@@ -156,6 +169,7 @@
 
   function normalizeBookingStatus(st) {
     var s = String(st || STATUS.PENDING).trim().toLowerCase();
+    if (s === "awaiting payment" || s === "awaiting_payment") return STATUS.AWAITING_PAYMENT;
     if (s === "for verification" || s === "pending payment verification") return STATUS.FOR_VERIFICATION;
     if (s === "confirmed" || s === "approved" || s === "active") return STATUS.CONFIRMED;
     if (s === "reserved") return STATUS.RESERVED;
@@ -196,12 +210,82 @@
     );
   }
 
+  function canCustomerCancelBooking(booking) {
+    if (!isAwaitingBookingReview(booking)) return false;
+    var st = normalizeBookingStatus(booking.status);
+    return st === STATUS.PENDING;
+  }
+
+  function buildCustomerCancelPatch() {
+    return {
+      status: STATUS.CANCELLED,
+      paymentStatus: "Cancelled by customer — booking was not confirmed yet",
+      slotLocked: false,
+      verificationStage: "cancelled",
+      workflow: "cancelled",
+      cancelledAt: new Date().toISOString(),
+      cancelledBy: "customer"
+    };
+  }
+
+  function isAwaitingBookingReview(booking) {
+    if (!booking) return false;
+    if (hasSubmittedReceipt(booking)) return false;
+    if (booking.paymentVerifiedAt || booking.payment_verified_at || booking.paymentRejectedAt) return false;
+    if (booking.bookingConfirmedAt || booking.paymentDeadlineAt || booking.payment_deadline_at) return false;
+    var wf = String(booking.workflow || "").trim().toLowerCase();
+    var stage = String(booking.verificationStage || booking.verification_stage || "").trim().toLowerCase();
+    return wf === "awaiting_booking_review" || stage === "awaiting_booking_review";
+  }
+
+  function isAwaitingCustomerPayment(booking) {
+    if (!booking) return false;
+    if (hasSubmittedReceipt(booking)) return false;
+    if (booking.paymentVerifiedAt || booking.payment_verified_at || booking.paymentRejectedAt) return false;
+    var st = normalizeBookingStatus(booking.status);
+    if (st === STATUS.CANCELLED || st === STATUS.REJECTED || st === STATUS.NO_SHOW) return false;
+    var wf = String(booking.workflow || "").trim().toLowerCase();
+    var stage = String(booking.verificationStage || booking.verification_stage || "").trim().toLowerCase();
+    return st === STATUS.AWAITING_PAYMENT || wf === "awaiting_payment" || stage === "awaiting_payment";
+  }
+
+  function paymentWindowDeadline(booking) {
+    if (!isAwaitingCustomerPayment(booking)) return null;
+    return booking.paymentDeadlineAt || booking.payment_deadline_at || null;
+  }
+
+  function isPaymentWindowExpired(booking) {
+    var deadline = paymentWindowDeadline(booking);
+    if (!deadline) return false;
+    return isHoldExpired({ holdExpiresAt: deadline });
+  }
+
+  function shouldAutoExpireUnpaidBooking(booking) {
+    return isPaymentWindowExpired(booking);
+  }
+
+  /** Uploaded proof is not a paid booking. These stages stay unpaid until paymentVerifiedAt. */
+  function isUnverifiedPaymentStage(booking) {
+    if (!booking) return false;
+    var wf = String(booking.workflow || "").trim().toLowerCase();
+    var stage = String(booking.verificationStage || booking.verification_stage || "").trim().toLowerCase();
+    return (
+      wf === "awaiting_booking_review" ||
+      wf === "awaiting_payment" ||
+      wf === "pending_payment" ||
+      stage === "awaiting_booking_review" ||
+      stage === "awaiting_payment" ||
+      stage === "awaiting_admin"
+    );
+  }
+
   function isAwaitingPaymentVerification(booking) {
     if (!booking) return false;
     if (booking.paymentVerifiedAt || booking.paymentRejectedAt) return false;
     if (!hasSubmittedReceipt(booking)) return false;
     var st = normalizeBookingStatus(booking.status);
     if (st === STATUS.FOR_VERIFICATION) return true;
+    if (st === STATUS.AWAITING_PAYMENT) return true;
     if (st === STATUS.PENDING) return true;
     var raw = String(booking.status || "").trim().toLowerCase();
     if (raw === "pending payment verification") return true;
@@ -221,6 +305,7 @@
     var st = normalizeBookingStatus(booking.status);
     if (
       st === STATUS.PENDING ||
+      st === STATUS.AWAITING_PAYMENT ||
       st === STATUS.FOR_VERIFICATION ||
       st === STATUS.CANCELLED ||
       st === STATUS.REJECTED ||
@@ -254,6 +339,68 @@
     );
   }
 
+  var PENDING_CALENDAR_LABEL = "Pending Admin Confirmation";
+
+  function explicitPaymentVerifiedAt(booking) {
+    if (!booking) return "";
+    return booking.paymentVerifiedAt || booking.payment_verified_at || "";
+  }
+
+  /**
+   * Calendar "Booked" is only for a payment the admin has verified.
+   * Pending, awaiting payment, and submitted-but-unverified downpayments stay pending.
+   */
+  function hasVerifiedCalendarPayment(booking) {
+    if (!booking) return false;
+    if (booking.paymentRejectedAt || booking.payment_rejected_at) return false;
+    if (explicitPaymentVerifiedAt(booking)) return true;
+    if (booking.paymentVerified === true || booking.payment_verified === true) return true;
+    if (booking.walkIn === true || booking.walk_in === true) return true;
+    var wf = String(booking.workflow || "").trim().toLowerCase();
+    var stage = String(booking.verificationStage || booking.verification_stage || "")
+      .trim()
+      .toLowerCase();
+    var st = String(booking.status || "").trim().toLowerCase();
+    if (
+      wf === "awaiting_booking_review" ||
+      wf === "awaiting_payment" ||
+      wf === "pending_payment" ||
+      wf === "pending_verification" ||
+      wf === "pending" ||
+      st === "pending" ||
+      st === "awaiting payment" ||
+      st === "awaiting_payment" ||
+      st === "for verification" ||
+      st === "pending payment verification" ||
+      stage === "awaiting_booking_review" ||
+      stage === "awaiting_payment" ||
+      stage === "awaiting_admin"
+    ) {
+      return false;
+    }
+    if (
+      wf === "confirmed" ||
+      wf === "approved" ||
+      wf === "checked_in" ||
+      wf === "verified_by_receptionist" ||
+      stage === "approved"
+    ) {
+      return true;
+    }
+    var normalized = normalizeBookingStatus(booking.status);
+    return (
+      normalized === STATUS.CHECKED_IN ||
+      normalized === STATUS.CHECKED_OUT ||
+      normalized === STATUS.COMPLETED
+    );
+  }
+
+  /** "booked" after payment verification, "pending" while the slot is held, or null when it does not occupy a date. */
+  function calendarSlotKind(booking) {
+    if (!bookingBlocksCalendarSlot(booking)) return null;
+    return hasVerifiedCalendarPayment(booking) ? "booked" : "pending";
+  }
+
   function bookingBlocksCalendarSlot(booking) {
     if (!booking) return false;
     if (!booking.checkIn || !booking.checkOut) return false;
@@ -276,6 +423,7 @@
       if (stLocked === STATUS.FOR_VERIFICATION && normalizePaymentType(booking.paymentType) === "down") {
         if (booking.holdExpiresAt && isHoldExpired(booking)) return false;
       }
+      if (stLocked === STATUS.AWAITING_PAYMENT && isPaymentWindowExpired(booking)) return false;
       return true;
     }
 
@@ -303,6 +451,12 @@
         return true;
       }
       return type === "full";
+    }
+
+    if (st === STATUS.AWAITING_PAYMENT) {
+      if (hasSubmittedReceipt(booking)) return true;
+      if (isPaymentWindowExpired(booking)) return false;
+      return booking.slotLocked !== false;
     }
 
     if (st === STATUS.PENDING) {
@@ -390,6 +544,70 @@
     return normalizePaymentType(type) === "full" ? "Full Payment" : "Down Payment";
   }
 
+  function buildBookingRequestPatch() {
+    return {
+      status: STATUS.PENDING,
+      paymentStatus: "Awaiting admin confirmation",
+      paymentSubmittedAt: null,
+      paymentVerifiedAt: null,
+      paymentDeadlineAt: null,
+      bookingConfirmedAt: null,
+      verificationExpiresAt: null,
+      holdExpiresAt: null,
+      verificationStage: "awaiting_booking_review",
+      slotLocked: true,
+      workflow: "awaiting_booking_review",
+      arrivalStatus: "not_arrived"
+    };
+  }
+
+  /** Admin confirmed the facility, date, time, guests, and amount. Payment opens for 3 hours. */
+  function buildBookingConfirmForPaymentPatch(fromIso) {
+    var at = fromIso || new Date().toISOString();
+    return {
+      status: STATUS.AWAITING_PAYMENT,
+      paymentStatus: "Awaiting payment",
+      bookingConfirmedAt: at,
+      bookingConfirmedBy: "",
+      paymentDeadlineAt: holdExpiresAtFromNow(at),
+      verificationStage: "awaiting_payment",
+      slotLocked: true,
+      workflow: "awaiting_payment"
+    };
+  }
+
+  function buildBookingReviewRejectPatch(adminEmail, reason) {
+    return {
+      status: STATUS.REJECTED,
+      paymentStatus: "Declined — booking not confirmed",
+      paymentRejectedAt: new Date().toISOString(),
+      paymentRejectedBy: adminEmail || "",
+      paymentRejectionReason: reason || "",
+      slotLocked: false,
+      holdExpiresAt: null,
+      paymentDeadlineAt: null,
+      verificationStage: "booking_declined",
+      workflow: "rejected"
+    };
+  }
+
+  /**
+   * Releases only this reservation. Other active bookings that share a facility
+   * keep their own rows and continue to block that schedule.
+   */
+  function buildPaymentDeadlineExpiredPatch() {
+    return {
+      status: STATUS.CANCELLED,
+      paymentStatus: "Payment deadline expired — booking cancelled",
+      slotLocked: false,
+      holdExpiresAt: null,
+      verificationStage: "payment_expired",
+      workflow: "cancelled",
+      arrivalStatus: "not_arrived",
+      cancelledAt: new Date().toISOString()
+    };
+  }
+
   function buildCustomerSubmitPatch(paymentType, submittedAt) {
     var type = normalizePaymentType(paymentType);
     var at = submittedAt || new Date().toISOString();
@@ -397,15 +615,11 @@
       status: STATUS.FOR_VERIFICATION,
       paymentStatus: STATUS.FOR_VERIFICATION,
       paymentSubmittedAt: at,
-      // Do not start any 3-hour clock on submit/upload — only after Admin verifies.
-      verificationExpiresAt: null,
-      holdExpiresAt: null,
+      // Proof upload is not payment approval and must not clear or start a hold.
       verificationStage: "awaiting_admin",
       slotLocked: true,
       workflow: "pending_payment",
-      paymentType: type,
-      // Payment submit never implies arrival.
-      arrivalStatus: "not_arrived"
+      paymentType: type
     };
   }
 
@@ -761,6 +975,7 @@
     if (!booking) return false;
     if (booking.paymentRejectedAt) return false;
     if (booking.paymentVerifiedAt || booking.payment_verified_at) return true;
+    if (isUnverifiedPaymentStage(booking)) return false;
     var stage = String(booking.verificationStage || booking.verification_stage || "")
       .trim()
       .toLowerCase();
@@ -788,17 +1003,26 @@
   }
 
   /**
-   * Customer-facing 3-hour countdown deadline.
-   * Starts only after Admin verifies a down payment (paymentVerifiedAt / holdExpiresAt).
-   * Never based on booking submit or receipt upload time.
+   * Customer-facing countdown.
+   * Payment window: 3 hours from admin booking confirmation (paymentDeadlineAt).
+   * Arrival hold: 3 hours after a verified down payment on the check-in date.
    */
   function customerTimerDeadline(booking) {
+    var paymentWindow = paymentWindowDeadline(booking);
+    if (paymentWindow) return paymentWindow;
     return downPaymentHoldDeadline(booking);
+  }
+
+  function customerTimerLabel(booking) {
+    if (paymentWindowDeadline(booking)) return "Payment time left";
+    if (downPaymentHoldDeadline(booking)) return "Arrival time left";
+    return "Time remaining";
   }
 
   function showCustomerTimer(booking) {
     if (!booking) return false;
     if (booking.paymentRejectedAt) return false;
+    if (paymentWindowDeadline(booking)) return true;
     return !!downPaymentHoldDeadline(booking);
   }
 
@@ -832,11 +1056,25 @@
         value: "Not Arrived"
       };
     }
-    var waiting = normalizeBookingStatus(booking.status);
-    if (waiting === STATUS.FOR_VERIFICATION || waiting === STATUS.PENDING) {
+    if (isAwaitingBookingReview(booking)) {
       return {
-        label: "Verification",
-        value: "Waiting for the owner to verify your payment"
+        label: "Booking review",
+        value: "Waiting for admin to confirm your facility, date, and schedule"
+      };
+    }
+    if (isAwaitingCustomerPayment(booking)) {
+      return {
+        label: "Payment window",
+        value: isPaymentWindowExpired(booking)
+          ? "The 3-hour payment window has ended"
+          : "Pay within 3 hours of admin confirmation"
+      };
+    }
+    var waiting = normalizeBookingStatus(booking.status);
+    if (waiting === STATUS.FOR_VERIFICATION || (waiting === STATUS.PENDING && hasSubmittedReceipt(booking))) {
+      return {
+        label: "Payment",
+        value: "Proof received. Waiting for admin to verify it. Not marked paid yet."
       };
     }
     return null;
@@ -858,7 +1096,12 @@
     }
     if (isActiveDownPaymentHold(booking)) return "Confirmed · 3-Hour Hold";
     if (st === STATUS.RESERVED) return "Confirmed";
-    if (st === STATUS.FOR_VERIFICATION) return "Pending";
+    if (isAwaitingBookingReview(booking)) return "Awaiting confirmation";
+    if (isAwaitingCustomerPayment(booking)) {
+      return isPaymentWindowExpired(booking) ? "Payment window expired" : "Awaiting payment";
+    }
+    if (st === STATUS.FOR_VERIFICATION) return "Pending payment verification";
+    if (st === STATUS.AWAITING_PAYMENT) return "Awaiting payment";
     if (st === STATUS.PENDING) return "Pending";
     if (st === STATUS.CONFIRMED) return "Confirmed";
     return fallback != null ? fallback : bookingDisplayStatus(booking);
@@ -950,7 +1193,7 @@
     }
     var display = paymentDisplayLabel(booking);
     var kind = "pending";
-    if (display === "Rejected") kind = "cancelled";
+    if (display === "Rejected" || display === "Expired" || display === "Not confirmed") kind = "cancelled";
     else if (display === "Approved") kind = "success";
     if (opts.kind) kind = opts.kind;
     return presentationForKind(kind, label || display);
@@ -1006,6 +1249,9 @@
     isInHouseGuest: isInHouseGuest,
     hasStayPeriodEnded: hasStayPeriodEnded,
     isSlotLockedStatus: isSlotLockedStatus,
+    PENDING_CALENDAR_LABEL: PENDING_CALENDAR_LABEL,
+    hasVerifiedCalendarPayment: hasVerifiedCalendarPayment,
+    calendarSlotKind: calendarSlotKind,
     bookingBlocksCalendarSlot: bookingBlocksCalendarSlot,
     occupiesCalendarSlot: occupiesCalendarSlot,
     amountDueNow: amountDueNow,
@@ -1024,6 +1270,10 @@
     getStatusPresentation: getStatusPresentation,
     getPaymentPresentation: getPaymentPresentation,
     fillStatusBadge: fillStatusBadge,
+    buildBookingRequestPatch: buildBookingRequestPatch,
+    buildBookingConfirmForPaymentPatch: buildBookingConfirmForPaymentPatch,
+    buildBookingReviewRejectPatch: buildBookingReviewRejectPatch,
+    buildPaymentDeadlineExpiredPatch: buildPaymentDeadlineExpiredPatch,
     buildCustomerSubmitPatch: buildCustomerSubmitPatch,
     buildVerificationApprovePatch: buildVerificationApprovePatch,
     buildVerificationRejectPatch: buildVerificationRejectPatch,
@@ -1042,7 +1292,15 @@
     isActiveDownPaymentHold: isActiveDownPaymentHold,
     shouldAutoCancelExpiredHold: shouldAutoCancelExpiredHold,
     isPaymentApproved: isPaymentApproved,
+    isAwaitingBookingReview: isAwaitingBookingReview,
+    canCustomerCancelBooking: canCustomerCancelBooking,
+    buildCustomerCancelPatch: buildCustomerCancelPatch,
+    isAwaitingCustomerPayment: isAwaitingCustomerPayment,
+    paymentWindowDeadline: paymentWindowDeadline,
+    isPaymentWindowExpired: isPaymentWindowExpired,
+    shouldAutoExpireUnpaidBooking: shouldAutoExpireUnpaidBooking,
     customerTimerDeadline: customerTimerDeadline,
+    customerTimerLabel: customerTimerLabel,
     showCustomerTimer: showCustomerTimer,
     customerStatusNote: customerStatusNote,
     hasSubmittedReceipt: hasSubmittedReceipt,

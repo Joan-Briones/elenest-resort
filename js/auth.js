@@ -687,18 +687,45 @@
         .exchangeCodeForSession(code)
         .then(function (exchangeResult) {
           if (exchangeResult.error) {
-            return waitForSession().then(afterOAuthSession);
+            return sessionFromUrlTokens(sb).then(function (session) {
+              if (session && session.user) return afterOAuthSession(session);
+              return waitForSession().then(afterOAuthSession);
+            });
           }
           return readSession().then(function (result) {
             return afterOAuthSession(result.data && result.data.session);
           });
         })
         .catch(function () {
-          return waitForSession().then(afterOAuthSession);
+          return sessionFromUrlTokens(sb).then(function (session) {
+            if (session && session.user) return afterOAuthSession(session);
+            return waitForSession().then(afterOAuthSession);
+          });
         });
     }
 
-    return waitForSession().then(afterOAuthSession);
+    return sessionFromUrlTokens(sb).then(function (session) {
+      if (session && session.user) return afterOAuthSession(session);
+      return waitForSession().then(afterOAuthSession);
+    });
+  }
+
+  function sessionFromUrlTokens(sb) {
+    if (!sb) return Promise.resolve(null);
+    var params = recoveryParams();
+    if (!params.accessToken || !params.refreshToken) return Promise.resolve(null);
+    return sb.auth
+      .setSession({
+        access_token: params.accessToken,
+        refresh_token: params.refreshToken
+      })
+      .then(function (result) {
+        if (result.error) return null;
+        return (result.data && result.data.session) || null;
+      })
+      .catch(function () {
+        return null;
+      });
   }
 
   function initSession() {
@@ -1711,6 +1738,21 @@
   }
 
   function passwordResetRedirectUrl() {
+    try {
+      var loc = window.location;
+      if (
+        loc &&
+        (loc.protocol === "http:" || loc.protocol === "https:") &&
+        loc.origin &&
+        loc.origin !== "null"
+      ) {
+        var path = loc.pathname || "/";
+        var htmlIdx = path.toLowerCase().lastIndexOf("/html/");
+        if (htmlIdx !== -1) {
+          return loc.origin + path.substring(0, htmlIdx + 6) + "reset-password.html";
+        }
+      }
+    } catch (e) {}
     return publicHtmlBaseUrl() + "reset-password.html";
   }
 
@@ -1727,10 +1769,21 @@
       return Promise.resolve({ ok: false, message: "Sign-in is unavailable right now. Please try again." });
     }
     var redirectTo = passwordResetRedirectUrl();
-    if (/localhost|127\.0\.0\.1/i.test(redirectTo)) {
-      return Promise.resolve({
-        ok: false,
-        message: "Password reset is not configured with a public site address."
+    var sb = getClient();
+    if (sb && sb.auth && typeof sb.auth.resetPasswordForEmail === "function") {
+      return sb.auth.resetPasswordForEmail(email, { redirectTo: redirectTo }).then(function (result) {
+        if (!result.error) return { ok: true };
+        var sdkMsg = result.error.message || "Could not send the reset email. Please try again.";
+        if (/redirect|not allowed|invalid url/i.test(sdkMsg)) {
+          return {
+            ok: false,
+            message:
+              "The reset link address is not allowed yet. In Supabase → Authentication → URL Configuration, add " +
+              redirectTo +
+              " to Redirect URLs."
+          };
+        }
+        return { ok: false, message: sdkMsg };
       });
     }
     return fetch(base + "/auth/v1/recover?redirect_to=" + encodeURIComponent(redirectTo), {
@@ -1768,14 +1821,60 @@
       });
   }
 
-  function requestPasswordReset(email) {
+  function emailInboxUrl(email) {
+    var e = normalizeEmail(email);
+    var at = e.lastIndexOf("@");
+    if (at < 1) return "";
+    var domain = e.slice(at + 1);
+    var urls = {
+      "gmail.com": "https://mail.google.com/mail/u/0/#inbox",
+      "googlemail.com": "https://mail.google.com/mail/u/0/#inbox",
+      "outlook.com": "https://outlook.live.com/mail/0/inbox",
+      "hotmail.com": "https://outlook.live.com/mail/0/inbox",
+      "live.com": "https://outlook.live.com/mail/0/inbox",
+      "msn.com": "https://outlook.live.com/mail/0/inbox",
+      "yahoo.com": "https://mail.yahoo.com/",
+      "ymail.com": "https://mail.yahoo.com/",
+      "rocketmail.com": "https://mail.yahoo.com/",
+      "icloud.com": "https://www.icloud.com/mail",
+      "me.com": "https://www.icloud.com/mail",
+      "mac.com": "https://www.icloud.com/mail",
+      "aol.com": "https://mail.aol.com/",
+      "proton.me": "https://mail.proton.me/u/0/inbox",
+      "protonmail.com": "https://mail.proton.me/u/0/inbox",
+      "pm.me": "https://mail.proton.me/u/0/inbox",
+      "zoho.com": "https://mail.zoho.com/zm/#mail/folder/inbox"
+    };
+    return urls[domain] || "";
+  }
+
+  function openEmailInbox(email) {
+    var url = emailInboxUrl(email);
+    if (!url) return false;
+    window.location.assign(url);
+    return true;
+  }
+
+  function checkPasswordResetEligibility(email) {
     var e = normalizeEmail(email);
     if (!isValidEmail(e)) {
-      return Promise.resolve({ ok: false, message: "Please enter a valid email address." });
+      return Promise.resolve({
+        ok: false,
+        email: e,
+        status: "invalid",
+        eligible: false,
+        message: "Please enter a valid email address."
+      });
     }
     var sb = getClient();
     if (!sb || !isSupabaseReady()) {
-      return Promise.resolve({ ok: false, message: "Sign-in is unavailable right now. Please try again." });
+      return Promise.resolve({
+        ok: false,
+        email: e,
+        status: "unavailable",
+        eligible: false,
+        message: "Sign-in is unavailable right now. Please try again."
+      });
     }
     return sb
       .rpc("password_reset_eligibility", { target_email: e })
@@ -1783,61 +1882,102 @@
         if (res.error) {
           return {
             ok: false,
+            email: e,
+            status: "unavailable",
+            eligible: false,
             message: "Password reset is unavailable right now. Please try again later."
           };
         }
         var status = String(res.data || "").trim().toLowerCase();
+        if (status === "eligible") {
+          return { ok: true, email: e, status: "eligible", eligible: true, message: "" };
+        }
         if (status === "denied") {
           return {
             ok: false,
+            email: e,
+            status: "denied",
+            eligible: false,
             denied: true,
-            message: "Password reset is only available for Admin and Client accounts."
+            message: "Password reset is only available for Customer and Admin accounts."
           };
         }
-        if (status !== "eligible") {
-          return {
-            ok: false,
-            message: "No Admin or Client account was found for that email."
-          };
-        }
-        return sendRecoveryEmail(e).then(function (sent) {
-          if (!sent.ok) return sent;
-          return {
-            ok: true,
-            message:
-              "A password reset link was sent to " +
-              e +
-              ". Open it on this phone, a laptop, or a desktop to choose a new password."
-          };
-        });
+        return {
+          ok: false,
+          email: e,
+          status: "unknown",
+          eligible: false,
+          message: "No Customer or Admin account was found for that email."
+        };
       })
       .catch(function () {
-        return { ok: false, message: "Could not start password reset. Please try again." };
+        return {
+          ok: false,
+          email: e,
+          status: "unavailable",
+          eligible: false,
+          message: "Could not start password reset. Please try again."
+        };
       });
   }
 
+  function requestPasswordReset(email) {
+    return checkPasswordResetEligibility(email).then(function (check) {
+      if (!check.eligible) return check;
+      return sendRecoveryEmail(check.email).then(function (sent) {
+        if (!sent.ok) return sent;
+        var inbox = emailInboxUrl(check.email);
+        return {
+          ok: true,
+          email: check.email,
+          inboxUrl: inbox,
+          message: inbox
+            ? "A link to reset your Elenest Resort password was sent to " +
+              check.email +
+              ". Opening your inbox so you can read that email. Your Google, Gmail, and other account passwords are not changed."
+            : "A link to reset your Elenest Resort password was sent to " +
+              check.email +
+              ". Open that email and choose a new Elenest Resort password. Your Google, Gmail, and other account passwords are not changed."
+        };
+      });
+    });
+  }
+
   function recoveryParams() {
-    var preset = window.ElenestRecoverySnapshot;
-    if (preset && typeof preset === "object") return preset;
+    var preset = window.ElenestRecoverySnapshot || {};
     var search = new URLSearchParams(window.location.search || "");
     var hash = new URLSearchParams(String(window.location.hash || "").replace(/^#/, ""));
+    function first() {
+      for (var i = 0; i < arguments.length; i++) {
+        if (arguments[i]) return String(arguments[i]);
+      }
+      return "";
+    }
     return {
-      type: search.get("type") || hash.get("type") || "",
-      tokenHash: search.get("token_hash") || hash.get("token_hash") || "",
-      code: search.get("code") || "",
-      accessToken: hash.get("access_token") || "",
-      error:
-        search.get("error_description") ||
-        hash.get("error_description") ||
-        search.get("error") ||
-        hash.get("error") ||
-        ""
+      type: first(preset.type, search.get("type"), hash.get("type")),
+      tokenHash: first(
+        preset.tokenHash,
+        search.get("token_hash"),
+        hash.get("token_hash"),
+        search.get("token"),
+        hash.get("token")
+      ),
+      code: first(preset.code, search.get("code")),
+      accessToken: first(preset.accessToken, hash.get("access_token"), search.get("access_token")),
+      refreshToken: first(preset.refreshToken, hash.get("refresh_token"), search.get("refresh_token")),
+      error: first(
+        preset.error,
+        search.get("error_description"),
+        hash.get("error_description"),
+        search.get("error"),
+        hash.get("error")
+      )
     };
   }
 
   function urlHasRecoveryGrant() {
     var p = recoveryParams();
-    return !!(p.tokenHash || p.accessToken || (p.code && p.type === "recovery") || p.type === "recovery");
+    return !!(p.tokenHash || p.accessToken || p.code || p.type === "recovery");
   }
 
   function rejectRecoverySession() {
@@ -1848,7 +1988,7 @@
       return {
         ok: false,
         denied: true,
-        message: "Password reset is only available for Admin and Client accounts."
+        message: "Password reset is only available for Customer and Admin accounts."
       };
     });
   }
@@ -1890,6 +2030,15 @@
       });
     }
 
+    function sessionOrTokens() {
+      return sb.auth.getSession().then(function (result) {
+        if (result.error) throw result.error;
+        var existing = result.data && result.data.session;
+        if (existing && existing.user) return existing;
+        return sessionFromUrlTokens(sb);
+      });
+    }
+
     var ready = Promise.resolve();
     if (params.tokenHash) {
       ready = sb.auth
@@ -1898,16 +2047,18 @@
           if (result.error) throw result.error;
           return result.data && result.data.session;
         });
-    } else if (params.code && params.type === "recovery") {
+    } else if (params.code) {
       ready = sb.auth.exchangeCodeForSession(params.code).then(function (result) {
-        if (result.error) throw result.error;
-        return result.data && result.data.session;
+        if (!result.error && result.data && result.data.session) {
+          return result.data.session;
+        }
+        return sessionOrTokens().then(function (session) {
+          if (session && session.user) return session;
+          throw result.error || new Error("This reset link is invalid or has expired. Request a new one.");
+        });
       });
     } else {
-      ready = sb.auth.getSession().then(function (result) {
-        if (result.error) throw result.error;
-        return result.data && result.data.session;
-      });
+      ready = sessionOrTokens();
     }
 
     return ready
@@ -1952,13 +2103,14 @@
         if (!check.ok) return check;
         return sb.auth.updateUser({ password: next }).then(function (updated) {
           if (updated.error) {
-            return { ok: false, message: updated.error.message || "Could not update the password." };
+            return { ok: false, message: updated.error.message || "Could not update the Elenest Resort password." };
           }
           cacheUser(null);
           return sb.auth.signOut().catch(function () {}).then(function () {
             return {
               ok: true,
-              message: "Your password was updated. Sign in with your new password."
+              message:
+                "Your Elenest Resort password was replaced. Sign in with that new password. Your Google, Gmail, and other account passwords were not changed."
             };
           });
         });
@@ -2321,6 +2473,9 @@
       return hydrateSessionUser(session);
     },
     verifyCurrentPassword: verifyCurrentPassword,
+    checkPasswordResetEligibility: checkPasswordResetEligibility,
+    emailInboxUrl: emailInboxUrl,
+    openEmailInbox: openEmailInbox,
     requestPasswordReset: requestPasswordReset,
     establishPasswordRecovery: establishPasswordRecovery,
     completePasswordReset: completePasswordReset,

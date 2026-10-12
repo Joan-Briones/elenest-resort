@@ -182,11 +182,46 @@
 
   var ADMIN_PAGE_SIZE = 5;
   var adminListPages = {
+    bookingReview: 1,
     paymentVerification: 1,
     arrivalMonitoring: 1,
     paymentHistory: 1,
     userAccounts: 1
   };
+  var paymentPeriodFilter = {
+    mode: "all",
+    year: new Date().getFullYear(),
+    month: new Date().getMonth(),
+    week: paymentWeekNumberForDate(new Date())
+  };
+  var PAYMENT_MONTH_NAMES = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+  ];
+  var PAYMENT_MONTH_SHORT = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec"
+  ];
   var staffAccountsCache = null;
 
   function hasSwal() {
@@ -2025,8 +2060,14 @@
       .concat(b && b.roomCatalogName ? [b.roomCatalogName] : [])
       .concat(b && b.cottageCatalogNames ? b.cottageCatalogNames : [])
       .concat(b && b.hallCatalogNames ? b.hallCatalogNames : [])
-      .concat(b && b.hallCatalogName ? [b.hallCatalogName] : [])
-      .filter(Boolean);
+      .concat(b && b.hallCatalogName ? [b.hallCatalogName] : []);
+    var seen = {};
+    names = names.filter(function (name) {
+      var key = String(name || "").trim().toLowerCase();
+      if (!key || seen[key]) return false;
+      seen[key] = true;
+      return true;
+    });
     if (names.length) return names.join(", ");
     var room = labelRoomType(b && b.roomType);
     return room && room !== "—" ? room : "";
@@ -2042,38 +2083,70 @@
     return "";
   }
 
+  function paymentApprovalRecipients(item, booking) {
+    var seen = {};
+    var list = [];
+    [booking && booking.email, booking && booking.user_email, booking && booking.userEmail, item && item.accountEmail].forEach(function (em) {
+      var raw = String(em || "").trim();
+      var key = raw.toLowerCase();
+      if (!key || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(key) || seen[key]) return;
+      seen[key] = true;
+      list.push(raw);
+    });
+    return list;
+  }
+
   function sendBookingVerifiedEmail(item, booking, isFull) {
-    var to = String((booking && booking.email) || (item && item.accountEmail) || "").trim();
-    if (!to || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to)) {
+    var recipients = paymentApprovalRecipients(item, booking);
+    if (!recipients.length) {
       return Promise.resolve({ ok: false, skipped: true, message: "Customer email is missing." });
     }
     var amountPaid = booking && (booking.amountPaid != null ? booking.amountPaid : booking.amountDown);
     var amountText = isFull
       ? paymentTypeLabel(booking) + " — " + fmtPHP(amountPaid) + " (fully paid)"
       : paymentTypeLabel(booking) + " — " + fmtPHP(amountPaid);
-    return fetch(getBookingVerifiedEmailApiUrl(), {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        to: to,
-        name: (booking && (booking.fullName || booking.name)) || "Guest",
-        payment_type: isFull ? "full" : "down",
-        check_in: booking && booking.checkIn ? fmtDateLong(booking.checkIn) : "",
-        check_out: booking && booking.checkOut ? fmtDateLong(booking.checkOut) : "",
-        facility: bookingFacilitySummary(booking),
-        stay_label: bookingStayLabel(booking),
-        amount: amountText,
-        booking_id: booking && booking.id ? String(booking.id) : ""
-      })
-    }).then(function (res) {
-      return res.json().then(function (data) {
-        if (!res.ok || !data || !data.ok) {
-          throw new Error((data && data.message) || "Could not send email.");
-        }
-        return data;
-      }, function () {
-        throw new Error("Invalid response from email server.");
+    var accountEmail = String((item && item.accountEmail) || "").trim();
+    function sendOne(to) {
+      return fetch(getBookingVerifiedEmailApiUrl(), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          to: to,
+          name: (booking && (booking.fullName || booking.name)) || "Guest",
+          payment_type: isFull ? "full" : "down",
+          check_in: booking && booking.checkIn ? fmtDateLong(booking.checkIn) : "",
+          check_out: booking && booking.checkOut ? fmtDateLong(booking.checkOut) : "",
+          facility: bookingFacilitySummary(booking),
+          stay_label: bookingStayLabel(booking),
+          amount: amountText,
+          booking_id: booking && booking.id ? String(booking.id) : "",
+          account_email: accountEmail
+        })
+      }).then(function (res) {
+        return res.text().then(function (text) {
+          var data = null;
+          try {
+            data = text ? JSON.parse(text) : null;
+          } catch (e) {
+            data = null;
+          }
+          if (!res.ok || !data || !data.ok) {
+            throw new Error((data && data.message) || "Could not send email.");
+          }
+          return data;
+        });
       });
+    }
+    return recipients.reduce(function (chain, to) {
+      return chain.then(function (results) {
+        return sendOne(to).then(function (data) {
+          results.push(data);
+          return results;
+        });
+      });
+    }, Promise.resolve([])).then(function (results) {
+      var sentTo = recipients.join(", ");
+      return { ok: true, message: "Approval email sent to " + sentTo + ".", results: results };
     });
   }
 
@@ -2152,9 +2225,13 @@
             syncPaymentsSection();
             return;
           }
-          if (window.ElenestNotifications && item.accountEmail) {
-            window.ElenestNotifications.notifyPaymentApproved(item.accountEmail, b);
-          }
+          try {
+            if (window.ElenestNotifications && typeof window.ElenestNotifications.notifyPaymentApproved === "function") {
+              paymentApprovalRecipients(item, b).forEach(function (em) {
+                window.ElenestNotifications.notifyPaymentApproved(em, b);
+              });
+            }
+          } catch (notifyErr) {}
           return sendBookingVerifiedEmail(item, b, isFull).then(function (data) {
             if (data && data.skipped) {
               finishApproved("No customer email was on file, so no confirmation email was sent.");
@@ -2236,13 +2313,258 @@
             renderPaymentVerificationHistory();
             renderArrivalMonitoringList();
             renderDashboard();
+          }).catch(function () {
+            if (BL) {
+              BL.set(approveBtn, false);
+              BL.set(rejectBtn, false);
+            } else {
+              approveBtn.disabled = false;
+              rejectBtn.disabled = false;
+            }
+            swalAlert({
+              icon: "error",
+              title: "Rejection failed",
+              text: "Could not save rejection. Please try again."
+            });
           });
         });
       });
     });
   }
 
-  function listPendingPaymentVerifications() {
+  function paymentWeeksInMonth(year, monthIndex) {
+    var lastDay = new Date(year, monthIndex + 1, 0).getDate();
+    var weeks = [];
+    var startDay = 1;
+    var number = 1;
+    while (startDay <= lastDay) {
+      var endDay = Math.min(startDay + 6, lastDay);
+      weeks.push({ number: number, startDay: startDay, endDay: endDay });
+      startDay = endDay + 1;
+      number += 1;
+    }
+    return weeks;
+  }
+
+  function paymentWeekNumberForDate(date) {
+    var weeks = paymentWeeksInMonth(date.getFullYear(), date.getMonth());
+    var day = date.getDate();
+    for (var i = 0; i < weeks.length; i++) {
+      if (day >= weeks[i].startDay && day <= weeks[i].endDay) return weeks[i].number;
+    }
+    return 1;
+  }
+
+  function paymentRecordInstant(booking) {
+    if (!booking) return null;
+    var raw = String(
+      booking.paymentVerifiedAt ||
+        booking.payment_verified_at ||
+        booking.paymentRejectedAt ||
+        booking.payment_rejected_at ||
+        booking.paymentSubmittedAt ||
+        booking.payment_submitted_at ||
+        booking.submittedAt ||
+        booking.submitted_at ||
+        booking.createdAt ||
+        booking.created_at ||
+        ""
+    ).trim();
+    if (!raw) return null;
+    var instant = /^\d{4}-\d{2}-\d{2}$/.test(raw) ? new Date(raw + "T12:00:00") : new Date(raw);
+    return isNaN(instant.getTime()) ? null : instant;
+  }
+
+  function clampPaymentWeek() {
+    var weeks = paymentWeeksInMonth(paymentPeriodFilter.year, paymentPeriodFilter.month);
+    if (!weeks.length) {
+      paymentPeriodFilter.week = 1;
+      return weeks;
+    }
+    if (paymentPeriodFilter.week < 1) paymentPeriodFilter.week = 1;
+    if (paymentPeriodFilter.week > weeks.length) paymentPeriodFilter.week = weeks.length;
+    return weeks;
+  }
+
+  function paymentPeriodRange() {
+    var mode = paymentPeriodFilter.mode;
+    var year = paymentPeriodFilter.year;
+    var month = paymentPeriodFilter.month;
+    if (mode === "year") {
+      return {
+        start: new Date(year, 0, 1, 0, 0, 0, 0),
+        end: new Date(year, 11, 31, 23, 59, 59, 999),
+        label: String(year)
+      };
+    }
+    if (mode === "month") {
+      var lastDay = new Date(year, month + 1, 0).getDate();
+      return {
+        start: new Date(year, month, 1, 0, 0, 0, 0),
+        end: new Date(year, month, lastDay, 23, 59, 59, 999),
+        label: PAYMENT_MONTH_NAMES[month] + " " + year
+      };
+    }
+    if (mode === "week") {
+      var weeks = clampPaymentWeek();
+      var week = null;
+      for (var i = 0; i < weeks.length; i++) {
+        if (weeks[i].number === paymentPeriodFilter.week) week = weeks[i];
+      }
+      if (!week) week = weeks[0];
+      if (!week) return null;
+      return {
+        start: new Date(year, month, week.startDay, 0, 0, 0, 0),
+        end: new Date(year, month, week.endDay, 23, 59, 59, 999),
+        label:
+          "Week " +
+          week.number +
+          " of " +
+          PAYMENT_MONTH_NAMES[month] +
+          " " +
+          year +
+          " (" +
+          PAYMENT_MONTH_SHORT[month] +
+          " " +
+          week.startDay +
+          "–" +
+          week.endDay +
+          ")"
+      };
+    }
+    return null;
+  }
+
+  function filterPaymentItemsByPeriod(items) {
+    var list = items || [];
+    if (paymentPeriodFilter.mode === "all") return list;
+    var range = paymentPeriodRange();
+    if (!range) return list;
+    return list.filter(function (item) {
+      var instant = paymentRecordInstant(item && item.booking);
+      if (!instant) return false;
+      var time = instant.getTime();
+      return time >= range.start.getTime() && time <= range.end.getTime();
+    });
+  }
+
+  function paymentPeriodEmptyText(base) {
+    if (paymentPeriodFilter.mode === "all") return base;
+    var range = paymentPeriodRange();
+    if (!range || !range.label) return base;
+    return String(base || "").replace(/\.$/, "") + " for " + range.label + ".";
+  }
+
+  function paymentRecordYears() {
+    var years = {};
+    var nowYear = new Date().getFullYear();
+    var y;
+    for (y = nowYear - 5; y <= nowYear + 1; y++) years[y] = true;
+    listBookings().forEach(function (item) {
+      var instant = paymentRecordInstant(item && item.booking);
+      if (instant) years[instant.getFullYear()] = true;
+    });
+    return Object.keys(years)
+      .map(function (key) {
+        return parseInt(key, 10);
+      })
+      .filter(function (year) {
+        return !isNaN(year);
+      })
+      .sort(function (a, b) {
+        return b - a;
+      });
+  }
+
+  function setPeriodFieldHidden(id, hidden) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    if (hidden) el.setAttribute("hidden", "");
+    else el.removeAttribute("hidden");
+  }
+
+  function fillPaymentYearOptions() {
+    var select = document.getElementById("adminPaymentsPeriodYear");
+    if (!select) return;
+    var years = paymentRecordYears();
+    if (years.indexOf(paymentPeriodFilter.year) === -1 && years.length) {
+      paymentPeriodFilter.year = years[0];
+    }
+    var markup = years
+      .map(function (year) {
+        return '<option value="' + year + '">' + year + "</option>";
+      })
+      .join("");
+    if (select.innerHTML !== markup) select.innerHTML = markup;
+    select.value = String(paymentPeriodFilter.year);
+  }
+
+  function fillPaymentWeekOptions() {
+    var select = document.getElementById("adminPaymentsPeriodWeek");
+    if (!select) return;
+    var weeks = clampPaymentWeek();
+    var month = paymentPeriodFilter.month;
+    var markup = weeks
+      .map(function (week) {
+        var label =
+          "Week " +
+          week.number +
+          " (" +
+          PAYMENT_MONTH_SHORT[month] +
+          " " +
+          week.startDay +
+          "–" +
+          week.endDay +
+          ")";
+        return '<option value="' + week.number + '">' + label + "</option>";
+      })
+      .join("");
+    if (select.innerHTML !== markup) select.innerHTML = markup;
+    select.value = String(paymentPeriodFilter.week);
+  }
+
+  function syncPaymentPeriodControls() {
+    var mode = paymentPeriodFilter.mode;
+    if (mode !== "week" && mode !== "month" && mode !== "year") mode = "all";
+    paymentPeriodFilter.mode = mode;
+    document.querySelectorAll("[data-payment-period]").forEach(function (btn) {
+      var active = btn.getAttribute("data-payment-period") === mode;
+      btn.classList.toggle("admin-payments-period__mode--active", active);
+      btn.setAttribute("aria-pressed", active ? "true" : "false");
+    });
+    setPeriodFieldHidden("adminPaymentsPeriodFields", mode === "all");
+    setPeriodFieldHidden("adminPaymentsPeriodYearField", mode === "all");
+    setPeriodFieldHidden("adminPaymentsPeriodMonthField", mode !== "week" && mode !== "month");
+    setPeriodFieldHidden("adminPaymentsPeriodWeekField", mode !== "week");
+    fillPaymentYearOptions();
+    var monthSelect = document.getElementById("adminPaymentsPeriodMonth");
+    if (monthSelect) monthSelect.value = String(paymentPeriodFilter.month);
+    if (mode === "week") fillPaymentWeekOptions();
+    var summary = document.getElementById("adminPaymentsPeriodSummary");
+    if (!summary) return;
+    var summaryText = "";
+    if (mode !== "all") {
+      var range = paymentPeriodRange();
+      summaryText = range && range.label
+        ? "Showing payments for " + range.label + ". Lists update as soon as you change the period."
+        : "Showing payments for the selected period.";
+    }
+    if (summary.textContent !== summaryText) summary.textContent = summaryText;
+    if (summaryText) summary.removeAttribute("hidden");
+    else summary.setAttribute("hidden", "");
+  }
+
+  function applyPaymentPeriodFilter() {
+    adminListPages.paymentVerification = 1;
+    adminListPages.arrivalMonitoring = 1;
+    adminListPages.paymentHistory = 1;
+    renderPaymentVerificationList();
+    renderArrivalMonitoringList();
+    renderPaymentVerificationHistory();
+    applyPaymentFocus();
+  }
+
+  function listPendingPaymentVerificationsRaw() {
     var B = window.ElenestBookings;
     if (B && typeof B.listPendingVerifications === "function") {
       return B.listPendingVerifications();
@@ -2250,6 +2572,10 @@
     return listBookings().filter(function (item) {
       return isAwaitingPaymentVerification(item.booking);
     });
+  }
+
+  function listPendingPaymentVerifications() {
+    return filterPaymentItemsByPeriod(listPendingPaymentVerificationsRaw());
   }
 
   function updatePaymentVerificationCount(count) {
@@ -2273,7 +2599,7 @@
     if (hEl) hEl.textContent = String(historyCount || 0);
   }
 
-  function listArrivalMonitoringItems() {
+  function listArrivalMonitoringItemsRaw() {
     return listBookings().filter(function (item) {
       if (item.booking && (item.booking.linkedFacilityBooking || item.booking.parentBookingId)) {
         return false;
@@ -2282,7 +2608,11 @@
     });
   }
 
-  function listPaymentHistoryItems() {
+  function listArrivalMonitoringItems() {
+    return filterPaymentItemsByPeriod(listArrivalMonitoringItemsRaw());
+  }
+
+  function listPaymentHistoryItemsRaw() {
     var items = listBookings().filter(function (item) {
       if (item.booking && (item.booking.linkedFacilityBooking || item.booking.parentBookingId)) {
         return false;
@@ -2300,6 +2630,371 @@
     return items;
   }
 
+  function listPaymentHistoryItems() {
+    return filterPaymentItemsByPeriod(listPaymentHistoryItemsRaw());
+  }
+
+  function bookingScheduleLabel(b) {
+    var pool = String((b && b.poolUse) || "").toLowerCase();
+    if (pool === "day_tour" || pool === "pool_only") return "8:00 AM — 10:00 PM";
+    var inn = b && b.checkInTime ? String(b.checkInTime) : "";
+    var out = b && b.checkOutTime ? String(b.checkOutTime) : "";
+    if (inn && out) return inn + " – " + out;
+    return inn || out || "—";
+  }
+
+  function bookingGuestLabel(b) {
+    var adults = parseInt(b && b.adults, 10);
+    var children = parseInt(b && b.children, 10);
+    var under = parseInt(b && b.childrenUnder6, 10);
+    if (isNaN(adults)) adults = 0;
+    if (isNaN(children)) children = 0;
+    if (isNaN(under)) under = 0;
+    var text = adults + " adult" + (adults === 1 ? "" : "s");
+    if (children) text += ", " + children + " child" + (children === 1 ? "" : "ren") + " (6–12)";
+    if (under) text += ", " + under + " under 6";
+    return text;
+  }
+
+  function bookingReviewAvailability(b) {
+    var UA = window.ElenestUnitAvailability;
+    if (!b || !UA || typeof UA.validateSelection !== "function") {
+      return { ok: null, text: "Availability not checked" };
+    }
+    var selection = {
+      roomCatalogIds: b.roomCatalogIds || (b.roomCatalogId ? [b.roomCatalogId] : []),
+      cottageCatalogIds: b.cottageCatalogIds || [],
+      hallCatalogIds: b.hallCatalogIds || (b.hallCatalogId ? [b.hallCatalogId] : []),
+      hallCatalogId: b.hallCatalogId || ""
+    };
+    function uniqueIds(list) {
+      var seen = {};
+      return (list || []).filter(function (id) {
+        var key = String(id || "").trim();
+        if (!key || seen[key]) return false;
+        seen[key] = true;
+        return true;
+      });
+    }
+    selection.roomCatalogIds = uniqueIds(selection.roomCatalogIds);
+    selection.cottageCatalogIds = uniqueIds(selection.cottageCatalogIds);
+    selection.hallCatalogIds = uniqueIds(selection.hallCatalogIds);
+    var result = UA.validateSelection(selection, b.checkIn, b.checkOut, b.id, {
+      validateGuests: true,
+      adults: b.adults,
+      children: b.children,
+      childrenUnder6: b.childrenUnder6,
+      checkInTime: b.checkInTime,
+      checkOutTime: b.checkOutTime,
+      skipSnapshotBlocks: true
+    });
+    if (result && result.ok) return { ok: true, text: "Available" };
+    return {
+      ok: false,
+      text: (result && result.errors && result.errors[0]) || "Unavailable for this date and time"
+    };
+  }
+
+  function listBookingReviewItems() {
+    var PF = window.ElenestPaymentFlow;
+    return listBookings().filter(function (item) {
+      var b = item && item.booking;
+      if (!b || b.linkedFacilityBooking || b.parentBookingId) return false;
+      return PF && typeof PF.isAwaitingBookingReview === "function" && PF.isAwaitingBookingReview(b);
+    });
+  }
+
+  function paymentReadyDetails(booking) {
+    var methods =
+      window.ElenestPaymentMethods && typeof window.ElenestPaymentMethods.listActive === "function"
+        ? window.ElenestPaymentMethods.listActive()
+        : [];
+    var methodBits = methods.map(function (m) {
+      var bit = m.provider || "Payment";
+      if (m.accountName) bit += " — " + m.accountName;
+      if (m.accountNumber) bit += " (" + m.accountNumber + ")";
+      return bit;
+    });
+    var when = "";
+    if (booking && booking.checkIn) {
+      when = fmtDateLong(booking.checkIn);
+      if (booking.checkOut && String(booking.checkOut).slice(0, 10) !== String(booking.checkIn).slice(0, 10)) {
+        when += " to " + fmtDateLong(booking.checkOut);
+      }
+      var schedule = bookingScheduleLabel(booking);
+      if (schedule && schedule !== "—") when += ", " + schedule;
+    }
+    return {
+      facility: bookingFacilitySummary(booking) || "Selected facility",
+      when: when,
+      guests: bookingGuestLabel(booking),
+      amount: fmtPHP(booking && booking.totalEstimate),
+      deadlineLabel: booking && booking.paymentDeadlineAt ? fmtWhen(booking.paymentDeadlineAt) : "",
+      methodsText: methodBits.join("; "),
+      methods: methods.map(function (m) {
+        return {
+          provider: m.provider || "",
+          accountName: m.accountName || "",
+          accountNumber: m.accountNumber || "",
+          instructions: m.instructions || ""
+        };
+      })
+    };
+  }
+
+  function getPaymentReadyEmailApiUrl() {
+    if (window.location.protocol === "file:") {
+      return "http://localhost/Elenest_Resort/api/send-payment-ready.php";
+    }
+    var path = window.location.pathname || "";
+    if (path.indexOf("/html/") !== -1) return "../api/send-payment-ready.php";
+    return "api/send-payment-ready.php";
+  }
+
+  function sendPaymentReadyEmail(item, booking, details) {
+    var to = String((booking && booking.email) || (item && item.accountEmail) || "").trim();
+    if (!to || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to)) {
+      return Promise.resolve({ ok: false, skipped: true, message: "Customer email is missing." });
+    }
+    details = details || paymentReadyDetails(booking);
+    return fetch(getPaymentReadyEmailApiUrl(), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        to: to,
+        name: (booking && (booking.fullName || booking.name)) || "Guest",
+        facility: details.facility,
+        schedule: details.when,
+        guests: details.guests,
+        amount: details.amount,
+        deadline: details.deadlineLabel,
+        methods: details.methods,
+        instructions:
+          "Pay the amount due using one of the methods below, then upload a photo of your receipt on your booking page before the deadline. Uploading proof does not mark the booking as paid until an admin verifies it.",
+        booking_id: booking && booking.id ? String(booking.id) : ""
+      })
+    }).then(function (res) {
+      return res.json().then(function (data) {
+        if (!res.ok || !data || !data.ok) {
+          throw new Error((data && data.message) || "Could not send email.");
+        }
+        return data;
+      }, function () {
+        throw new Error("Invalid response from email server.");
+      });
+    });
+  }
+
+  function confirmBookingForPayment(item, button) {
+    var b = item && item.booking;
+    if (!b || !b.id) return;
+    var avail = bookingReviewAvailability(b);
+    if (avail.ok === false) {
+      swalAlert({
+        icon: "warning",
+        title: "Facility unavailable",
+        text: avail.text + " Decline this request so the guest can choose another schedule."
+      });
+      return;
+    }
+    swalConfirm({
+      icon: "question",
+      title: "Confirm this booking?",
+      text:
+        "The guest will be notified by email and in-app message that they can pay online. They will have 3 hours from now to submit payment.",
+      confirmText: "Confirm booking",
+      confirmColor: "#16a34a"
+    }).then(function (ok) {
+      if (!ok) return;
+      var PF = window.ElenestPaymentFlow;
+      var admin = window.ElenestAuth && window.ElenestAuth.getCurrentUser
+        ? window.ElenestAuth.getCurrentUser()
+        : null;
+      var adminEmail = admin && admin.email ? admin.email : "";
+      var BL = window.ElenestButtonLoading;
+      if (BL && button) BL.set(button, true);
+      else if (button) button.disabled = true;
+      var patch = PF
+        ? PF.buildBookingConfirmForPaymentPatch()
+        : { status: "Awaiting Payment", workflow: "awaiting_payment" };
+      patch.bookingConfirmedBy = adminEmail;
+      Promise.resolve(updateBookingById(b.id, patch.status, patch)).then(function (saved) {
+        if (!saved) {
+          if (BL && button) BL.set(button, false);
+          else if (button) button.disabled = false;
+          swalAlert({ icon: "error", title: "Could not confirm", text: "Please try again." });
+          return;
+        }
+        var merged = Object.assign({}, b, patch);
+        var details = paymentReadyDetails(merged);
+        if (window.ElenestNotifications && item.accountEmail) {
+          window.ElenestNotifications.notifyPaymentWindowOpened(item.accountEmail, merged, details);
+        }
+        return sendPaymentReadyEmail(item, merged, details).then(function (data) {
+          if (BL && button) BL.set(button, false);
+          swalAlert({
+            icon: "success",
+            title: "Booking confirmed",
+            text:
+              data && data.skipped
+                ? "Payment is open for 3 hours. No customer email was on file."
+                : "The guest was notified and has 3 hours to pay."
+          });
+          renderBookingReviewList();
+          renderDashboard();
+        }).catch(function (err) {
+          if (BL && button) BL.set(button, false);
+          swalAlert({
+            icon: "warning",
+            title: "Booking confirmed",
+            text:
+              "Payment is open, but the email could not be sent" +
+              (err && err.message ? ": " + err.message : ".")
+          });
+          renderBookingReviewList();
+        });
+      }).catch(function () {
+        if (BL && button) BL.set(button, false);
+        swalAlert({ icon: "error", title: "Could not confirm", text: "Please try again." });
+      });
+    });
+  }
+
+  function declineBookingReview(item, button) {
+    var b = item && item.booking;
+    if (!b || !b.id) return;
+    swalConfirm({
+      icon: "warning",
+      title: "Decline this booking?",
+      text: "The reserved schedule will be released and the guest will be notified.",
+      confirmText: "Decline",
+      confirmColor: "#b91c1c"
+    }).then(function (ok) {
+      if (!ok) return;
+      var PF = window.ElenestPaymentFlow;
+      var admin = window.ElenestAuth && window.ElenestAuth.getCurrentUser
+        ? window.ElenestAuth.getCurrentUser()
+        : null;
+      var patch = PF
+        ? PF.buildBookingReviewRejectPatch(admin && admin.email ? admin.email : "", "Booking details were not confirmed.")
+        : { status: "Rejected", slotLocked: false, workflow: "rejected" };
+      var BL = window.ElenestButtonLoading;
+      if (BL && button) BL.set(button, true);
+      Promise.resolve(updateBookingById(b.id, patch.status, patch)).then(function (saved) {
+        if (BL && button) BL.set(button, false);
+        if (!saved) {
+          swalAlert({ icon: "error", title: "Could not decline", text: "Please try again." });
+          return;
+        }
+        if (window.ElenestNotifications && item.accountEmail) {
+          window.ElenestNotifications.notifyBookingUpdated(
+            item.accountEmail,
+            Object.assign({}, b, patch),
+            "Your booking request was not confirmed. The schedule has been released. You can submit a new booking."
+          );
+        }
+        renderBookingReviewList();
+        renderDashboard();
+      });
+    });
+  }
+
+  function renderBookingReviewList() {
+    var host = document.getElementById("adminBookingReviewList");
+    if (!host) return;
+    var refreshBtn = document.getElementById("adminBookingReviewRefresh");
+    if (refreshBtn && refreshBtn.getAttribute("data-bound") !== "1") {
+      refreshBtn.setAttribute("data-bound", "1");
+      refreshBtn.addEventListener("click", function () {
+        var B = window.ElenestBookings;
+        if (B && typeof B.refresh === "function") {
+          Promise.resolve(B.refresh()).then(renderBookingReviewList).catch(renderBookingReviewList);
+        } else {
+          renderBookingReviewList();
+        }
+      });
+    }
+    host.textContent = "";
+    var items = listBookingReviewItems();
+    if (!items.length) {
+      appendPayEmpty(host, "No booking requests waiting for confirmation.");
+      return;
+    }
+    items.forEach(function (item) {
+      var b = item.booking;
+      var avail = bookingReviewAvailability(b);
+      var card = document.createElement("article");
+      card.className = "admin-booking-review-card";
+      var top = document.createElement("div");
+      top.className = "admin-booking-review-card__top";
+      var who = document.createElement("div");
+      var name = document.createElement("h4");
+      name.className = "admin-booking-review-card__name";
+      name.textContent = b.fullName || "Guest";
+      var email = document.createElement("p");
+      email.className = "admin-booking-review-card__email";
+      email.textContent = b.email || item.accountEmail || "";
+      who.appendChild(name);
+      who.appendChild(email);
+      var badge = document.createElement("span");
+      badge.className =
+        "admin-booking-review-card__badge " +
+        (avail.ok === false ? "is-unavailable" : "is-available");
+      badge.textContent = avail.ok === false ? "Unavailable" : "Available";
+      top.appendChild(who);
+      top.appendChild(badge);
+      card.appendChild(top);
+
+      var grid = document.createElement("dl");
+      grid.className = "admin-booking-review-card__grid";
+      function addFact(label, value) {
+        var wrap = document.createElement("div");
+        var dt = document.createElement("dt");
+        dt.textContent = label;
+        var dd = document.createElement("dd");
+        dd.textContent = value || "—";
+        wrap.appendChild(dt);
+        wrap.appendChild(dd);
+        grid.appendChild(wrap);
+      }
+      addFact("Facility", bookingFacilitySummary(b) || "—");
+      addFact("Date", b.checkIn ? fmtDateLong(b.checkIn) : "—");
+      addFact("Schedule", bookingScheduleLabel(b));
+      addFact("Guests", bookingGuestLabel(b));
+      addFact("Total", fmtPHP(b.totalEstimate));
+      card.appendChild(grid);
+
+      if (avail.ok === false) {
+        var note = document.createElement("p");
+        note.className = "admin-booking-review-card__note";
+        note.textContent = avail.text;
+        card.appendChild(note);
+      }
+
+      var actions = document.createElement("div");
+      actions.className = "admin-booking-review-card__actions";
+      var confirmBtn = document.createElement("button");
+      confirmBtn.type = "button";
+      confirmBtn.className = "btn btn--small";
+      confirmBtn.textContent = "Confirm booking";
+      confirmBtn.disabled = avail.ok === false;
+      confirmBtn.addEventListener("click", function () {
+        confirmBookingForPayment(item, confirmBtn);
+      });
+      var declineBtn = document.createElement("button");
+      declineBtn.type = "button";
+      declineBtn.className = "btn btn--outline btn--small";
+      declineBtn.textContent = "Decline";
+      declineBtn.addEventListener("click", function () {
+        declineBookingReview(item, declineBtn);
+      });
+      actions.appendChild(confirmBtn);
+      actions.appendChild(declineBtn);
+      card.appendChild(actions);
+      host.appendChild(card);
+    });
+  }
+
   function renderPaymentVerificationList() {
     var host = document.getElementById("adminPaymentVerificationList");
     var pager = document.getElementById("adminPaymentVerificationPagination");
@@ -2314,7 +3009,7 @@
     );
     if (!items.length) {
       adminListPages.paymentVerification = 1;
-      appendPayEmpty(host, "No payments awaiting verification.");
+      appendPayEmpty(host, paymentPeriodEmptyText("No payments awaiting verification."));
       renderPaginationControls(pager, null);
       return;
     }
@@ -2400,7 +3095,7 @@
     );
     if (!items.length) {
       adminListPages.arrivalMonitoring = 1;
-      appendPayEmpty(host, "No down-payment holds with active 3-hour timers.");
+      appendPayEmpty(host, paymentPeriodEmptyText("No down-payment holds with active 3-hour timers."));
       renderPaginationControls(pager, null);
       return;
     }
@@ -2569,7 +3264,7 @@
     );
     if (!items.length) {
       adminListPages.paymentHistory = 1;
-      appendPayEmpty(host, "No verified payments yet.");
+      appendPayEmpty(host, paymentPeriodEmptyText("No verified payments yet."));
       renderPaginationControls(pager, null);
       return;
     }
@@ -2632,11 +3327,12 @@
     });
   }
 
-  var paymentsActiveTab = "approval";
+  var paymentsActiveTab = "bookings";
 
   function setPaymentsTab(tabId) {
-    var next = tabId === "settings" ? "settings" : "approval";
+    var next = tabId === "settings" || tabId === "bookings" ? tabId : "approval";
     paymentsActiveTab = next;
+    if (next === "bookings") renderBookingReviewList();
     document.querySelectorAll("[data-payments-tab]").forEach(function (btn) {
       var active = btn.getAttribute("data-payments-tab") === next;
       btn.classList.toggle("content-mgmt-tab--active", active);
@@ -2738,9 +3434,18 @@
     var matched = highlightPaymentRows(id);
     if (note) {
       note.hidden = false;
+      var outsidePeriod =
+        !found &&
+        !matched.length &&
+        paymentPeriodFilter.mode !== "all" &&
+        (paymentListIndex(listPendingPaymentVerificationsRaw(), id) >= 0 ||
+          paymentListIndex(listArrivalMonitoringItemsRaw(), id) >= 0 ||
+          paymentListIndex(listPaymentHistoryItemsRaw(), id) >= 0);
       note.textContent = found || matched.length
         ? "Payment record for booking " + id + " is highlighted below. Use the existing verification actions on that row."
-        : "No payment record was found for booking " + id + ". This guest may not have submitted a receipt yet.";
+        : outsidePeriod
+          ? "This payment is outside the selected period. Choose All, or pick the week, month, or year that includes it."
+          : "No payment record was found for booking " + id + ". This guest may not have submitted a receipt yet.";
     }
     if (matched[0]) {
       window.requestAnimationFrame(function () {
@@ -2752,11 +3457,12 @@
   }
 
   function renderPaymentsSection() {
+    syncPaymentPeriodControls();
     renderAdminPaymentMethodsList();
     renderPaymentVerificationList();
     renderPaymentVerificationHistory();
     renderArrivalMonitoringList();
-    setPaymentsTab(paymentsActiveTab || "approval");
+    setPaymentsTab(paymentsActiveTab || "bookings");
     applyPaymentFocus();
   }
 
@@ -2789,10 +3495,47 @@
 
     document.querySelectorAll("[data-payments-tab]").forEach(function (btn) {
       btn.addEventListener("click", function () {
-        setPaymentsTab(btn.getAttribute("data-payments-tab") || "approval");
+        setPaymentsTab(btn.getAttribute("data-payments-tab") || "bookings");
       });
     });
-    setPaymentsTab("approval");
+    setPaymentsTab("bookings");
+
+    var periodRoot = document.getElementById("adminPaymentsPeriodFilters");
+    if (periodRoot) {
+      periodRoot.addEventListener("click", function (e) {
+        var btn = e.target && e.target.closest ? e.target.closest("[data-payment-period]") : null;
+        if (!btn || !periodRoot.contains(btn)) return;
+        var next = btn.getAttribute("data-payment-period") || "all";
+        if (next !== "week" && next !== "month" && next !== "year") next = "all";
+        if (paymentPeriodFilter.mode === next) return;
+        paymentPeriodFilter.mode = next;
+        clampPaymentWeek();
+        syncPaymentPeriodControls();
+        applyPaymentPeriodFilter();
+      });
+      periodRoot.addEventListener("change", function (e) {
+        var target = e.target;
+        if (!target || !target.id) return;
+        if (target.id === "adminPaymentsPeriodYear") {
+          paymentPeriodFilter.year = parseInt(target.value, 10);
+          if (isNaN(paymentPeriodFilter.year)) paymentPeriodFilter.year = new Date().getFullYear();
+        } else if (target.id === "adminPaymentsPeriodMonth") {
+          paymentPeriodFilter.month = parseInt(target.value, 10);
+          if (isNaN(paymentPeriodFilter.month) || paymentPeriodFilter.month < 0 || paymentPeriodFilter.month > 11) {
+            paymentPeriodFilter.month = new Date().getMonth();
+          }
+        } else if (target.id === "adminPaymentsPeriodWeek") {
+          paymentPeriodFilter.week = parseInt(target.value, 10);
+          if (isNaN(paymentPeriodFilter.week)) paymentPeriodFilter.week = 1;
+        } else {
+          return;
+        }
+        clampPaymentWeek();
+        syncPaymentPeriodControls();
+        applyPaymentPeriodFilter();
+      });
+    }
+    syncPaymentPeriodControls();
 
     if (cancelBtn) {
       cancelBtn.addEventListener("click", function () {
@@ -3415,12 +4158,37 @@
     return items;
   }
 
+  function upcomingBookingsSignature(items) {
+    var parts = [];
+    for (var i = 0; i < items.length; i++) {
+      var b = items[i] && items[i].booking;
+      if (!b) continue;
+      parts.push(
+        [
+          b.id,
+          b.status,
+          b.paymentStatus,
+          b.arrivalStatus,
+          b.checkIn,
+          b.checkOut,
+          b.fullName,
+          b.totalEstimate
+        ].join("~")
+      );
+    }
+    return parts.join(";");
+  }
+
   function renderUpcomingBookingsSection() {
     var host = document.getElementById("adminUpcomingBookingsList");
     var empty = document.getElementById("adminUpcomingBookingsEmpty");
     if (!host) return;
-    host.textContent = "";
     var items = listUpcomingActionBookings();
+    var sig = upcomingBookingsSignature(items);
+    if (sig === renderUpcomingBookingsSection._sig && host.childElementCount) return;
+    if (!items.length && sig === renderUpcomingBookingsSection._sig && empty && !empty.hidden) return;
+    renderUpcomingBookingsSection._sig = sig;
+    host.textContent = "";
     if (!items.length) {
       if (empty) {
         empty.hidden = false;
@@ -3516,11 +4284,41 @@
     });
   }
 
+  function adminCalendarSignature() {
+    var items = [];
+    try {
+      items = listBookings() || [];
+    } catch (e) {
+      return "";
+    }
+    var parts = [String(adminCalView.y), String(adminCalView.m)];
+    for (var i = 0; i < items.length; i++) {
+      var b = items[i] && items[i].booking;
+      if (!b || !b.id) continue;
+      parts.push(
+        [
+          b.id,
+          b.status,
+          b.workflow,
+          b.checkIn,
+          b.checkOut,
+          b.slotLocked ? 1 : 0,
+          b.paymentDeadlineAt || "",
+          b.paymentVerifiedAt || ""
+        ].join("~")
+      );
+    }
+    return parts.join("|");
+  }
+
   function renderAdminCalendar() {
     var host = document.getElementById("adminCalendarHost");
     var label = document.getElementById("adminCalMonthLabel");
     if (!host || !label) return;
     if (!window.ElenestCalendarWidget || typeof window.ElenestCalendarWidget.render !== "function") return;
+    var sig = adminCalendarSignature();
+    if (sig && sig === renderAdminCalendar.paintSig && host.childElementCount) return;
+    renderAdminCalendar.paintSig = sig;
 
     window.ElenestCalendarWidget.render({
       host: host,
@@ -3585,9 +4383,6 @@
     // Dashboard should only show totals; clear any legacy board if it exists.
     if (board) board.textContent = "";
     renderUpcomingBookingsSection();
-    if (window.ElenestNotifications && typeof window.ElenestNotifications.processAutomaticForAllStaff === "function") {
-      window.ElenestNotifications.processAutomaticForAllStaff();
-    }
   }
 
   function renderSentimentFeedbackList() {
@@ -3743,13 +4538,10 @@
   }
 
   function renderAnalytics() {
-    // Defer model evaluation — it must not compete with first paint.
-    setTimeout(function () {
-      var section = document.getElementById("section-reports");
-      if (!section || section.hidden) return;
-      var EV = window.ElenestModelEvaluation;
-      if (EV && typeof EV.render === "function") EV.render();
-    }, 600);
+    var section = document.getElementById("section-reports");
+    if (!section || section.hidden) return;
+    var EV = window.ElenestModelEvaluation;
+    if (EV && typeof EV.render === "function") EV.render();
   }
 
   var lastReportBookings = null;
@@ -6702,7 +7494,9 @@
           return;
         }
         if ((Auth.normalizeRole ? Auth.normalizeRole(user.role) : "") !== "admin") {
-          window.location.replace(Auth.getHomePathForRole(user.role));
+          var otherHome = Auth.getHomePathForRole(user.role);
+          if (/book\.html/i.test(String(otherHome))) otherHome = "login.html";
+          window.location.replace(otherHome);
           return;
         }
         initDashboard(user);
@@ -6841,6 +7635,10 @@
           closeGate();
           try { window.location.hash = "#" + targetSectionId; } catch (err) {}
           showSection(targetSectionId);
+        }).catch(function () {
+          if (BL) BL.set(gateSubmitBtn, false);
+          else if (gateSubmitBtn) gateSubmitBtn.disabled = false;
+          setGateMsg(false, "Could not verify your password. Please try again.");
         });
       });
     }
@@ -6850,7 +7648,6 @@
       "section-dashboard",
       "section-reports",
       "section-payments",
-      "section-reservation-queue",
       "section-calendar-access",
       "section-activity-logs",
       "section-sentiment",
@@ -6862,6 +7659,13 @@
       return sectionIds.indexOf(id) !== -1;
     };
 
+    function paymentsTabFromHash(h) {
+      var raw = String(h || "");
+      if (/section-bookings/i.test(raw) || /(?:\?|&)tab=bookings/i.test(raw)) return "bookings";
+      if (/(?:\?|&)tab=settings/i.test(raw)) return "settings";
+      return "";
+    }
+
     function getSectionIdFromHash(h) {
       var id = String(h || "");
       if (id.charAt(0) === "#") id = id.slice(1);
@@ -6871,6 +7675,7 @@
       if (amp >= 0) id = id.slice(0, amp);
       // Backwards compatibility: old links used to point to #section-analytics.
       if (id === "section-analytics") return "section-reports";
+      if (id === "section-bookings") return "section-payments";
       if (isSectionIdValid(id)) return id;
       return "section-dashboard";
     }
@@ -6963,10 +7768,6 @@
         renderAnalytics();
       } else if (currentSectionId === "section-payments") {
         renderPaymentsSection();
-      } else if (currentSectionId === "section-reservation-queue") {
-        if (window.ElenestReservationQueue && window.ElenestReservationQueue.renderSection) {
-          window.ElenestReservationQueue.renderSection();
-        }
       } else if (currentSectionId === "section-calendar-access") {
         if (window.ElenestCalendarAccess && window.ElenestCalendarAccess.renderOwnerSection) {
           window.ElenestCalendarAccess.renderOwnerSection();
@@ -6990,12 +7791,46 @@
       }
     }
 
+    var lastAdminLiveSignature = "";
+    function adminLiveSignature() {
+      var items = [];
+      try {
+        items = listBookings() || [];
+      } catch (e) {
+        return "";
+      }
+      var parts = [];
+      var i;
+      for (i = 0; i < items.length; i++) {
+        var b = items[i] && items[i].booking;
+        if (!b || !b.id) continue;
+        parts.push(
+          [
+            b.id,
+            b.status,
+            b.paymentStatus,
+            b.workflow,
+            b.verificationStage,
+            b.arrivalStatus,
+            b.checkIn,
+            b.checkOut,
+            b.fullName,
+            b.totalEstimate,
+            b.hasPaymentProof ? 1 : 0,
+            b.paymentDeadlineAt || "",
+            b.holdExpiresAt || ""
+          ].join("~")
+        );
+      }
+      return String(items.length) + "|" + parts.join(";");
+    }
+
     function refreshActiveSection() {
       if (refreshActiveTimer) clearTimeout(refreshActiveTimer);
       refreshActiveTimer = setTimeout(function () {
         refreshActiveTimer = null;
         refreshActiveSectionNow();
-      }, 450);
+      }, 1600);
     }
 
     function showSection(sectionId) {
@@ -7011,6 +7846,9 @@
       if (currentSectionId === sectionId) {
         if (sectionId === "section-dashboard") openBookingFromHashIfPresent();
         if (sectionId === "section-payments") {
+          var sameTab = paymentsTabFromHash(window.location.hash);
+          if (sameTab) setPaymentsTab(sameTab);
+          else if (!bookingIdFromLocationHash()) setPaymentsTab("bookings");
           pendingPaymentFocusId = bookingIdFromLocationHash();
           applyPaymentFocus();
         }
@@ -7041,12 +7879,11 @@
         renderReports();
         renderAnalytics();
       } else if (sectionId === "section-payments") {
+        var openTab = paymentsTabFromHash(window.location.hash);
+        if (openTab) setPaymentsTab(openTab);
+        else if (!bookingIdFromLocationHash()) setPaymentsTab("bookings");
         pendingPaymentFocusId = bookingIdFromLocationHash();
         syncPaymentsSection();
-      } else if (sectionId === "section-reservation-queue") {
-        if (window.ElenestReservationQueue && window.ElenestReservationQueue.renderSection) {
-          window.ElenestReservationQueue.renderSection();
-        }
       } else if (sectionId === "section-calendar-access") {
         if (window.ElenestCalendarAccess && window.ElenestCalendarAccess.refresh) {
           window.ElenestCalendarAccess.refresh();
@@ -7163,8 +8000,8 @@
     var navLinks = document.querySelectorAll('header .navlinks a[href^="#section-"]');
     var navDropdownToggles = document.querySelectorAll(".admin-nav-dropdown-toggle");
     var sectionNavGroups = {
+      "section-bookings": "adminNavManagement",
       "section-payments": "adminNavManagement",
-      "section-reservation-queue": "adminNavManagement",
       "section-calendar-access": "adminNavManagement",
       "section-activity-logs": "adminNavManagement",
       "section-manager-user": "adminNavManagement",
@@ -7278,6 +8115,9 @@
       if (e.key === "elenest_feedback" || e.key === "elenest_bookings" || e.key === "elenest_payment_methods" || e.key === "elenest_notifications" || e.key === "elenest_notification_broadcasts") refreshActiveSection();
     });
     window.addEventListener("elenest-bookings-updated", function () {
+      var sig = adminLiveSignature();
+      if (sig && sig === lastAdminLiveSignature) return;
+      lastAdminLiveSignature = sig;
       refreshActiveSection();
     });
     window.addEventListener("elenest-calendar-access-updated", function () {
@@ -7297,6 +8137,7 @@
       }
     });
     window.addEventListener("elenest-manager-blocks-updated", function () {
+      renderAdminCalendar.paintSig = "";
       if (currentSectionId === "section-dashboard") renderAdminCalendar();
       if (currentSectionId === "section-calendar-access" && window.ElenestCalendarAccess) {
         window.ElenestCalendarAccess.renderOwnerSection();
@@ -7615,7 +8456,14 @@
         }
 
         if (Auth && typeof Auth.changePassword === "function") {
-          Auth.changePassword(currentPassword, newPassword).then(finishPasswordChange);
+          Auth.changePassword(currentPassword, newPassword)
+            .then(finishPasswordChange)
+            .catch(function () {
+              finishPasswordChange({
+                ok: false,
+                message: "Could not update password. Please try again."
+              });
+            });
           return;
         }
 

@@ -58,7 +58,7 @@
   }
 
   var currentFlowStep = 1;
-  var BOOK_FLOW_STEP_KEY = "elenest_book_flow_step_v8";
+  var BOOK_FLOW_STEP_KEY = "elenest_book_flow_step_v9";
   var BOOK_FLOW_DRAFT_KEY = "elenest_book_flow_draft_v1";
   var LAST_COMPLETED_RECEIPT_KEY = "elenest_last_completed_receipt_v1";
   var lastCompletedBooking = null;
@@ -71,6 +71,10 @@
     selectedPaymentMethodId: null,
     paymentType: "full",
     downPaymentAgreed: false,
+    payableBooking: null,
+    reviewBookingId: null,
+    paymentProofSubmitted: false,
+    skipResume: false,
     unitSelection: {
       roomCatalogIds: [],
       roomCatalogId: "",
@@ -551,8 +555,14 @@
     }
 
     var unit = getSelectedCatalogUnit();
+    var type = unit ? String(unit.type || "room").toLowerCase() : "";
+
+    // Overnight follows the dates the guest already chose, including cottages and halls.
+    if (isOvernightBooking()) {
+      return { mode: "range", requiresFacility: true, facilityKind: type || "room" };
+    }
+
     if (unit) {
-      var type = String(unit.type || "room").toLowerCase();
       if (type === "room") {
         return { mode: "range", requiresFacility: true, facilityKind: "room" };
       }
@@ -833,7 +843,7 @@
 
     if (lead) {
       if (rule.facilityKind === "day_tour") {
-        lead.textContent = "Day Tour: pick one date, then choose your facility.";
+        lead.textContent = "One-Day Book: pick one date, then choose your facility.";
       } else if (rule.mode === "single") {
         lead.textContent = "Pick one date, then choose your facility.";
       } else {
@@ -1078,6 +1088,9 @@
     updateStep2ContinueButton();
   }
 
+  var OVERNIGHT_BLOCKED_RANGE_MSG =
+    "One of the selected dates is blocked. Please select another date range.";
+
   function stayRangeHasUnavailableNight(checkInIso, checkOutIso) {
     var cur = isoToUtcDate(checkInIso);
     var end = isoToUtcDate(checkOutIso);
@@ -1087,6 +1100,70 @@
       cur.setUTCDate(cur.getUTCDate() + 1);
     }
     return false;
+  }
+
+  /**
+   * Overnight check-out is exclusive. A stay of Oct 13–15 occupies Oct 13 and Oct 14,
+   * so a block on any night in that span must stop the selection.
+   */
+  function overnightRangeDateError(checkInIso, checkOutIso) {
+    if (!checkInIso || !checkOutIso) return "";
+    var cur = isoToUtcDate(checkInIso);
+    var end = isoToUtcDate(checkOutIso);
+    if (end <= cur) return "";
+    var managerBlocked = false;
+    var unavailable = false;
+    var av = window.ElenestAvailability;
+    while (cur < end) {
+      var nightIso = utcDateToIso(cur);
+      if (av && typeof av.getManagerBlocked === "function" && av.getManagerBlocked(nightIso)) {
+        managerBlocked = true;
+      } else if (isCalendarDateBlocked(nightIso)) {
+        unavailable = true;
+      }
+      cur.setUTCDate(cur.getUTCDate() + 1);
+    }
+    if (managerBlocked) return OVERNIGHT_BLOCKED_RANGE_MSG;
+    if (unavailable) {
+      return "The selected dates include unavailable days. Please choose different dates.";
+    }
+    return "";
+  }
+
+  function calendarRangeAlertEl() {
+    var el = document.getElementById("calendarRangeAlert");
+    if (el) return el;
+    var summary = document.getElementById("pickedDatesSummary");
+    if (!summary || !summary.parentNode) return null;
+    el = document.createElement("p");
+    el.id = "calendarRangeAlert";
+    el.className = "date-range-alert";
+    el.hidden = true;
+    el.setAttribute("role", "alert");
+    summary.insertAdjacentElement("afterend", el);
+    return el;
+  }
+
+  function showCalendarDateMessage(message) {
+    var errEl = document.getElementById("calendarError");
+    var alertEl = calendarRangeAlertEl();
+    var text = message || "";
+    var notice = window.ElenestCalendarWidget;
+    var popup = text === OVERNIGHT_BLOCKED_RANGE_MSG;
+    if (popup && notice && typeof notice.showDateNotice === "function") {
+      notice.showDateNotice(text);
+      text = "";
+    } else if (notice && typeof notice.hideDateNotice === "function") {
+      notice.hideDateNotice();
+    }
+    if (errEl) {
+      errEl.textContent = text;
+      errEl.hidden = !text;
+    }
+    if (alertEl) {
+      alertEl.textContent = text;
+      alertEl.hidden = !text;
+    }
   }
 
   /** If user did not tap check-out, use the first valid day after check-in (1–14 nights). */
@@ -1424,7 +1501,7 @@
     var media = document.createElement("div");
     media.className = "book-facility-card__media";
     appendFacilityCardMedia(media, unit);
-    if (!available) {
+    if (!available && opts.status !== "pending") {
       var overlay = document.createElement("span");
       overlay.className = "book-facility-card__overlay";
       overlay.textContent = "Booked";
@@ -1450,6 +1527,12 @@
     body.appendChild(name);
     body.appendChild(capacity);
     body.appendChild(price);
+    if (!available && opts.status === "pending") {
+      var pendingNote = document.createElement("span");
+      pendingNote.className = "book-facility-card__pending";
+      pendingNote.textContent = "Pending Admin Confirmation";
+      body.appendChild(pendingNote);
+    }
     if (String((unit && unit.type) || "") === "hall" || opts.facilityType === "hall") {
       var poolPerk = document.createElement("span");
       poolPerk.className = "book-facility-card__pool-perk";
@@ -1460,8 +1543,9 @@
       body.appendChild(poolPerk);
     }
     if (!available) {
+      var ariaStatus = opts.status === "pending" ? "pending admin confirmation" : "booked";
       card.setAttribute("aria-disabled", "true");
-      card.setAttribute("aria-label", (unit.name || "Unit") + " is booked and unavailable");
+      card.setAttribute("aria-label", (unit.name || "Unit") + " is " + ariaStatus + " and unavailable");
     }
     card.appendChild(body);
     return card;
@@ -2076,8 +2160,145 @@
     }
   }
 
-  function appendReadonlyUnitCard(listEl, unit) {
-    var card = buildFacilityCard(unit, { available: false, selectable: false, selected: false });
+  function catalogUnitById(id) {
+    var UA = window.ElenestUnitAvailability;
+    if (!id || !UA || typeof UA.getCatalog !== "function") return null;
+    var list = UA.getCatalog() || [];
+    for (var i = 0; i < list.length; i++) {
+      if (String(list[i].id) === String(id)) return list[i];
+    }
+    return null;
+  }
+
+  function selectedFacilityItems() {
+    var sel = getUnitSelection();
+    var items = [];
+    function push(ids, type) {
+      (ids || []).forEach(function (id) {
+        var key = String(id || "").trim();
+        if (!key) return;
+        var unit = catalogUnitById(key);
+        items.push({
+          id: key,
+          type: (unit && unit.type) || type,
+          name: (unit && unit.name) || catalogNameForId(key) || "Facility",
+          unit: unit
+        });
+      });
+    }
+    push(sel.roomCatalogIds, "room");
+    push(sel.cottageCatalogIds, "cottage");
+    push(sel.hallCatalogIds, "hall");
+    return items;
+  }
+
+  function facilityRemoveIconSvg() {
+    return (
+      '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">' +
+      '<circle cx="12" cy="12" r="8.25" fill="none" stroke="currentColor" stroke-width="2"></circle>' +
+      '<path d="M9 9l6 6M15 9l-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>' +
+      "</svg>"
+    );
+  }
+
+  function renderFacilityConfirmation() {
+    var section = document.getElementById("bookUnitConfirmSection");
+    var body = document.getElementById("bookUnitConfirmBody");
+    if (!section || !body) return;
+    body.textContent = "";
+    var items = selectedFacilityItems();
+    if (!items.length) {
+      section.hidden = true;
+      return;
+    }
+    section.hidden = false;
+    var box = document.createElement("div");
+    box.className = "book-unit-confirm__box";
+    items.forEach(function (item) {
+      var row = document.createElement("div");
+      row.className = "book-unit-confirm__facility";
+      var photo = document.createElement("span");
+      photo.className = "book-unit-confirm__photo";
+      var img = document.createElement("img");
+      img.src = unitImageSrc(item.unit || { id: item.id, type: item.type, name: item.name });
+      img.alt = "";
+      img.loading = "lazy";
+      img.decoding = "async";
+      photo.appendChild(img);
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "book-unit-confirm__cancel";
+      btn.setAttribute("data-remove-facility-id", item.id);
+      btn.setAttribute("data-remove-facility-type", item.type);
+      btn.setAttribute("aria-label", "Remove " + item.name);
+      btn.title = "Remove " + item.name;
+      btn.innerHTML = facilityRemoveIconSvg();
+      photo.appendChild(btn);
+      var name = document.createElement("span");
+      name.className = "book-unit-confirm__name";
+      name.textContent = item.name;
+      row.appendChild(photo);
+      row.appendChild(name);
+      box.appendChild(row);
+    });
+    var scheduleText = facilityConfirmScheduleLine();
+    if (scheduleText) {
+      var schedule = document.createElement("p");
+      schedule.className = "book-unit-confirm__schedule";
+      schedule.textContent = scheduleText;
+      box.appendChild(schedule);
+    }
+    body.appendChild(box);
+  }
+
+  function facilityConfirmScheduleLine() {
+    if (!wizardState.checkIn) return "";
+    var rule = getBookingDateRule();
+    if (rule.mode === "single" || isDayTourBooking()) {
+      return fmtDateLong(wizardState.checkIn) + " · " + formatDayTourHours();
+    }
+    if (wizardState.checkOut && wizardState.checkOut > wizardState.checkIn) {
+      var line = fmtDateLong(wizardState.checkIn) + " – " + fmtDateLong(wizardState.checkOut);
+      var tIn = wizardState.checkInTime ? formatTimeLabel(wizardState.checkInTime) : "";
+      var tOut = wizardState.checkOutTime ? formatTimeLabel(wizardState.checkOutTime) : "";
+      if (tIn && tIn !== "not selected") line += " · " + tIn;
+      if (tOut && tOut !== "not selected") line += " – " + tOut;
+      return line;
+    }
+    return fmtDateLong(wizardState.checkIn);
+  }
+
+  function syncFacilityCardChecked(id, checked) {
+    var host = getUnitPickerHost();
+    if (!host) return;
+    var inputs = host.querySelectorAll('input.book-facility-card__input[name="bookFacilityUnit"]');
+    for (var i = 0; i < inputs.length; i++) {
+      if (String(inputs[i].value) !== String(id)) continue;
+      inputs[i].checked = !!checked;
+      inputs[i].removeAttribute("aria-invalid");
+      var card = inputs[i].closest ? inputs[i].closest(".book-facility-card") : null;
+      if (card && card.classList) card.classList.toggle("book-facility-card--selected", !!checked);
+      break;
+    }
+  }
+
+  function removeSelectedFacility(type, id) {
+    toggleUnitInSelection(type, id, false);
+    syncFacilityCardChecked(id, false);
+    updateGuestCapacityLiveUI();
+    updateStep2ContinueButton();
+    renderUnitSelectionSummary();
+    renderBookingDetailsSummary();
+    renderFacilityConfirmation();
+  }
+
+  function appendReadonlyUnitCard(listEl, unit, status) {
+    var card = buildFacilityCard(unit, {
+      available: false,
+      selectable: false,
+      selected: false,
+      status: status || "booked"
+    });
     card.classList.add("book-facility-card--unavailable");
     card.setAttribute("role", "button");
     card.setAttribute("tabindex", "0");
@@ -2086,8 +2307,6 @@
       "aria-label",
       (unit.name || "Room") + " is unavailable for your selected date and time"
     );
-    var overlay = card.querySelector(".book-facility-card__overlay");
-    if (overlay) overlay.textContent = "Unavailable";
     function reject(e) {
       if (e) {
         e.preventDefault();
@@ -2170,7 +2389,7 @@
             })
           );
         } else {
-          appendReadonlyUnitCard(listEl, unit);
+          appendReadonlyUnitCard(listEl, unit, item.status);
         }
       });
     }
@@ -2277,6 +2496,7 @@
 
     renderUnitSelectionSummary();
     updateUnitModalConfirmButton();
+    renderFacilityConfirmation();
   }
 
   function showUnitModalCapacityMessage(msg) {
@@ -2346,6 +2566,7 @@
     } else if (t) {
       t.removeAttribute("aria-invalid");
     }
+    renderFacilityConfirmation();
   }
 
   function bindGuestCapacityLiveValidation() {
@@ -2362,7 +2583,7 @@
           renderUnitSelectionSummary();
           renderBookingDetailsSummary();
         }
-        if (currentFlowStep === 3) {
+        if (currentFlowStep === 4 && !wizardState.paymentProofSubmitted) {
           renderPaymentPanel();
         }
         var modal = document.getElementById("bookUnitModal");
@@ -2397,6 +2618,59 @@
     if (lower === "no show" || lower === "no_show" || lower === "noshow") return "No Show";
     if (lower === "cancelled" || lower === "canceled") return "Cancelled";
     return "Pending";
+  }
+
+  function customerCanCancelBooking(booking) {
+    var PF = window.ElenestPaymentFlow;
+    return !!(
+      booking &&
+      booking.id &&
+      PF &&
+      typeof PF.canCustomerCancelBooking === "function" &&
+      PF.canCustomerCancelBooking(booking)
+    );
+  }
+
+  function cancelCustomerBooking(booking) {
+    if (!customerCanCancelBooking(booking)) return Promise.resolve(false);
+    if (
+      !window.confirm(
+        "Cancel this booking? It has not been confirmed by the admin yet. The reserved schedule will be released."
+      )
+    ) {
+      return Promise.resolve(false);
+    }
+    var PF = window.ElenestPaymentFlow;
+    var patch =
+      PF && typeof PF.buildCustomerCancelPatch === "function"
+        ? PF.buildCustomerCancelPatch()
+        : {
+            status: "Cancelled",
+            paymentStatus: "Cancelled by customer — booking was not confirmed yet",
+            slotLocked: false,
+            workflow: "cancelled",
+            verificationStage: "cancelled",
+            cancelledAt: new Date().toISOString(),
+            cancelledBy: "customer"
+          };
+    if (!window.ElenestBookings || typeof window.ElenestBookings.updateById !== "function") {
+      return Promise.resolve(false);
+    }
+    return Promise.resolve(window.ElenestBookings.updateById(booking.id, patch)).then(function (ok) {
+      if (!ok) {
+        window.alert("Could not cancel this booking. Please try again.");
+        return false;
+      }
+      if (wizardState.reviewBookingId && String(wizardState.reviewBookingId) === String(booking.id)) {
+        wizardState.skipResume = true;
+        didResumeOpenBooking = true;
+        wizardState.reviewBookingId = null;
+        wizardState.payableBooking = null;
+        wizardState.paymentProofSubmitted = false;
+        goStep(1);
+      }
+      return true;
+    });
   }
 
   function isPendingLikeStatus(st, booking) {
@@ -2752,6 +3026,9 @@
           b.paymentStatus || "",
           b.paymentVerifiedAt || "",
           b.holdExpiresAt || "",
+          b.paymentDeadlineAt || "",
+          b.bookingConfirmedAt || "",
+          b.workflow || "",
           b.submittedAt || "",
           b.checkIn || "",
           b.checkOut || "",
@@ -2899,39 +3176,25 @@
     var badge = document.createElement("span");
     applyStatusBadge(badge, b, statusDisplayLabel(normalizedStatus, b));
     top.appendChild(badge);
-    function createDeleteButton() {
-      var delBtn = document.createElement("button");
-      delBtn.type = "button";
-      delBtn.className = "booking-card__delete";
-      delBtn.setAttribute("aria-label", "Remove this reservation from your list");
-      delBtn.textContent = "Delete";
-      delBtn.addEventListener("click", function (e) {
+    function createCancelButton() {
+      var cancelBtn = document.createElement("button");
+      cancelBtn.type = "button";
+      cancelBtn.className = "booking-card__delete";
+      cancelBtn.setAttribute("aria-label", "Cancel this booking");
+      cancelBtn.textContent = "Cancel booking";
+      cancelBtn.addEventListener("click", function (e) {
         e.preventDefault();
         e.stopPropagation();
-        if (
-          !confirm(
-            "Remove this reservation from your list on this device? You can submit a new booking anytime."
-          )
-        ) {
-          return;
-        }
-        var user = window.ElenestAuth.getCurrentUser();
-        if (!user || !b.id) return;
-        Promise.resolve(window.ElenestBookings.removeById(user.email, b.id))
-          .catch(function () {
-            return true;
-          })
-          .then(function () {
-            if (typeof onDeleted === "function") onDeleted();
-          });
+        cancelCustomerBooking(b).then(function (ok) {
+          if (ok && typeof onDeleted === "function") onDeleted();
+        });
       });
-      return delBtn;
+      return cancelBtn;
     }
 
-    if (b.id && !isPendingLikeStatus(normalizedStatus, b)) {
-      top.appendChild(createDeleteButton());
-    }
     article.appendChild(top);
+    article.appendChild(renderBookingProgressStepper(b));
+    appendPaymentDeadlineBanner(article, b);
 
     var name = document.createElement("h4");
     name.className = "booking-card__name";
@@ -2947,7 +3210,7 @@
         );
       }
       nameRow.appendChild(name);
-      nameRow.appendChild(createDeleteButton());
+      if (customerCanCancelBooking(b)) nameRow.appendChild(createCancelButton());
       article.appendChild(nameRow);
     } else {
       var nameWrap = document.createElement("div");
@@ -3006,7 +3269,10 @@
       holdRow.setAttribute("data-hold-timer-for", b.id);
       var labHold = document.createElement("span");
       labHold.className = "booking-card__label";
-      labHold.textContent = "Time remaining";
+      labHold.textContent =
+        PFTimer && typeof PFTimer.customerTimerLabel === "function"
+          ? PFTimer.customerTimerLabel(b)
+          : "Time remaining";
       var valHold = document.createElement("span");
       valHold.className = "booking-card__value admin-arrival-timer";
       valHold.setAttribute("data-hold-expires", timerDeadline);
@@ -3221,6 +3487,37 @@
     if (sub.textContent) article.appendChild(sub);
     article.appendChild(details);
 
+    var PFPay = window.ElenestPaymentFlow;
+    if (PFPay && PFPay.isAwaitingBookingReview && PFPay.isAwaitingBookingReview(b)) {
+      var confirmActions = document.createElement("div");
+      confirmActions.className = "booking-card__receipt-actions";
+      var confirmViewBtn = document.createElement("button");
+      confirmViewBtn.type = "button";
+      confirmViewBtn.className = "booking-card__receipt-btn";
+      confirmViewBtn.textContent = "View booking confirmation";
+      confirmViewBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        openConfirmationForBooking(b);
+      });
+      confirmActions.appendChild(confirmViewBtn);
+      article.appendChild(confirmActions);
+    }
+    if (PFPay && PFPay.isAwaitingCustomerPayment && PFPay.isAwaitingCustomerPayment(b) && !PFPay.isPaymentWindowExpired(b)) {
+      var payActions = document.createElement("div");
+      payActions.className = "booking-card__receipt-actions";
+      var payBtn = document.createElement("button");
+      payBtn.type = "button";
+      payBtn.className = "booking-card__receipt-btn";
+      payBtn.textContent = "Pay now";
+      payBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        openPaymentForBooking(b);
+      });
+      payActions.appendChild(payBtn);
+      article.appendChild(payActions);
+    }
     if (bookingHasCustomerReceipt(b)) {
       var receiptActions = document.createElement("div");
       receiptActions.className = "booking-card__receipt-actions";
@@ -3534,10 +3831,11 @@
       updateStep2ContinueButton();
       ensureStep2LiveAvailability(true);
     }
-    if (n === 3) renderPaymentPanel();
+    if (n === 3 && typeof renderBookingConfirmationPanel === "function") renderBookingConfirmationPanel();
     if (n === 4) {
-      renderAppointmentsBoard();
-      showReceiptForCompletedBooking();
+      if (wizardState.paymentProofSubmitted && typeof renderPaymentSubmittedState === "function") {
+        renderPaymentSubmittedState();
+      } else renderPaymentPanel();
     }
     saveBookingDraft();
   }
@@ -3610,10 +3908,84 @@
     return record;
   }
 
+  function paymentFigures() {
+    if (wizardState.payableBooking) {
+      var saved = wizardState.payableBooking;
+      var subtotal = Number(saved.totalEstimate);
+      if (!isFinite(subtotal)) subtotal = 0;
+      var down =
+        saved.amountDown != null && saved.amountDown !== ""
+          ? Number(saved.amountDown)
+          : Math.round(subtotal * 0.2);
+      return {
+        subtotal: subtotal,
+        down: down,
+        nights: 1,
+        lines: [],
+        poolFee: Number(saved.poolFee) || 0,
+        roomSub: 0,
+        cottageSub: 0,
+        hallFee: 0
+      };
+    }
+    return computePayment();
+  }
+
+  function renderBookingProgressStepper(booking, host) {
+    var root = host || document.createElement("nav");
+    root.className = "book-status-stepper";
+    root.setAttribute("aria-label", "Booking progress");
+    root.textContent = "";
+    var PF = window.ElenestPaymentFlow;
+    var approved = !!(PF && PF.isPaymentApproved && PF.isPaymentApproved(booking));
+    var proof = !!(PF && PF.hasSubmittedReceipt && PF.hasSubmittedReceipt(booking));
+    var confirmed = !!(
+      booking &&
+      (booking.bookingConfirmedAt ||
+        booking.paymentDeadlineAt ||
+        proof ||
+        approved ||
+        (PF && PF.isAwaitingCustomerPayment && PF.isAwaitingCustomerPayment(booking)))
+    );
+    var steps = [
+      { label: "Submitted", done: !!booking },
+      { label: "Booking confirmation", done: confirmed },
+      { label: "Payment", done: proof || approved },
+      { label: "Payment confirmed", done: approved }
+    ];
+    var current = 0;
+    for (var i = 0; i < steps.length; i++) {
+      if (!steps[i].done) {
+        current = i;
+        break;
+      }
+      current = i;
+    }
+    var list = document.createElement("ol");
+    list.className = "book-status-stepper__list";
+    steps.forEach(function (step, index) {
+      var li = document.createElement("li");
+      li.className = "book-status-stepper__step";
+      if (step.done && index < 3) li.classList.add("is-done");
+      if (step.done && index === 3) li.classList.add("is-done");
+      if (!step.done && index === current) li.classList.add("is-current");
+      var mark = document.createElement("span");
+      mark.className = "book-status-stepper__index";
+      mark.textContent = step.done ? "✓" : String(index + 1);
+      var lab = document.createElement("span");
+      lab.textContent = step.label;
+      li.appendChild(mark);
+      li.appendChild(lab);
+      list.appendChild(li);
+    });
+    root.appendChild(list);
+    return root;
+  }
+
   function renderPaymentSummary() {
     var host = document.getElementById("paymentSummaryHost");
     if (!host) return;
-    var p = computePayment();
+    var p = paymentFigures();
     var PF = window.ElenestPaymentFlow;
     var paymentType = getSelectedPaymentType();
     var dueNow = PF && PF.amountDueNow ? PF.amountDueNow(paymentType, p) : paymentType === "full" ? p.subtotal : p.down;
@@ -3653,10 +4025,27 @@
         true
       )
     );
+    if (wizardState.payableBooking && wizardState.payableBooking.paymentDeadlineAt) {
+      card.appendChild(
+        row(
+          "Payment deadline",
+          new Date(wizardState.payableBooking.paymentDeadlineAt).toLocaleString("en-US", {
+            timeZone: "Asia/Manila",
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+            hour: "numeric",
+            minute: "2-digit",
+            hour12: true
+          })
+        )
+      );
+    }
+    card.appendChild(row("After you upload proof", "For verification — not marked paid yet"));
     if (paymentType === "full") {
-      card.appendChild(row("After verification", "Confirmed · Fully Paid · Non-refundable"));
+      card.appendChild(row("After admin verifies payment", "Booking confirmed · Fully paid"));
     } else {
-      card.appendChild(row("After verification", "3-hour hold · Must arrive on time"));
+      card.appendChild(row("After admin verifies payment", "Booking confirmed · Down payment received"));
     }
     host.appendChild(card);
   }
@@ -3775,8 +4164,333 @@
     });
   }
 
+  function openConfirmationForBooking(booking) {
+    if (!booking || !booking.id) return;
+    wizardState.skipResume = false;
+    wizardState.reviewBookingId = booking.id;
+    wizardState.payableBooking = booking;
+    wizardState.paymentProofSubmitted = false;
+    closeAppointmentsModal();
+    goStep(3);
+    var section = document.getElementById("bookingSection");
+    if (section && section.scrollIntoView) section.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function pickOpenBooking() {
+    var user = window.ElenestAuth && window.ElenestAuth.getCurrentUser ? window.ElenestAuth.getCurrentUser() : null;
+    if (!user || !window.ElenestBookings || typeof window.ElenestBookings.listForUser !== "function") return null;
+    var list = window.ElenestBookings.listForUser(user.email) || [];
+    var PF = window.ElenestPaymentFlow;
+    var best = null;
+    var bestRank = 0;
+    list.forEach(function (b) {
+      if (!b || !b.id || String(b.id).indexOf("__") !== -1) return;
+      if (b.linkedFacilityBooking || b.parentBookingId) return;
+      var rank = 0;
+      if (PF && PF.hasSubmittedReceipt && PF.hasSubmittedReceipt(b) && PF.isPaymentApproved && !PF.isPaymentApproved(b)) {
+        rank = 2;
+      } else if (PF && PF.isAwaitingBookingReview && PF.isAwaitingBookingReview(b)) {
+        rank = 3;
+      } else if (
+        PF &&
+        PF.isAwaitingCustomerPayment &&
+        PF.isAwaitingCustomerPayment(b) &&
+        PF.isPaymentWindowExpired &&
+        !PF.isPaymentWindowExpired(b)
+      ) {
+        rank = 4;
+      }
+      if (rank > bestRank) {
+        best = b;
+        bestRank = rank;
+      }
+    });
+    return best;
+  }
+
+  var didResumeOpenBooking = false;
+  function tryResumeOpenBooking() {
+    if (didResumeOpenBooking || wizardState.skipResume) return;
+    if (!window.ElenestAuth || !window.ElenestAuth.getCurrentUser || !window.ElenestAuth.getCurrentUser()) return;
+    if (!window.ElenestBookings || typeof window.ElenestBookings.listForUser !== "function") return;
+    var open = pickOpenBooking();
+    if (!open) {
+      var ready = window.ElenestBookings.ready;
+      if (ready && ready.then) return;
+      didResumeOpenBooking = true;
+      return;
+    }
+    didResumeOpenBooking = true;
+    if (window.ElenestPaymentFlow && window.ElenestPaymentFlow.hasSubmittedReceipt && window.ElenestPaymentFlow.hasSubmittedReceipt(open) && !window.ElenestPaymentFlow.isPaymentApproved(open)) {
+      wizardState.reviewBookingId = open.id;
+      wizardState.payableBooking = open;
+      wizardState.paymentProofSubmitted = true;
+      goStep(4);
+      return;
+    }
+    openConfirmationForBooking(open);
+  }
+
+  function findReviewBooking() {
+    var user = window.ElenestAuth && window.ElenestAuth.getCurrentUser ? window.ElenestAuth.getCurrentUser() : null;
+    if (!user || !window.ElenestBookings || typeof window.ElenestBookings.listForUser !== "function") {
+      return wizardState.payableBooking || null;
+    }
+    var list = window.ElenestBookings.listForUser(user.email) || [];
+    var i;
+    if (wizardState.reviewBookingId) {
+      for (i = 0; i < list.length; i++) {
+        if (list[i] && String(list[i].id) === String(wizardState.reviewBookingId)) return list[i];
+      }
+    }
+    if (wizardState.payableBooking && wizardState.payableBooking.id) {
+      for (i = 0; i < list.length; i++) {
+        if (list[i] && String(list[i].id) === String(wizardState.payableBooking.id)) return list[i];
+      }
+    }
+    return wizardState.payableBooking || null;
+  }
+
+  function isMarkedPaymentExpired(booking) {
+    if (!booking) return false;
+    var stage = String(booking.verificationStage || booking.verification_stage || "").toLowerCase();
+    var pay = String(booking.paymentStatus || "").toLowerCase();
+    return stage === "payment_expired" || pay.indexOf("payment deadline expired") !== -1;
+  }
+
+  function paymentDeadlineIso(booking) {
+    if (!booking) return "";
+    return booking.paymentDeadlineAt || booking.payment_deadline_at || "";
+  }
+
+  function paintPaymentDeadlineAlert(host, booking) {
+    if (!host) return;
+    var PF = window.ElenestPaymentFlow;
+    var deadline = paymentDeadlineIso(booking);
+    var open = !!(
+      booking &&
+      deadline &&
+      PF &&
+      PF.isAwaitingCustomerPayment &&
+      PF.isAwaitingCustomerPayment(booking)
+    );
+    var expired =
+      isMarkedPaymentExpired(booking) ||
+      !!(open && PF.isPaymentWindowExpired && PF.isPaymentWindowExpired(booking));
+    if (!open && !expired) {
+      host.hidden = true;
+      host.removeAttribute("data-pay-state");
+      host.textContent = "";
+      return;
+    }
+    host.hidden = false;
+    if (expired) {
+      host.classList.add("is-expired");
+      if (host.getAttribute("data-pay-state") !== "expired") {
+        host.setAttribute("data-pay-state", "expired");
+        host.innerHTML =
+          '<p class="pay-deadline-alert__title">Payment window ended</p>' +
+          '<p class="pay-deadline-alert__note">The 3-hour payment deadline has passed. This booking is expired and the reserved facility has been released.</p>';
+      }
+      return;
+    }
+    host.classList.remove("is-expired");
+    var clock = host.querySelector("[data-pay-clock]");
+    if (host.getAttribute("data-pay-state") !== "open" || !clock) {
+      host.setAttribute("data-pay-state", "open");
+      host.innerHTML =
+        '<p class="pay-deadline-alert__title">Complete payment within 3 hours</p>' +
+        '<p class="pay-deadline-alert__clock" data-pay-clock="1"></p>' +
+        '<p class="pay-deadline-alert__note">Pay the amount due and upload your receipt before this timer ends.</p>';
+      clock = host.querySelector("[data-pay-clock]");
+    }
+    if (clock) {
+      clock.setAttribute("data-deadline", deadline);
+      clock.textContent = PF.formatTimerRemaining ? PF.formatTimerRemaining(deadline) : "";
+    }
+  }
+
+  function appendPaymentDeadlineBanner(article, booking) {
+    var PF = window.ElenestPaymentFlow;
+    var deadline = paymentDeadlineIso(booking);
+    if (!article || !deadline || !PF || !PF.isAwaitingCustomerPayment || !PF.isAwaitingCustomerPayment(booking)) return;
+    if (PF.isPaymentWindowExpired && PF.isPaymentWindowExpired(booking)) return;
+    var banner = document.createElement("div");
+    banner.className = "pay-deadline-alert";
+    banner.setAttribute("role", "status");
+    var title = document.createElement("p");
+    title.className = "pay-deadline-alert__title";
+    title.textContent = "Complete payment within 3 hours";
+    var clock = document.createElement("p");
+    clock.className = "pay-deadline-alert__clock";
+    clock.setAttribute("data-pay-clock", "1");
+    clock.setAttribute("data-deadline", deadline);
+    clock.textContent = PF.formatTimerRemaining ? PF.formatTimerRemaining(deadline) : "";
+    var note = document.createElement("p");
+    note.className = "pay-deadline-alert__note";
+    note.textContent = "Pay and upload your receipt before this timer ends.";
+    banner.appendChild(title);
+    banner.appendChild(clock);
+    banner.appendChild(note);
+    article.appendChild(banner);
+  }
+
+  var paymentExpireSweepAt = 0;
+  function sweepExpiredPaymentWindows() {
+    var PF = window.ElenestPaymentFlow;
+    var user = window.ElenestAuth && window.ElenestAuth.getCurrentUser ? window.ElenestAuth.getCurrentUser() : null;
+    if (!user || !user.email || !window.ElenestBookings || !PF || !PF.shouldAutoExpireUnpaidBooking) return;
+    var list = window.ElenestBookings.listForUser(user.email) || [];
+    var needs = false;
+    for (var i = 0; i < list.length; i++) {
+      if (PF.shouldAutoExpireUnpaidBooking(list[i])) {
+        needs = true;
+        break;
+      }
+    }
+    if (!needs) return;
+    var now = Date.now();
+    if (now - paymentExpireSweepAt < 4000) return;
+    paymentExpireSweepAt = now;
+    if (window.ElenestBookings.processAutoNoShows) window.ElenestBookings.processAutoNoShows();
+  }
+
+  function renderBookingConfirmationPanel() {
+    var lead = document.getElementById("bookingConfirmLead");
+    var statusEl = document.getElementById("bookingConfirmStatus");
+    var summary = document.getElementById("bookingConfirmSummary");
+    var payBtn = document.getElementById("continueToPaymentBtn");
+    var booking = findReviewBooking();
+    var PF = window.ElenestPaymentFlow;
+    if (summary) {
+      summary.textContent = "";
+      if (!booking) {
+        summary.hidden = true;
+      } else {
+        summary.hidden = false;
+        var adults = parseInt(booking.adults, 10) || 0;
+        var children = parseInt(booking.children, 10) || 0;
+        var under = parseInt(booking.childrenUnder6, 10) || 0;
+        var guestBits = [];
+        if (adults) guestBits.push(adults + (adults === 1 ? " adult" : " adults"));
+        if (children) guestBits.push(children + (children === 1 ? " child (6–12)" : " children (6–12)"));
+        if (under) guestBits.push(under + (under === 1 ? " child (0–5)" : " children (0–5)"));
+        var rows = [
+          ["Facility", appointmentStayLabel(booking)],
+          ["Date", bookingReceiptDateLabel(booking)],
+          ["Schedule", bookingReceiptTimeLabel(booking)],
+          ["Guests", guestBits.join(", ") || "—"],
+          ["Total", formatMoneyPeso(booking.totalEstimate)]
+        ];
+        rows.forEach(function (pair) {
+          var row = document.createElement("div");
+          row.className = "book-confirm-summary__row";
+          var lab = document.createElement("span");
+          lab.textContent = pair[0];
+          var val = document.createElement("strong");
+          val.textContent = pair[1] || "—";
+          row.appendChild(lab);
+          row.appendChild(val);
+          summary.appendChild(row);
+        });
+      }
+    }
+    var awaitingPay = !!(booking && PF && PF.isAwaitingCustomerPayment && PF.isAwaitingCustomerPayment(booking));
+    var expired =
+      isMarkedPaymentExpired(booking) ||
+      !!(awaitingPay && PF.isPaymentWindowExpired && PF.isPaymentWindowExpired(booking));
+    var proof = !!(booking && PF && PF.hasSubmittedReceipt && PF.hasSubmittedReceipt(booking));
+    if (statusEl) {
+      statusEl.className = "book-confirm-status";
+      if (expired) {
+        statusEl.textContent = "Payment window ended";
+        statusEl.classList.add("is-expired");
+      } else if (proof) {
+        statusEl.textContent = "Receipt submitted";
+        statusEl.classList.add("is-ready");
+      } else if (awaitingPay) {
+        statusEl.textContent = "Confirmed — pay within 3 hours";
+        statusEl.classList.add("is-pay");
+      } else {
+        statusEl.textContent = "Waiting for admin";
+        statusEl.classList.add("is-waiting");
+      }
+    }
+    if (lead) {
+      if (!booking) {
+        lead.textContent = "Submit your booking details first. This step stays here until an admin confirms them.";
+      } else if (expired) {
+        lead.textContent =
+          "The 3-hour payment window ended before a receipt was uploaded. This booking is expired and the reserved facility has been released.";
+      } else if (proof) {
+        lead.textContent =
+          "Proof of payment submitted successfully. An admin will verify it in Reservation Management. This booking is not marked paid yet.";
+      } else if (awaitingPay) {
+        lead.textContent =
+          "Your booking is confirmed. Pay the amount due and upload your receipt before the timer reaches zero.";
+      } else {
+        lead.textContent =
+          "Your request is with the admin. You can cancel it until the admin confirms the facility, date, and schedule. After confirmation, payment opens for 3 hours and cancellation is closed.";
+      }
+    }
+    paintPaymentDeadlineAlert(document.getElementById("bookingPaymentDeadlineAlert"), booking);
+    var cancelConfirmBtn = document.getElementById("cancelBookingFromConfirmBtn");
+    if (cancelConfirmBtn) cancelConfirmBtn.hidden = !customerCanCancelBooking(booking);
+    if (payBtn) {
+      var canPay = awaitingPay && !expired;
+      payBtn.disabled = !canPay;
+      payBtn.hidden = !!proof;
+      payBtn.textContent = canPay ? "Continue to payment" : "Waiting for admin confirmation";
+    }
+  }
+
+  function setPaymentFormVisible(visible) {
+    ["paymentTypeFieldset", "paymentSummaryHost", "paymentMethodsHost", "paymentProofSection", "paymentStepActions"].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) el.hidden = !visible;
+    });
+    var submitted = document.getElementById("paymentSubmittedState");
+    if (submitted) submitted.hidden = visible;
+  }
+
+  function renderPaymentSubmittedState() {
+    setPaymentFormVisible(false);
+    var booking = wizardState.payableBooking || (typeof getCompletedBookingForReceipt === "function" ? getCompletedBookingForReceipt() : null);
+    var lead = document.getElementById("paymentStepLead");
+    var submittedLead = document.getElementById("paymentSubmittedLead");
+    if (lead) lead.textContent = "Proof of payment submitted successfully.";
+    if (submittedLead) {
+      submittedLead.textContent =
+        "Your proof of payment was submitted successfully. An admin will verify it in Reservation Management. This booking is not marked paid yet.";
+    }
+    if (typeof setPaymentStepError === "function") setPaymentStepError("");
+    if (booking && typeof renderCompletedBookingReceipt === "function") renderCompletedBookingReceipt(booking);
+  }
+
   function renderPaymentPanel() {
+    wizardState.paymentProofSubmitted = false;
+    setPaymentFormVisible(true);
     wizardState.paymentType = getSelectedPaymentType();
+    var lead = document.getElementById("paymentStepLead");
+    var payable = wizardState.payableBooking;
+    var PF = window.ElenestPaymentFlow;
+    var stepperHost = document.getElementById("paymentFlowStepper");
+    if (stepperHost) {
+      if (payable) renderBookingProgressStepper(payable, stepperHost);
+      else stepperHost.textContent = "";
+    }
+    paintPaymentDeadlineAlert(document.getElementById("paymentDeadlineAlert"), payable);
+    if (lead) {
+      if (!payable || !PF || !PF.isAwaitingCustomerPayment(payable)) {
+        lead.textContent = "Online payment opens after an admin confirms your booking details.";
+      } else if (PF.isPaymentWindowExpired && PF.isPaymentWindowExpired(payable)) {
+        lead.textContent =
+          "The 3-hour payment window has ended. This booking is expired and the reserved facility has been released.";
+      } else {
+        lead.textContent =
+          "Your booking details are confirmed. Pay the amount due and upload a photo of your receipt before the timer reaches zero. Uploading proof does not mark the booking as paid until an admin verifies it.";
+      }
+    }
     renderPaymentSummary();
     renderPaymentMethods();
     var typeRadios = document.querySelectorAll('input[name="paymentTypeChoice"]');
@@ -4784,9 +5498,9 @@
       ? PF.getPaymentPresentation(booking)
       : { kind: "success" };
     var kind = "success";
-    var title = "Payment submitted";
+    var title = "Proof of payment submitted";
     var lead =
-      "Your proof of payment was received. We will verify it shortly and update your booking status.";
+      "Your proof of payment was submitted successfully. An admin will verify it in Reservation Management. This booking is not marked paid yet.";
     if (pay.kind === "cancelled") {
       kind = "cancelled";
       title = "Payment unsuccessful";
@@ -4856,11 +5570,14 @@
         var n = parseInt(s, 10);
         if (n >= 1 && n <= 4) step = n;
       }
-      // Confirmation/receipt is only for a booking completed in this session.
-      if (step === 4 && !readRememberedCompletedBooking()) {
-        step = 1;
-      }
     } catch (e) {}
+    if (!wizardState.skipResume && (step === 1 || step === 3 || step === 4)) {
+      tryResumeOpenBooking();
+      if (didResumeOpenBooking) return;
+    }
+    if ((step === 3 || step === 4) && !wizardState.payableBooking && !wizardState.reviewBookingId) {
+      step = 1;
+    }
     goStep(step);
     if (step === 1) {
       renderCalendar();
@@ -4868,8 +5585,6 @@
       renderUnitSelectionSummary();
       renderBookingDetailsSummary();
       updateStep2ContinueButton();
-    } else if (step === 3) {
-      renderPaymentPanel();
     }
   }
 
@@ -4936,24 +5651,17 @@
     // Ignore double-taps while facilities are loading.
     if (facilityPickerBusy) return;
 
-    var errEl = document.getElementById("calendarError");
     var rule = getBookingDateRule();
 
     if (rule.mode === "single") {
       if (isCalendarDateBlocked(iso)) {
-        if (errEl) {
-          errEl.textContent = "This date is unavailable. Please choose another date.";
-          errEl.hidden = false;
-        }
+        showCalendarDateMessage("This date is unavailable. Please choose another date.");
         return;
       }
       wizardState.checkIn = iso;
       wizardState.checkOut = singleDayCheckoutIso(iso);
       resetUnitSelection();
-      if (errEl) {
-        errEl.hidden = true;
-        errEl.textContent = "";
-      }
+      showCalendarDateMessage("");
       afterBookingRuleOrDatesChanged();
       tryOpenFacilityPickerAfterDateClick();
       return;
@@ -4961,53 +5669,37 @@
 
     if (!wizardState.checkIn || (wizardState.checkIn && wizardState.checkOut)) {
       if (isCalendarDateBlocked(iso)) {
-        if (errEl) {
-          errEl.textContent = "This date is unavailable. Please choose another check-in date.";
-          errEl.hidden = false;
-        }
+        showCalendarDateMessage("This date is unavailable. Please choose another check-in date.");
         return;
       }
       wizardState.checkIn = iso;
       wizardState.checkOut = null;
       resetUnitSelection();
-      if (errEl) {
-        errEl.hidden = true;
-        errEl.textContent = "";
-      }
+      showCalendarDateMessage("");
     } else {
       if (iso <= wizardState.checkIn) {
         if (isCalendarDateBlocked(iso)) {
-          if (errEl) {
-            errEl.textContent = "This date is unavailable. Please choose another check-in date.";
-            errEl.hidden = false;
-          }
+          showCalendarDateMessage("This date is unavailable. Please choose another check-in date.");
           return;
         }
         wizardState.checkIn = iso;
         wizardState.checkOut = null;
         resetUnitSelection();
-        if (errEl) {
-          errEl.hidden = true;
-          errEl.textContent = "";
-        }
+        showCalendarDateMessage("");
       } else {
-        var cur = isoToUtcDate(wizardState.checkIn);
-        var end = isoToUtcDate(iso);
-        var blocked = false;
-        while (cur < end) {
-          var nightIso = utcDateToIso(cur);
-          if (isCalendarDateBlocked(nightIso)) {
-            blocked = true;
-            break;
-          }
-          cur.setUTCDate(cur.getUTCDate() + 1);
-        }
-        if (blocked) {
-          if (errEl) {
-            errEl.textContent =
-              "The selected dates include unavailable days. Please choose different dates.";
-            errEl.hidden = false;
-          }
+        var rangeErr = overnightRangeDateError(wizardState.checkIn, iso);
+        if (rangeErr) {
+          wizardState.checkIn = null;
+          wizardState.checkOut = null;
+          resetUnitSelection();
+          closeBookUnitModal();
+          showCalendarDateMessage(rangeErr);
+          renderCalendar();
+          updatePickedSummary();
+          syncStep2BookingRuleUI();
+          renderBookingDetailsSummary();
+          updateStep2ContinueButton();
+          saveBookingDraft();
           return;
         }
         wizardState.checkOut = iso;
@@ -5021,9 +5713,8 @@
         if (droppedOnDateChange) {
           showRoomUnavailableMessage();
           openBookUnitModal();
-        } else if (errEl) {
-          errEl.hidden = true;
-          errEl.textContent = "";
+        } else {
+          showCalendarDateMessage("");
         }
       }
     }
@@ -5056,8 +5747,10 @@
       monthLabel: label,
       calView: calView,
       wizardState: getCalendarWizardState(),
-      highlightRange: getBookingDateRule().mode === "range",
+      // One-day stays pass check-out as null, so only the visit date is marked.
+      highlightRange: true,
       showLiveOccupancy: true,
+      hidePendingStatus: true,
       onDayClick: pickDate
     });
     var step2Layout = host.closest(".book-flow-cal-layout") || host.parentElement;
@@ -5096,20 +5789,19 @@
       return false;
     }
     var changed = false;
+    var managerBlocked = false;
     if (wizardState.checkIn && isCalendarDateBlocked(wizardState.checkIn)) {
+      managerBlocked = !!(av.getManagerBlocked && av.getManagerBlocked(wizardState.checkIn));
       wizardState.checkIn = null;
       wizardState.checkOut = null;
       changed = true;
     } else if (wizardState.checkIn && wizardState.checkOut) {
-      var cur = isoToUtcDate(wizardState.checkIn);
-      var end = isoToUtcDate(wizardState.checkOut);
-      while (cur < end) {
-        if (isCalendarDateBlocked(utcDateToIso(cur))) {
-          wizardState.checkOut = null;
-          changed = true;
-          break;
-        }
-        cur.setUTCDate(cur.getUTCDate() + 1);
+      var rangeErr = overnightRangeDateError(wizardState.checkIn, wizardState.checkOut);
+      if (rangeErr) {
+        managerBlocked = rangeErr === OVERNIGHT_BLOCKED_RANGE_MSG;
+        wizardState.checkIn = null;
+        wizardState.checkOut = null;
+        changed = true;
       }
       if (
         !changed &&
@@ -5123,12 +5815,11 @@
     if (changed) {
       resetUnitSelection();
       closeBookUnitModal();
-      var errEl = document.getElementById("calendarError");
-      if (errEl) {
-        errEl.textContent =
-          "Availability was updated. Please select your check-out date again (or your full stay if the dates are no longer available).";
-        errEl.hidden = false;
-      }
+      showCalendarDateMessage(
+        managerBlocked
+          ? OVERNIGHT_BLOCKED_RANGE_MSG
+          : "Availability was updated. Please select your check-out date again (or your full stay if the dates are no longer available)."
+      );
     }
     return changed;
   }
@@ -5205,6 +5896,140 @@
 
   function syncAcHallWrap() {}
 
+  function submitBookingRequest() {
+    if (!window.ElenestAuth.isLoggedIn()) {
+      window.location.href = "login.html";
+      return;
+    }
+    var user = window.ElenestAuth.getCurrentUser();
+    var btn = document.getElementById("submitBookingRequestBtn");
+    var PF = window.ElenestPaymentFlow;
+    var base = buildPendingBookingRecord();
+    var patch = PF && PF.buildBookingRequestPatch ? PF.buildBookingRequestPatch() : {
+      status: "Pending",
+      paymentStatus: "Awaiting admin confirmation",
+      workflow: "awaiting_booking_review",
+      verificationStage: "awaiting_booking_review",
+      slotLocked: true,
+      arrivalStatus: "not_arrived"
+    };
+    var record = {};
+    var key;
+    for (key in base) {
+      if (Object.prototype.hasOwnProperty.call(base, key)) record[key] = base[key];
+    }
+    for (key in patch) {
+      if (!Object.prototype.hasOwnProperty.call(patch, key)) continue;
+      if (patch[key] !== null) record[key] = patch[key];
+    }
+    record.status = patch.status || "Pending";
+    record.paymentStatus = patch.paymentStatus || "Awaiting admin confirmation";
+    record.workflow = patch.workflow || "awaiting_booking_review";
+    record.verificationStage = patch.verificationStage || "awaiting_booking_review";
+    record.slotLocked = true;
+    record.arrivalStatus = "not_arrived";
+    record.hasPaymentProof = false;
+    delete record.paymentProof;
+    delete record.paymentSubmittedAt;
+    delete record.paymentVerifiedAt;
+    delete record.amountPaid;
+    var BL = window.ElenestButtonLoading;
+    if (BL && btn) BL.set(btn, true);
+    var saved = window.ElenestBookings.add(user.email, record);
+    var done =
+      window.ElenestBookings && typeof window.ElenestBookings.waitForSave === "function"
+        ? window.ElenestBookings.waitForSave(saved)
+        : Promise.resolve(saved);
+    Promise.resolve(done).then(function (row) {
+      if (BL && btn) BL.set(btn, false);
+      if (!row) {
+        alert("Could not submit your booking. Please try again.");
+        return;
+      }
+      if (window.ElenestNotifications && window.ElenestNotifications.TYPES) {
+        window.ElenestNotifications.addForUser(user.email, {
+          type: window.ElenestNotifications.TYPES.BOOKING_UPDATED,
+          title: "Booking request submitted",
+          message:
+            "Your booking details are waiting for admin confirmation. Online payment opens after the admin confirms the facility, date, and schedule.",
+          bookingId: row.id,
+          dedupKey: "booking_request:" + row.id,
+          link: "book.html"
+        });
+      }
+      clearBookingDraft();
+      wizardState.pendingRecord = null;
+      wizardState.reviewBookingId = row.id;
+      wizardState.payableBooking = row;
+      wizardState.paymentProofSubmitted = false;
+      goStep(3);
+    }).catch(function () {
+      if (BL && btn) BL.set(btn, false);
+      alert("Could not submit your booking. Please try again.");
+    });
+  }
+
+  function openPaymentForBooking(booking) {
+    var PF = window.ElenestPaymentFlow;
+    if (!booking || !PF || typeof PF.isAwaitingCustomerPayment !== "function") return;
+    if (!PF.isAwaitingCustomerPayment(booking)) return;
+    if (PF.isPaymentWindowExpired(booking)) {
+      alert("The 3-hour payment window has ended.");
+      if (window.ElenestBookings && window.ElenestBookings.processAutoNoShows) {
+        window.ElenestBookings.processAutoNoShows();
+      }
+      return;
+    }
+    wizardState.payableBooking = booking;
+    wizardState.paymentType = booking.paymentType === "down" ? "down" : "full";
+    closeAppointmentsModal();
+    goStep(4);
+    var section = document.getElementById("bookingSection");
+    if (section && section.scrollIntoView) section.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  var paymentHashOpened = false;
+  function maybeOpenPaymentFromHash() {
+    if (paymentHashOpened) return;
+    var match = String(window.location.hash || "").match(/pay-([^&]+)/i);
+    if (!match) return;
+    var id = match[1];
+    try {
+      id = decodeURIComponent(id);
+    } catch (e) {}
+    var user = window.ElenestAuth && window.ElenestAuth.getCurrentUser ? window.ElenestAuth.getCurrentUser() : null;
+    if (!user || !window.ElenestBookings || !window.ElenestBookings.listForUser) return;
+    var list = window.ElenestBookings.listForUser(user.email) || [];
+    var booking = null;
+    for (var i = 0; i < list.length; i++) {
+      if (list[i] && String(list[i].id) === String(id)) booking = list[i];
+    }
+    if (!booking) return;
+    paymentHashOpened = true;
+    openPaymentForBooking(booking);
+  }
+
+  var continueToPaymentBtn = document.getElementById("continueToPaymentBtn");
+  if (continueToPaymentBtn) {
+    continueToPaymentBtn.addEventListener("click", function () {
+      var booking = findReviewBooking();
+      if (booking) openPaymentForBooking(booking);
+    });
+  }
+  var cancelBookingFromConfirmBtn = document.getElementById("cancelBookingFromConfirmBtn");
+  if (cancelBookingFromConfirmBtn) {
+    cancelBookingFromConfirmBtn.addEventListener("click", function () {
+      var booking = findReviewBooking();
+      if (booking) cancelCustomerBooking(booking);
+    });
+  }
+  var viewBookingsFromConfirmBtn = document.getElementById("viewBookingsFromConfirmBtn");
+  if (viewBookingsFromConfirmBtn) {
+    viewBookingsFromConfirmBtn.addEventListener("click", function () {
+      openAppointmentsModal();
+    });
+  }
+
   var step1Form = document.getElementById("step1Form");
   var eventTypeEl = document.getElementById("eventType");
   var eventOtherWrap = document.getElementById("eventOtherWrap");
@@ -5260,8 +6085,7 @@
         return;
       }
       saveBookingDraft();
-      wizardState.pendingRecord = buildPendingBookingRecord();
-      goStep(3);
+      submitBookingRequest();
     });
   }
 
@@ -5332,7 +6156,22 @@
         }
         }
       }
-      if (stayRangeHasUnavailableNight(wizardState.checkIn, wizardState.checkOut)) {
+      if (dateRule.mode !== "single") {
+        var rangeErr = overnightRangeDateError(wizardState.checkIn, wizardState.checkOut);
+        if (rangeErr) {
+          wizardState.checkIn = null;
+          wizardState.checkOut = null;
+          resetUnitSelection();
+          closeBookUnitModal();
+          showCalendarDateMessage(rangeErr);
+          renderCalendar();
+          updatePickedSummary();
+          renderBookingDetailsSummary();
+          updateStep2ContinueButton();
+          saveBookingDraft();
+          return;
+        }
+      } else if (stayRangeHasUnavailableNight(wizardState.checkIn, wizardState.checkOut)) {
         if (err) {
           err.textContent =
             "The selected dates include unavailable days. Please choose different dates.";
@@ -5441,6 +6280,12 @@
   var backFromPayment = document.getElementById("backFromPayment");
   if (backFromPayment) {
     backFromPayment.addEventListener("click", function () {
+      if (wizardState.payableBooking) {
+        wizardState.payableBooking = null;
+        goStep(1);
+        openAppointmentsModal();
+        return;
+      }
       goStep(2);
     });
   }
@@ -5483,6 +6328,19 @@
         return;
       }
       setPaymentStepError("");
+      var payable = wizardState.payableBooking;
+      var PFGate = window.ElenestPaymentFlow;
+      if (!payable || !payable.id || !PFGate || !PFGate.isAwaitingCustomerPayment(payable)) {
+        setPaymentStepError("Online payment opens after an admin confirms your booking details.");
+        return;
+      }
+      if (PFGate.isPaymentWindowExpired(payable)) {
+        setPaymentStepError("The 3-hour payment window has ended. This booking will be released.");
+        if (window.ElenestBookings && window.ElenestBookings.processAutoNoShows) {
+          window.ElenestBookings.processAutoNoShows();
+        }
+        return;
+      }
       if (getSelectedPaymentType() === "down" && !wizardState.downPaymentAgreed) {
         promptDownPaymentRules();
         setPaymentStepError("Please agree to the down payment rules to continue.");
@@ -5511,9 +6369,6 @@
         return;
       }
       var user = window.ElenestAuth.getCurrentUser();
-      // Rebuild from current selection so all facilities, pricing, and capacity persist.
-      var base = buildPendingBookingRecord();
-      wizardState.pendingRecord = base;
       var BL = window.ElenestButtonLoading;
       if (BL) BL.set(submitPaymentBtn, true);
       readPaymentProofAsDataUrl().then(function (proofDataUrl) {
@@ -5526,100 +6381,20 @@
           setPaymentStepError("Please upload proof of payment before continuing.");
           return;
         }
-        var p = computePayment();
+        var p = paymentFigures();
         var paymentType = getSelectedPaymentType();
         var PF = window.ElenestPaymentFlow;
         var dueNow = PF && PF.amountDueNow ? PF.amountDueNow(paymentType, p) : paymentType === "full" ? p.subtotal : p.down;
-        var selectionPayload = getUnitSelection();
-        selectionPayload.allowNoFacility = false;
-        if (isPoolOnlyBooking()) {
-          sanitizeSelectionForPoolOnly();
-          selectionPayload = getUnitSelection();
-        }
-        if (window.ElenestUnitAvailability) {
-          var guestsFinal = getGuestCounts();
-          var finalCheck = window.ElenestUnitAvailability.validateSelection(
-            selectionPayload,
-            base.checkIn,
-            base.checkOut,
-            null,
-            {
-              validateGuests: true,
-              adults: guestsFinal.adults,
-              children: guestsFinal.children,
-              childrenUnder6: guestsFinal.childrenUnder6,
-              checkInTime: getStayTimeWindow().checkInTime,
-              checkOutTime: getStayTimeWindow().checkOutTime
-            }
-          );
-          if (!finalCheck.ok) {
-            if (BL) BL.set(submitPaymentBtn, false);
-            var unavailableMsg = (finalCheck.errors || []).filter(function (msg) {
-              return /unavailable/i.test(String(msg || ""));
-            })[0];
-            var unavailableNow = !!unavailableMsg;
-            setPaymentStepError(
-              unavailableNow
-                ? unavailableMsg
-                : finalCheck.errors[0] ||
-                    "Selected units are unavailable or do not fit your guest count."
-            );
-            goStep(1);
-            renderCalendar();
-            if (unavailableNow) {
-              wizardState.unitSelectionConfirmed = false;
-              var failRange = getAvailabilityRange();
-              if (failRange) sanitizeUnitSelectionForRange(failRange.checkIn, failRange.checkOut, failRange);
-              openBookUnitModalWithLoading({ forceChange: true });
-              showRoomUnavailableMessage(unavailableMsg);
-            } else {
-              openBookUnitModal();
-            }
-            return;
-          }
-          // Ensure every selected facility id is on the saved record for calendar sync.
-          var legacyFresh = window.ElenestUnitAvailability.deriveLegacyFields(selectionPayload);
-          base.roomCatalogId = legacyFresh.roomCatalogId || "";
-          base.roomCatalogIds = legacyFresh.roomCatalogIds || [];
-          base.roomCatalogName = legacyFresh.roomCatalogName || "";
-          base.roomCatalogNames = legacyFresh.roomCatalogNames || [];
-          base.cottageCatalogIds = legacyFresh.cottageCatalogIds || [];
-          base.cottageCatalogNames = legacyFresh.cottageCatalogNames || [];
-          base.cottageQty = legacyFresh.cottageQty || "0";
-          base.hallCatalogId = legacyFresh.hallCatalogId || "";
-          base.hallCatalogIds = legacyFresh.hallCatalogIds || [];
-          base.hallCatalogName = legacyFresh.hallCatalogName || "";
-          base.hallCatalogNames = legacyFresh.hallCatalogNames || [];
-          base.eventHall = legacyFresh.eventHall || "none";
-          base.roomType = legacyFresh.roomType || "none";
-          base.room_ids = legacyFresh.room_ids || legacyFresh.facilityIds || [];
-          base.facilityIds = legacyFresh.facilityIds || legacyFresh.room_ids || [];
-          base.room_id =
-            legacyFresh.roomCatalogId ||
-            (legacyFresh.cottageCatalogIds && legacyFresh.cottageCatalogIds[0]) ||
-            legacyFresh.hallCatalogId ||
-            "";
-          base.capacityTotal = legacyFresh.capacityTotal || 0;
-          base.capacityLabel = legacyFresh.capacityLabel || "";
-          base.totalEstimate = p.subtotal;
-          base.amountDown = p.down;
-        }
-        var record = {};
-        for (var k in base) {
-          if (Object.prototype.hasOwnProperty.call(base, k)) record[k] = base[k];
-        }
-        record.amountDown = p.down;
-        record.paymentType = paymentType;
-        record.amountPaid = dueNow;
-        record.balanceDue = paymentType === "full" ? 0 : Math.max(0, p.subtotal - dueNow);
-        record.nonRefundable = paymentType === "full";
-        record.paymentMethodId = method.id;
-        record.paymentMethod = method.provider || "QR payment";
-        record.paymentAccountName = method.accountName || "";
-        record.paymentAccountNumber = method.accountNumber || "";
-        record.paymentProof = proofDataUrl;
-        var PF = window.ElenestPaymentFlow;
         var submittedAt = new Date().toISOString();
+        var deadlineAt = payable.paymentDeadlineAt || payable.payment_deadline_at;
+        if (deadlineAt && new Date(submittedAt).getTime() > new Date(deadlineAt).getTime()) {
+          if (BL) BL.set(submitPaymentBtn, false);
+          setPaymentStepError("The 3-hour payment window has ended.");
+          if (window.ElenestBookings && window.ElenestBookings.processAutoNoShows) {
+            window.ElenestBookings.processAutoNoShows();
+          }
+          return;
+        }
         var submitPatch = PF
           ? PF.buildCustomerSubmitPatch(paymentType, submittedAt)
           : {
@@ -5628,31 +6403,45 @@
               paymentSubmittedAt: submittedAt,
               slotLocked: true
             };
+        var patch = {};
         for (var sk in submitPatch) {
-          if (Object.prototype.hasOwnProperty.call(submitPatch, sk)) {
-            record[sk] = submitPatch[sk];
-          }
+          if (Object.prototype.hasOwnProperty.call(submitPatch, sk)) patch[sk] = submitPatch[sk];
         }
-        record.hasPaymentProof = !!proofDataUrl;
-        var saved = window.ElenestBookings.add(user.email, record);
-        var saveDone =
-          window.ElenestBookings && typeof window.ElenestBookings.waitForSave === "function"
-            ? window.ElenestBookings.waitForSave(saved)
-            : Promise.resolve(saved);
-        return saveDone.then(function (savedRow) {
-          if (!savedRow) {
+        delete patch.paymentVerifiedAt;
+        delete patch.paymentVerifiedBy;
+        delete patch.holdExpiresAt;
+        delete patch.arrivalStatus;
+        patch.amountDown = p.down;
+        patch.paymentType = paymentType;
+        patch.amountPaid = dueNow;
+        patch.balanceDue = paymentType === "full" ? 0 : Math.max(0, p.subtotal - dueNow);
+        patch.nonRefundable = false;
+        patch.paymentMethodId = method.id;
+        patch.paymentMethod = method.provider || "QR payment";
+        patch.paymentAccountName = method.accountName || "";
+        patch.paymentAccountNumber = method.accountNumber || "";
+        patch.paymentProof = proofDataUrl;
+        patch.hasPaymentProof = !!proofDataUrl;
+        var saveDone = window.ElenestBookings.updateById(payable.id, patch);
+        return Promise.resolve(saveDone).then(function (savedOk) {
+          if (!savedOk) {
             if (BL) BL.set(submitPaymentBtn, false);
-            setPaymentStepError("Could not save your booking. Please try again.");
+            setPaymentStepError("Could not save your payment. Please try again.");
             return;
+          }
+          var savedRow = {};
+          for (var rk in payable) {
+            if (Object.prototype.hasOwnProperty.call(payable, rk)) savedRow[rk] = payable[rk];
+          }
+          for (var pk in patch) {
+            if (Object.prototype.hasOwnProperty.call(patch, pk)) savedRow[pk] = patch[pk];
           }
           if (window.ElenestNotifications) {
             window.ElenestNotifications.addForUser(user.email, {
               type: window.ElenestNotifications.TYPES.BOOKING_UPDATED,
               title: "Payment Submitted",
               message:
-                paymentType === "full"
-                  ? "We received your full payment proof. Your booking is pending verification by the owner."
-                  : "We received your down payment proof. Your booking is pending verification by the owner.",
+                "We received your proof of payment. It is waiting for admin verification and is not marked paid yet. Booking confirmation appears after the payment is verified.",
               bookingId: savedRow.id || "",
               dedupKey: "payment_pending:" + (savedRow.id || ""),
               link: "book.html"
@@ -5662,12 +6451,15 @@
             }
           }
           wizardState.pendingRecord = null;
+          wizardState.payableBooking = savedRow;
+          wizardState.reviewBookingId = savedRow.id || wizardState.reviewBookingId;
+          wizardState.paymentProofSubmitted = true;
           wizardState.selectedPaymentMethodId = null;
           wizardState.downPaymentAgreed = false;
           clearBookingDraft();
           renderCompletedBookingReceipt(savedRow);
-          openPaymentSuccessModal(savedRow);
           goStep(4);
+          openPaymentSuccessModal(savedRow);
           if (BL) BL.set(submitPaymentBtn, false);
         });
       }).catch(function () {
@@ -5752,6 +6544,11 @@
   var newBookingFlowBtn = document.getElementById("newBookingFlowBtn");
   if (newBookingFlowBtn) {
     newBookingFlowBtn.addEventListener("click", function () {
+      wizardState.skipResume = true;
+      didResumeOpenBooking = true;
+      wizardState.reviewBookingId = null;
+      wizardState.payableBooking = null;
+      wizardState.paymentProofSubmitted = false;
       wizardState.checkIn = null;
       wizardState.checkOut = null;
       wizardState.checkInTime = null;
@@ -5779,6 +6576,13 @@
       fillTimeSelects();
       clearCompletedBookingReceipt();
       goStep(1);
+    });
+  }
+
+  var startNewFromConfirmBtn = document.getElementById("startNewFromConfirmBtn");
+  if (startNewFromConfirmBtn && newBookingFlowBtn) {
+    startNewFromConfirmBtn.addEventListener("click", function () {
+      newBookingFlowBtn.click();
     });
   }
 
@@ -5875,7 +6679,10 @@
           renderUnitSelectionSummary();
           renderBookingDetailsSummary();
         }
-        if (currentFlowStep === 3) {
+        if (currentFlowStep === 3 && typeof renderBookingConfirmationPanel === "function") {
+          renderBookingConfirmationPanel();
+        }
+        if (currentFlowStep === 4 && !wizardState.paymentProofSubmitted) {
           renderPaymentPanel();
         }
         updateStep2ContinueButton();
@@ -5891,14 +6698,13 @@
       step2RefreshTimer = null;
       if (currentFlowStep !== 1) return;
       renderCalendar();
-      if (
-        document.getElementById("bookUnitModal") &&
-        !document.getElementById("bookUnitModal").hasAttribute("hidden") &&
-        !wizardState.unitSelectionConfirmed
-      ) {
+      var unitModal = document.getElementById("bookUnitModal");
+      var unitModalOpen = !!(unitModal && !unitModal.hasAttribute("hidden"));
+      if (unitModalOpen && !wizardState.unitSelectionConfirmed) {
         renderUnitPicker();
       } else {
         renderUnitSelectionSummary();
+        if (unitModalOpen) renderFacilityConfirmation();
       }
       renderBookingDetailsSummary();
       updateStep2ContinueButton();
@@ -5965,6 +6771,19 @@
     });
     var bookUnitModalDone = document.getElementById("bookUnitModalDone");
     if (bookUnitModalDone) bookUnitModalDone.addEventListener("click", confirmUnitSelection);
+    var bookUnitConfirmBody = document.getElementById("bookUnitConfirmBody");
+    if (bookUnitConfirmBody) {
+      bookUnitConfirmBody.addEventListener("click", function (e) {
+        var btn = e.target && e.target.closest ? e.target.closest("[data-remove-facility-id]") : null;
+        if (!btn) return;
+        e.preventDefault();
+        e.stopPropagation();
+        removeSelectedFacility(
+          btn.getAttribute("data-remove-facility-type") || "",
+          btn.getAttribute("data-remove-facility-id") || ""
+        );
+      });
+    }
     bookUnitModal.querySelectorAll("[data-book-unit-tab]").forEach(function (btn) {
       btn.addEventListener("click", function () {
         setUnitPickerTab(btn.getAttribute("data-book-unit-tab"));
@@ -6033,24 +6852,185 @@
     if (em && !String(em.value || "").trim()) em.value = user.email || "";
   }
 
-  /** Apply dates + facility chosen in the public availability modal. */
+  function readPrefillFacilityIds() {
+    var ids = [];
+    try {
+      var raw = sessionStorage.getItem("elenest_prefill_unit_ids");
+      if (raw) {
+        var parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) ids = parsed;
+      }
+    } catch (e) {
+      ids = [];
+    }
+    if (!ids.length) {
+      try {
+        var one = sessionStorage.getItem("elenest_prefill_unit_id") || "";
+        if (one) ids = [one];
+      } catch (e2) {}
+    }
+    var seen = {};
+    return ids
+      .map(function (id) {
+        return String(id || "").trim();
+      })
+      .filter(function (id) {
+        if (!id || seen[id]) return false;
+        seen[id] = true;
+        return true;
+      });
+  }
+
+  function applyPrefillStayMode(mode) {
+    var overnight = document.querySelector('input[name="bookStayType"][value="overnight"]');
+    var dayTour = document.querySelector('input[name="bookStayType"][value="day_tour"]');
+    var poolEl = document.getElementById("poolUse");
+    if (mode === "single") {
+      if (dayTour) dayTour.checked = true;
+      if (overnight) overnight.checked = false;
+      if (poolEl) poolEl.value = "day_tour";
+      return;
+    }
+    if (mode === "range") {
+      if (overnight) overnight.checked = true;
+      if (dayTour) dayTour.checked = false;
+      if (poolEl) poolEl.value = "none";
+    }
+  }
+
+  var pendingPrefillFacilityIds = null;
+
+  function applyPrefillFacilityIds(unitIds) {
+    if (!unitIds || !unitIds.length || !wizardState.checkIn || !wizardState.checkOut) return 0;
+    var UA = window.ElenestUnitAvailability;
+    var catalog = UA && typeof UA.getCatalog === "function" ? UA.getCatalog() : [];
+    var byId = {};
+    catalog.forEach(function (unit) {
+      if (unit && unit.id != null) byId[String(unit.id)] = unit;
+    });
+    resetUnitSelection();
+    var matched = 0;
+    unitIds.forEach(function (unitId) {
+      var unit = byId[String(unitId)];
+      if (!unit) return;
+      matched += 1;
+      var t = String(unit.type || "room").toLowerCase();
+      var id = String(unit.id);
+      if (t === "cottage") {
+        if (wizardState.unitSelection.cottageCatalogIds.indexOf(id) === -1) {
+          wizardState.unitSelection.cottageCatalogIds.push(id);
+        }
+      } else if (t === "hall") {
+        if (wizardState.unitSelection.hallCatalogIds.indexOf(id) === -1) {
+          wizardState.unitSelection.hallCatalogIds.push(id);
+        }
+      } else if (wizardState.unitSelection.roomCatalogIds.indexOf(id) === -1) {
+        wizardState.unitSelection.roomCatalogIds.push(id);
+      }
+    });
+    getUnitSelection();
+    wizardState.unitSelectionConfirmed = hasSelectedFacilities();
+    return matched;
+  }
+
+  function paintPrefillOnStep1() {
+    try {
+      localStorage.setItem(BOOK_FLOW_STEP_KEY, "1");
+    } catch (e2) {}
+    goStep(1);
+  }
+
+  function readPublicCalendarDraft() {
+    try {
+      var raw = localStorage.getItem("elenest_public_calendar_draft_v1");
+      if (!raw) return null;
+      var draft = JSON.parse(raw);
+      return draft && typeof draft === "object" ? draft : null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  /** Apply dates + facilities chosen in the public availability modal. */
   function applyAvailabilityPrefill() {
     var ci = null;
     var co = null;
-    var unitId = "";
+    var stayMode = "";
+    var unitIds = [];
+    var hasProceed = false;
+    var adultsPrefill = null;
+    var childrenPrefill = null;
+    var under6Prefill = null;
+    var arrivalPrefill = null;
+    var departurePrefill = null;
+    var publicDraft = readPublicCalendarDraft();
     try {
-      if (sessionStorage.getItem("elenest_avail_proceed") !== "1") return false;
-      ci = sessionStorage.getItem("elenest_prefill_checkin");
-      co = sessionStorage.getItem("elenest_prefill_checkout");
-      unitId = sessionStorage.getItem("elenest_prefill_unit_id") || "";
-      sessionStorage.removeItem("elenest_avail_proceed");
-      sessionStorage.removeItem("elenest_prefill_checkin");
-      sessionStorage.removeItem("elenest_prefill_checkout");
-      sessionStorage.removeItem("elenest_prefill_unit_id");
-      sessionStorage.removeItem("elenest_prefill_stay_mode");
+      hasProceed = sessionStorage.getItem("elenest_avail_proceed") === "1";
+      var bookDraftRaw = null;
+      try {
+        bookDraftRaw = localStorage.getItem(BOOK_FLOW_DRAFT_KEY);
+      } catch (eDraft) {}
+      var bookSavedAt = 0;
+      if (bookDraftRaw) {
+        try {
+          bookSavedAt = Number(JSON.parse(bookDraftRaw).savedAt) || 0;
+        } catch (eParse) {}
+      }
+      var publicIsNewer = publicDraft && (!bookSavedAt || Number(publicDraft.savedAt) > bookSavedAt);
+      if (!hasProceed && publicIsNewer && publicDraft.checkIn) hasProceed = true;
+      if (!sessionStorage.getItem("elenest_prefill_checkin") && publicIsNewer) {
+        ci = publicDraft.checkIn || null;
+        co = publicDraft.checkOut || null;
+        stayMode = publicDraft.stayMode || "";
+        unitIds = Array.isArray(publicDraft.unitIds) ? publicDraft.unitIds.slice() : [];
+        adultsPrefill = publicDraft.adults != null ? String(publicDraft.adults) : null;
+        childrenPrefill = publicDraft.children != null ? String(publicDraft.children) : null;
+        under6Prefill = publicDraft.childrenUnder6 != null ? String(publicDraft.childrenUnder6) : null;
+        arrivalPrefill = publicDraft.arrivalTime || null;
+        departurePrefill = publicDraft.departureTime || null;
+      } else if (hasProceed) {
+        ci = sessionStorage.getItem("elenest_prefill_checkin");
+        co = sessionStorage.getItem("elenest_prefill_checkout");
+        stayMode = sessionStorage.getItem("elenest_prefill_stay_mode") || "";
+        unitIds = readPrefillFacilityIds();
+        adultsPrefill = sessionStorage.getItem("elenest_prefill_adults");
+        childrenPrefill = sessionStorage.getItem("elenest_prefill_children");
+        under6Prefill = sessionStorage.getItem("elenest_prefill_children_under6");
+        arrivalPrefill = sessionStorage.getItem("elenest_prefill_arrival_time");
+        departurePrefill = sessionStorage.getItem("elenest_prefill_departure_time");
+        sessionStorage.removeItem("elenest_avail_proceed");
+        sessionStorage.removeItem("elenest_prefill_checkin");
+        sessionStorage.removeItem("elenest_prefill_checkout");
+        sessionStorage.removeItem("elenest_prefill_unit_id");
+        sessionStorage.removeItem("elenest_prefill_unit_ids");
+        sessionStorage.removeItem("elenest_prefill_stay_mode");
+        sessionStorage.removeItem("elenest_prefill_adults");
+        sessionStorage.removeItem("elenest_prefill_children");
+        sessionStorage.removeItem("elenest_prefill_children_under6");
+        sessionStorage.removeItem("elenest_prefill_arrival_time");
+        sessionStorage.removeItem("elenest_prefill_departure_time");
+      }
     } catch (e) {
       return false;
     }
+    if (adultsPrefill != null || childrenPrefill != null || under6Prefill != null) {
+      var adultsField = document.getElementById("adults");
+      var childrenField = document.getElementById("children");
+      var under6Field = document.getElementById("childrenUnder6");
+      if (adultsField && adultsPrefill != null && adultsPrefill !== "") {
+        adultsField.value = String(Math.max(1, parseInt(adultsPrefill, 10) || 1));
+      }
+      if (childrenField && childrenPrefill != null && childrenPrefill !== "") {
+        childrenField.value = String(Math.max(0, parseInt(childrenPrefill, 10) || 0));
+      }
+      if (under6Field && under6Prefill != null && under6Prefill !== "") {
+        under6Field.value = String(Math.max(0, parseInt(under6Prefill, 10) || 0));
+      }
+      if (adultsField) adultsField.dispatchEvent(new Event("input", { bubbles: true }));
+      if (childrenField) childrenField.dispatchEvent(new Event("input", { bubbles: true }));
+      if (under6Field) under6Field.dispatchEvent(new Event("input", { bubbles: true }));
+    }
+    if (!hasProceed) return false;
     if (!ci || !/^\d{4}-\d{2}-\d{2}$/.test(ci)) return false;
     wizardState.checkIn = ci;
     wizardState.checkOut =
@@ -6059,38 +7039,60 @@
     if (!wizardState.checkOut) {
       wizardState.checkOut = addDaysIso(ci, 1);
     }
+    if (stayMode !== "single" && stayMode !== "range") {
+      stayMode = wizardState.checkOut > addDaysIso(ci, 1) ? "range" : "single";
+    }
+    if (stayMode === "single" || stayMode === "range") applyPrefillStayMode(stayMode);
+    if (stayMode === "range") {
+      var prefillRangeErr = overnightRangeDateError(wizardState.checkIn, wizardState.checkOut);
+      if (prefillRangeErr) {
+        wizardState.checkIn = null;
+        wizardState.checkOut = null;
+        resetUnitSelection();
+        pendingPrefillFacilityIds = null;
+        paintPrefillOnStep1();
+        showCalendarDateMessage(prefillRangeErr);
+        return true;
+      }
+    }
     var parsed = new Date(ci + "T12:00:00");
     if (!isNaN(parsed.getTime())) {
       calView.y = parsed.getFullYear();
       calView.m = parsed.getMonth();
     }
+    pendingPrefillFacilityIds = unitIds.slice();
 
-    if (unitId && wizardState.checkOut) {
-      var UA = window.ElenestUnitAvailability;
-      var catalog = UA && typeof UA.getCatalog === "function" ? UA.getCatalog() : [];
-      var unit = catalog.find(function (u) {
-        return String(u.id) === String(unitId);
-      });
-      if (unit) {
-        resetUnitSelection();
-        var t = String(unit.type || "room");
-        if (t === "cottage") {
-          wizardState.unitSelection.cottageCatalogIds = [String(unit.id)];
-        } else if (t === "hall") {
-          wizardState.unitSelection.hallCatalogIds = [String(unit.id)];
-          wizardState.unitSelection.hallCatalogId = String(unit.id);
-        } else {
-          wizardState.unitSelection.roomCatalogIds = [String(unit.id)];
-          wizardState.unitSelection.roomCatalogId = String(unit.id);
-        }
-        wizardState.unitSelectionConfirmed = true;
-      }
+    // Keep this visit on Step 1 even if an older open booking would normally resume.
+    wizardState.skipResume = true;
+
+    var matched = 0;
+    if (pendingPrefillFacilityIds.length) {
+      matched = applyPrefillFacilityIds(pendingPrefillFacilityIds);
+    } else {
+      resetUnitSelection();
     }
 
-    try {
-      localStorage.setItem(BOOK_FLOW_STEP_KEY, "1");
-    } catch (e2) {}
-    goStep(1);
+    if (stayMode === "range") {
+      if (arrivalPrefill) wizardState.checkInTime = arrivalPrefill;
+      if (departurePrefill) wizardState.checkOutTime = departurePrefill;
+      fillTimeSelects();
+    }
+    paintPrefillOnStep1();
+
+    if (pendingPrefillFacilityIds.length && matched < pendingPrefillFacilityIds.length) {
+      var retryIds = pendingPrefillFacilityIds.slice();
+      pendingPrefillFacilityIds = null;
+      var storeReady = window.ElenestContentStore && window.ElenestContentStore.ready;
+      if (storeReady && typeof storeReady.then === "function") {
+        Promise.resolve(storeReady).then(function () {
+          if (currentFlowStep !== 1) return;
+          applyPrefillFacilityIds(retryIds);
+          paintPrefillOnStep1();
+        });
+      }
+    } else {
+      pendingPrefillFacilityIds = null;
+    }
     return true;
   }
 
@@ -6323,6 +7325,15 @@
       applyAvailabilityPrefill();
       restoreFlowStep();
       saveBookingDraft();
+      if (window.ElenestBookings && window.ElenestBookings.ready) {
+        Promise.resolve(window.ElenestBookings.ready)
+          .catch(function () {
+            return null;
+          })
+          .then(function () {
+            if (currentFlowStep === 1) tryResumeOpenBooking();
+          });
+      }
     } catch (err) {
       try {
         console.warn("[Elenest Book] Session apply failed:", err);
@@ -6440,7 +7451,52 @@
         return;
       }
       val.textContent = "🕒 " + PF.formatTimerRemaining(deadline);
+      if (PF.formatTimerRemaining(deadline) === "Expired") val.classList.add("admin-arrival-timer--expired");
     });
+    document.querySelectorAll("[data-pay-clock]").forEach(function (clock) {
+      var deadline = clock.getAttribute("data-deadline");
+      if (!deadline) return;
+      var label = PF.formatTimerRemaining(deadline);
+      clock.textContent = label;
+      if (label === "Expired") {
+        var alertEl = clock.closest(".pay-deadline-alert");
+        if (alertEl) alertEl.classList.add("is-expired");
+      }
+    });
+    var reviewBooking = typeof findReviewBooking === "function" ? findReviewBooking() : null;
+    paintPaymentDeadlineAlert(document.getElementById("bookingPaymentDeadlineAlert"), reviewBooking);
+    paintPaymentDeadlineAlert(
+      document.getElementById("paymentDeadlineAlert"),
+      wizardState.payableBooking || reviewBooking
+    );
+    sweepExpiredPaymentWindows();
+    var livePayable = wizardState.payableBooking || reviewBooking;
+    var paySubmit = document.getElementById("submitPaymentBtn");
+    if (
+      paySubmit &&
+      livePayable &&
+      PF.isAwaitingCustomerPayment(livePayable) &&
+      PF.isPaymentWindowExpired(livePayable)
+    ) {
+      paySubmit.disabled = true;
+      if (currentFlowStep === 4) {
+        var payLead = document.getElementById("paymentStepLead");
+        if (payLead) {
+          payLead.textContent =
+            "The 3-hour payment window has ended. This booking is expired and the reserved facility has been released.";
+        }
+      }
+    }
+    if (
+      currentFlowStep === 3 &&
+      reviewBooking &&
+      (isMarkedPaymentExpired(reviewBooking) ||
+        (PF.isAwaitingCustomerPayment(reviewBooking) && PF.isPaymentWindowExpired(reviewBooking))) &&
+      refreshHoldTimersOnCards._expiredFor !== String(reviewBooking.id)
+    ) {
+      refreshHoldTimersOnCards._expiredFor = String(reviewBooking.id);
+      renderBookingConfirmationPanel();
+    }
     if (needsRerender && isAppointmentsOverlayOpen()) {
       if (!refreshHoldTimersOnCards._queued) {
         refreshHoldTimersOnCards._queued = true;
@@ -6459,6 +7515,16 @@
     // Auto no-show check every ~30s, not every second.
     if (holdTick % 30 === 0 && window.ElenestBookings && window.ElenestBookings.processAutoNoShows) {
       window.ElenestBookings.processAutoNoShows();
+    }
+    if (
+      currentFlowStep === 3 &&
+      holdTick % 5 === 0 &&
+      window.ElenestBookings &&
+      window.ElenestBookings.refresh
+    ) {
+      Promise.resolve(window.ElenestBookings.refresh()).catch(function () {
+        return null;
+      });
     }
     var awaitingVerify = false;
     var tickPF = window.ElenestPaymentFlow;
@@ -6501,8 +7567,12 @@
   }, 1000);
 
   window.addEventListener("elenest-bookings-updated", function () {
+    if (currentFlowStep === 1) tryResumeOpenBooking();
     if (isAppointmentsOverlayOpen() || currentFlowStep === 4) renderAppointmentsBoard();
-    if (currentFlowStep === 4) showReceiptForCompletedBooking();
+    if (currentFlowStep === 3) renderBookingConfirmationPanel();
+    if (currentFlowStep === 4 && wizardState.paymentProofSubmitted) renderPaymentSubmittedState();
+    else if (currentFlowStep === 4) showReceiptForCompletedBooking();
+    maybeOpenPaymentFromHash();
   });
 
   window.addEventListener("elenest-notifications-changed", function () {

@@ -12,10 +12,14 @@
 
   function withFormLoading(form, work) {
     var BL = window.ElenestButtonLoading;
-    if (!BL || typeof BL.runForm !== "function" || !form) {
-      return Promise.resolve().then(work);
-    }
-    return BL.runForm(form, work);
+    var job =
+      !BL || typeof BL.runForm !== "function" || !form
+        ? Promise.resolve().then(work)
+        : BL.runForm(form, work);
+    return job.catch(function () {
+      var msgId = form && form.id === "managerEventForm" ? "managerEventMsg" : "managerPromotionMsg";
+      setMarketingMsg(msgId, false, "Could not save that item. Please try again.");
+    });
   }
 
   function renderMarketingList(kind, hostId, editFn) {
@@ -78,8 +82,14 @@
             render();
           });
         };
-        if (BL) BL.run(delBtn, work);
-        else work();
+        var job = BL ? BL.run(delBtn, work) : Promise.resolve().then(work);
+        Promise.resolve(job).catch(function () {
+          setMarketingMsg(
+            kind === "event" ? "managerEventMsg" : "managerPromotionMsg",
+            false,
+            "Could not delete that item. Please try again."
+          );
+        });
       });
       actions.appendChild(editBtn);
       actions.appendChild(delBtn);
@@ -159,7 +169,10 @@
       promoForm.addEventListener("submit", function (e) {
         e.preventDefault();
         var N = window.ElenestNotifications;
-        if (!N) return;
+        if (!N) {
+          setMarketingMsg("managerPromotionMsg", false, "Offers are unavailable right now. Refresh the page and try again.");
+          return;
+        }
         var editId = document.getElementById("managerPromotionEditId");
         var title = document.getElementById("managerPromotionTitle");
         var message = document.getElementById("managerPromotionMessage");
@@ -190,7 +203,10 @@
       eventForm.addEventListener("submit", function (e) {
         e.preventDefault();
         var N = window.ElenestNotifications;
-        if (!N) return;
+        if (!N) {
+          setMarketingMsg("managerEventMsg", false, "Event notices are unavailable right now. Refresh the page and try again.");
+          return;
+        }
         var editId = document.getElementById("managerEventEditId");
         var title = document.getElementById("managerEventTitle");
         var message = document.getElementById("managerEventMessage");

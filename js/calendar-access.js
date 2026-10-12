@@ -456,11 +456,23 @@
       return;
     }
     var kind = unavailableKind(selectedIso);
+    var facilityStatus =
+      window.ElenestAvailability && typeof window.ElenestAvailability.getDateFacilityStatus === "function"
+        ? window.ElenestAvailability.getDateFacilityStatus(selectedIso)
+        : null;
     var pending = pendingForDate(selectedIso);
     var isManagerBlocked = kind === "manager";
-    var isBooked = kind === "booked" || kind === "limited" || kind === "hold" || kind === "google";
+    var isPendingDate = kind === "pending" || !!(facilityStatus && facilityStatus.hasPending);
+    var isBooked = kind === "booked" || kind === "limited" || kind === "hold" || kind === "google" || kind === "pending";
     var label = "Available";
-    if (isBooked) label = "Booked";
+    if (isPendingDate) {
+      label =
+        (facilityStatus && facilityStatus.label) ||
+        (window.ElenestUnitAvailability &&
+        typeof window.ElenestUnitAvailability.pendingCalendarLabel === "function"
+          ? window.ElenestUnitAvailability.pendingCalendarLabel()
+          : "Pending Admin Confirmation");
+    } else if (isBooked) label = "Booked";
     else if (isManagerBlocked) label = "Block";
     else if (kind) label = "Unavailable";
     if (pending) {
@@ -677,9 +689,15 @@
         text: "Only the Owner can change official calendar availability."
       });
     }
-    if (!selectedIso) return Promise.resolve();
+    if (!selectedIso) {
+      return swalAlert({
+        icon: "info",
+        title: "Select a date",
+        text: "Choose a date on the calendar before blocking or unblocking it."
+      });
+    }
     var kind = unavailableKind(selectedIso);
-    if (kind === "booked" || kind === "google") {
+    if (kind === "booked" || kind === "limited" || kind === "hold" || kind === "pending" || kind === "google") {
       return swalAlert({
         icon: "warning",
         title: "Date is booked",
@@ -729,7 +747,7 @@
       });
     }
     var kind = unavailableKind(iso);
-    if (kind === "booked" || kind === "google") {
+    if (kind === "booked" || kind === "limited" || kind === "hold" || kind === "pending" || kind === "google") {
       return swalAlert({
         icon: "warning",
         title: "Date is booked",

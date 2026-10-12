@@ -8,6 +8,19 @@
     recordsCheckout: 1
   };
 
+  function notifyReceptionError(message) {
+    var text = message || "Could not complete that action. Please try again.";
+    if (typeof Swal !== "undefined" && typeof Swal.fire === "function") {
+      Swal.fire({ icon: "error", title: "Action failed", text: text });
+      return;
+    }
+    if (window.ElenestErrors && typeof window.ElenestErrors.toast === "function") {
+      window.ElenestErrors.toast(text);
+      return;
+    }
+    window.alert(text);
+  }
+
   function paginateItems(items, page, pageSize) {
     var list = Array.isArray(items) ? items : [];
     var size = Math.max(1, Number(pageSize) || RECEPTION_PAGE_SIZE);
@@ -1329,6 +1342,7 @@
 
   function buildWalkInFacilityCard(unit, opts) {
     opts = opts || {};
+    var UA = window.ElenestUnitAvailability;
     var available = opts.available !== false;
     var selected = !!opts.selected;
     var facilityType = opts.facilityType || String((unit && unit.type) || "room");
@@ -1363,7 +1377,8 @@
       img.decoding = "async";
       media.appendChild(img);
     }
-    if (!available) {
+    var occStatus = available ? "available" : opts.status === "pending" ? "pending" : "booked";
+    if (!available && occStatus !== "pending") {
       var overlay = document.createElement("span");
       overlay.className = "book-facility-card__overlay";
       overlay.textContent = "Booked";
@@ -1378,20 +1393,33 @@
     name.textContent = unit.name || "Facility";
     var capacity = document.createElement("span");
     capacity.className = "book-facility-card__capacity";
-    var UA = window.ElenestUnitAvailability;
     capacity.textContent =
       UA && typeof UA.formatCapacityLabel === "function"
         ? UA.formatCapacityLabel(unit)
         : "Capacity n/a";
     var meta = document.createElement("span");
-    meta.className = "book-facility-card__price";
-    meta.textContent = available ? "Available" : "Booked";
+    meta.className =
+      "book-facility-card__price" + (occStatus === "pending" ? " book-facility-card__price--pending" : "");
+    var metaLabel = "Booked";
+    if (available) metaLabel = "Available";
+    else if (UA && typeof UA.occupancyDisplayLabel === "function") {
+      metaLabel = UA.occupancyDisplayLabel(occStatus) || "Booked";
+    } else if (occStatus === "pending") {
+      metaLabel = "Pending Admin Confirmation";
+    }
+    meta.textContent = metaLabel;
     body.appendChild(name);
     body.appendChild(capacity);
     body.appendChild(meta);
     if (!available) card.setAttribute("aria-disabled", "true");
     if (!available) {
-      card.setAttribute("aria-label", (unit.name || "Facility") + " is booked and unavailable");
+      card.setAttribute(
+        "aria-label",
+        (unit.name || "Facility") +
+          (occStatus === "pending"
+            ? " is pending admin confirmation and unavailable"
+            : " is booked and unavailable")
+      );
     }
     card.appendChild(body);
     return card;
@@ -1510,6 +1538,7 @@
         listEl.appendChild(
           buildWalkInFacilityCard(item.unit, {
             available: !!item.available,
+            status: item.status,
             selected: !!selectedSet[String(item.unit.id)],
             facilityType: type
           })
@@ -1821,6 +1850,7 @@
             })
             .catch(function () {
               if (BL) BL.set(confirmBtn, false);
+              notifyReceptionError("Could not check this guest in. Please try again.");
             });
         }
       );
@@ -1846,6 +1876,7 @@
             })
             .catch(function () {
               if (BL) BL.set(cancelBookingBtn, false);
+              notifyReceptionError("Could not cancel this booking. Please try again.");
             });
         }
       );
@@ -1867,6 +1898,7 @@
             })
             .catch(function () {
               if (BL) BL.set(checkoutBtn, false);
+              notifyReceptionError("Could not complete check-out. Please try again.");
             });
         }
       );
@@ -1892,7 +1924,7 @@
           var BL = window.ElenestButtonLoading;
           var work = function () {
             return Promise.resolve(removeBooking(item.accountEmail, b.id)).then(function (removed) {
-              if (!removed) return;
+              if (!removed) throw new Error("Could not delete this record. Please try again.");
               renderCheckIn();
               renderCheckOut();
               renderRecords();
@@ -2068,6 +2100,7 @@
           })
           .catch(function () {
             if (BL) BL.set(confirmBtn, false);
+            notifyReceptionError("Could not check this guest in. Please try again.");
           });
       }
     );
@@ -2096,6 +2129,7 @@
           })
           .catch(function () {
             if (BL) BL.set(cancelBookingBtn, false);
+            notifyReceptionError("Could not cancel this booking. Please try again.");
           });
       }
     );
