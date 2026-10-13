@@ -41,18 +41,38 @@ function elenest_apply_env_config(array $config): array
         'smtp_from_name' => 'SMTP_FROM_NAME',
         'smtp_from_email' => 'SMTP_FROM_EMAIL',
     ];
-    $onRender = getenv('RENDER') === 'true';
+    $onRender = elenest_env_value('RENDER') === 'true';
 
     foreach ($keys as $key => $envName) {
-        $fromEnv = getenv($envName);
-        if (!is_string($fromEnv) || trim($fromEnv) === '') {
+        $fromEnv = elenest_env_value($envName, $key);
+        if ($fromEnv === '') {
             continue;
         }
         $current = trim((string) ($config[$key] ?? ''));
         if ($onRender || $current === '' || str_starts_with($current, 'YOUR_')) {
-            $config[$key] = $key === 'smtp_port' ? (int) trim($fromEnv) : trim($fromEnv);
+            $config[$key] = $key === 'smtp_port' ? (int) $fromEnv : $fromEnv;
         }
     }
 
     return $config;
+}
+
+function elenest_env_value(string ...$names): string
+{
+    foreach ($names as $name) {
+        $candidates = [getenv($name)];
+        if (isset($_SERVER[$name])) {
+            $candidates[] = $_SERVER[$name];
+        }
+        if (isset($_ENV[$name])) {
+            $candidates[] = $_ENV[$name];
+        }
+        foreach ($candidates as $value) {
+            if (is_string($value) && trim($value) !== '') {
+                return trim($value);
+            }
+        }
+    }
+
+    return '';
 }
