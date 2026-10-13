@@ -1754,21 +1754,32 @@
       return Promise.resolve({ ok: false, message: "Sign-in is unavailable right now. Please try again." });
     }
     var redirectTo = passwordResetRedirectUrl();
-    var sb = getClient();
-    if (sb && sb.auth && typeof sb.auth.resetPasswordForEmail === "function") {
-      return sb.auth.resetPasswordForEmail(email, { redirectTo: redirectTo }).then(function (result) {
-        if (!result.error) return { ok: true };
-        var sdkMsg = result.error.message || "Could not send the reset email. Please try again.";
-        if (/redirect|not allowed|invalid url/i.test(sdkMsg)) {
-          return {
-            ok: false,
-            message:
-              "The reset link address is not allowed yet. In Supabase → Authentication → URL Configuration, add " +
-              redirectTo +
-              " to Redirect URLs."
-          };
+    function recoveryFailureMessage(raw) {
+      var sdkMsg = raw || "Could not send the reset email. Please try again.";
+      if (/redirect|not allowed|invalid url/i.test(sdkMsg)) {
+        return (
+          "The reset link address is not allowed yet. In Supabase → Authentication → URL Configuration, add " +
+          redirectTo +
+          " to Redirect URLs."
+        );
+      }
+      return sdkMsg;
+    }
+    // A separate implicit client so the email link is not locked to this browser.
+    // The main client uses PKCE, which fails when the email is opened on a phone.
+    if (window.supabase && typeof window.supabase.createClient === "function") {
+      var recoveryClient = window.supabase.createClient(base, key, {
+        auth: {
+          persistSession: false,
+          autoRefreshToken: false,
+          detectSessionInUrl: false,
+          flowType: "implicit",
+          storageKey: "elenest-password-recovery"
         }
-        return { ok: false, message: sdkMsg };
+      });
+      return recoveryClient.auth.resetPasswordForEmail(email, { redirectTo: redirectTo }).then(function (result) {
+        if (!result.error) return { ok: true };
+        return { ok: false, message: recoveryFailureMessage(result.error.message) };
       });
     }
     return fetch(base + "/auth/v1/recover?redirect_to=" + encodeURIComponent(redirectTo), {
@@ -1790,13 +1801,7 @@
             var msg =
               (body && (body.msg || body.message || body.error_description || body.error)) ||
               "Could not send the reset email. Please try again.";
-            if (/redirect|not allowed|invalid url/i.test(String(msg))) {
-              msg =
-                "The reset link address is not allowed yet. In Supabase → Authentication → URL Configuration, add " +
-                redirectTo +
-                " to Redirect URLs.";
-            }
-            return { ok: false, message: String(msg) };
+            return { ok: false, message: recoveryFailureMessage(String(msg)) };
           }
           return { ok: true };
         });
@@ -2055,6 +2060,10 @@
       })
       .catch(function (err) {
         var msg = (err && err.message) || "This reset link is invalid or has expired. Request a new one.";
+        if (/code verifier|pkce|different browser/i.test(msg)) {
+          msg =
+            "This reset link was opened in a different browser. Request a new password reset on this phone, then open that new email here.";
+        }
         return { ok: false, message: msg };
       });
   }
