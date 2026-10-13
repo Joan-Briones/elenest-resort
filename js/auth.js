@@ -1718,7 +1718,7 @@
 
   function publicHtmlBaseUrl() {
     var cfg = window.ElenestSupabaseConfig || {};
-    var publicBase = String(cfg.publicSiteHtmlBaseUrl || "https://elenestresort.infinityfreeapp.com/html/").trim();
+    var publicBase = String(cfg.publicSiteHtmlBaseUrl || "https://elenest-resort.onrender.com/html/").trim();
     if (publicBase.charAt(publicBase.length - 1) !== "/") publicBase += "/";
     try {
       var loc = window.location;
@@ -1738,21 +1738,6 @@
   }
 
   function passwordResetRedirectUrl() {
-    try {
-      var loc = window.location;
-      if (
-        loc &&
-        (loc.protocol === "http:" || loc.protocol === "https:") &&
-        loc.origin &&
-        loc.origin !== "null"
-      ) {
-        var path = loc.pathname || "/";
-        var htmlIdx = path.toLowerCase().lastIndexOf("/html/");
-        if (htmlIdx !== -1) {
-          return loc.origin + path.substring(0, htmlIdx + 6) + "reset-password.html";
-        }
-      }
-    } catch (e) {}
     return publicHtmlBaseUrl() + "reset-password.html";
   }
 

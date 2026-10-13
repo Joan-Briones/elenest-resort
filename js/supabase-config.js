@@ -69,13 +69,16 @@
      * Always use this when the staff machine is on localhost/XAMPP so phones
      * open InfinityFree instead of an unreachable localhost URL.
      */
-    publicSiteHtmlBaseUrl: "https://elenestresort.infinityfreeapp.com/html/",
+    publicSiteHtmlBaseUrl: "https://elenest-resort.onrender.com/html/",
     oauthRedirectAllowlist: [
       detectedBase + "**",
       detectedBase + "auth-callback.html",
       "http://localhost/Elenest_Resort/html/**",
       "http://localhost/Elenest_Resort/html/auth-callback.html",
       "http://localhost/Elenest_Resort/html/reset-password.html",
+      "https://elenest-resort.onrender.com/html/**",
+      "https://elenest-resort.onrender.com/html/auth-callback.html",
+      "https://elenest-resort.onrender.com/html/reset-password.html",
       "https://elenestresort.infinityfreeapp.com/html/**",
       "https://elenestresort.infinityfreeapp.com/html/auth-callback.html",
       "https://elenestresort.infinityfreeapp.com/html/reset-password.html",
