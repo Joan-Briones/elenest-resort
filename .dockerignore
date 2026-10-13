@@ -1,0 +1,10 @@
+.git
+docs
+archive
+Screenshots
+api/config.local.json
+api/config.local.php
+api/python.path
+**/.DS_Store
+**/__pycache__
+**/*.pyc
