@@ -25398,3 +25398,266 @@ body.m-record-open {
     pointer-events: auto !important;
   }
 }
+
+/* ==========================================================================
+   Shared motion — buttons, cards, steps, overlays (layout unchanged)
+   ========================================================================== */
+
+:root {
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.btn,
+.primary-btn,
+.secondary-btn,
+.book-flow-btn-main,
+.admin-save-btn,
+.staff-access-btn,
+button.btn {
+  transition:
+    transform 0.16s var(--ease-out),
+    box-shadow 0.2s var(--ease-soft),
+    background-color 0.2s var(--ease-soft),
+    border-color 0.2s var(--ease-soft),
+    filter 0.2s var(--ease-soft);
+}
+
+@media (hover: hover) {
+  .btn:hover:not(:disabled):not([aria-disabled="true"]),
+  .primary-btn:hover,
+  .secondary-btn:hover,
+  .book-flow-btn-main:hover:not(:disabled),
+  .admin-save-btn:hover:not(:disabled),
+  .staff-access-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 18px rgba(196, 107, 130, 0.22);
+  }
+}
+
+.btn:active:not(:disabled):not([aria-disabled="true"]),
+.primary-btn:active,
+.secondary-btn:active,
+.book-flow-btn-main:active:not(:disabled),
+.admin-save-btn:active:not(:disabled),
+.staff-access-btn:active,
+.book-flow-cal-day:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.subpage .card,
+.admin-kpi-card,
+.admin-payment-kpi-card,
+.manager-chart-card,
+.admin-report-chart-card,
+.admin-booking-review-card,
+.review-card,
+.facility-card,
+.home-review-kpis__item,
+body:not(.subpage) .rooms .items,
+body:not(.subpage) .gallery .items,
+body:not(.subpage) .news .box {
+  transition:
+    transform 0.22s var(--ease-out),
+    box-shadow 0.22s var(--ease-soft);
+}
+
+@media (hover: hover) {
+  .subpage .card:hover,
+  .admin-kpi-card:hover,
+  .admin-payment-kpi-card:hover,
+  .manager-chart-card:hover,
+  .admin-report-chart-card:hover,
+  .admin-booking-review-card:hover,
+  .review-card:hover,
+  .facility-card:hover,
+  .home-review-kpis__item:hover,
+  body:not(.subpage) .rooms .items:hover,
+  body:not(.subpage) .news .box:hover {
+    transform: translateY(-3px);
+    box-shadow:
+      0 14px 28px rgba(61, 51, 64, 0.08),
+      0 6px 16px rgba(196, 107, 130, 0.12);
+  }
+}
+
+.subpage [id^="section-"]:not([hidden]),
+.book-flow__panel:not([hidden]) {
+  animation: elenest-view-in 0.32s var(--ease-out) both;
+}
+
+.book-flow-stepper__marker,
+.book-flow-stepper__connector,
+.book-flow-stepper__label {
+  transition:
+    background 0.22s var(--ease-soft),
+    color 0.22s var(--ease-soft),
+    border-color 0.22s var(--ease-soft),
+    box-shadow 0.22s var(--ease-soft),
+    transform 0.22s var(--ease-out);
+}
+
+.book-flow__step.is-active .book-flow-stepper__marker {
+  transform: scale(1.06);
+  box-shadow: 0 0 0 4px rgba(196, 107, 130, 0.16), 0 6px 14px rgba(196, 107, 130, 0.28);
+}
+
+.book-flow__step.is-done .book-flow-stepper__marker {
+  background: linear-gradient(135deg, #c46b82, #d9899c);
+  border-color: #c46b82;
+  color: #fff;
+}
+
+.book-flow__step.is-done .book-flow-stepper__label {
+  color: #9a4e63;
+}
+
+.book-flow-stepper__connector.is-done {
+  background: linear-gradient(90deg, #c46b82, #f3c3cf);
+}
+
+@media (max-width: 640px) {
+  .book-flow-stepper {
+    margin-bottom: 14px;
+    padding-bottom: 0;
+  }
+
+  .book-flow-stepper__list {
+    flex-wrap: nowrap;
+  }
+
+  .book-flow__step {
+    min-width: 0;
+    flex: 1 1 0;
+    gap: 4px;
+  }
+
+  .book-flow-stepper__marker {
+    width: 28px;
+    height: 28px;
+    font-size: 0.78rem;
+  }
+
+  .book-flow-stepper__label {
+    font-size: 0.66rem;
+    max-width: 4.6rem;
+  }
+
+  .book-flow-stepper__connector {
+    min-width: 12px;
+    max-width: 28px;
+    margin-bottom: 18px;
+  }
+}
+
+.book-flow-cal-day {
+  transition:
+    transform 0.16s var(--ease-out),
+    box-shadow 0.16s var(--ease-soft),
+    background 0.16s var(--ease-soft);
+}
+
+@media (hover: hover) {
+  .book-flow-cal-day--available:hover,
+  .book-flow-cal-day--partial:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(196, 107, 130, 0.16);
+  }
+}
+
+.book-flow-cal-day.is-selected,
+.book-flow-cal-day[aria-pressed="true"] {
+  box-shadow: 0 0 0 2px #c46b82;
+}
+
+.swal2-popup {
+  animation: elenest-modal-in 0.28s var(--ease-out) both;
+}
+
+.elenest-error-toast:not([hidden]) {
+  animation: elenest-toast-in 0.28s var(--ease-out) both;
+}
+
+.admin-nav-dropdown-menu:not([hidden]) {
+  animation: elenest-drop-in 0.2s var(--ease-out) both;
+}
+
+.customer-notif-badge {
+  animation: elenest-badge-in 0.35s var(--ease-out) both;
+}
+
+.manager-chart-card canvas,
+.admin-report-chart-card canvas,
+.admin-kpi-card,
+.admin-payment-kpi-card {
+  animation: elenest-view-in 0.4s var(--ease-out) both;
+}
+
+.btn.is-loading,
+[aria-busy="true"].btn {
+  position: relative;
+}
+
+@keyframes elenest-toast-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes elenest-drop-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes elenest-badge-in {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: none; }
+}
+
+*::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(196, 107, 130, 0.72), rgba(216, 154, 170, 0.85));
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, rgba(176, 90, 112, 0.9), rgba(196, 107, 130, 0.95));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .subpage [id^="section-"]:not([hidden]),
+  .book-flow__panel:not([hidden]),
+  .swal2-popup,
+  .elenest-error-toast:not([hidden]),
+  .admin-nav-dropdown-menu:not([hidden]),
+  .customer-notif-badge,
+  .manager-chart-card canvas,
+  .admin-report-chart-card canvas,
+  .admin-kpi-card,
+  .admin-payment-kpi-card {
+    animation: none !important;
+  }
+
+  .btn:hover,
+  .btn:active,
+  .primary-btn:hover,
+  .primary-btn:active,
+  .secondary-btn:hover,
+  .secondary-btn:active,
+  .book-flow-btn-main:hover,
+  .book-flow-btn-main:active,
+  .admin-save-btn:hover,
+  .admin-save-btn:active,
+  .staff-access-btn:hover,
+  .staff-access-btn:active,
+  .subpage .card:hover,
+  .admin-kpi-card:hover,
+  .admin-payment-kpi-card:hover,
+  .manager-chart-card:hover,
+  .admin-report-chart-card:hover,
+  .admin-booking-review-card:hover,
+  .review-card:hover,
+  .facility-card:hover,
+  .book-flow__step.is-active .book-flow-stepper__marker,
+  .book-flow-cal-day:active,
+  .book-flow-cal-day--available:hover,
+  .book-flow-cal-day--partial:hover {
+    transform: none !important;
+  }
+}
