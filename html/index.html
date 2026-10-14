@@ -9,7 +9,7 @@
     try { if ("scrollRestoration" in history) history.scrollRestoration = "manual"; } catch (e) {}
   </script>
   <link rel="icon" type="image/png" href="../Images/icon.png">
-  <link rel="stylesheet" href="../css/style.css?v=20261012-pax3">
+  <link rel="stylesheet" href="../css/style.css?v=20261014-hero1">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.css" integrity="sha512-UTNP5BXLIptsaj5WdKFrkFov94lDx+eBvbKyoe1YAfjeRPC+gT5kyZ10kOHCfNZqEui1sxmqvodNUx3KbuYI/A==" crossorigin="anonymous"
     referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" integrity="sha512-sMXtMNL1zRzolHYKEujM2AqCLUR9F2C4/05cdbxjjLSRvMQIciEPCQZo++nk7go3BtSuK9kfa/s+a4f4i5pLkw=="
@@ -99,21 +99,28 @@
       $hero.owlCarousel({
         loop: true,
         margin: 0,
+        items: 1,
         nav: true,
         dots: false,
-        navText: ["<i class = 'fa fa-chevron-left'></i>", "<i class = 'fa fa-chevron-right'></i>"],
+        mouseDrag: true,
+        touchDrag: true,
+        autoplay: true,
+        autoplayTimeout: 4500,
+        autoplaySpeed: 800,
+        autoplayHoverPause: true,
+        smartSpeed: 800,
+        navText: [
+          '<span class="hero-arrow" aria-hidden="true">&#8249;</span>',
+          '<span class="hero-arrow" aria-hidden="true">&#8250;</span>'
+        ],
         responsive: {
-          0: {
-            items: 1
-          },
-          768: {
-            items: 1
-          },
-          1000: {
-            items: 1
-          }
+          0: { items: 1 },
+          768: { items: 1 },
+          1000: { items: 1 }
         }
       });
+      $hero.find('.owl-prev').attr('aria-label', 'Previous image');
+      $hero.find('.owl-next').attr('aria-label', 'Next image');
       try { window.scrollTo(x, y); } catch (err) {}
     })();
   </script>
