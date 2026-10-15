@@ -3572,12 +3572,38 @@ body.subpage .pay-deadline-alert.is-expired .pay-deadline-alert__title {
     padding: 0 12px;
   }
 
-  .gallery .owl-nav .owl-prev,
-  .gallery .owl-nav .owl-next {
+  .gallery .owl-gallery.owl-theme .owl-nav .owl-prev,
+  .gallery .owl-gallery.owl-theme .owl-nav .owl-next {
     top: auto;
-    bottom: 52px;
-    width: 40px;
-    height: 40px;
+    bottom: 40px;
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    line-height: 1;
+    z-index: 4;
+  }
+
+  .gallery .owl-gallery.owl-theme .owl-nav .owl-prev i,
+  .gallery .owl-gallery.owl-theme .owl-nav .owl-next i,
+  .gallery .owl-gallery.owl-theme .owl-nav .owl-prev svg,
+  .gallery .owl-gallery.owl-theme .owl-nav .owl-next svg {
+    width: 12px;
+    height: 12px;
+    font-size: 12px;
+    line-height: 1;
+    margin: 0;
+  }
+
+  .gallery .gallery-caption {
+    min-height: 40px;
+    margin: 8px 0 0;
+    padding: 0 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .gallery .owl-nav .owl-prev {
