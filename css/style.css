@@ -26364,3 +26364,81 @@ html[data-theme="dark"] #section-analytics .manager-chart-insights__title {
   color: #f3b7c8 !important;
   -webkit-text-fill-color: #f3b7c8 !important;
 }
+
+html[data-theme="dark"] body.admin-app header ul li .admin-nav-dropdown-toggle:hover,
+html[data-theme="dark"] body.admin-app header ul li .admin-nav-dropdown-toggle:focus-visible,
+html[data-theme="dark"] body.admin-app header ul li .admin-nav-dropdown-toggle.active,
+html[data-theme="dark"] body.admin-app .admin-nav-dropdown.is-open .admin-nav-dropdown-toggle,
+html[data-theme="dark"] body[data-staff-portal="manager"] header ul li .admin-nav-dropdown-toggle:hover,
+html[data-theme="dark"] body[data-staff-portal="manager"] header ul li .admin-nav-dropdown-toggle:focus-visible,
+html[data-theme="dark"] body[data-staff-portal="manager"] header ul li .admin-nav-dropdown-toggle.active,
+html[data-theme="dark"] body[data-staff-portal="manager"] .admin-nav-dropdown.is-open .admin-nav-dropdown-toggle,
+html[data-theme="dark"] body[data-staff-portal="reception"] header ul li .admin-nav-dropdown-toggle:hover,
+html[data-theme="dark"] body[data-staff-portal="reception"] header ul li .admin-nav-dropdown-toggle:focus-visible,
+html[data-theme="dark"] body[data-staff-portal="reception"] header ul li .admin-nav-dropdown-toggle.active,
+html[data-theme="dark"] body[data-staff-portal="reception"] .admin-nav-dropdown.is-open .admin-nav-dropdown-toggle {
+  color: #2a2030 !important;
+  -webkit-text-fill-color: #2a2030 !important;
+  background: #ffffff !important;
+}
+
+html[data-theme="dark"] .home-review-kpis__item,
+html[data-theme="dark"] .home-review-kpis__item:hover {
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
+}
+
+html[data-theme="dark"] .home-review-kpis__item h1,
+html[data-theme="dark"] .home-review-kpis__item span {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html[data-theme="dark"] #section-predictive .pa-chart-insights {
+  background: #221e28 !important;
+  background-image: none !important;
+  border-color: rgba(196, 107, 130, 0.32) !important;
+}
+
+html[data-theme="dark"] #section-predictive .pa-chart-insights__title {
+  color: #f3b7c8 !important;
+  -webkit-text-fill-color: #f3b7c8 !important;
+}
+
+html[data-theme="dark"] #section-predictive .pa-chart-insights__list li {
+  color: #f7f2f5 !important;
+  -webkit-text-fill-color: #f7f2f5 !important;
+}
+
+html[data-theme="dark"] .admin-report-review-names__name,
+html[data-theme="dark"] .reviews-page .reviews-feedback-row__name,
+html[data-theme="dark"] .reviews-page .reviews-feedback-row__comment {
+  color: #f7f2f5 !important;
+  -webkit-text-fill-color: #f7f2f5 !important;
+}
+
+html[data-theme="dark"] .admin-report-review-names__meta,
+html[data-theme="dark"] .admin-report-review-names__heading {
+  color: #f3b7c8 !important;
+  -webkit-text-fill-color: #f3b7c8 !important;
+}
+
+html[data-theme="dark"] .admin-app .admin-model-eval__table,
+html[data-theme="dark"] .admin-app .admin-model-eval__table th,
+html[data-theme="dark"] .admin-app .admin-model-eval__table td,
+html[data-theme="dark"] .admin-app .admin-model-eval__avg td,
+html[data-theme="dark"] .admin-app .admin-model-eval__acc td {
+  background: #1c1822 !important;
+  color: #f7f2f5 !important;
+  -webkit-text-fill-color: #f7f2f5 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+html[data-theme="dark"] .admin-app .admin-model-eval__badge--very-good,
+html[data-theme="dark"] .admin-app .admin-model-eval__badge--good {
+  background: #14532d !important;
+  color: #d7f5c4 !important;
+  -webkit-text-fill-color: #d7f5c4 !important;
+}
