@@ -1732,7 +1732,7 @@
         var path = loc.pathname || "/";
         var htmlIdx = path.toLowerCase().lastIndexOf("/html/");
         if (htmlIdx !== -1) return loc.origin + path.substring(0, htmlIdx + 6);
-        if (path === "/" || /^\/[^/]+\.html$/i.test(path)) return loc.origin + "/html/";
+        if (path === "/" || /^\/[^/]+$/i.test(path)) return loc.origin + "/html/";
       }
     } catch (e) {}
     return publicBase;

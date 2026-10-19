@@ -1,5 +1,5 @@
-# Keep every public page on https://elenestresort.com/
-# Files stay in /html/, but that folder must not appear in the address bar.
+# Keep every public page on https://elenestresort.com/ without /html or .html.
+# Files stay in /html/, but that folder and extension must not appear in the address bar.
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
@@ -16,20 +16,33 @@
   RewriteCond %{REQUEST_URI} ^/html/?$
   RewriteRule ^html/?$ https://elenestresort.com/ [R=301,L,QSA]
 
-  RewriteCond %{THE_REQUEST} \s/+index\.html[\s?] [NC]
-  RewriteCond %{REQUEST_URI} ^/index\.html$
-  RewriteRule ^index\.html$ https://elenestresort.com/ [R=301,L,QSA]
+  RewriteCond %{THE_REQUEST} \s/+index(\.html)?[\s?] [NC]
+  RewriteCond %{REQUEST_URI} ^/index(\.html)?$
+  RewriteRule ^index(\.html)?$ https://elenestresort.com/ [R=301,L,QSA]
 
-  RewriteCond %{THE_REQUEST} \s/+html/[^?\s]+\.html[\s?] [NC]
+  RewriteCond %{THE_REQUEST} \s/+html/[^?\s/]+\.html[\s?] [NC]
   RewriteCond %{REQUEST_URI} ^/html/[^/]+\.html$
-  RewriteRule ^html/(.+\.html)$ https://elenestresort.com/$1 [R=301,L,QSA]
+  RewriteRule ^html/(.+)\.html$ https://elenestresort.com/$1 [R=301,L,QSA]
+
+  RewriteCond %{THE_REQUEST} \s/+[^?\s/]+\.html[\s?] [NC]
+  RewriteCond %{REQUEST_URI} ^/[^/]+\.html$
+  RewriteRule ^([^/]+)\.html$ https://elenestresort.com/$1 [R=301,L,QSA]
+
+  RewriteCond %{THE_REQUEST} \s/+[^?\s/]+/[\s?] [NC]
+  RewriteCond %{REQUEST_URI} ^/([^/]+)/$
+  RewriteCond %{DOCUMENT_ROOT}/html/%1.html -f
+  RewriteRule ^([^/]+)/$ https://elenestresort.com/$1 [R=301,L,QSA]
 
   # Serve the real homepage without changing the address bar.
-  RewriteCond %{REQUEST_URI} ^/$ [OR]
-  RewriteCond %{REQUEST_URI} ^/index\.html$
-  RewriteRule ^(index\.html)?$ html/index.html [L]
+  RewriteCond %{REQUEST_URI} ^/$
+  RewriteRule ^$ html/index.html [L]
 
-  # /about.html and the other sections are served from /html/ internally.
+  # /about is served from /html/about.html internally.
+  RewriteCond %{REQUEST_URI} ^/[^/]+$
+  RewriteCond %{DOCUMENT_ROOT}/html%{REQUEST_URI}.html -f
+  RewriteRule ^([^/]+)$ html/$1.html [L]
+
+  # Direct .html requests still resolve if a redirect did not apply.
   RewriteCond %{REQUEST_URI} ^/[^/]+\.html$
   RewriteCond %{DOCUMENT_ROOT}/html%{REQUEST_URI} -f
   RewriteRule ^([^/]+\.html)$ html/$1 [L]

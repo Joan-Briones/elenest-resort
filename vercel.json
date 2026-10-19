@@ -19,8 +19,18 @@
       "permanent": true
     },
     {
+      "source": "/index",
+      "destination": "https://elenestresort.com/",
+      "permanent": true
+    },
+    {
       "source": "/html/:file.html",
-      "destination": "https://elenestresort.com/:file.html",
+      "destination": "https://elenestresort.com/:file",
+      "permanent": true
+    },
+    {
+      "source": "/:file.html",
+      "destination": "https://elenestresort.com/:file",
       "permanent": true
     }
   ],
@@ -30,7 +40,7 @@
       "destination": "/html/index.html"
     },
     {
-      "source": "/:file.html",
+      "source": "/:file",
       "destination": "/html/:file.html"
     }
   ]
