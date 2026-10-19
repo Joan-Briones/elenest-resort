@@ -26011,3 +26011,100 @@ html[data-theme="dark"] .review-card h3,
 html[data-theme="dark"] .review-card span {
   color: #f7f2f5;
 }
+
+html[data-theme="dark"] header ul li a:not(.primary-btn):not(.admin-nav-dropdown-item):not(.staff-access-btn):not(.role-login-trigger):hover,
+html[data-theme="dark"] .subpage header ul li a.active:not(.primary-btn):not(.admin-nav-dropdown-item),
+html[data-theme="dark"] body.subpage header ul li a[href^="#section-"].active:not(.admin-nav-dropdown-item),
+html[data-theme="dark"] body.subpage header ul li#adminAuthNav > a#adminSettingsToggle.active,
+html[data-theme="dark"] body.subpage header ul li#staffAuthNav > a#staffSettingsToggle.active,
+html[data-theme="dark"] header #menulist a.active,
+html[data-theme="dark"] header #menulist a[href^="#section-"].active,
+html[data-theme="dark"] body.subpage header #menulist a.active,
+html[data-theme="dark"] body.admin-app header #menulist a.active {
+  color: #2a2030 !important;
+  -webkit-text-fill-color: #2a2030 !important;
+  background: #ffffff !important;
+}
+
+html[data-theme="dark"] header ul li a.role-login-trigger.staff-access-btn,
+html[data-theme="dark"] .role-login-trigger.staff-access-btn,
+html[data-theme="dark"] a.role-login-trigger.staff-access-btn,
+html[data-theme="dark"] header ul li a.primary-btn,
+html[data-theme="dark"] .subpage header ul li a.primary-btn,
+html[data-theme="dark"] .subpage header ul li a.primary-btn.active {
+  color: #2a2030 !important;
+  -webkit-text-fill-color: #2a2030 !important;
+  background: #ffffff !important;
+}
+
+html[data-theme="dark"] header .admin-nav-dropdown-menu a.admin-nav-dropdown-item,
+html[data-theme="dark"] body.subpage header .admin-nav-dropdown-menu a.admin-nav-dropdown-item,
+html[data-theme="dark"] body.subpage header .admin-nav-dropdown-menu a.admin-nav-dropdown-item[href^="#section-"] {
+  color: #f7f2f5 !important;
+  -webkit-text-fill-color: #f7f2f5 !important;
+  background: transparent !important;
+}
+
+html[data-theme="dark"] header .admin-nav-dropdown-menu a.admin-nav-dropdown-item.active,
+html[data-theme="dark"] body.subpage header .admin-nav-dropdown-menu a.admin-nav-dropdown-item.active,
+html[data-theme="dark"] body.subpage header .admin-nav-dropdown-menu a.admin-nav-dropdown-item[href^="#section-"].active {
+  color: #2a2030 !important;
+  -webkit-text-fill-color: #2a2030 !important;
+  background: #ffffff !important;
+}
+
+html[data-theme="dark"] .reviews-page .reviews-card h3,
+html[data-theme="dark"] .reviews-page .reviews-card__comment {
+  color: #f7f2f5 !important;
+  -webkit-text-fill-color: #f7f2f5 !important;
+}
+
+html[data-theme="dark"] .facilities-tab,
+html[data-theme="dark"] .avail-facility-tab {
+  background: #2a2430;
+  color: #f7f2f5;
+  border-color: rgba(127, 193, 66, 0.55);
+}
+
+html[data-theme="dark"] .facilities-tab--active,
+html[data-theme="dark"] .avail-facility-tab--active {
+  background: #c46b82;
+  border-color: #c46b82;
+  color: #ffffff;
+}
+
+html[data-theme="dark"] .avail-guest-bar,
+html[data-theme="dark"] .avail-guest-stepper,
+html[data-theme="dark"] .admin-dash-cal-notes,
+html[data-theme="dark"] .admin-dash-cal-legend li,
+html[data-theme="dark"] .welcome-modal,
+html[data-theme="dark"] .book-unit-info__card {
+  background: #221e28 !important;
+  background-image: none !important;
+  color: #f7f2f5;
+  border-color: rgba(196, 107, 130, 0.35) !important;
+}
+
+html[data-theme="dark"] .avail-guest-bar__label,
+html[data-theme="dark"] .avail-guest-bar__note,
+html[data-theme="dark"] .avail-guest-bar__hint,
+html[data-theme="dark"] .welcome-modal__title,
+html[data-theme="dark"] .welcome-modal__subtitle,
+html[data-theme="dark"] .book-unit-info__title,
+html[data-theme="dark"] .book-unit-info__dates,
+html[data-theme="dark"] .book-unit-info__lead,
+html[data-theme="dark"] .admin-dash-cal-notes__title,
+html[data-theme="dark"] .admin-dash-cal-notes__hint,
+html[data-theme="dark"] .admin-dash-cal-legend__text strong,
+html[data-theme="dark"] .admin-dash-cal-legend__text span,
+html[data-theme="dark"] .stay-schedule__time {
+  color: #f7f2f5 !important;
+  -webkit-text-fill-color: #f7f2f5 !important;
+}
+
+html[data-theme="dark"] .stay-schedule__kicker,
+html[data-theme="dark"] .welcome-modal__eyebrow,
+html[data-theme="dark"] .book-unit-info__eyebrow {
+  color: #f3b7c8 !important;
+  -webkit-text-fill-color: #f3b7c8 !important;
+}
