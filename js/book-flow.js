@@ -6951,6 +6951,36 @@
     }
   }
 
+  function readReservedFacilityRecord() {
+    try {
+      var raw = localStorage.getItem("elenest_reserved_facilities_v1");
+      if (!raw) return null;
+      var data = JSON.parse(raw);
+      if (!data || typeof data !== "object") return null;
+      if (!Array.isArray(data.unitIds) || !data.unitIds.length) return null;
+      return data;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function clearPrefillHandoff() {
+    try {
+      sessionStorage.removeItem("elenest_avail_proceed");
+      sessionStorage.removeItem("elenest_prefill_checkin");
+      sessionStorage.removeItem("elenest_prefill_checkout");
+      sessionStorage.removeItem("elenest_prefill_unit_id");
+      sessionStorage.removeItem("elenest_prefill_unit_ids");
+      sessionStorage.removeItem("elenest_prefill_stay_mode");
+      sessionStorage.removeItem("elenest_prefill_adults");
+      sessionStorage.removeItem("elenest_prefill_children");
+      sessionStorage.removeItem("elenest_prefill_children_under6");
+      sessionStorage.removeItem("elenest_prefill_arrival_time");
+      sessionStorage.removeItem("elenest_prefill_departure_time");
+      localStorage.removeItem("elenest_reserved_facilities_v1");
+    } catch (e) {}
+  }
+
   /** Apply dates + facilities chosen in the public availability modal. */
   function applyAvailabilityPrefill() {
     var ci = null;
@@ -6998,20 +7028,32 @@
         under6Prefill = sessionStorage.getItem("elenest_prefill_children_under6");
         arrivalPrefill = sessionStorage.getItem("elenest_prefill_arrival_time");
         departurePrefill = sessionStorage.getItem("elenest_prefill_departure_time");
-        sessionStorage.removeItem("elenest_avail_proceed");
-        sessionStorage.removeItem("elenest_prefill_checkin");
-        sessionStorage.removeItem("elenest_prefill_checkout");
-        sessionStorage.removeItem("elenest_prefill_unit_id");
-        sessionStorage.removeItem("elenest_prefill_unit_ids");
-        sessionStorage.removeItem("elenest_prefill_stay_mode");
-        sessionStorage.removeItem("elenest_prefill_adults");
-        sessionStorage.removeItem("elenest_prefill_children");
-        sessionStorage.removeItem("elenest_prefill_children_under6");
-        sessionStorage.removeItem("elenest_prefill_arrival_time");
-        sessionStorage.removeItem("elenest_prefill_departure_time");
       }
     } catch (e) {
       return false;
+    }
+    var reserved = readReservedFacilityRecord();
+    if (reserved && (!unitIds.length || !ci)) {
+      var reservedAt = Number(reserved.savedAt) || 0;
+      var bookSavedAtForReserved = 0;
+      try {
+        var existingDraft = localStorage.getItem(BOOK_FLOW_DRAFT_KEY);
+        if (existingDraft) bookSavedAtForReserved = Number(JSON.parse(existingDraft).savedAt) || 0;
+      } catch (eReserved) {}
+      if (!unitIds.length && (hasProceed || !bookSavedAtForReserved || reservedAt >= bookSavedAtForReserved)) {
+        hasProceed = true;
+        ci = ci || reserved.checkIn || null;
+        co = co || reserved.checkOut || null;
+        stayMode = stayMode || reserved.stayMode || "";
+        unitIds = reserved.unitIds.slice();
+        if (adultsPrefill == null && reserved.adults != null) adultsPrefill = String(reserved.adults);
+        if (childrenPrefill == null && reserved.children != null) childrenPrefill = String(reserved.children);
+        if (under6Prefill == null && reserved.childrenUnder6 != null) {
+          under6Prefill = String(reserved.childrenUnder6);
+        }
+        if (!arrivalPrefill && reserved.arrivalTime) arrivalPrefill = reserved.arrivalTime;
+        if (!departurePrefill && reserved.departureTime) departurePrefill = reserved.departureTime;
+      }
     }
     if (adultsPrefill != null || childrenPrefill != null || under6Prefill != null) {
       var adultsField = document.getElementById("adults");
@@ -7086,12 +7128,14 @@
       if (storeReady && typeof storeReady.then === "function") {
         Promise.resolve(storeReady).then(function () {
           if (currentFlowStep !== 1) return;
-          applyPrefillFacilityIds(retryIds);
+          var retryMatched = applyPrefillFacilityIds(retryIds);
           paintPrefillOnStep1();
+          if (retryMatched > 0) clearPrefillHandoff();
         });
       }
     } else {
       pendingPrefillFacilityIds = null;
+      if (!unitIds.length || matched > 0) clearPrefillHandoff();
     }
     return true;
   }

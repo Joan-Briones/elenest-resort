@@ -1405,14 +1405,18 @@
     }
   }
 
+  function pageName() {
+    var path = String(window.location.pathname || "");
+    var name = path.split("/").pop() || "";
+    return name.replace(/\.html$/i, "").toLowerCase();
+  }
+
   function isBookPage() {
-    var path = window.location.pathname || "";
-    return /(?:^|\/)book\.html$/i.test(path);
+    return pageName() === "book";
   }
 
   function isLoginPage() {
-    var path = window.location.pathname || "";
-    return /(?:^|\/)login\.html$/i.test(path);
+    return pageName() === "login";
   }
 
   function isLoggedIn() {
@@ -1469,6 +1473,53 @@
     }, 0);
   }
 
+  var RESERVED_FACILITIES_KEY = "elenest_reserved_facilities_v1";
+  var facilityClickLockId = "";
+  var facilityClickLockUntil = 0;
+  var reserveClickLock = false;
+
+  function uniqueFacilityIds(ids) {
+    var seen = {};
+    return (ids || [])
+      .map(function (id) {
+        return String(id || "").trim();
+      })
+      .filter(function (id) {
+        if (!id || seen[id]) return false;
+        seen[id] = true;
+        return true;
+      });
+  }
+
+  function rememberReservedFacilities(ci, co, mode, ids) {
+    var unique = uniqueFacilityIds(ids);
+    if (!ci || !co || !unique.length) return;
+    var times = getAvailTimes();
+    try {
+      localStorage.setItem(
+        RESERVED_FACILITIES_KEY,
+        JSON.stringify({
+          savedAt: Date.now(),
+          checkIn: ci,
+          checkOut: co,
+          stayMode: mode === "single" ? "single" : "range",
+          unitIds: unique,
+          adults: guestCounts.adults,
+          children: guestCounts.children,
+          childrenUnder6: guestCounts.childrenUnder6,
+          arrivalTime: times.arrival || "",
+          departureTime: times.departure || ""
+        })
+      );
+    } catch (e) {}
+  }
+
+  function forgetReservedFacilities() {
+    try {
+      localStorage.removeItem(RESERVED_FACILITIES_KEY);
+    } catch (e) {}
+  }
+
   function stashPreviewForBooking() {
     try {
       if (!previewState.checkIn || !previewState.checkOut || !selectedUnitIds.length) return false;
@@ -1479,6 +1530,12 @@
       sessionStorage.setItem("elenest_prefill_stay_mode", stayMode === "single" ? "single" : "range");
       sessionStorage.setItem("elenest_avail_proceed", "1");
       writeGuestSession();
+      rememberReservedFacilities(
+        previewState.checkIn,
+        previewState.checkOut,
+        stayMode === "single" ? "single" : "range",
+        selectedUnitIds
+      );
       stashOwned = true;
       return true;
     } catch (e) {
@@ -1495,6 +1552,7 @@
       sessionStorage.removeItem("elenest_prefill_unit_ids");
       sessionStorage.removeItem("elenest_prefill_stay_mode");
       clearGuestSession();
+      forgetReservedFacilities();
     } catch (e) {}
     stashOwned = false;
   }
@@ -1592,7 +1650,10 @@
       sessionStorage.setItem("elenest_prefill_stay_mode", mode);
       sessionStorage.setItem("elenest_avail_proceed", "1");
       writeGuestSession();
-      if (ids.length) stashOwned = true;
+      if (ids.length) {
+        rememberReservedFacilities(ci, co, mode, ids);
+        stashOwned = true;
+      }
       return true;
     } catch (e) {
       return false;
@@ -1737,19 +1798,24 @@
 
   if (reserveBtn) {
     reserveBtn.addEventListener("click", function () {
+      if (reserveClickLock) return;
+      reserveClickLock = true;
       var BL = window.ElenestButtonLoading;
       function work() {
         var result;
         try {
           result = isHomeCalendar() && !isLoggedIn() ? continueSignIn() : proceedToBooking();
         } catch (err) {
+          reserveClickLock = false;
           showAvailActionError("Could not continue. Please try again.");
           return;
         }
         if (result === "leave") return new Promise(function () {});
+        reserveClickLock = false;
       }
       if (BL && typeof BL.run === "function") {
         BL.run(reserveBtn, work, "Please wait…").catch(function () {
+          reserveClickLock = false;
           showAvailActionError("Could not continue. Please try again.");
         });
         return;
@@ -1815,12 +1881,12 @@
       if (btn.classList.contains("avail-facility-card--unavailable")) return;
       var pickedId = String(btn.getAttribute("data-unit-id") || "");
       if (!pickedId) return;
-      if (selectedUnitIds.indexOf(pickedId) === -1) selectedUnitIds.push(pickedId);
-      else {
-        selectedUnitIds = selectedUnitIds.filter(function (id) {
-          return id !== pickedId;
-        });
-      }
+      var now = Date.now();
+      if (facilityClickLockId === pickedId && now < facilityClickLockUntil) return;
+      facilityClickLockId = pickedId;
+      facilityClickLockUntil = now + 500;
+      if (selectedUnitIds.indexOf(pickedId) !== -1) return;
+      selectedUnitIds.push(pickedId);
       facilityHost.querySelectorAll(".avail-facility-card").forEach(function (card) {
         card.classList.toggle(
           "is-selected",

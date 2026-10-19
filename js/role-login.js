@@ -42,9 +42,9 @@
       Auth && typeof Auth.getHomePathForRole === "function"
         ? Auth.getHomePathForRole(role)
         : "book.html";
-    var page = currentPage();
+    var page = currentPage().replace(/\.html$/i, "");
 
-    if (role === "guest" && (page === "book.html" || (document.body && document.body.classList.contains("book-page")))) {
+    if (role === "guest" && (page === "book" || (document.body && document.body.classList.contains("book-page")))) {
       nav.hidden = true;
       nav.setAttribute("hidden", "");
       trigger.hidden = true;
