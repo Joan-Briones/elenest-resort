@@ -267,6 +267,7 @@
     try {
       if (clean) sessionStorage.setItem(STORAGE_SESSION, JSON.stringify(clean));
       else sessionStorage.removeItem(STORAGE_SESSION);
+      if (clean && clean.id) sessionStorage.removeItem("elenest_login_booking_notice");
     } catch (e) {}
     if (clean && clean.id && isStaffRole(clean.role)) {
       writeRoleCache(clean);
@@ -394,6 +395,7 @@
     try {
       sessionStorage.removeItem("elenest_role_hop");
       sessionStorage.removeItem("elenest_staff_gate_deny");
+      sessionStorage.removeItem("elenest_login_booking_notice");
     } catch (e) {}
     try {
       var keys = [];

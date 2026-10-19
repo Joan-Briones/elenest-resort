@@ -1408,6 +1408,7 @@
     modal.setAttribute("aria-hidden", "true");
     document.body.classList.remove("avail-modal-open");
     if (wasOpen && isLoginPage() && !isLoggedIn() && readStashedPreview()) {
+      markLoginBookingNotice();
       showLoginContinueBanner();
     }
   }
@@ -1434,9 +1435,42 @@
     );
   }
 
+  var LOGIN_BOOKING_NOTICE_KEY = "elenest_login_booking_notice";
+
+  function markLoginBookingNotice() {
+    try {
+      sessionStorage.setItem(LOGIN_BOOKING_NOTICE_KEY, "1");
+    } catch (e) {}
+  }
+
+  function hasLoginBookingNotice() {
+    try {
+      return sessionStorage.getItem(LOGIN_BOOKING_NOTICE_KEY) === "1";
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function hideLoginContinueBanner() {
+    var banner = document.getElementById("loginReserveContinue");
+    if (!banner) return;
+    banner.hidden = true;
+    banner.setAttribute("hidden", "");
+    banner.textContent = "";
+  }
+
   function showLoginContinueBanner() {
     var banner = document.getElementById("loginReserveContinue");
     if (!banner) return;
+    if (!isLoginPage() || isLoggedIn() || !hasLoginBookingNotice()) {
+      hideLoginContinueBanner();
+      return;
+    }
+    var saved = readStashedPreview();
+    if (!saved || !saved.checkIn || !saved.checkOut || !saved.unitIds || !saved.unitIds.length) {
+      hideLoginContinueBanner();
+      return;
+    }
     banner.hidden = false;
     banner.removeAttribute("hidden");
     banner.innerHTML =
@@ -1452,9 +1486,15 @@
   }
 
   function revealSavedSelectionOnLogin() {
-    if (!isLoginPage() || isLoggedIn()) return;
+    if (!isLoginPage() || isLoggedIn() || !hasLoginBookingNotice()) {
+      hideLoginContinueBanner();
+      return;
+    }
     var saved = readStashedPreview();
-    if (!saved || !saved.checkIn || !saved.checkOut || !saved.unitIds.length) return;
+    if (!saved || !saved.checkIn || !saved.checkOut || !saved.unitIds.length) {
+      hideLoginContinueBanner();
+      return;
+    }
     var form = document.getElementById("loginReserveForm");
     if (form) {
       var arrival = form.querySelector('[name="arrival"]');
@@ -1681,6 +1721,7 @@
       window.location.href = "book.html";
       return "leave";
     }
+    markLoginBookingNotice();
     window.location.href = "login.html?next=" + encodeURIComponent("book.html");
     return "leave";
   }
@@ -1725,10 +1766,12 @@
     }
 
     if (isLoginPage()) {
+      markLoginBookingNotice();
       showLoginContinueBanner();
       return "stay";
     }
 
+    markLoginBookingNotice();
     window.location.href = "login.html?next=" + encodeURIComponent("book.html");
     return "leave";
   }
