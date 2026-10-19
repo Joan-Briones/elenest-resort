@@ -19175,13 +19175,21 @@ body.weather-modal-open {
 .stay-schedule {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
-  max-width: 420px;
+  gap: 12px;
+  width: 100%;
+}
+
+#availDayScheduleWrap.avail-stay-times__field {
+  flex: 1 1 100%;
 }
 
 .stay-schedule__card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 64px;
   margin: 0;
-  padding: 8px 12px;
+  padding: 12px 16px;
   border: 1px solid #f0d5dc;
   border-radius: 10px;
   background: linear-gradient(165deg, #fff 0%, #fdf7f8 100%);
@@ -19189,18 +19197,18 @@ body.weather-modal-open {
 
 .stay-schedule__kicker {
   display: block;
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   font-weight: 700;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: #c46b82;
 }
 
 .stay-schedule__time {
   display: block;
-  margin-top: 2px;
-  font-size: 0.95rem;
-  font-weight: 650;
+  margin-top: 4px;
+  font-size: 1.125rem;
+  font-weight: 600;
   line-height: 1.2;
   color: #2c241e;
 }
