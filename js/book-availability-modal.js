@@ -661,10 +661,18 @@
     wrap.className = "avail-stay-times";
     wrap.innerHTML =
       '<div class="avail-stay-times__field" id="availDayScheduleWrap" hidden>' +
-      '<label for="availDaySchedule">Schedule</label>' +
-      '<input id="availDaySchedule" type="text" value="' +
+      '<p class="stay-schedule__label" id="availDayScheduleLabel">Schedule</p>' +
+      '<div class="stay-schedule" role="group" aria-labelledby="availDayScheduleLabel">' +
+      '<div class="stay-schedule__card"><span class="stay-schedule__kicker">Check-in</span><span class="stay-schedule__time">' +
+      DAY_ARRIVAL +
+      "</span></div>" +
+      '<div class="stay-schedule__card"><span class="stay-schedule__kicker">Check-out</span><span class="stay-schedule__time">' +
+      DAY_DEPARTURE +
+      "</span></div>" +
+      "</div>" +
+      '<input id="availDaySchedule" type="hidden" value="' +
       DAY_SCHEDULE_LABEL +
-      '" readonly tabindex="-1" aria-readonly="true">' +
+      '">' +
       "</div>" +
       '<div class="avail-stay-times__field" id="availArrivalWrap">' +
       '<label for="availArrivalTime">Arrival time (day of check-in)</label>' +

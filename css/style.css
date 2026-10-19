@@ -19167,8 +19167,54 @@ body.weather-modal-open {
   cursor: default;
 }
 
-#bookDayTourScheduleWrap {
+#bookDayTourScheduleWrap,
+.stay-schedule-wrap {
   grid-column: 1 / -1;
+}
+
+.stay-schedule__label {
+  margin: 0 0 10px;
+  font-weight: 600;
+  color: #3f342c;
+}
+
+.stay-schedule {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.stay-schedule__card {
+  margin: 0;
+  padding: 14px 16px;
+  border: 1px solid #f0d5dc;
+  border-radius: 14px;
+  background: linear-gradient(165deg, #fff 0%, #fdf7f8 100%);
+  box-shadow: 0 1px 2px rgba(120, 60, 75, 0.05);
+}
+
+.stay-schedule__kicker {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #c46b82;
+}
+
+.stay-schedule__time {
+  display: block;
+  margin-top: 4px;
+  font-size: 1.2rem;
+  font-weight: 650;
+  line-height: 1.2;
+  color: #2c241e;
+}
+
+@media (max-width: 640px) {
+  .stay-schedule {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Walk-in guest form: even 2-column spacing for Overnight / Day Tour */
