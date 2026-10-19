@@ -143,7 +143,12 @@
         paymentType: wizardState.paymentType || "full",
         downPaymentAgreed: !!wizardState.downPaymentAgreed,
         unitSelection: cloneUnitSelection(wizardState.unitSelection),
-        unitSelectionConfirmed: !!wizardState.unitSelectionConfirmed
+        unitSelectionConfirmed: !!wizardState.unitSelectionConfirmed,
+        reviewBookingId: wizardState.reviewBookingId || "",
+        payableBookingId:
+          wizardState.payableBooking && wizardState.payableBooking.id
+            ? wizardState.payableBooking.id
+            : ""
       },
       calView: { y: calView.y, m: calView.m }
     };
@@ -227,6 +232,8 @@
           confirmed = false;
         }
         wizardState.unitSelectionConfirmed = confirmed;
+        wizardState.reviewBookingId = w.reviewBookingId || null;
+        wizardState.payableBooking = w.payableBookingId ? { id: w.payableBookingId } : null;
       }
 
       if (draft.calView && draft.calView.y != null && draft.calView.m != null) {
@@ -5554,6 +5561,43 @@
     }, 280);
   }
 
+  function restoreReachedBookingStep(step, bookingId) {
+    function showStepOne() {
+      goStep(1);
+      renderCalendar();
+      updatePickedSummary();
+      renderUnitSelectionSummary();
+      renderBookingDetailsSummary();
+      updateStep2ContinueButton();
+    }
+    function apply() {
+      var user =
+        window.ElenestAuth && window.ElenestAuth.getCurrentUser
+          ? window.ElenestAuth.getCurrentUser()
+          : null;
+      var booking = null;
+      if (user && window.ElenestBookings && typeof window.ElenestBookings.listForUser === "function") {
+        var list = window.ElenestBookings.listForUser(user.email) || [];
+        for (var i = 0; i < list.length; i++) {
+          if (list[i] && String(list[i].id) === String(bookingId)) booking = list[i];
+        }
+      }
+      if (!booking) {
+        showStepOne();
+        return;
+      }
+      if (step === 4) openPaymentForBooking(booking);
+      else openConfirmationForBooking(booking);
+      if (currentFlowStep !== step) showStepOne();
+    }
+    var ready = window.ElenestBookings && window.ElenestBookings.ready;
+    if (ready && typeof ready.then === "function") {
+      Promise.resolve(ready).then(apply).catch(showStepOne);
+      return;
+    }
+    apply();
+  }
+
   function restoreFlowStep() {
     var step = 1;
     try {
@@ -5571,12 +5615,16 @@
         if (n >= 1 && n <= 4) step = n;
       }
     } catch (e) {}
-    if (!wizardState.skipResume && (step === 1 || step === 3 || step === 4)) {
-      tryResumeOpenBooking();
-      if (didResumeOpenBooking) return;
-    }
-    if ((step === 3 || step === 4) && !wizardState.payableBooking && !wizardState.reviewBookingId) {
-      step = 1;
+    if (step === 3 || step === 4) {
+      var savedBookingId =
+        wizardState.reviewBookingId ||
+        (wizardState.payableBooking && wizardState.payableBooking.id);
+      if (!savedBookingId || wizardState.skipResume) {
+        step = 1;
+      } else {
+        restoreReachedBookingStep(step, savedBookingId);
+        return;
+      }
     }
     goStep(step);
     if (step === 1) {
@@ -7369,15 +7417,6 @@
       applyAvailabilityPrefill();
       restoreFlowStep();
       saveBookingDraft();
-      if (window.ElenestBookings && window.ElenestBookings.ready) {
-        Promise.resolve(window.ElenestBookings.ready)
-          .catch(function () {
-            return null;
-          })
-          .then(function () {
-            if (currentFlowStep === 1) tryResumeOpenBooking();
-          });
-      }
     } catch (err) {
       try {
         console.warn("[Elenest Book] Session apply failed:", err);
@@ -7611,7 +7650,6 @@
   }, 1000);
 
   window.addEventListener("elenest-bookings-updated", function () {
-    if (currentFlowStep === 1) tryResumeOpenBooking();
     if (isAppointmentsOverlayOpen() || currentFlowStep === 4) renderAppointmentsBoard();
     if (currentFlowStep === 3) renderBookingConfirmationPanel();
     if (currentFlowStep === 4 && wizardState.paymentProofSubmitted) renderPaymentSubmittedState();
