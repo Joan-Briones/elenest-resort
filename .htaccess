@@ -5,17 +5,19 @@
 
   # These rules apply only when the project is the domain root.
   # Local XAMPP (/Elenest_Resort/...) keeps its current /html/ paths.
+  # Render's Apache listens on an internal port. Redirecting to "/" becomes
+  # http://elenestresort.com:10000/, so use the public https address.
   RewriteCond %{THE_REQUEST} \s/+html/index\.html[\s?] [NC]
   RewriteCond %{REQUEST_URI} ^/html/index\.html$
-  RewriteRule ^html/index\.html$ / [R=301,L,QSA]
+  RewriteRule ^html/index\.html$ https://elenestresort.com/ [R=301,L,QSA]
 
   RewriteCond %{THE_REQUEST} \s/+html/?[\s?] [NC]
   RewriteCond %{REQUEST_URI} ^/html/?$
-  RewriteRule ^html/?$ / [R=301,L,QSA]
+  RewriteRule ^html/?$ https://elenestresort.com/ [R=301,L,QSA]
 
   RewriteCond %{THE_REQUEST} \s/+index\.html[\s?] [NC]
   RewriteCond %{REQUEST_URI} ^/index\.html$
-  RewriteRule ^index\.html$ / [R=301,L,QSA]
+  RewriteRule ^index\.html$ https://elenestresort.com/ [R=301,L,QSA]
 
   # Serve the real homepage without changing the address bar.
   RewriteCond %{REQUEST_URI} ^/$ [OR]
