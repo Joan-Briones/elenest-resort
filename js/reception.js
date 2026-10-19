@@ -446,6 +446,9 @@
           if (htmlIdx !== -1) {
             return window.location.origin + path.substring(0, htmlIdx + 6);
           }
+          if (path === "/" || /^\/[^/]+\.html$/i.test(path)) {
+            return window.location.origin + "/html/";
+          }
           var live = String(cfg.siteHtmlBaseUrl || "").trim();
           if (live) {
             if (live.charAt(live.length - 1) !== "/") live += "/";

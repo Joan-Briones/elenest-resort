@@ -5,17 +5,22 @@
   "redirects": [
     {
       "source": "/html/index.html",
-      "destination": "/",
+      "destination": "https://elenestresort.com/",
       "permanent": true
     },
     {
       "source": "/html",
-      "destination": "/",
+      "destination": "https://elenestresort.com/",
       "permanent": true
     },
     {
       "source": "/index.html",
-      "destination": "/",
+      "destination": "https://elenestresort.com/",
+      "permanent": true
+    },
+    {
+      "source": "/html/:file.html",
+      "destination": "https://elenestresort.com/:file.html",
       "permanent": true
     }
   ],
@@ -23,6 +28,10 @@
     {
       "source": "/",
       "destination": "/html/index.html"
+    },
+    {
+      "source": "/:file.html",
+      "destination": "/html/:file.html"
     }
   ]
 }

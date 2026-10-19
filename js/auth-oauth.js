@@ -285,7 +285,7 @@
     if (htmlIdx !== -1) {
       return window.location.origin + path.substring(0, htmlIdx + 6);
     }
-    if (path === "/" || path === "/index.html") {
+    if (path === "/" || /^\/[^/]+\.html$/i.test(path)) {
       return window.location.origin + "/html/";
     }
     var lastSlash = path.lastIndexOf("/");

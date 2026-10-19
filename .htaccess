@@ -1,5 +1,5 @@
-# Public site root should stay https://elenestresort.com/
-# Pages still live in /html/, but that folder must not appear for the homepage.
+# Keep every public page on https://elenestresort.com/
+# Files stay in /html/, but that folder must not appear in the address bar.
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
@@ -7,6 +7,7 @@
   # Local XAMPP (/Elenest_Resort/...) keeps its current /html/ paths.
   # Render's Apache listens on an internal port. Redirecting to "/" becomes
   # http://elenestresort.com:10000/, so use the public https address.
+
   RewriteCond %{THE_REQUEST} \s/+html/index\.html[\s?] [NC]
   RewriteCond %{REQUEST_URI} ^/html/index\.html$
   RewriteRule ^html/index\.html$ https://elenestresort.com/ [R=301,L,QSA]
@@ -19,8 +20,17 @@
   RewriteCond %{REQUEST_URI} ^/index\.html$
   RewriteRule ^index\.html$ https://elenestresort.com/ [R=301,L,QSA]
 
+  RewriteCond %{THE_REQUEST} \s/+html/[^?\s]+\.html[\s?] [NC]
+  RewriteCond %{REQUEST_URI} ^/html/[^/]+\.html$
+  RewriteRule ^html/(.+\.html)$ https://elenestresort.com/$1 [R=301,L,QSA]
+
   # Serve the real homepage without changing the address bar.
   RewriteCond %{REQUEST_URI} ^/$ [OR]
   RewriteCond %{REQUEST_URI} ^/index\.html$
   RewriteRule ^(index\.html)?$ html/index.html [L]
+
+  # /about.html and the other sections are served from /html/ internally.
+  RewriteCond %{REQUEST_URI} ^/[^/]+\.html$
+  RewriteCond %{DOCUMENT_ROOT}/html%{REQUEST_URI} -f
+  RewriteRule ^([^/]+\.html)$ html/$1 [L]
 </IfModule>
