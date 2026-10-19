@@ -26108,3 +26108,162 @@ html[data-theme="dark"] .book-unit-info__eyebrow {
   color: #f3b7c8 !important;
   -webkit-text-fill-color: #f3b7c8 !important;
 }
+
+html[data-theme="dark"] .facility-detail-modal,
+html[data-theme="dark"] .facility-detail-modal__body,
+html[data-theme="dark"] .facility-detail-modal__intro,
+html[data-theme="dark"] .facility-detail-modal__panel,
+html[data-theme="dark"] .facility-detail-modal__panel--notes,
+html[data-theme="dark"] .facility-detail-modal__amenity-grid li,
+html[data-theme="dark"] .facility-detail-meta-item,
+html[data-theme="dark"] .facility-detail-modal__actions,
+html[data-theme="dark"] .logout-confirm,
+html[data-theme="dark"] .admin-settings-modal,
+html[data-theme="dark"] .payment-success-modal,
+html[data-theme="dark"] .payment-rules-modal,
+html[data-theme="dark"] .booking-terms-modal,
+html[data-theme="dark"] .staff-gate-modal,
+html[data-theme="dark"] .book-unit-modal__dialog,
+html[data-theme="dark"] .weather-modal__dialog,
+html[data-theme="dark"] .weather-widget,
+html[data-theme="dark"] .login-activity-detail__dialog,
+html[data-theme="dark"] .guest-profile-modal,
+html[data-theme="dark"] .manager-edit-modal,
+html[data-theme="dark"] .admin-payment-proof-modal,
+html[data-theme="dark"] .customer-notif-detail-modal,
+html[data-theme="dark"] .admin-sentiment-archive-modal,
+html[data-theme="dark"] .appointments-strip,
+html[data-theme="dark"] #section-dashboard > .appointments-strip,
+html[data-theme="dark"] #section-messages > .appointments-strip,
+html[data-theme="dark"] #section-content > .appointments-strip,
+html[data-theme="dark"] #section-manage > .appointments-strip,
+html[data-theme="dark"] #section-calendar > .appointments-strip,
+html[data-theme="dark"] #section-calendar-access > .appointments-strip,
+html[data-theme="dark"] #section-activity-logs > .appointments-strip,
+html[data-theme="dark"] #section-payments > .appointments-strip,
+html[data-theme="dark"] #section-analytics > .appointments-strip,
+html[data-theme="dark"] .manager-cal-selected,
+html[data-theme="dark"] .admin-payment-empty {
+  background: #221e28 !important;
+  background-image: none !important;
+  color: #f7f2f5 !important;
+  border-color: rgba(196, 107, 130, 0.32) !important;
+}
+
+html[data-theme="dark"] .facility-detail-modal__title,
+html[data-theme="dark"] .facility-detail-modal__desc,
+html[data-theme="dark"] .facility-detail-modal__panel h3,
+html[data-theme="dark"] .facility-detail-modal__panel-sub,
+html[data-theme="dark"] .facility-detail-modal__amenity-grid li,
+html[data-theme="dark"] .facility-detail-modal__notes-list li,
+html[data-theme="dark"] .facility-detail-meta-item,
+html[data-theme="dark"] .facility-detail-meta-item__value,
+html[data-theme="dark"] .facility-detail-meta-item strong,
+html[data-theme="dark"] .facility-detail-modal__actions-copy strong,
+html[data-theme="dark"] .facility-detail-modal__actions-copy span,
+html[data-theme="dark"] .logout-confirm__title,
+html[data-theme="dark"] .logout-confirm__lead,
+html[data-theme="dark"] .admin-settings-modal h3,
+html[data-theme="dark"] .admin-settings-modal p,
+html[data-theme="dark"] .admin-settings-modal label,
+html[data-theme="dark"] .book-unit-modal__title,
+html[data-theme="dark"] .book-unit-modal__dates,
+html[data-theme="dark"] .book-unit-modal__capacity,
+html[data-theme="dark"] .weather-modal__title,
+html[data-theme="dark"] .weather-modal__place,
+html[data-theme="dark"] .weather-modal__status,
+html[data-theme="dark"] .weather-widget__label,
+html[data-theme="dark"] .weather-widget__status,
+html[data-theme="dark"] .weather-widget__temp,
+html[data-theme="dark"] .appointments-strip__title,
+html[data-theme="dark"] body.subpage .appointments-strip__title,
+html[data-theme="dark"] .appointments-strip__lead,
+html[data-theme="dark"] .manager-cal-selected__info,
+html[data-theme="dark"] .manager-cal-selected__status,
+html[data-theme="dark"] .book-details-summary .book-unit-picker__title,
+html[data-theme="dark"] .book-details-summary__list dd,
+html[data-theme="dark"] .book-details-summary__hint,
+html[data-theme="dark"] body.subpage .book-details-summary__hint,
+html[data-theme="dark"] .book-facility-pool-note,
+html[data-theme="dark"] .book-facility-pool-note--room,
+html[data-theme="dark"] .book-facility-pool-note--hall,
+html[data-theme="dark"] .book-facility-pool-note--cottage,
+html[data-theme="dark"] .book-facility-pool-note p,
+html[data-theme="dark"] .book-hall-pool-note,
+html[data-theme="dark"] .book-hall-pool-note p,
+html[data-theme="dark"] .admin-pay-cell-main,
+html[data-theme="dark"] .guest-profile-modal,
+html[data-theme="dark"] .guest-profile-modal h3,
+html[data-theme="dark"] .guest-profile-modal p,
+html[data-theme="dark"] .guest-profile-modal label,
+html[data-theme="dark"] .manager-edit-modal,
+html[data-theme="dark"] .manager-edit-modal h3,
+html[data-theme="dark"] .manager-edit-modal p,
+html[data-theme="dark"] .manager-edit-modal label,
+html[data-theme="dark"] .payment-rules-modal,
+html[data-theme="dark"] .payment-rules-modal h3,
+html[data-theme="dark"] .payment-rules-modal p,
+html[data-theme="dark"] .payment-rules-modal li,
+html[data-theme="dark"] .booking-terms-modal,
+html[data-theme="dark"] .booking-terms-modal h3,
+html[data-theme="dark"] .booking-terms-modal p,
+html[data-theme="dark"] .booking-terms-modal li,
+html[data-theme="dark"] .customer-notif-detail-modal,
+html[data-theme="dark"] .customer-notif-detail-modal h3,
+html[data-theme="dark"] .customer-notif-detail-modal p {
+  color: #f7f2f5 !important;
+  -webkit-text-fill-color: #f7f2f5 !important;
+}
+
+html[data-theme="dark"] .facility-detail-modal__eyebrow,
+html[data-theme="dark"] .facility-detail-modal__panel-kicker,
+html[data-theme="dark"] .facility-detail-meta-item__label,
+html[data-theme="dark"] .book-details-summary__list dt,
+html[data-theme="dark"] .book-facility-pool-note strong,
+html[data-theme="dark"] .book-hall-pool-note strong,
+html[data-theme="dark"] .weather-widget__place {
+  color: #f3b7c8 !important;
+  -webkit-text-fill-color: #f3b7c8 !important;
+}
+
+html[data-theme="dark"] .weather-widget__place {
+  color: #d7f5c4 !important;
+  -webkit-text-fill-color: #d7f5c4 !important;
+}
+
+html[data-theme="dark"] .weather-day__name,
+html[data-theme="dark"] .weather-day__temps {
+  color: #2a2030 !important;
+  -webkit-text-fill-color: #2a2030 !important;
+}
+
+html[data-theme="dark"] .weather-day__temps em {
+  color: #9e4d66 !important;
+  -webkit-text-fill-color: #9e4d66 !important;
+}
+
+html[data-theme="dark"] .logout-confirm__btn--no {
+  background: #2a2430 !important;
+  color: #f7f2f5 !important;
+  -webkit-text-fill-color: #f7f2f5 !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+html[data-theme="dark"] .facility-detail-modal__price,
+html[data-theme="dark"] .facility-detail-modal__price-unit,
+html[data-theme="dark"] .weather-widget__hint {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html[data-theme="dark"] .admin-pay-cell-sub {
+  color: #e4d5dc !important;
+  -webkit-text-fill-color: #e4d5dc !important;
+}
+
+html[data-theme="dark"] .book-unit-modal__close,
+html[data-theme="dark"] .facility-detail-modal__close,
+html[data-theme="dark"] .weather-modal__close {
+  background: #2a2430 !important;
+  color: #f7f2f5 !important;
+}
