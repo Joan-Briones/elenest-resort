@@ -25744,3 +25744,163 @@ body:not(.subpage) .news .box {
     transform: none !important;
   }
 }
+
+/* Dark mode. Light mode stays the default until the visitor chooses otherwise. */
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --page-bg: #141218;
+  --text-on-light: #f7f2f5;
+  --brand-ink: #f4eef2;
+  --dt-head-bg: #2a2432;
+  --dt-head-bg-pink: #32242c;
+  --dt-head-color: #e7f6d8;
+  --dt-head-color-pink: #f6d5df;
+  --dt-row-line: rgba(255, 255, 255, 0.08);
+  --dt-row-line-pink: rgba(196, 107, 130, 0.28);
+  --dt-row-alt: #1c1822;
+  --dt-row-alt-pink: #221c24;
+  --dt-row-hover: #2c2633;
+  --dt-row-hover-pink: #33262d;
+  --dt-border: 1px solid rgba(127, 193, 66, 0.28);
+  --dt-border-pink: 1px solid rgba(196, 107, 130, 0.32);
+  --dt-shadow: none;
+}
+
+html[data-theme="dark"] body {
+  background: #141218 !important;
+  color: #f7f2f5;
+}
+
+html[data-theme="dark"] body.subpage h1,
+html[data-theme="dark"] body.subpage h2,
+html[data-theme="dark"] body.subpage h3,
+html[data-theme="dark"] body.subpage h4,
+html[data-theme="dark"] body.subpage h5,
+html[data-theme="dark"] body.subpage p,
+html[data-theme="dark"] body.subpage li,
+html[data-theme="dark"] body.subpage label,
+html[data-theme="dark"] body.subpage .note,
+html[data-theme="dark"] body.subpage .auth-lead,
+html[data-theme="dark"] body.subpage .book-flow__panel-lead,
+html[data-theme="dark"] body.subpage .booking-form-hint,
+html[data-theme="dark"] body.subpage .section-title {
+  color: #f4eef2;
+}
+
+html[data-theme="dark"] .card,
+html[data-theme="dark"] .subpage .card,
+html[data-theme="dark"] .auth-card,
+html[data-theme="dark"] .login-reserve-card,
+html[data-theme="dark"] .book-flow,
+html[data-theme="dark"] .book-flow__panel,
+html[data-theme="dark"] .book-flow-block,
+html[data-theme="dark"] .book-flow-calendar,
+html[data-theme="dark"] .book-unit-summary,
+html[data-theme="dark"] .book-details-summary,
+html[data-theme="dark"] .admin-kpi-card,
+html[data-theme="dark"] .admin-payment-kpi-card,
+html[data-theme="dark"] .manager-chart-card,
+html[data-theme="dark"] .admin-report-chart-card,
+html[data-theme="dark"] .admin-booking-review-card,
+html[data-theme="dark"] .review-card,
+html[data-theme="dark"] .facility-card,
+html[data-theme="dark"] .stay-schedule__card,
+html[data-theme="dark"] .book-capacity-notice,
+html[data-theme="dark"] .book-facility-pool-note,
+html[data-theme="dark"] .avail-modal__dialog,
+html[data-theme="dark"] .swal2-popup,
+html[data-theme="dark"] .staff-boot-loading__card,
+html[data-theme="dark"] .admin-nav-dropdown-menu,
+html[data-theme="dark"] .rooms .items,
+html[data-theme="dark"] .news .box,
+html[data-theme="dark"] .home-review-kpis__item,
+html[data-theme="dark"] .staff-header-user__inner,
+html[data-theme="dark"] .book-date-trigger,
+html[data-theme="dark"] .btn--outline {
+  background: #221e28 !important;
+  background-image: none !important;
+  color: #f7f2f5;
+  border-color: rgba(196, 107, 130, 0.32) !important;
+}
+
+html[data-theme="dark"] body.subpage input:not(.swal2-input):not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="hidden"]):not([type="range"]),
+html[data-theme="dark"] body.subpage textarea:not(.swal2-textarea),
+html[data-theme="dark"] body.subpage select:not(.swal2-select),
+html[data-theme="dark"] input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="hidden"]):not([type="range"]),
+html[data-theme="dark"] textarea,
+html[data-theme="dark"] select {
+  background: #1b1722 !important;
+  color: #f7f2f5 !important;
+  -webkit-text-fill-color: #f7f2f5 !important;
+  border-color: rgba(196, 107, 130, 0.38) !important;
+}
+
+html[data-theme="dark"] ::placeholder {
+  color: #b7aab3;
+}
+
+html[data-theme="dark"] table,
+html[data-theme="dark"] .subpage table {
+  background: #1c1822;
+  color: #f4eef2;
+}
+
+html[data-theme="dark"] table th,
+html[data-theme="dark"] table td {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+html[data-theme="dark"] .btn,
+html[data-theme="dark"] .book-flow-btn-main,
+html[data-theme="dark"] .book-reserve-submit,
+html[data-theme="dark"] .primary-btn {
+  color: #ffffff;
+}
+
+html[data-theme="dark"] header {
+  background: #b85d76;
+}
+
+html[data-theme="dark"] footer,
+html[data-theme="dark"] footer p,
+html[data-theme="dark"] footer li,
+html[data-theme="dark"] .subpage footer,
+html[data-theme="dark"] .subpage footer p {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+header .theme-toggle {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  margin: 0;
+  padding: 0;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+  cursor: pointer;
+  box-shadow: none;
+}
+
+header .theme-toggle:hover,
+header .theme-toggle:focus-visible {
+  background: rgba(255, 255, 255, 0.28);
+  color: #ffffff;
+  outline: none;
+}
+
+header .theme-toggle__icon {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+html:not([data-theme="dark"]) .theme-toggle__moon,
+html[data-theme="dark"] .theme-toggle__sun {
+  display: none;
+}

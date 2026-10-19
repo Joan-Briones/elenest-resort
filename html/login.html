@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login | Elenest Resort</title>
   <link rel="icon" type="image/png" href="../Images/icon.png">
-  <link rel="stylesheet" href="../css/style.css?v=20261020-schedule4">
+  <link rel="stylesheet" href="../css/style.css?v=20261020-theme1">
+  <script src="../js/theme.js?v=20261020-theme1"></script>
   <script src="../js/supabase-config.js?v=20260922-iphone13"></script>
   <script src="../js/site-boot.js"></script>
 </head>
@@ -31,6 +32,15 @@
             <a href="login.html" class="role-login-trigger staff-access-btn active" id="roleLoginTrigger" aria-label="Sign In" aria-current="page">Sign In</a>
           </li>
         </ul>
+        <button type="button" class="theme-toggle" id="themeToggle" aria-pressed="false" aria-label="Switch to dark mode" title="Dark mode">
+          <svg class="theme-toggle__icon theme-toggle__sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2.5v2.2M12 19.3v2.2M4.8 4.8l1.6 1.6M17.6 17.6l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.8 19.2l1.6-1.6M17.6 6.4l1.6-1.6"></path>
+          </svg>
+          <svg class="theme-toggle__icon theme-toggle__moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 14.5A8.5 8.5 0 1 1 9.5 3 7 7 0 0 0 21 14.5z"></path>
+          </svg>
+        </button>
         <button type="button" class="nav-menu-toggle" id="navMenuToggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="menulist">
           <span class="nav-menu-toggle__bar" aria-hidden="true"></span>
           <span class="nav-menu-toggle__bar" aria-hidden="true"></span>

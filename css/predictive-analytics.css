@@ -851,3 +851,24 @@
     -webkit-overflow-scrolling: touch;
   }
 }
+
+html[data-theme="dark"] #section-predictive {
+  --pa-ink: #f4eef2;
+  --pa-muted: #cbbfc6;
+  --pa-line: rgba(255, 255, 255, 0.12);
+  color: #f4eef2;
+}
+
+html[data-theme="dark"] #section-predictive .pa-panel,
+html[data-theme="dark"] #section-predictive .pa-stat-card,
+html[data-theme="dark"] #section-predictive .pa-feedback-card,
+html[data-theme="dark"] #section-predictive .pa-jump-chip,
+html[data-theme="dark"] #section-predictive .pa-chart-tooltip,
+html[data-theme="dark"] #section-predictive .pa-table-wrap,
+html[data-theme="dark"] #section-predictive .pa-rec-item,
+html[data-theme="dark"] #section-predictive .pa-filter-chip,
+html[data-theme="dark"] #section-predictive .pa-filter-chip select {
+  background: #221e28;
+  color: #f4eef2;
+  border-color: rgba(196, 107, 130, 0.32);
+}
