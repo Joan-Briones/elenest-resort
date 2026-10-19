@@ -5623,7 +5623,7 @@ footer i,
 
 #bookPanel1 .book-flow-block {
   margin-top: 14px;
-  margin-bottom: 0;
+  margin-bottom: 16px;
 }
 
 #bookPanel2 .book-flow-block {
@@ -6233,7 +6233,9 @@ footer i,
   display: flex;
   gap: 12px;
   align-items: flex-start;
-  margin: 4px 0 2px;
+  margin: 4px 0 8px;
+  position: relative;
+  z-index: 1;
   padding: 14px 16px;
   border-radius: 12px;
   border: 1px solid #f5d0a9;
@@ -19167,9 +19169,15 @@ body.weather-modal-open {
   cursor: default;
 }
 
+#bookFlowTimesSection {
+  margin-top: 4px;
+  clear: both;
+}
+
 #bookDayTourScheduleWrap,
 .stay-schedule-wrap {
   grid-column: 1 / -1;
+  margin-top: 2px;
 }
 
 .stay-schedule {
@@ -19177,6 +19185,7 @@ body.weather-modal-open {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
   width: 100%;
+  max-width: 100%;
 }
 
 #availDayScheduleWrap.avail-stay-times__field {
