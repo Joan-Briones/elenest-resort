@@ -1732,6 +1732,7 @@
         var path = loc.pathname || "/";
         var htmlIdx = path.toLowerCase().lastIndexOf("/html/");
         if (htmlIdx !== -1) return loc.origin + path.substring(0, htmlIdx + 6);
+        if (path === "/" || path === "/index.html") return loc.origin + "/html/";
       }
     } catch (e) {}
     return publicBase;
