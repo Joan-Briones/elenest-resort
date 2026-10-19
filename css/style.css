@@ -26442,3 +26442,106 @@ html[data-theme="dark"] .admin-app .admin-model-eval__badge--good {
   color: #d7f5c4 !important;
   -webkit-text-fill-color: #d7f5c4 !important;
 }
+
+html[data-theme="dark"] .avail-modal__calendar-title,
+html[data-theme="dark"] .avail-modal__calendar-lead,
+html[data-theme="dark"] .avail-modal__calendar-lead strong,
+html[data-theme="dark"] .avail-facility-section__title,
+html[data-theme="dark"] .avail-facility-section__lead,
+html[data-theme="dark"] .book-unit-picker__title,
+html[data-theme="dark"] .book-unit-picker__group-title {
+  color: #f7f2f5 !important;
+  -webkit-text-fill-color: #f7f2f5 !important;
+}
+
+html[data-theme="dark"] .subpage .auth-msg,
+html[data-theme="dark"] .subpage .auth-msg--err,
+html[data-theme="dark"] .subpage .auth-msg--ok {
+  background: #2a2430 !important;
+  color: #f7f2f5 !important;
+  -webkit-text-fill-color: #f7f2f5 !important;
+  border-color: rgba(196, 107, 130, 0.4) !important;
+}
+
+html[data-theme="dark"] .manager-msg-table,
+html[data-theme="dark"] .manager-msg-table-wrap,
+html[data-theme="dark"] .manager-msg-row td,
+html[data-theme="dark"] .manager-msg-table tbody td,
+html[data-theme="dark"] .manager-msg-table tbody th {
+  background: #1c1822 !important;
+  color: #f7f2f5 !important;
+  -webkit-text-fill-color: #f7f2f5 !important;
+}
+
+html[data-theme="dark"] .manager-msg-table tbody tr:nth-child(even) td,
+html[data-theme="dark"] .manager-msg-row:nth-child(even) td {
+  background: #261f2c !important;
+}
+
+html[data-theme="dark"] .manager-msg-customer__name,
+html[data-theme="dark"] .manager-msg-body,
+html[data-theme="dark"] .manager-msg-when {
+  color: #f7f2f5 !important;
+  -webkit-text-fill-color: #f7f2f5 !important;
+}
+
+html[data-theme="dark"] .admin-report-insights,
+html[data-theme="dark"] .manager-chart-insights {
+  background: #221e28 !important;
+  background-image: none !important;
+  border-color: rgba(196, 107, 130, 0.32) !important;
+}
+
+html[data-theme="dark"] .admin-report-insights__title,
+html[data-theme="dark"] .manager-chart-insights__title {
+  color: #f3b7c8 !important;
+  -webkit-text-fill-color: #f3b7c8 !important;
+}
+
+html[data-theme="dark"] .admin-report-insights__list li,
+html[data-theme="dark"] .manager-chart-insights__list li {
+  color: #f7f2f5 !important;
+  -webkit-text-fill-color: #f7f2f5 !important;
+}
+
+html[data-theme="dark"] .checkin-ticket-list {
+  --ticket-paper: #221e28;
+  --ticket-notch: #1b1722;
+  --ticket-ink: #f7f2f5;
+  --ticket-muted: #e4d5dc;
+  background: #1b1722 !important;
+}
+
+html[data-theme="dark"] .checkin-ticket {
+  background: #221e28 !important;
+  color: #f7f2f5 !important;
+}
+
+html[data-theme="dark"] .checkin-ticket__guest,
+html[data-theme="dark"] .checkin-ticket__id,
+html[data-theme="dark"] .checkin-ticket__meta-item dd {
+  color: #f7f2f5 !important;
+  -webkit-text-fill-color: #f7f2f5 !important;
+}
+
+html[data-theme="dark"] .checkin-ticket__meta-item dt {
+  color: #f3b7c8 !important;
+  -webkit-text-fill-color: #f3b7c8 !important;
+}
+
+html[data-theme="dark"] .reception-records-panel,
+html[data-theme="dark"] .reception-records-panel--checkout {
+  background: #221e28 !important;
+  background-image: none !important;
+  border-color: rgba(196, 107, 130, 0.32) !important;
+}
+
+html[data-theme="dark"] .reception-records-split__heading,
+html[data-theme="dark"] .reception-records-split__empty,
+html[data-theme="dark"] .reception-table__name,
+html[data-theme="dark"] .reception-table__facility,
+html[data-theme="dark"] .reception-table__date,
+html[data-theme="dark"] .reception-table__id {
+  color: #f7f2f5 !important;
+  -webkit-text-fill-color: #f7f2f5 !important;
+}
