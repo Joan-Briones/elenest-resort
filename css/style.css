@@ -26267,3 +26267,100 @@ html[data-theme="dark"] .weather-modal__close {
   background: #2a2430 !important;
   color: #f7f2f5 !important;
 }
+
+html[data-theme="dark"] body.subpage .staff-header-user__inner {
+  background: #1b1722 !important;
+  color: #ffffff !important;
+}
+
+html[data-theme="dark"] body.subpage .staff-header-user__name,
+html[data-theme="dark"] .staff-identity-popover__name {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html[data-theme="dark"] body.subpage .staff-header-user__role,
+html[data-theme="dark"] .staff-identity-popover__role {
+  color: #f3b7c8 !important;
+  -webkit-text-fill-color: #f3b7c8 !important;
+}
+
+html[data-theme="dark"] .staff-identity-popover {
+  background: #221e28 !important;
+  color: #f7f2f5 !important;
+  border-color: rgba(196, 107, 130, 0.35) !important;
+}
+
+html[data-theme="dark"] .staff-identity-popover__hint {
+  color: #e4d5dc !important;
+  -webkit-text-fill-color: #e4d5dc !important;
+}
+
+html[data-theme="dark"] .news {
+  background: #141218 !important;
+}
+
+html[data-theme="dark"] .news .left .items .text h2,
+html[data-theme="dark"] .news .items p,
+html[data-theme="dark"] .news .admin label,
+html[data-theme="dark"] .news .box h3,
+html[data-theme="dark"] .news .box p {
+  color: #f7f2f5 !important;
+  -webkit-text-fill-color: #f7f2f5 !important;
+}
+
+html[data-theme="dark"] .news .left .items .text h2 {
+  color: #d7f5c4 !important;
+  -webkit-text-fill-color: #d7f5c4 !important;
+}
+
+html[data-theme="dark"] .admin-app .admin-sentiment-rec-inner,
+html[data-theme="dark"] .admin-app .admin-sentiment-rec-item,
+html[data-theme="dark"] .admin-app .admin-sentiment-rec-item--action,
+html[data-theme="dark"] .admin-app .admin-sentiment-rec-item--watch,
+html[data-theme="dark"] .admin-app .admin-sentiment-rec-item--positive,
+html[data-theme="dark"] .admin-app .admin-sentiment-rec-item--neutral,
+html[data-theme="dark"] .admin-app .sentiment-current-week-empty,
+html[data-theme="dark"] .admin-app .sentiment-archive-empty,
+html[data-theme="dark"] #section-dashboard .manager-chart-insights,
+html[data-theme="dark"] #section-analytics .manager-chart-insights {
+  background: #221e28 !important;
+  background-image: none !important;
+  color: #f7f2f5 !important;
+  border-color: rgba(196, 107, 130, 0.32) !important;
+}
+
+html[data-theme="dark"] .admin-app .admin-sentiment-rec-title,
+html[data-theme="dark"] .admin-app .admin-sentiment-rec-summary,
+html[data-theme="dark"] .admin-app .admin-sentiment-rec-item-title,
+html[data-theme="dark"] .admin-app .admin-sentiment-rec-item-text,
+html[data-theme="dark"] .admin-app .admin-sentiment-h3,
+html[data-theme="dark"] .admin-app .admin-sentiment-metric-card .admin-sentiment-h3,
+html[data-theme="dark"] .admin-app .admin-sentiment-label,
+html[data-theme="dark"] .admin-app .admin-sentiment-sub,
+html[data-theme="dark"] .admin-app .admin-sentiment-total,
+html[data-theme="dark"] .admin-app .sentiment-current-week-empty,
+html[data-theme="dark"] .admin-app .sentiment-archive-empty,
+html[data-theme="dark"] #section-dashboard .manager-chart-card__title,
+html[data-theme="dark"] #section-analytics .manager-chart-card__title,
+html[data-theme="dark"] #section-dashboard .manager-chart-insights__list li,
+html[data-theme="dark"] #section-analytics .manager-chart-insights__list li,
+html[data-theme="dark"] #section-dashboard .manager-chart-card__sub,
+html[data-theme="dark"] #section-analytics .manager-chart-card__sub,
+html[data-theme="dark"] .admin-users-password {
+  color: #f7f2f5 !important;
+  -webkit-text-fill-color: #f7f2f5 !important;
+}
+
+html[data-theme="dark"] .admin-app .admin-sentiment-rec-badge {
+  color: #f3b7c8 !important;
+  -webkit-text-fill-color: #f3b7c8 !important;
+  background: rgba(196, 107, 130, 0.16);
+  border-color: rgba(196, 107, 130, 0.35);
+}
+
+html[data-theme="dark"] #section-dashboard .manager-chart-insights__title,
+html[data-theme="dark"] #section-analytics .manager-chart-insights__title {
+  color: #f3b7c8 !important;
+  -webkit-text-fill-color: #f3b7c8 !important;
+}
