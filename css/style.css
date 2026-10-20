@@ -26609,3 +26609,123 @@ html[data-theme="dark"] .customer-notif-item__time {
   color: #f7f2f5 !important;
   -webkit-text-fill-color: #f7f2f5 !important;
 }
+
+html[data-theme="dark"] .m-record {
+  background: #2a2430 !important;
+  border-color: rgba(196, 107, 130, 0.35) !important;
+  box-shadow: none !important;
+}
+
+html[data-theme="dark"] .m-record__title,
+html[data-theme="dark"] .m-record-section {
+  color: #f7f2f5 !important;
+  -webkit-text-fill-color: #f7f2f5 !important;
+}
+
+html[data-theme="dark"] .m-record__meta {
+  color: #e7d5de !important;
+  -webkit-text-fill-color: #e7d5de !important;
+}
+
+html[data-theme="dark"] .m-record-modal__panel,
+html[data-theme="dark"] .m-record-modal__close {
+  background: #221e28 !important;
+  border-color: rgba(196, 107, 130, 0.32) !important;
+}
+
+html[data-theme="dark"] .m-record-modal__title,
+html[data-theme="dark"] .m-record-modal__row,
+html[data-theme="dark"] .m-record-modal__value,
+html[data-theme="dark"] .m-record-modal__value * {
+  color: #f7f2f5 !important;
+  -webkit-text-fill-color: #f7f2f5 !important;
+}
+
+html[data-theme="dark"] .m-record-modal__label {
+  color: #f3b7c8 !important;
+  -webkit-text-fill-color: #f3b7c8 !important;
+}
+
+html[data-theme="dark"] .m-record-modal__row {
+  border-bottom-color: rgba(196, 107, 130, 0.22) !important;
+}
+
+html[data-theme="dark"] .m-record-modal__close {
+  color: #f3b7c8 !important;
+  -webkit-text-fill-color: #f3b7c8 !important;
+}
+
+html[data-theme="dark"] .subpage .booking-card {
+  background: #221e28 !important;
+  background-image: none !important;
+  border-color: rgba(196, 107, 130, 0.32) !important;
+  box-shadow: none !important;
+}
+
+html[data-theme="dark"] .subpage .booking-card__name,
+html[data-theme="dark"] .subpage .booking-card__value,
+html[data-theme="dark"] .appointments-modal__lead,
+html[data-theme="dark"] .subpage .booking-card__details summary,
+html[data-theme="dark"] .subpage .booking-dl dd {
+  color: #f7f2f5 !important;
+  -webkit-text-fill-color: #f7f2f5 !important;
+}
+
+html[data-theme="dark"] .subpage .booking-card__label,
+html[data-theme="dark"] .subpage .booking-card__sub,
+html[data-theme="dark"] .subpage .booking-dl dt {
+  color: #e7d5de !important;
+  -webkit-text-fill-color: #e7d5de !important;
+}
+
+html[data-theme="dark"] .subpage .booking-card__value--note,
+html[data-theme="dark"] .subpage .booking-card__note-row .booking-card__label {
+  color: #fdba74 !important;
+  -webkit-text-fill-color: #fdba74 !important;
+}
+
+html[data-theme="dark"] .subpage .booking-card__row {
+  border-bottom-color: rgba(196, 107, 130, 0.2) !important;
+}
+
+html[data-theme="dark"] .subpage .booking-card__details {
+  background: #1b1722 !important;
+  border-color: rgba(196, 107, 130, 0.28) !important;
+}
+
+html[data-theme="dark"] .subpage .booking-card__details .booking-dl {
+  border-top-color: rgba(196, 107, 130, 0.22) !important;
+}
+
+html[data-theme="dark"] .book-status-stepper__step {
+  background: #2a2430 !important;
+  color: #f7f2f5 !important;
+  -webkit-text-fill-color: #f7f2f5 !important;
+}
+
+html[data-theme="dark"] .book-status-stepper__step.is-done {
+  background: #14532d !important;
+  color: #d7f5c4 !important;
+  -webkit-text-fill-color: #d7f5c4 !important;
+}
+
+html[data-theme="dark"] .book-status-stepper__step.is-current {
+  background: #4a2432 !important;
+  color: #ffe4ee !important;
+  -webkit-text-fill-color: #ffe4ee !important;
+}
+
+html[data-theme="dark"] .pay-deadline-alert,
+html[data-theme="dark"] .pay-deadline-alert.is-expired {
+  background: #3a2430 !important;
+  background-image: none !important;
+  border-color: rgba(196, 107, 130, 0.45) !important;
+}
+
+html[data-theme="dark"] body.subpage .pay-deadline-alert .pay-deadline-alert__title,
+html[data-theme="dark"] body.subpage .pay-deadline-alert .pay-deadline-alert__clock,
+html[data-theme="dark"] body.subpage .pay-deadline-alert .pay-deadline-alert__note,
+html[data-theme="dark"] body.subpage .pay-deadline-alert.is-expired .pay-deadline-alert__title {
+  color: #ffe4ee !important;
+  -webkit-text-fill-color: #ffe4ee !important;
+}
