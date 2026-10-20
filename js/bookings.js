@@ -195,6 +195,128 @@
     }
   }
 
+  function bookingUnitIds(booking) {
+    var ids = [];
+    function add(value) {
+      var id = canonicalizeUnitId(value);
+      if (id && ids.indexOf(id) === -1) ids.push(id);
+    }
+    if (!booking) return ids;
+    add(booking.roomId);
+    add(booking.room_id);
+    add(booking.facilityId);
+    add(booking.roomCatalogId);
+    add(booking.hallCatalogId);
+    add(booking.cottageId);
+    ["roomCatalogIds", "hallCatalogIds", "cottageCatalogIds", "facilityIds", "room_ids"].forEach(
+      function (key) {
+        var list = booking[key];
+        if (!Array.isArray(list)) return;
+        list.forEach(add);
+      }
+    );
+    if (Array.isArray(booking.facilities)) {
+      booking.facilities.forEach(function (facility) {
+        if (!facility) return;
+        if (typeof facility === "string") add(facility);
+        else add(facility.id || facility.facilityId || facility.roomId);
+      });
+    }
+    return ids;
+  }
+
+  function stayNightIsos(booking) {
+    var start = normalizeDateField(booking && (booking.checkIn || booking.check_in));
+    var end = normalizeDateField(booking && (booking.checkOut || booking.check_out));
+    if (!start) return [];
+    if (!end || end < start) end = start;
+    if (end === start) return [start];
+    var nights = [];
+    var cur = start;
+    var guard = 0;
+    while (cur < end && guard < 400) {
+      nights.push(cur);
+      cur = addDaysIso(cur, 1);
+      guard += 1;
+    }
+    return nights;
+  }
+
+  function bookingStillHoldsUnit(booking, unitId, day, exceptId) {
+    if (!booking || !unitId || !day) return false;
+    var id = String(booking.id || "");
+    var parent = String(booking.parentBookingId || "");
+    var group = String(booking.bookingGroupId || "");
+    if (exceptId && (id === exceptId || parent === exceptId || group === exceptId || id.indexOf(exceptId + "__") === 0)) {
+      return false;
+    }
+    var PF = window.ElenestPaymentFlow;
+    if (PF && typeof PF.bookingBlocksCalendarSlot === "function" && !PF.bookingBlocksCalendarSlot(booking)) {
+      return false;
+    }
+    if (bookingUnitIds(booking).indexOf(unitId) === -1) return false;
+    return stayNightIsos(booking).indexOf(day) !== -1;
+  }
+
+  function anotherBookingStillHolds(unitId, day, exceptId) {
+    var i;
+    var live = listLive();
+    for (i = 0; i < live.length; i++) {
+      if (live[i] && bookingStillHoldsUnit(live[i].booking, unitId, day, exceptId)) return true;
+    }
+    for (i = 0; i < availabilityBookings.length; i++) {
+      if (bookingStillHoldsUnit(availabilityBookings[i], unitId, day, exceptId)) return true;
+    }
+    return false;
+  }
+
+  function releaseDeclinedBookingAvailability(booking, opts) {
+    if (!booking) return;
+    opts = opts || {};
+    var exceptId = String(booking.bookingGroupId || booking.parentBookingId || booking.id || "");
+    var units = bookingUnitIds(booking);
+    var nights = stayNightIsos(booking);
+    availabilityBookings = availabilityBookings.filter(function (row) {
+      if (!row) return false;
+      var id = String(row.id || "");
+      if (!exceptId) return true;
+      if (id === exceptId || id.indexOf(exceptId + "__") === 0) return false;
+      if (String(row.parentBookingId || "") === exceptId) return false;
+      if (String(row.bookingGroupId || "") === exceptId) return false;
+      return true;
+    });
+    nights.forEach(function (day) {
+      var blocks = publicFacilityBlocksByDate[day];
+      if (!blocks) return;
+      units.forEach(function (unitId) {
+        if (!anotherBookingStillHolds(unitId, day, exceptId)) delete blocks[unitId];
+      });
+    });
+    if (opts.notify === false) return;
+    emitUpdated();
+    broadcastAvailabilityChanged();
+  }
+
+  function pruneBlocksHeldOnlyByReleasedBookings() {
+    listLive().forEach(function (item) {
+      var booking = item && item.booking;
+      if (!booking) return;
+      var status = String(booking.status || "").toLowerCase();
+      var workflow = String(booking.workflow || "").toLowerCase();
+      var stage = String(booking.verificationStage || "").toLowerCase();
+      var declined = !!(
+        booking.paymentRejectedAt ||
+        status === "rejected" ||
+        status === "declined" ||
+        workflow === "rejected" ||
+        workflow === "booking_declined" ||
+        stage === "booking_declined"
+      );
+      if (!declined) return;
+      releaseDeclinedBookingAvailability(booking, { notify: false });
+    });
+  }
+
   function broadcastAvailabilityChanged() {
     var sb = getClient();
     if (!sb) return;
@@ -1767,6 +1889,16 @@
       var checkIn = normalizeDateField(row.check_in || row.checkIn);
       var checkOut = normalizeDateField(row.check_out || row.checkOut);
       if (checkIn && checkOut && !isRecentOrUpcomingStay(checkIn, checkOut)) return false;
+      var shaped = rowToAvailabilityBooking(row);
+      var PF = window.ElenestPaymentFlow;
+      if (
+        shaped &&
+        PF &&
+        typeof PF.bookingBlocksCalendarSlot === "function" &&
+        !PF.bookingBlocksCalendarSlot(shaped)
+      ) {
+        return false;
+      }
       return true;
     });
     rebuildAvailabilityFromRows(list, {
@@ -1998,6 +2130,7 @@
     var snapshotP = loadMobileAvailabilitySnapshot();
 
     loadPublicAvailabilityPromise = Promise.all([bookingsP, snapshotP]).then(function () {
+      pruneBlocksHeldOnlyByReleasedBookings();
       var fp = availabilityFingerprint();
       if (fp !== lastAvailabilityFingerprint) {
         lastAvailabilityFingerprint = fp;
@@ -3097,13 +3230,29 @@
         return { error: null };
       });
     }
+    function updateDeclinedGroup(patch) {
+      var id = String(booking.bookingGroupId || booking.id || "");
+      if (!id) return Promise.resolve({ error: null });
+      var safeId = id.replace(/[,.()]/g, "");
+      return sb
+        .from("bookings")
+        .update(patch)
+        .or("id.eq." + safeId + ",id.like." + safeId + "__*")
+        .then(function (res) {
+          return res || { error: null };
+        })
+        .catch(function () {
+          return { error: null };
+        });
+    }
+    var updateRelated = booking.paymentRejectedAt ? updateDeclinedGroup : updateStaySiblings;
     return updateById(corePatch)
       .then(function (res) {
         if (res && res.error) throw res.error;
-        return updateStaySiblings(corePatch).then(function () {
+        return updateRelated(corePatch).then(function () {
           return updateById({ payload: payload }).then(function (payRes) {
             if (payRes && payRes.error) return finishOk();
-            return updateStaySiblings({ payload: payload }).then(finishOk);
+            return updateRelated({ payload: payload }).then(finishOk);
           });
         });
       })
@@ -3968,6 +4117,7 @@
     syncLivePaymentStatuses: syncLivePaymentStatuses,
     refreshAvailability: loadPublicAvailability,
     refreshAvailabilityAndNotify: refreshAvailabilityAndNotify,
+    releaseDeclinedBookingAvailability: releaseDeclinedBookingAvailability,
     listForAvailability: listForAvailability,
     processAutoNoShows: processAutoNoShows,
     broadcastAvailabilityChanged: broadcastAvailabilityChanged,

@@ -1028,6 +1028,13 @@
 
   function customerStatusNote(booking) {
     if (!booking) return null;
+    var declinedReason = String(booking.paymentRejectionReason || "").trim();
+    if (
+      declinedReason &&
+      (booking.paymentRejectedAt || normalizeBookingStatus(booking.status) === STATUS.REJECTED)
+    ) {
+      return { label: "Decline reason", value: declinedReason };
+    }
     if (normalizeArrivalStatus(booking.arrivalStatus) === "arrived" || booking.checkedInAt) {
       return { label: "Arrival status", value: "Arrived" };
     }

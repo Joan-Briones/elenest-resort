@@ -277,8 +277,9 @@
       icon: options.icon || "question",
       title: options.title || "Enter details",
       text: label,
-      input: "text",
+      input: options.input || "text",
       inputValue: options.defaultValue || "",
+      inputPlaceholder: options.placeholder || "",
       showCancelButton: true,
       focusCancel: true,
       confirmButtonText: options.confirmText || "Continue",
@@ -2863,38 +2864,75 @@
   function declineBookingReview(item, button) {
     var b = item && item.booking;
     if (!b || !b.id) return;
-    swalConfirm({
+    swalPrompt({
       icon: "warning",
       title: "Decline this booking?",
-      text: "The reserved schedule will be released and the guest will be notified.",
-      confirmText: "Decline",
+      text: "Enter the reason for declining. The guest will see this reason in their notification and booking details.",
+      input: "textarea",
+      placeholder: "Reason for declining this request",
+      confirmText: "Continue",
       confirmColor: "#b91c1c"
-    }).then(function (ok) {
-      if (!ok) return;
-      var PF = window.ElenestPaymentFlow;
-      var admin = window.ElenestAuth && window.ElenestAuth.getCurrentUser
-        ? window.ElenestAuth.getCurrentUser()
-        : null;
-      var patch = PF
-        ? PF.buildBookingReviewRejectPatch(admin && admin.email ? admin.email : "", "Booking details were not confirmed.")
-        : { status: "Rejected", slotLocked: false, workflow: "rejected" };
-      var BL = window.ElenestButtonLoading;
-      if (BL && button) BL.set(button, true);
-      Promise.resolve(updateBookingById(b.id, patch.status, patch)).then(function (saved) {
-        if (BL && button) BL.set(button, false);
-        if (!saved) {
-          swalAlert({ icon: "error", title: "Could not decline", text: "Please try again." });
-          return;
-        }
-        if (window.ElenestNotifications && item.accountEmail) {
-          window.ElenestNotifications.notifyBookingUpdated(
-            item.accountEmail,
-            Object.assign({}, b, patch),
-            "Your booking request was not confirmed. The schedule has been released. You can submit a new booking."
-          );
-        }
-        renderBookingReviewList();
-        renderDashboard();
+    }).then(function (reason) {
+      if (reason === null) return;
+      reason = String(reason || "").trim();
+      if (!reason) {
+        swalAlert({
+          icon: "warning",
+          title: "Reason required",
+          text: "Enter a decline reason so the guest knows why this request was not confirmed."
+        });
+        return;
+      }
+      return swalConfirm({
+        icon: "warning",
+        title: "Confirm decline",
+        text: "Decline this booking? The room or facility will be available again unless another confirmed reservation still holds it.",
+        confirmText: "Decline",
+        confirmColor: "#b91c1c"
+      }).then(function (ok) {
+        if (!ok) return;
+        var PF = window.ElenestPaymentFlow;
+        var admin = window.ElenestAuth && window.ElenestAuth.getCurrentUser
+          ? window.ElenestAuth.getCurrentUser()
+          : null;
+        var patch = PF
+          ? PF.buildBookingReviewRejectPatch(admin && admin.email ? admin.email : "", reason)
+          : {
+              status: "Rejected",
+              slotLocked: false,
+              workflow: "rejected",
+              paymentRejectionReason: reason
+            };
+        var BL = window.ElenestButtonLoading;
+        if (BL && button) BL.set(button, true);
+        Promise.resolve(updateBookingById(b.id, patch.status, patch)).then(function (saved) {
+          if (BL && button) BL.set(button, false);
+          if (!saved) {
+            swalAlert({ icon: "error", title: "Could not decline", text: "Please try again." });
+            return;
+          }
+          var savedBooking = Object.assign({}, b, patch);
+          var BK = window.ElenestBookings;
+          if (BK && typeof BK.releaseDeclinedBookingAvailability === "function") {
+            BK.releaseDeclinedBookingAvailability(savedBooking);
+          }
+          if (window.ElenestNotifications && item.accountEmail) {
+            window.ElenestNotifications.notifyBookingUpdated(
+              item.accountEmail,
+              savedBooking,
+              "Your booking request was not confirmed. Reason: " +
+                reason +
+                " The reserved schedule has been released. You can submit a new booking."
+            );
+          }
+          renderBookingReviewList();
+          renderDashboard();
+          swalAlert({
+            icon: "success",
+            title: "Booking declined",
+            text: "The guest was notified, and the room or facility is available again unless another reservation still holds it."
+          });
+        });
       });
     });
   }

@@ -175,7 +175,9 @@ as $$
       'completed',
       'checked out',
       'checked_out',
-      'checked-out'
+      'checked-out',
+      'declined',
+      'booking_declined'
     )
     and (
       -- Mobile app workflows
@@ -209,10 +211,16 @@ as $$
         coalesce(nullif(b.payload ->> 'workflow', ''), '') = ''
         and lower(coalesce(b.status::text, 'pending')) not in (
           'cancelled', 'canceled', 'rejected', 'no show', 'no_show', 'noshow',
-          'completed', 'checked out', 'checked_out', 'checked-out'
+          'completed', 'checked out', 'checked_out', 'checked-out',
+          'declined', 'booking_declined'
         )
       )
     )
+    and lower(coalesce(b.payload ->> 'workflow', '')) not in (
+      'rejected', 'booking_declined', 'cancelled', 'canceled', 'payment_expired'
+    )
+    and lower(coalesce(b.payload ->> 'verificationStage', '')) not in ('booking_declined', 'rejected')
+    and lower(coalesce(b.payload ->> 'verification_stage', '')) not in ('booking_declined', 'rejected')
     -- Rejected payment releases the slot
     and coalesce(nullif(b.payload ->> 'paymentRejectedAt', ''), '') = ''
     and coalesce(nullif(b.payload ->> 'payment_rejected_at', ''), '') = ''

@@ -1034,6 +1034,16 @@
         if (unitIdsMatch(booking.facilityIds[k], uid)) return true;
       }
     }
+    if (booking.roomId && unitIdsMatch(booking.roomId, uid)) return true;
+    if (booking.facilityId && unitIdsMatch(booking.facilityId, uid)) return true;
+    if (Array.isArray(booking.facilities)) {
+      for (var f = 0; f < booking.facilities.length; f++) {
+        var facility = booking.facilities[f];
+        if (!facility) continue;
+        var facilityId = typeof facility === "string" ? facility : facility.id || facility.facilityId || facility.roomId;
+        if (facilityId && unitIdsMatch(facilityId, uid)) return true;
+      }
+    }
     return false;
   }
 
@@ -1093,6 +1103,52 @@
     return B.getFacilityBlockKindOnDate(unitId, iso) || "";
   }
 
+  function releasedBookingClearsSnapshot(unitId, iso, timeWindow) {
+    var B = window.ElenestBookings;
+    if (!B || typeof B.listLive !== "function" || !unitId || !iso) return false;
+    var tw = normalizeTimeWindow(timeWindow);
+    var d = isoToUtcDate(iso);
+    d.setUTCDate(d.getUTCDate() + 1);
+    var next = utcDateToIso(d);
+    var rows = B.listLive();
+    var sawReleased = false;
+    for (var i = 0; i < rows.length; i++) {
+      var booking = rows[i] && rows[i].booking;
+      if (!booking || !bookingOccupiesUnit(booking, unitId)) continue;
+      var bt = bookingTimeWindow(booking);
+      if (
+        !staysOverlap(
+          iso,
+          tw.checkInTime,
+          next,
+          tw.checkOutTime,
+          booking.checkIn,
+          bt.checkInTime,
+          booking.checkOut,
+          bt.checkOutTime
+        )
+      ) {
+        continue;
+      }
+      if (bookingCalendarKind(booking)) return false;
+      var status = String(booking.status || "").toLowerCase();
+      var workflow = String(booking.workflow || "").toLowerCase();
+      var stage = String(booking.verificationStage || "").toLowerCase();
+      if (
+        booking.paymentRejectedAt ||
+        booking.payment_rejected_at ||
+        status === "rejected" ||
+        status === "declined" ||
+        workflow === "rejected" ||
+        workflow === "booking_declined" ||
+        stage === "booking_declined"
+      ) {
+        sawReleased = true;
+      }
+    }
+    return sawReleased;
+  }
+
   function getUnitNightStatus(unitId, iso, excludeBookingId, timeWindow) {
     if (!unitId || !iso) return "available";
     var catalog = getCatalog();
@@ -1115,6 +1171,7 @@
     });
     if (sawBooked) return "booked";
     if (sawPending) return "pending";
+    if (releasedBookingClearsSnapshot(unitId, iso, timeWindow)) return "available";
     if (!isUnitAvailable(unit, iso, next, excludeBookingId, timeWindow)) {
       var snap = snapshotNightKind(unitId, iso);
       if (snap === "pending") return "pending";
