@@ -5972,6 +5972,7 @@
     }
     record.status = patch.status || "Pending";
     record.paymentStatus = patch.paymentStatus || "Awaiting admin confirmation";
+    if (!record.submittedAt) record.submittedAt = new Date().toISOString();
     record.workflow = patch.workflow || "awaiting_booking_review";
     record.verificationStage = patch.verificationStage || "awaiting_booking_review";
     record.slotLocked = true;

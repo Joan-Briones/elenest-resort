@@ -249,9 +249,35 @@
     return st === STATUS.AWAITING_PAYMENT || wf === "awaiting_payment" || stage === "awaiting_payment";
   }
 
+  function bookingCreatedMs(booking) {
+    if (!booking) return 0;
+    var raw = booking.submittedAt || booking.submitted_at || booking.createdAt || booking.created_at || "";
+    var ms = new Date(raw).getTime();
+    return ms && !isNaN(ms) ? ms : 0;
+  }
+
+  function unpaidBookingExpiresMs(booking) {
+    var created = bookingCreatedMs(booking);
+    if (!created) return 0;
+    return created + HOLD_HOURS * 60 * 60 * 1000;
+  }
+
+  function isUnpaidPastCreationWindow(booking) {
+    var expires = unpaidBookingExpiresMs(booking);
+    if (!expires) return false;
+    return Date.now() > expires;
+  }
+
   function paymentWindowDeadline(booking) {
     if (!isAwaitingCustomerPayment(booking)) return null;
-    return booking.paymentDeadlineAt || booking.payment_deadline_at || null;
+    var stored = booking.paymentDeadlineAt || booking.payment_deadline_at || "";
+    var storedMs = stored ? new Date(stored).getTime() : 0;
+    if (storedMs && isNaN(storedMs)) storedMs = 0;
+    var createdMs = unpaidBookingExpiresMs(booking);
+    var ms = 0;
+    if (storedMs && createdMs) ms = Math.min(storedMs, createdMs);
+    else ms = storedMs || createdMs;
+    return ms ? new Date(ms).toISOString() : null;
   }
 
   function isPaymentWindowExpired(booking) {
@@ -261,6 +287,23 @@
   }
 
   function shouldAutoExpireUnpaidBooking(booking) {
+    if (!booking) return false;
+    if (hasSubmittedReceipt(booking)) return false;
+    if (booking.paymentVerifiedAt || booking.payment_verified_at) return false;
+    var st = normalizeBookingStatus(booking.status);
+    if (
+      st === STATUS.CONFIRMED ||
+      st === STATUS.RESERVED ||
+      st === STATUS.CHECKED_IN ||
+      st === STATUS.CHECKED_OUT ||
+      st === STATUS.COMPLETED ||
+      st === STATUS.CANCELLED ||
+      st === STATUS.REJECTED ||
+      st === STATUS.NO_SHOW
+    ) {
+      return false;
+    }
+    if (isUnpaidPastCreationWindow(booking)) return true;
     return isPaymentWindowExpired(booking);
   }
 
@@ -405,6 +448,7 @@
     if (!booking) return false;
     if (!booking.checkIn || !booking.checkOut) return false;
     if (booking.paymentRejectedAt) return false;
+    if (shouldAutoExpireUnpaidBooking(booking)) return false;
 
     if (booking.slotLocked === true) {
       var stLocked = normalizeBookingStatus(booking.status);
@@ -562,14 +606,19 @@
   }
 
   /** Admin confirmed the facility, date, time, guests, and amount. Payment opens for 3 hours. */
-  function buildBookingConfirmForPaymentPatch(fromIso) {
+  function buildBookingConfirmForPaymentPatch(fromIso, booking) {
     var at = fromIso || new Date().toISOString();
+    var deadline = holdExpiresAtFromNow(at);
+    var createdDeadline = unpaidBookingExpiresMs(booking);
+    if (createdDeadline && createdDeadline < new Date(deadline).getTime()) {
+      deadline = new Date(createdDeadline).toISOString();
+    }
     return {
       status: STATUS.AWAITING_PAYMENT,
       paymentStatus: "Awaiting payment",
       bookingConfirmedAt: at,
       bookingConfirmedBy: "",
-      paymentDeadlineAt: holdExpiresAtFromNow(at),
+      paymentDeadlineAt: deadline,
       verificationStage: "awaiting_payment",
       slotLocked: true,
       workflow: "awaiting_payment"
@@ -1306,6 +1355,7 @@
     paymentWindowDeadline: paymentWindowDeadline,
     isPaymentWindowExpired: isPaymentWindowExpired,
     shouldAutoExpireUnpaidBooking: shouldAutoExpireUnpaidBooking,
+    unpaidBookingExpiresMs: unpaidBookingExpiresMs,
     customerTimerDeadline: customerTimerDeadline,
     customerTimerLabel: customerTimerLabel,
     showCustomerTimer: showCustomerTimer,

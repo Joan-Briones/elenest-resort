@@ -225,6 +225,21 @@ as $$
     and coalesce(nullif(b.payload ->> 'paymentRejectedAt', ''), '') = ''
     and coalesce(nullif(b.payload ->> 'payment_rejected_at', ''), '') = ''
     and not (
+      coalesce(b.submitted_at, b.created_at) <= now() - interval '3 hours'
+      and coalesce(nullif(b.payload ->> 'paymentVerifiedAt', ''), '') = ''
+      and coalesce(nullif(b.payload ->> 'payment_verified_at', ''), '') = ''
+      and coalesce(nullif(b.payment_proof_url, ''), '') = ''
+      and coalesce(nullif(b.payload ->> 'paymentProofUrl', ''), '') = ''
+      and coalesce(nullif(b.payload ->> 'paymentProof', ''), '') = ''
+      and coalesce(nullif(b.payload ->> 'paymentSubmittedAt', ''), '') = ''
+      and lower(coalesce(b.payload ->> 'hasPaymentProof', '')) not in ('true', '1')
+      and lower(coalesce(b.status::text, '')) not in (
+        'confirmed', 'reserved', 'approved', 'active',
+        'checked in', 'checked_in',
+        'checked out', 'checked_out', 'completed'
+      )
+    )
+    and not (
       lower(coalesce(b.payload ->> 'workflow', '')) = 'awaiting_payment'
       and coalesce(b.payload ->> 'paymentDeadlineAt', '') ~ '^[0-9]{4}-[0-9]{2}-[0-9]{2}'
       and (b.payload ->> 'paymentDeadlineAt')::timestamptz <= now()

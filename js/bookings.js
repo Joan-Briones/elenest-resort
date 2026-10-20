@@ -2215,7 +2215,8 @@
     );
     booking.checkIn = row.check_in || booking.checkIn || "";
     booking.checkOut = row.check_out || booking.checkOut || "";
-    booking.submittedAt = row.submitted_at || booking.submittedAt || new Date().toISOString();
+    booking.createdAt = row.created_at || booking.createdAt || "";
+    booking.submittedAt = row.submitted_at || booking.submittedAt || booking.createdAt || "";
     booking.requestedAt = row.requested_at || payload.requestedAt || booking.requestedAt || "";
     var guestQueueRole = payload.guestQueueRole || "";
     var guestQueueMessage = payload.guestQueueMessage || "";
@@ -2660,6 +2661,18 @@
   var loadAllBookingsPromise = null;
   var lastLoadAllBookingsAt = 0;
 
+  function expireUnpaidBookingsInDatabase() {
+    var sb = getClient();
+    if (!sb || typeof sb.rpc !== "function") return Promise.resolve(0);
+    return sb.rpc("expire_unpaid_bookings").then(function (res) {
+      if (!res || res.error) return 0;
+      var count = Number(res.data);
+      return count > 0 ? count : 0;
+    }).catch(function () {
+      return 0;
+    });
+  }
+
   function loadAllBookings(force) {
     if (loadAllBookingsPromise) return loadAllBookingsPromise;
     if (!force && lastLoadAllBookingsAt && Date.now() - lastLoadAllBookingsAt < 12000) {
@@ -2744,6 +2757,14 @@
         lastLoadAllBookingsAt = Date.now();
         readyResolve();
         emitUpdated();
+        if (force === "after-expire") return;
+        return expireUnpaidBookingsInDatabase().then(function (count) {
+          if (count > 0) {
+            setTimeout(function () {
+              loadAllBookings("after-expire");
+            }, 400);
+          }
+        });
       })
       .catch(function (err) {
         try {
@@ -3831,6 +3852,7 @@
                 }
               }
             }
+            releaseDeclinedBookingAvailability(b, { notify: false });
             persistBookingLikeMobile(email, b, { skipAvailabilityRefresh: true });
             if (
               window.ElenestNotifications &&
@@ -4092,7 +4114,9 @@
         if (!item || !item.booking) return false;
         if (item.booking.linkedFacilityBooking || item.booking.parentBookingId) return false;
         if (PF && typeof PF.isAwaitingPaymentVerification === "function") {
-          return PF.isAwaitingPaymentVerification(item.booking);
+          if (!PF.isAwaitingPaymentVerification(item.booking)) return false;
+          if (PF.shouldAutoExpireUnpaidBooking && PF.shouldAutoExpireUnpaidBooking(item.booking)) return false;
+          return true;
         }
         var b = item.booking;
         if (b.paymentVerifiedAt || b.paymentRejectedAt) return false;

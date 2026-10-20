@@ -700,7 +700,7 @@
       type: TYPES.BOOKING_UPDATED,
       title: "Payment window expired",
       message:
-        "Your booking was cancelled because payment was not submitted within 3 hours of admin confirmation. The reserved schedule has been released.",
+        "Your booking was cancelled because payment was not completed within 3 hours of creating the booking. The reserved schedule has been released.",
       bookingId: id,
       dedupKey: "payment_window_expired:" + id,
       link: "book.html"

@@ -2798,11 +2798,24 @@
       });
       return;
     }
+    var PF = window.ElenestPaymentFlow;
+    if (PF && typeof PF.shouldAutoExpireUnpaidBooking === "function" && PF.shouldAutoExpireUnpaidBooking(b)) {
+      if (window.ElenestBookings && window.ElenestBookings.processAutoNoShows) {
+        window.ElenestBookings.processAutoNoShows();
+      }
+      swalAlert({
+        icon: "warning",
+        title: "Booking expired",
+        text: "This booking was created more than 3 hours ago and payment was not completed. It has been cancelled and the room or facility has been released."
+      });
+      renderBookingReviewList();
+      return;
+    }
     swalConfirm({
       icon: "question",
       title: "Confirm this booking?",
       text:
-        "The guest will be notified by email and in-app message that they can pay online. They will have 3 hours from now to submit payment.",
+        "The guest will be notified that they can pay online. Payment must be completed within 3 hours of when the booking was created. If that time has passed, the unpaid booking is cancelled and the room is released.",
       confirmText: "Confirm booking",
       confirmColor: "#16a34a"
     }).then(function (ok) {
@@ -2816,7 +2829,7 @@
       if (BL && button) BL.set(button, true);
       else if (button) button.disabled = true;
       var patch = PF
-        ? PF.buildBookingConfirmForPaymentPatch()
+        ? PF.buildBookingConfirmForPaymentPatch(null, b)
         : { status: "Awaiting Payment", workflow: "awaiting_payment" };
       patch.bookingConfirmedBy = adminEmail;
       Promise.resolve(updateBookingById(b.id, patch.status, patch)).then(function (saved) {
@@ -2940,6 +2953,9 @@
   function renderBookingReviewList() {
     var host = document.getElementById("adminBookingReviewList");
     if (!host) return;
+    if (window.ElenestBookings && window.ElenestBookings.processAutoNoShows) {
+      window.ElenestBookings.processAutoNoShows();
+    }
     var refreshBtn = document.getElementById("adminBookingReviewRefresh");
     if (refreshBtn && refreshBtn.getAttribute("data-bound") !== "1") {
       refreshBtn.setAttribute("data-bound", "1");
@@ -3037,6 +3053,9 @@
     var host = document.getElementById("adminPaymentVerificationList");
     var pager = document.getElementById("adminPaymentVerificationPagination");
     if (!host) return;
+    if (window.ElenestBookings && window.ElenestBookings.processAutoNoShows) {
+      window.ElenestBookings.processAutoNoShows();
+    }
     host.textContent = "";
     var items = listPendingPaymentVerifications();
     updatePaymentVerificationCount(items.length);
