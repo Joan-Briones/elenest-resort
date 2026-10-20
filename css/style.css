@@ -26545,3 +26545,67 @@ html[data-theme="dark"] .reception-table__id {
   color: #f7f2f5 !important;
   -webkit-text-fill-color: #f7f2f5 !important;
 }
+
+html[data-theme="dark"] .booking-status--pending,
+html[data-theme="dark"] .subpage .booking-status--pending,
+html[data-theme="dark"] .booking-status--pending-payment,
+html[data-theme="dark"] .manager-reserve-table .booking-status--pending {
+  background: #fff7ed !important;
+  color: #9a3412 !important;
+  -webkit-text-fill-color: #9a3412 !important;
+  border-color: #fdba74 !important;
+}
+
+html[data-theme="dark"] .booking-status--confirmed,
+html[data-theme="dark"] .subpage .booking-status--confirmed {
+  background: #d1fae5 !important;
+  color: #065f46 !important;
+  -webkit-text-fill-color: #065f46 !important;
+  border-color: #6ee7b7 !important;
+}
+
+html[data-theme="dark"] .booking-status--cancelled,
+html[data-theme="dark"] .subpage .booking-status--cancelled {
+  background: #ffe4e6 !important;
+  color: #9f1239 !important;
+  -webkit-text-fill-color: #9f1239 !important;
+  border-color: #fda4af !important;
+}
+
+html[data-theme="dark"] .manager-msg-pill {
+  background: #4a2432 !important;
+  color: #ffe4ee !important;
+  -webkit-text-fill-color: #ffe4ee !important;
+}
+
+html[data-theme="dark"] .book-unit-modal__header,
+html[data-theme="dark"] .book-unit-modal header.book-unit-modal__header,
+html[data-theme="dark"] .book-unit-modal__footer {
+  background: #221e28 !important;
+  color: #f7f2f5 !important;
+  border-color: rgba(196, 107, 130, 0.28) !important;
+}
+
+html[data-theme="dark"] .book-unit-modal__lead,
+html[data-theme="dark"] .book-unit-modal__empty {
+  color: #f7f2f5 !important;
+  -webkit-text-fill-color: #f7f2f5 !important;
+}
+
+html[data-theme="dark"] .customer-notif-panel,
+html[data-theme="dark"] .customer-notif-panel__head,
+html[data-theme="dark"] .customer-notif-item,
+html[data-theme="dark"] .customer-notif-item--unread {
+  background: #221e28 !important;
+  color: #f7f2f5 !important;
+  border-color: rgba(196, 107, 130, 0.28) !important;
+}
+
+html[data-theme="dark"] .customer-notif-panel__title,
+html[data-theme="dark"] .customer-notif-item__type,
+html[data-theme="dark"] .customer-notif-item__title,
+html[data-theme="dark"] .customer-notif-item__msg,
+html[data-theme="dark"] .customer-notif-item__time {
+  color: #f7f2f5 !important;
+  -webkit-text-fill-color: #f7f2f5 !important;
+}
