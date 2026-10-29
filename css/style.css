@@ -2912,16 +2912,25 @@ body.subpage .pay-deadline-alert.is-expired .pay-deadline-alert__title {
 }
 
 .heading h1 {
-  font-size: 100px;
+  font-size: clamp(2.4rem, 12vw, 100px);
+  font-size: min(100px, 12cqi);
   font-weight: 500;
   opacity: 0.1;
   font-family: serif;
   position: absolute;
   top: -30px;
+  left: 0;
+  line-height: 1;
+  white-space: nowrap;
+  max-width: 100%;
 }
 
 .heading {
   position: relative;
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  container-type: inline-size;
 }
 
 .heading p {
@@ -2942,6 +2951,9 @@ body.subpage .pay-deadline-alert.is-expired .pay-deadline-alert__title {
   left: 0;
   line-height: 1;
   white-space: nowrap;
+  /* Seven wide capitals: stay inside the column on phones and tablets. */
+  font-size: clamp(2.5rem, 14vw, 100px);
+  font-size: min(100px, 15.5cqi);
 }
 
 .about .heading h2 {
@@ -2953,7 +2965,9 @@ body.subpage .pay-deadline-alert.is-expired .pay-deadline-alert__title {
 }
 
 .about .heading {
-  display: inline-block;
+  display: block;
+  width: 100%;
+  max-width: 100%;
 }
 
 .about {
