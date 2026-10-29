@@ -21150,6 +21150,9 @@ body.subpage[data-staff-portal="manager"]:has(#section-recommendations:not([hidd
 
 .login-reserve-card {
   padding: 18px 18px 16px;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .login-reserve-card__title {
@@ -21194,9 +21197,12 @@ body.subpage[data-staff-portal="manager"]:has(#section-recommendations:not([hidd
 
 .login-reserve-stay-bar {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px 12px;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   margin: 0 0 12px;
 }
 
@@ -21209,36 +21215,55 @@ body.subpage[data-staff-portal="manager"]:has(#section-recommendations:not([hidd
 }
 
 .login-reserve-stay-bar__toggle {
-  display: inline-flex;
-  flex-wrap: nowrap;
-  align-items: center;
-  gap: 5px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 8px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
 }
 
-.login-reserve-stay-bar__option {
-  display: inline-flex;
+.login-reserve-stay-bar__option,
+body.subpage .login-reserve-stay-bar__option {
+  display: flex;
   align-items: center;
-  flex: 0 0 auto;
-  gap: 6px;
-  width: auto;
-  max-width: none;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  min-height: 44px;
   margin: 0;
-  padding: 7px 14px;
+  padding: 8px 6px;
   border-radius: 999px;
   border: 1px solid rgba(196, 107, 130, 0.3);
   background: #fff;
-  font-size: 0.8rem;
+  font-size: clamp(0.78rem, 3.4vw, 0.84rem);
   font-weight: 600;
   color: #3d3340;
   cursor: pointer;
   white-space: nowrap;
+  text-align: center;
   box-sizing: border-box;
+  line-height: 1.15;
 }
 
-.login-reserve-stay-bar__option span {
-  display: inline;
+.login-reserve-stay-bar__option span,
+body.subpage .login-reserve-stay-bar__option span {
+  display: block;
+  min-width: 0;
+  font-size: inherit;
   white-space: nowrap;
-  flex: 0 0 auto;
+  overflow-wrap: normal;
+  text-align: center;
+  line-height: 1.15;
+}
+
+@media (max-width: 340px) {
+  .login-reserve-stay-bar__toggle {
+    grid-template-columns: 1fr;
+  }
 }
 
 .login-reserve-stay-bar__option:has(input:checked) {
