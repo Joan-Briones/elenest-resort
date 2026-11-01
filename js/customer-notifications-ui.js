@@ -80,6 +80,20 @@
     overlay.removeAttribute("hidden");
   }
 
+  function dismissNotification(id, event) {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    var N = api();
+    if (!N || !activeEmail || !id) return;
+    N.clearForUser(activeEmail, id);
+    if (selectedId === id) closeDetail();
+    renderPanelList();
+    var bell = document.querySelector(".customer-notif-bell");
+    if (bell) updateBadge(bell);
+  }
+
   function renderPanelList() {
     var host = document.querySelector(".customer-notif-panel__list");
     var N = api();
@@ -95,9 +109,12 @@
     }
     list.forEach(function (n) {
       if (!n) return;
-      var item = document.createElement("button");
-      item.type = "button";
+      var item = document.createElement("div");
       item.className = "customer-notif-item" + (n.read ? "" : " customer-notif-item--unread");
+      item.setAttribute("role", "listitem");
+      var open = document.createElement("button");
+      open.type = "button";
+      open.className = "customer-notif-item__open";
       var type = document.createElement("span");
       type.className = "customer-notif-item__type";
       type.textContent = N.getTypeLabel(n.type);
@@ -111,14 +128,25 @@
       var time = document.createElement("span");
       time.className = "customer-notif-item__time";
       time.textContent = fmtWhen(n.createdAt);
-      item.appendChild(type);
-      item.appendChild(title);
-      item.appendChild(msg);
-      item.appendChild(time);
-      item.addEventListener("click", function (e) {
+      open.appendChild(type);
+      open.appendChild(title);
+      open.appendChild(msg);
+      open.appendChild(time);
+      open.addEventListener("click", function (e) {
         e.stopPropagation();
         openDetail(n.id);
       });
+      var dismiss = document.createElement("button");
+      dismiss.type = "button";
+      dismiss.className = "customer-notif-item__dismiss";
+      dismiss.setAttribute("aria-label", "Dismiss notification");
+      dismiss.title = "Dismiss";
+      dismiss.textContent = "\u00d7";
+      dismiss.addEventListener("click", function (e) {
+        dismissNotification(n.id, e);
+      });
+      item.appendChild(open);
+      item.appendChild(dismiss);
       host.appendChild(item);
     });
   }

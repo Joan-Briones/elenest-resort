@@ -11755,18 +11755,60 @@ button.btn--disabled {
 
 .customer-notif-item {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: flex-start;
-  gap: 4px;
+  gap: 0;
   width: 100%;
   margin-bottom: 6px;
-  padding: 12px 14px;
+  padding: 0;
   border: 1px solid #eef0f2;
   border-radius: 12px;
   background: #fff;
   text-align: left;
-  cursor: pointer;
+  cursor: default;
+  box-sizing: border-box;
   transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.customer-notif-item__open {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  padding: 12px 4px 12px 14px;
+  border: none;
+  border-radius: 12px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.customer-notif-item__dismiss {
+  flex: 0 0 auto;
+  width: 32px;
+  height: 32px;
+  margin: 6px 6px 0 0;
+  padding: 0;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #6b7280;
+  font-size: 1.35rem;
+  font-weight: 500;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.customer-notif-item__dismiss:hover,
+.customer-notif-item__dismiss:focus-visible {
+  background: rgba(220, 38, 38, 0.12);
+  color: #b91c1c;
+  outline: none;
 }
 
 .customer-notif-item:hover {
@@ -26647,6 +26689,18 @@ html[data-theme="dark"] .customer-notif-item__msg,
 html[data-theme="dark"] .customer-notif-item__time {
   color: #f7f2f5 !important;
   -webkit-text-fill-color: #f7f2f5 !important;
+}
+
+html[data-theme="dark"] .customer-notif-item__dismiss {
+  color: #f7f2f5 !important;
+  -webkit-text-fill-color: #f7f2f5 !important;
+}
+
+html[data-theme="dark"] .customer-notif-item__dismiss:hover,
+html[data-theme="dark"] .customer-notif-item__dismiss:focus-visible {
+  background: rgba(220, 38, 38, 0.28) !important;
+  color: #fecaca !important;
+  -webkit-text-fill-color: #fecaca !important;
 }
 
 html[data-theme="dark"] .m-record {

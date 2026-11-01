@@ -170,7 +170,10 @@
       .order("created_at", { ascending: false })
       .then(function (res) {
         if (res.error) throw res.error;
-        inboxCache[key] = mergeKeptNotices(key, (res.data || []).map(rowToNotification));
+        inboxCache[key] = applyStoredDismissals(
+          key,
+          mergeKeptNotices(key, (res.data || []).map(rowToNotification))
+        );
         inboxLoaded[key] = true;
         inboxLoading[key] = null;
         emitChanged(key);
@@ -418,6 +421,63 @@
     return !!(n && n.meta && n.meta.dismissed);
   }
 
+  var STORAGE_DISMISSED = "elenest_notification_dismissals";
+
+  function readDismissals() {
+    try {
+      var raw = localStorage.getItem(STORAGE_DISMISSED);
+      if (!raw) return {};
+      var parsed = JSON.parse(raw);
+      return parsed && typeof parsed === "object" ? parsed : {};
+    } catch (e) {
+      return {};
+    }
+  }
+
+  function writeDismissals(all) {
+    try {
+      localStorage.setItem(STORAGE_DISMISSED, JSON.stringify(all || {}));
+    } catch (e) {}
+  }
+
+  function dismissedIdSet(email) {
+    var key = normalizeEmail(email);
+    var all = readDismissals();
+    var ids = key && Array.isArray(all[key]) ? all[key] : [];
+    var set = {};
+    for (var i = 0; i < ids.length; i++) {
+      if (ids[i]) set[String(ids[i])] = true;
+    }
+    return set;
+  }
+
+  function rememberDismissed(email, id) {
+    var key = normalizeEmail(email);
+    if (!key || !id) return;
+    var all = readDismissals();
+    if (!Array.isArray(all[key])) all[key] = [];
+    var sid = String(id);
+    if (all[key].indexOf(sid) === -1) all[key].push(sid);
+    if (all[key].length > 400) all[key] = all[key].slice(all[key].length - 400);
+    writeDismissals(all);
+  }
+
+  function hiddenFromInbox(n, hiddenSet) {
+    if (!n || isDismissed(n)) return true;
+    if (!n.id || !hiddenSet) return false;
+    return !!hiddenSet[String(n.id)];
+  }
+
+  function applyStoredDismissals(email, list) {
+    var hidden = dismissedIdSet(email);
+    (list || []).forEach(function (n) {
+      if (!n || !n.id || isDismissed(n) || !hidden[String(n.id)]) return;
+      dismissItem(n);
+      persistNotification(email, n);
+    });
+    return list;
+  }
+
   function rawListForUser(email) {
     var key = normalizeEmail(email);
     if (!key) return [];
@@ -431,9 +491,10 @@
     if (getSb() && !inboxLoaded[key]) {
       loadInboxFromSupabase(key);
     }
+    var hidden = dismissedIdSet(key);
     return rawListForUser(key)
       .filter(function (n) {
-        return n && !isDismissed(n);
+        return n && !hiddenFromInbox(n, hidden);
       })
       .slice()
       .sort(function (a, b) {
@@ -569,6 +630,7 @@
     for (var i = 0; i < list.length; i++) {
       if (list[i] && list[i].id === id) {
         found = dismissItem(list[i]);
+        rememberDismissed(key, found.id);
         break;
       }
     }
@@ -593,6 +655,7 @@
     list.forEach(function (n) {
       if (!n || isDismissed(n)) return;
       dismissItem(n);
+      if (n.id) rememberDismissed(key, n.id);
       persistNotification(key, n);
     });
     saveInboxAll(all);
