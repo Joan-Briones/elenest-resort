@@ -596,16 +596,19 @@
       buckets[key].revenue += revenue;
     });
 
-    if (!Object.keys(buckets).length) return syntheticBaseline(facilityType);
-
-    var keys = Object.keys(buckets).sort(function (a, b) {
-      var ap = buckets[a];
-      var bp = buckets[b];
-      return ap.year !== bp.year ? ap.year - bp.year : ap.month - bp.month;
-    });
-    var first = buckets[keys[0]];
     var now = new Date();
-    var cursor = new Date(first.year, first.month - 1, 1);
+    var cursor;
+    if (!Object.keys(buckets).length) {
+      cursor = new Date(now.getFullYear(), now.getMonth() - 5, 1);
+    } else {
+      var keys = Object.keys(buckets).sort(function (a, b) {
+        var ap = buckets[a];
+        var bp = buckets[b];
+        return ap.year !== bp.year ? ap.year - bp.year : ap.month - bp.month;
+      });
+      var first = buckets[keys[0]];
+      cursor = new Date(first.year, first.month - 1, 1);
+    }
     var end = new Date(now.getFullYear(), now.getMonth(), 1);
     var points = [];
     while (cursor <= end) {

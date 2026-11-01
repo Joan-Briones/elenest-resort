@@ -4762,6 +4762,8 @@
         if (currentSectionId === "section-recommendations") renderRecommendations();
         if (currentSectionId === "section-analytics" || currentSectionId === "section-reports") {
           renderManagerGuestReviews();
+          renderAnalytics();
+          renderReports();
         }
       });
     });

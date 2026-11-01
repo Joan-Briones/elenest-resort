@@ -4453,58 +4453,12 @@
     }
     host.textContent = "";
     if (!list.length) {
-      if (getFeedback().length) {
-        var empty = document.createElement("p");
-        empty.className = "sentiment-current-week-empty";
-        empty.textContent =
-          "No guest comments yet for this week. Previous weeks are in the Comment Archive.";
-        host.appendChild(empty);
-        return;
-      }
-      var examples = [
-        {
-          name: "Joan Briones",
-          stars: 5,
-          comment: "Very peaceful place. Staff are kind, rooms are spotless, and check-in was smooth. Perfect weekend escape.",
-          img: "../Images/blog-s1.png"
-        },
-        {
-          name: "Chryzel de Torres",
-          stars: 4,
-          comment: "We loved the pool and food. Relaxing environment and attentive staff from start to finish.",
-          img: "../Images/blog-s2.png"
-        },
-        {
-          name: "Kate Mangurali",
-          stars: 5,
-          comment: "Excellent service and smooth check-in. We celebrated a birthday here and the team helped with every detail.",
-          img: "../Images/blog-s3.png"
-        }
-      ];
-      examples.forEach(function (ex, i) {
-        var card = document.createElement("article");
-        card.className = "review-card";
-        var img = document.createElement("img");
-        img.className = "review-img";
-        img.src = ex.img;
-        img.alt = "Guest " + ex.name;
-        var nameLine = document.createElement("p");
-        nameLine.className = "review-name";
-        nameLine.style.margin = "0 0 6px";
-        nameLine.style.fontWeight = "600";
-        nameLine.style.fontSize = "0.95rem";
-        nameLine.textContent = ex.name;
-        var stars = document.createElement("p");
-        stars.className = "stars";
-        stars.textContent = starsText(ex.stars);
-        var txt = document.createElement("p");
-        txt.textContent = '"' + ex.comment + '"';
-        card.appendChild(img);
-        card.appendChild(nameLine);
-        card.appendChild(stars);
-        card.appendChild(txt);
-        host.appendChild(card);
-      });
+      var empty = document.createElement("p");
+      empty.className = "sentiment-current-week-empty";
+      empty.textContent = getFeedback().length
+        ? "No guest comments yet for this week. Previous weeks are in the Comment Archive."
+        : "No guest comments yet. New reviews will appear here and update the ratings.";
+      host.appendChild(empty);
       return;
     }
     list.slice(0, 6).forEach(function (f, i) {
@@ -6244,11 +6198,6 @@
     var hasAny = working.some(function (b) {
       return b.pos + b.neu + b.neg > 0;
     });
-    var useExample = !hasAny && !opts.skipExample;
-    if (useExample) {
-      fillExampleSentimentBuckets(working);
-      hasAny = true;
-    }
 
     var prev = sentimentChartMetaById[canvasId] || {};
     var tip =
@@ -6678,16 +6627,21 @@
     var trend = sentimentTrendFromBuckets(weekBuckets);
 
     if (!allListLen) {
-      var exampleWeek = formatWeekRangeLabel(getCurrentWeekStartDate());
+      var emptyWeek = formatWeekRangeLabel(getCurrentWeekStartDate());
       return {
-        exampleMode: true,
+        exampleMode: false,
         weekStartKey: weekStartKey,
         headline: "Weekly recommendation",
-        summary:
-          "Week of " +
-          exampleWeek +
-          " · Sample insight from guest comments submitted this week.",
-        items: getExampleImprovementItems(),
+        summary: "Week of " + emptyWeek + ". No guest comments are stored yet.",
+        items: [
+          {
+            tone: "watch",
+            title: "Collect guest feedback",
+            recId: "weekly-no-comments",
+            text:
+              "Encourage guests to submit reviews after checkout. Satisfaction, ratings, and this recommendation update from those reviews."
+          }
+        ],
         footnote: footnote
       };
     }
@@ -7406,11 +7360,7 @@
     if (!overlay || !titleEl || !listEl || !closeBtn) return;
 
     function getDetailsFeedbackSource() {
-      var all = getFeedback();
-      if (all.length) {
-        return { list: getSentimentFeedback(), exampleMode: false };
-      }
-      return { list: getAdminExampleFeedback(), exampleMode: true };
+      return { list: getSentimentFeedback(), exampleMode: false };
     }
 
     function openSentiment(type) {
@@ -7766,7 +7716,7 @@
       if (predictiveScriptPromise) return predictiveScriptPromise;
       predictiveScriptPromise = new Promise(function (resolve, reject) {
         var s = document.createElement("script");
-        s.src = "../js/predictive-analytics.js?v=20260922-ux1";
+        s.src = "../js/predictive-analytics.js?v=20261101-live1";
         s.async = true;
         s.onload = function () {
           resolve(window.ElenestPredictiveAnalytics || null);

@@ -2,12 +2,12 @@
  * Model Evaluation for Report & Analytics.
  * Sentiment: Logistic Regression + TF-IDF (Positive / Negative / Neutral)
  * Predictive: Linear Regression on historical monthly bookings
- * Metrics are computed from a held-out test set — not entered by hand.
+ * Metrics are recalculated from guest reviews and reservations in the database.
  */
 (function () {
   var CLASSES = ["Positive", "Negative", "Neutral"];
   var SPLIT_SEED = 20260911;
-  var TEST_RATIO = 0.25;
+  var TEST_RATIO = 0.3;
 
   function round4(n) {
     if (n == null || !isFinite(n)) return null;
@@ -185,6 +185,14 @@
     return "Neutral";
   }
 
+  function isHistoricalReview(item) {
+    if (!item) return false;
+    var id = String(item.id || "");
+    if (id.indexOf("past-fb-") === 0) return true;
+    var F = window.ElenestGuestFeedback;
+    return !!(F && typeof F.isHistoricalFeedback === "function" && F.isHistoricalFeedback(item));
+  }
+
   function collectLiveFeedback() {
     var F = window.ElenestGuestFeedback;
     var list = F && typeof F.listAll === "function" ? F.listAll() : [];
@@ -195,7 +203,12 @@
       if (text.length < 8) return;
       var label = labelFromStars(item.stars || item.rating);
       if (!label) return;
-      out.push({ text: text, label: label, source: "guest_feedback" });
+      out.push({
+        text: text,
+        label: label,
+        source: "guest_feedback",
+        historical: isHistoricalReview(item)
+      });
     });
     return out;
   }
@@ -436,8 +449,11 @@
       });
     });
     var i;
+    var counted = 0;
     for (i = 0; i < yTrue.length; i++) {
+      if (idx[yTrue[i]] == null || idx[yPred[i]] == null) continue;
       matrix[idx[yTrue[i]]][idx[yPred[i]]] += 1;
+      counted += 1;
     }
     var correct = 0;
     var support = {};
@@ -459,8 +475,8 @@
       var f1 = precision + recall ? (2 * precision * recall) / (precision + recall) : 0;
       perClass[c] = { precision: precision, recall: recall, f1: f1, support: sup };
     });
-    var n = yTrue.length || 1;
-    var accuracy = correct / n;
+    var n = counted || 1;
+    var accuracy = counted ? correct / counted : 0;
     var macro = { precision: 0, recall: 0, f1: 0 };
     var weighted = { precision: 0, recall: 0, f1: 0 };
     CLASSES.forEach(function (c) {
@@ -525,29 +541,16 @@
     return rows;
   }
 
-  function evaluateSentiment() {
-    var stored = storedFeedbackRows();
-    var useStored = stored.length >= 200;
-    var cacheKey = useStored ? "stored:" + stored.length + ":" + String(stored[0].text || "").length : "corpus";
-    if (sentimentCache && sentimentCacheKey === cacheKey) return sentimentCache;
-    var gold = useStored ? stored : labeledCorpus();
-    var split = stratifiedSplit(gold, 0.3, SPLIT_SEED);
-    if (split.train.length < 9 || split.test.length < 3) {
-      return { ok: false, reason: "Not enough labeled comments for a train/test split." };
-    }
+  function feedbackSignature(rows) {
+    var parts = (rows || []).map(function (row) {
+      return String(row.label || "") + "\t" + String(row.text || "");
+    });
+    return String(parts.length) + ":" + parts.join("\n");
+  }
+
+  function scoreSentiment(trainRows, testRows, epochs) {
     var rng = seededRng(SPLIT_SEED + 17);
-    var trainSource = split.train;
-    if (!useStored) {
-      var extra = stored.filter(function (row) {
-        return commentPolarity(row.text) === row.label;
-      });
-      var byClass = { Positive: [], Negative: [], Neutral: [] };
-      extra.forEach(function (row) {
-        if (byClass[row.label] && byClass[row.label].length < 80) byClass[row.label].push(row);
-      });
-      trainSource = split.train.concat(byClass.Positive, byClass.Negative, byClass.Neutral);
-    }
-    var train = balanceTrain(trainSource, rng, useStored ? 400 : 0);
+    var train = balanceTrain(trainRows, rng, 400);
     var tfidf = buildTfidf(
       train.map(function (r) {
         return r.text;
@@ -559,27 +562,90 @@
     var yIndex = train.map(function (r) {
       return CLASSES.indexOf(r.label);
     });
-    var W = trainSoftmaxLogistic(Xtrain, yIndex, CLASSES.length, useStored ? 200 : 900);
+    var W = trainSoftmaxLogistic(Xtrain, yIndex, CLASSES.length, epochs);
     var yTrue = [];
     var yPred = [];
-    split.test.forEach(function (row) {
-      var modelPred = CLASSES[predictSoftmax(W, tfidf.transform(row.text))];
-      if (useStored) {
-        yTrue.push(row.label);
-        yPred.push(modelPred);
-        return;
-      }
-      var lexPred = commentPolarity(row.text);
+    testRows.forEach(function (row) {
       yTrue.push(row.label);
-      yPred.push(lexPred === modelPred ? modelPred : lexPred);
+      yPred.push(CLASSES[predictSoftmax(W, tfidf.transform(row.text))]);
     });
     var metrics = confusionAndMetrics(yTrue, yPred);
     metrics.ok = true;
-    metrics.nTrain = split.train.length;
-    metrics.nTest = split.test.length;
-    metrics.nAll = gold.length;
-    metrics.nLive = stored.length;
+    metrics.nTrain = trainRows.length;
+    metrics.nTest = testRows.length;
     metrics.vocabSize = tfidf.vocab.length;
+    return metrics;
+  }
+
+  function evaluateSentiment() {
+    var stored = storedFeedbackRows();
+    var cacheKey = feedbackSignature(stored);
+    if (sentimentCache && sentimentCacheKey === cacheKey) return sentimentCache;
+
+    var historical = stored.filter(function (row) {
+      return row.historical;
+    });
+    var fresh = stored.filter(function (row) {
+      return !row.historical;
+    });
+    var baseRows = historical.length ? historical : stored;
+    var liveSplit = baseRows.length
+      ? stratifiedSplit(baseRows, TEST_RATIO, SPLIT_SEED)
+      : { train: [], test: [] };
+    var trainRows;
+    var testRows;
+    var dataNote;
+    var nAll;
+    if (historical.length && liveSplit.train.length >= 6 && liveSplit.test.length >= 2) {
+      trainRows = liveSplit.train;
+      testRows = liveSplit.test.concat(fresh);
+      nAll = stored.length;
+      dataNote = fresh.length
+        ? "Same held-out historical test, plus " +
+          fresh.length +
+          " new guest review" +
+          (fresh.length === 1 ? "" : "s") +
+          " from the database."
+        : "Held-out test on " +
+          liveSplit.test.length +
+          " of " +
+          historical.length +
+          " stored guest reviews.";
+    } else if (liveSplit.train.length >= 6 && liveSplit.test.length >= 2) {
+      trainRows = liveSplit.train;
+      testRows = liveSplit.test;
+      nAll = stored.length;
+      dataNote =
+        "Held-out test on " +
+        liveSplit.test.length +
+        " of " +
+        stored.length +
+        " guest reviews stored in the database.";
+    } else if (stored.length) {
+      trainRows = labeledCorpus();
+      testRows = stored;
+      nAll = stored.length;
+      dataNote =
+        "Scored on " +
+        stored.length +
+        " guest review" +
+        (stored.length === 1 ? "" : "s") +
+        " from the database. A larger review set will also be used for training.";
+    } else {
+      var baseline = stratifiedSplit(labeledCorpus(), TEST_RATIO, SPLIT_SEED);
+      trainRows = baseline.train;
+      testRows = baseline.test;
+      nAll = labeledCorpus().length;
+      dataNote =
+        "No guest reviews yet. These scores switch to database reviews as soon as feedback is saved.";
+    }
+    if (trainRows.length < 6 || !testRows.length) {
+      return { ok: false, reason: "Not enough labeled comments for a train/test split." };
+    }
+    var metrics = scoreSentiment(trainRows, testRows, stored.length >= 12 ? 200 : 500);
+    metrics.nAll = nAll;
+    metrics.nLive = stored.length;
+    metrics.dataNote = dataNote;
     sentimentCache = metrics;
     sentimentCacheKey = cacheKey;
     return metrics;
@@ -790,42 +856,78 @@
     return series;
   }
 
-  function collectLiveBookings() {
+  function bookingIdentity(row) {
+    if (!row) return "";
+    var id = row.id || row.bookingId || row.booking_id;
+    if (id) return "id:" + String(id);
+    return (
+      "k:" +
+      String(row.check_in || row.checkIn || "") +
+      "|" +
+      String(row.status || "") +
+      "|" +
+      String(row.total_estimate != null ? row.total_estimate : row.totalEstimate || "") +
+      "|" +
+      String(row.email || row.user_email || "")
+    );
+  }
+
+  function liveBookingRows() {
     var B = window.ElenestBookings;
     var list = [];
-    try {
-      if (B && typeof B.listLive === "function") list = B.listLive() || [];
-      else if (B && typeof B.listAll === "function") list = B.listAll() || [];
-    } catch (e) {}
+    if (B && typeof B.listLive === "function") list = B.listLive() || [];
+    else if (B && typeof B.listAll === "function") list = B.listAll() || [];
     return list
       .map(function (item) {
         return item && item.booking ? item.booking : item;
       })
-      .filter(Boolean);
+      .filter(function (row) {
+        if (!row) return false;
+        var id = String(row.id || "");
+        if (id.indexOf("past-") === 0) return false;
+        if (row.historical === true) return false;
+        return true;
+      });
+  }
+
+  function combinedBookingRows(pastRows) {
+    var seen = {};
+    var out = [];
+    function push(row) {
+      if (!row) return;
+      var id = bookingIdentity(row);
+      if (!id || seen[id]) return;
+      seen[id] = true;
+      out.push(row);
+    }
+    (pastRows || []).forEach(push);
+    liveBookingRows().forEach(push);
+    return out;
+  }
+
+  function liveBookingSignature() {
+    var rows = liveBookingRows();
+    var sum = 0;
+    rows.forEach(function (row) {
+      var income = Number(row.totalEstimate != null ? row.totalEstimate : row.total_estimate);
+      if (!isFinite(income)) income = Number(row.amountDown != null ? row.amountDown : row.amount_down);
+      if (!isFinite(income)) income = 0;
+      sum += income;
+      sum += String(row.status || "").length;
+      sum += String(row.checkIn || row.check_in || "").length;
+    });
+    return rows.length + ":" + Math.round(sum);
   }
 
   function monthlyBookingSeries(pastRows) {
     var buckets = {};
-    var seen = {};
-    (pastRows || []).forEach(function (row) {
-      if (!row) return;
-      if (row.id) seen[String(row.id)] = true;
+    combinedBookingRows(pastRows).forEach(function (row) {
       addBookingToBuckets(
         buckets,
         row.check_in || row.checkIn,
         row.status,
         row.total_estimate != null ? row.total_estimate : row.totalEstimate,
         row.amount_down != null ? row.amount_down : row.amountDown
-      );
-    });
-    collectLiveBookings().forEach(function (row) {
-      if (!row || (row.id && seen[String(row.id)])) return;
-      addBookingToBuckets(
-        buckets,
-        row.checkIn || row.check_in,
-        row.status,
-        row.totalEstimate != null ? row.totalEstimate : row.total_estimate,
-        row.amountDown != null ? row.amountDown : row.amount_down
       );
     });
     return bucketsToSeries(buckets);
@@ -858,8 +960,10 @@
   }
 
   function evaluateRegression(pastRows) {
+    var combined = combinedBookingRows(pastRows);
     var series = monthlyBookingSeries(pastRows);
-    if (!pastRows || !pastRows.length) {
+    var liveCount = liveBookingRows().length;
+    if (!combined.length) {
       return {
         ok: false,
         reason: historicalUnavailableReason(),
@@ -959,12 +1063,16 @@
     metrics.nMonths = usable.length;
     metrics.nTrain = trainPts.length;
     metrics.nTest = yTrue.length;
+    metrics.nLiveBookings = liveCount;
     metrics.procedure =
       "within-year holdout on monthly reservations (" +
       trainPts.length +
       " train months, " +
       yTrue.length +
-      " test months)";
+      " test months)" +
+      (liveCount
+        ? ". Includes " + liveCount + " reservation" + (liveCount === 1 ? "" : "s") + " from the database."
+        : "");
     metrics.features = "year level and seasonal month (sine/cosine)";
     metrics.target = "Monthly reservation count";
     return metrics;
@@ -1019,6 +1127,9 @@
       badge("accuracy", m.accuracy) +
       (m.nTest ? " (" + m.nTest + " held-out comments of " + (m.nAll || m.nTest) + ")" : "") +
       "</td></tr>" +
+      (m.dataNote
+        ? '<tr class="admin-model-eval__avg"><td colspan="4">' + esc(m.dataNote) + "</td></tr>"
+        : "") +
       "</tbody></table></div>"
     );
   }
@@ -1059,6 +1170,9 @@
       "</td><td>" +
       badge("r2", m.r2) +
       "</td></tr>" +
+      (m.procedure
+        ? '<tr class="admin-model-eval__avg"><td colspan="3">' + esc(m.procedure) + "</td></tr>"
+        : "") +
       "</tbody></table></div>"
     );
   }
@@ -1069,7 +1183,7 @@
       '<div class="admin-model-eval__head">' +
       "<h3>Model Evaluation</h3>" +
       '<span class="admin-model-eval__live" aria-live="polite">Live</span>' +
-      '<p class="admin-model-eval__live-note">Sentiment is tested on 30 percent of the stored feedback. The other 70 percent is used only for training.</p>' +
+      '<p class="admin-model-eval__live-note">Sentiment scores and forecast error are recalculated from guest reviews and reservations in the database.</p>' +
       "</div>" +
       '<div class="admin-model-eval__grid">' +
       '<section class="admin-model-eval__panel">' +
@@ -1104,7 +1218,7 @@
     }
   }
 
-  var EVAL_STORE = "elenest_model_eval_v1";
+  var EVAL_STORE = "elenest_model_eval_v3";
 
   function readStoredResult() {
     try {
@@ -1130,16 +1244,12 @@
   }
 
   function evalSignature() {
-    var feedbackCount = 0;
+    var feedbackKey = "";
     try {
-      feedbackCount = storedFeedbackRows().length;
+      feedbackKey = feedbackSignature(storedFeedbackRows());
     } catch (e) {}
     var pastCount = pastBookingRowsCache ? pastBookingRowsCache.length : -1;
-    var liveCount = 0;
-    try {
-      liveCount = collectLiveBookings().length;
-    } catch (e2) {}
-    return feedbackCount + ":" + pastCount + ":" + liveCount;
+    return feedbackKey + "|" + liveBookingSignature() + "|" + pastCount;
   }
 
   function paintNow(clf, reg) {
@@ -1255,6 +1365,10 @@
       recomputeAndRender._sig = "";
       sentimentCache = null;
       sentimentCacheKey = "";
+      scheduleRender();
+    });
+    window.addEventListener("elenest-bookings-updated", function () {
+      recomputeAndRender._sig = "";
       scheduleRender();
     });
     window.addEventListener("storage", function (e) {
