@@ -111,19 +111,6 @@
     overlay.removeAttribute("hidden");
   }
 
-  function dismissNotification(id, event) {
-    if (event) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-    var N = api();
-    if (!N || !activeEmail || !id) return;
-    N.clearForUser(activeEmail, id);
-    if (selectedId === id) closeDetail();
-    renderPanelList();
-    updateBadge();
-  }
-
   function renderPanelList() {
     var host = document.querySelector("#staffNotifPanel .customer-notif-panel__list");
     if (!host) return;
@@ -138,12 +125,9 @@
     }
     list.forEach(function (n) {
       if (!n) return;
-      var item = document.createElement("div");
+      var item = document.createElement("button");
+      item.type = "button";
       item.className = "customer-notif-item" + (n.read ? "" : " customer-notif-item--unread");
-      item.setAttribute("role", "listitem");
-      var open = document.createElement("button");
-      open.type = "button";
-      open.className = "customer-notif-item__open";
       var type = document.createElement("span");
       type.className = "customer-notif-item__type";
       type.textContent = typeLabel(n);
@@ -157,25 +141,14 @@
       var time = document.createElement("span");
       time.className = "customer-notif-item__time";
       time.textContent = fmtWhen(n.createdAt);
-      open.appendChild(type);
-      open.appendChild(title);
-      open.appendChild(msg);
-      open.appendChild(time);
-      open.addEventListener("click", function (e) {
+      item.appendChild(type);
+      item.appendChild(title);
+      item.appendChild(msg);
+      item.appendChild(time);
+      item.addEventListener("click", function (e) {
         e.stopPropagation();
         openDetail(n.id);
       });
-      var dismiss = document.createElement("button");
-      dismiss.type = "button";
-      dismiss.className = "customer-notif-item__dismiss";
-      dismiss.setAttribute("aria-label", "Dismiss notification");
-      dismiss.title = "Dismiss";
-      dismiss.textContent = "\u00d7";
-      dismiss.addEventListener("click", function (e) {
-        dismissNotification(n.id, e);
-      });
-      item.appendChild(open);
-      item.appendChild(dismiss);
       host.appendChild(item);
     });
   }
@@ -216,9 +189,19 @@
       '<div class="customer-notif-panel__actions">' +
       '<button type="button" class="customer-notif-panel__mark-all">Mark all read</button>' +
       '<button type="button" class="customer-notif-panel__clear-all">Clear all</button>' +
-      "</div></div>" +
+      "</div>" +
+      '<button type="button" class="customer-notif-panel__close" aria-label="Close notifications" title="Close">\u00d7</button>' +
+      "</div>" +
       '<div class="customer-notif-panel__list" role="list"></div>';
     document.body.appendChild(panel);
+
+    var closeBtn = panel.querySelector(".customer-notif-panel__close");
+    if (closeBtn) {
+      closeBtn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        closePanel();
+      });
+    }
 
     var markAll = panel.querySelector(".customer-notif-panel__mark-all");
     if (markAll) {
