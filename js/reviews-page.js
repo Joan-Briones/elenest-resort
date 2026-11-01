@@ -93,6 +93,7 @@
     if (api && typeof api.listLive === "function") list = api.listLive();
     else if (api && typeof api.listAll === "function") {
       list = api.listAll().filter(function (item) {
+        if (api.isTestFeedback && api.isTestFeedback(item)) return false;
         return !api.isHistoricalFeedback || !api.isHistoricalFeedback(item);
       });
     }

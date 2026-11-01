@@ -56,9 +56,15 @@
 
   function getAllFeedback() {
     var api = window.ElenestGuestFeedback;
-    if (api && typeof api.listAll === "function") return api.listAll();
-    if (api && typeof api.listLive === "function") return api.listLive();
-    return [];
+    var list = [];
+    if (api && typeof api.listAll === "function") list = api.listAll();
+    else if (api && typeof api.listLive === "function") list = api.listLive();
+    return (list || []).filter(function (item) {
+      if (!item) return false;
+      if (String(item.id || "").indexOf("test-fb-") === 0) return false;
+      if (api && typeof api.isTestFeedback === "function" && api.isTestFeedback(item)) return false;
+      return true;
+    });
   }
 
   function loadKpis() {
@@ -102,7 +108,7 @@
           var byId = {};
           (rows || []).forEach(function (row) {
             var id = String(row.id || "");
-            if (!id) return;
+            if (!id || id.indexOf("test-fb-") === 0) return;
             byId[id] = {
               stars: row.stars != null ? row.stars : 0,
               sentiment: row.sentiment || ""
@@ -110,7 +116,10 @@
           });
           (getAllFeedback() || []).forEach(function (item) {
             var id = String(item.id || "");
+            var GF = window.ElenestGuestFeedback;
             if (!id || byId[id]) return;
+            if (id.indexOf("test-fb-") === 0) return;
+            if (GF && typeof GF.isTestFeedback === "function" && GF.isTestFeedback(item)) return;
             byId[id] = {
               stars: item.stars != null ? item.stars : 0,
               sentiment: item.sentiment || ""

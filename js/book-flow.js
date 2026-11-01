@@ -3192,6 +3192,12 @@
       cancelBtn.addEventListener("click", function (e) {
         e.preventDefault();
         e.stopPropagation();
+        if (!customerCanCancelBooking(b)) {
+          window.alert(
+            "This booking can no longer be cancelled because an admin already confirmed it, or the stay is checked in or completed."
+          );
+          return;
+        }
         cancelCustomerBooking(b).then(function (ok) {
           if (ok && typeof onDeleted === "function") onDeleted();
         });
@@ -3206,7 +3212,7 @@
     var name = document.createElement("h4");
     name.className = "booking-card__name";
     name.textContent = b.fullName || "Guest";
-    if (b.id && isPendingLikeStatus(normalizedStatus, b)) {
+    if (b.id && (isPendingLikeStatus(normalizedStatus, b) || customerCanCancelBooking(b))) {
       var nameRow = document.createElement("div");
       nameRow.className = "booking-card__name-row";
       if (window.ElenestGuestAvatar && typeof window.ElenestGuestAvatar.create === "function") {
@@ -6069,7 +6075,17 @@
   if (cancelBookingFromConfirmBtn) {
     cancelBookingFromConfirmBtn.addEventListener("click", function () {
       var booking = findReviewBooking();
-      if (booking) cancelCustomerBooking(booking);
+      if (!booking) {
+        window.alert("Open your booking first, then choose Cancel booking.");
+        return;
+      }
+      if (!customerCanCancelBooking(booking)) {
+        window.alert(
+          "This booking can no longer be cancelled because an admin already confirmed it, or the stay is checked in or completed."
+        );
+        return;
+      }
+      cancelCustomerBooking(booking);
     });
   }
   var viewBookingsFromConfirmBtn = document.getElementById("viewBookingsFromConfirmBtn");

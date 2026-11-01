@@ -5610,6 +5610,7 @@ footer i,
 
 .book-flow-actions {
   display: flex;
+  flex-wrap: wrap;
   justify-content: flex-end;
   align-items: center;
   gap: 10px;
@@ -13009,6 +13010,17 @@ header #bookNavUser button.book-nav-appointments:not(.book-nav-icon-btn).is-acti
 
 .subpage .booking-card__name-row .booking-card__name {
   margin-bottom: 0;
+}
+
+#cancelBookingFromConfirmBtn[hidden] {
+  display: none !important;
+}
+
+#cancelBookingFromConfirmBtn:not([hidden]),
+.subpage .booking-card__delete {
+  pointer-events: auto !important;
+  position: relative;
+  z-index: 5;
 }
 
 .subpage .booking-card__delete {

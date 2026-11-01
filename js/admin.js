@@ -567,6 +567,8 @@
   function accumulateReviewRow(acc, row) {
     if (!row) return;
     var id = String(row.id || "");
+    var email = String(row.guest_email || row.email || "").toLowerCase();
+    if (id.indexOf("test-fb-") === 0 || email.indexOf("@test.elenest.local") !== -1) return;
     if (id) {
       if (acc.seen[id]) return;
       acc.seen[id] = true;
@@ -7716,7 +7718,7 @@
       if (predictiveScriptPromise) return predictiveScriptPromise;
       predictiveScriptPromise = new Promise(function (resolve, reject) {
         var s = document.createElement("script");
-        s.src = "../js/predictive-analytics.js?v=20261101-live1";
+        s.src = "../js/predictive-analytics.js?v=20261101-testdata1";
         s.async = true;
         s.onload = function () {
           resolve(window.ElenestPredictiveAnalytics || null);

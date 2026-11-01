@@ -225,6 +225,9 @@
   function loadReviewsFromLocal() {
     var F = window.ElenestGuestFeedback;
     var local = F && typeof F.listAll === "function" ? F.listAll() || [] : [];
+    local = local.filter(function (item) {
+      return !(F && typeof F.isTestFeedback === "function" && F.isTestFeedback(item));
+    });
     return local.map(function (item) {
       return mapReviewRow({
         id: item.id,

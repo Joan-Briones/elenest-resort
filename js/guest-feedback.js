@@ -636,6 +636,14 @@
     return false;
   }
 
+  function isTestFeedback(item) {
+    if (!item) return false;
+    var id = String(item.id || "");
+    if (id.indexOf("test-fb-") === 0) return true;
+    var email = String(item.guest_email || item.email || "").toLowerCase();
+    return email.indexOf("@test.elenest.local") !== -1;
+  }
+
   function ensureHistoricalLoaded(force) {
     if (force) {
       historicalLoaded = false;
@@ -756,14 +764,14 @@
 
   function listLive() {
     return cache.filter(function (item) {
-      return !isHistoricalFeedback(item);
+      return !isHistoricalFeedback(item) && !isTestFeedback(item);
     });
   }
 
   function listForSentiment() {
     var currentKey = getCurrentWeekStartKey();
     return cache.filter(function (item) {
-      if (item.sentimentArchived) return false;
+      if (isTestFeedback(item) || item.sentimentArchived) return false;
       return feedbackWeekKey(item) === currentKey;
     });
   }
@@ -1044,6 +1052,8 @@
     mountRecentReviewNames: mountRecentReviewNames,
 
     isHistoricalFeedback: isHistoricalFeedback,
+
+    isTestFeedback: isTestFeedback,
 
     ensureHistoricalLoaded: ensureHistoricalLoaded,
 

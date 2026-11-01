@@ -210,10 +210,42 @@
     );
   }
 
+  function bookingWasSubmittedAt(booking) {
+    var ms = new Date(
+      (booking && (booking.submittedAt || booking.createdAt || booking.created_at)) || 0
+    ).getTime();
+    return ms && !isNaN(ms) ? ms : 0;
+  }
+
+  function decisionIsBorrowed(booking) {
+    if (!booking) return false;
+    var createdMs = bookingWasSubmittedAt(booking);
+    var decisionMs = new Date(
+      booking.paymentVerifiedAt ||
+        booking.payment_verified_at ||
+        booking.checkedInAt ||
+        booking.checkedOutAt ||
+        0
+    ).getTime();
+    return !!(createdMs && decisionMs && !isNaN(decisionMs) && decisionMs + 1000 < createdMs);
+  }
+
   function canCustomerCancelBooking(booking) {
-    if (!isAwaitingBookingReview(booking)) return false;
+    if (!booking || !booking.id) return false;
     var st = normalizeBookingStatus(booking.status);
-    return st === STATUS.PENDING;
+    if (
+      st === STATUS.CANCELLED ||
+      st === STATUS.REJECTED ||
+      st === STATUS.NO_SHOW
+    ) {
+      return false;
+    }
+    if (decisionIsBorrowed(booking)) return true;
+    if (st !== STATUS.PENDING) return false;
+    if (hasSubmittedReceipt(booking)) return false;
+    if (booking.paymentVerifiedAt || booking.payment_verified_at || booking.paymentRejectedAt) return false;
+    if (booking.bookingConfirmedAt || booking.paymentDeadlineAt || booking.payment_deadline_at) return false;
+    return true;
   }
 
   function buildCustomerCancelPatch() {
@@ -223,6 +255,9 @@
       slotLocked: false,
       verificationStage: "cancelled",
       workflow: "cancelled",
+      paymentVerifiedAt: null,
+      checkedInAt: "",
+      checkedOutAt: "",
       cancelledAt: new Date().toISOString(),
       cancelledBy: "customer"
     };

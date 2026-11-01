@@ -765,7 +765,6 @@
   function syncAllGroupsPaymentState() {
     var seen = {};
     var changed = false;
-    var stayGroups = {};
     for (var email in cache) {
       if (!Object.prototype.hasOwnProperty.call(cache, email)) continue;
       var list = cache[email];
@@ -777,35 +776,8 @@
           seen[gid] = true;
           if (syncGroupPaymentState(gid)) changed = true;
         }
-        var stayKey =
-          normalizeEmail(booking && (booking.email || email)) +
-          "|" +
-          String((booking && booking.checkIn) || "") +
-          "|" +
-          String((booking && booking.checkOut) || "");
-        if (stayKey.indexOf("||") === 0 || stayKey.slice(-1) === "|") continue;
-        if (!stayGroups[stayKey]) stayGroups[stayKey] = [];
-        stayGroups[stayKey].push(booking);
       }
     }
-    Object.keys(stayGroups).forEach(function (stayKey) {
-      var members = stayGroups[stayKey];
-      if (!members || members.length < 2) return;
-      var source = preferredPaymentSource(members);
-      if (!source) return;
-      for (var s = 0; s < members.length; s++) {
-        if (members[s] === source) continue;
-        var before =
-          String(members[s].status || "") + "|" + String(members[s].paymentVerifiedAt || "");
-        copyPaymentApprovalFields(source, members[s]);
-        var after =
-          String(members[s].status || "") + "|" + String(members[s].paymentVerifiedAt || "");
-        if (before !== after) {
-          changed = true;
-          persistRepairedPrimaryMembers([members[s]]);
-        }
-      }
-    });
     return changed;
   }
 
@@ -873,28 +845,59 @@
       checkOut: booking.checkOut || ""
     };
     var map = readVerifiedStore();
-    [booking.id, getBookingGroupId(booking), stayKeyFor(booking, rec.email)].forEach(function (k) {
-      if (k && String(k).indexOf("||") !== 0 && String(k).slice(-1) !== "|") {
-        map[String(k)] = rec;
-      }
+    // Remember this booking only. A stay-date key would stamp the next request
+    // for the same guest and dates with this payment or checkout.
+    [booking.id, getBookingGroupId(booking)].forEach(function (k) {
+      if (k) map[String(k)] = rec;
     });
     writeVerifiedStore(map);
   }
 
-  function findRememberedVerification(booking, email) {
+  function rememberedRecordBelongs(booking, rec) {
+    if (!booking || !rec) return false;
+    var id = String(booking.id || "");
+    var groupId = String(getBookingGroupId(booking) || "");
+    var recId = String(rec.id || "");
+    if (!id || !recId) return false;
+    if (recId === id || (groupId && recId === groupId)) return true;
+    if (id.indexOf(recId + "__") === 0) return true;
+    if (recId.indexOf(id + "__") === 0) return true;
+    return false;
+  }
+
+  function findRememberedVerification(booking) {
     if (!booking) return null;
     var map = readVerifiedStore();
-    var keys = [booking.id, getBookingGroupId(booking), stayKeyFor(booking, email || booking.email)];
+    var keys = [booking.id, getBookingGroupId(booking)];
     for (var i = 0; i < keys.length; i++) {
-      if (keys[i] && map[String(keys[i])]) return map[String(keys[i])];
+      var rec = keys[i] && map[String(keys[i])];
+      if (rec && rememberedRecordBelongs(booking, rec)) return rec;
     }
     return null;
   }
 
   function applyRememberedVerification(booking, email) {
     if (!booking) return booking;
+    var currentStatus = String(booking.status || "").toLowerCase();
+    var currentWorkflow = String(booking.workflow || "").toLowerCase();
+    if (
+      currentStatus === "cancelled" ||
+      currentStatus === "canceled" ||
+      currentStatus === "rejected" ||
+      currentStatus === "pending" ||
+      currentWorkflow === "cancelled" ||
+      currentWorkflow === "rejected" ||
+      currentWorkflow === "awaiting_booking_review"
+    ) {
+      return booking;
+    }
     var rec = findRememberedVerification(booking, email);
     if (!rec) return booking;
+    var createdMs = new Date(
+      booking.submittedAt || booking.createdAt || booking.created_at || 0
+    ).getTime();
+    var decisionMs = new Date(rec.paymentVerifiedAt || rec.checkedInAt || rec.paymentRejectedAt || 0).getTime();
+    if (createdMs && decisionMs && decisionMs + 1000 < createdMs) return booking;
     if (rec.paymentRejectedAt) {
       booking.paymentRejectedAt = rec.paymentRejectedAt;
       booking.status = "Rejected";
@@ -973,9 +976,14 @@
     if (!booking) return true;
     if (booking.customerRemovedAt) return true;
     var map = readHiddenStore();
-    var keys = [booking.id, getBookingGroupId(booking), stayKeyFor(booking, email || booking.email)];
+    var keys = [booking.id, getBookingGroupId(booking)];
     for (var i = 0; i < keys.length; i++) {
-      if (keys[i] && map[String(keys[i])]) return true;
+      var hidden = keys[i] && map[String(keys[i])];
+      if (!hidden) continue;
+      var hiddenId = String(hidden.id || "");
+      var bookingId = String(booking.id || "");
+      if (hiddenId && hiddenId !== bookingId && hiddenId !== String(getBookingGroupId(booking) || "")) continue;
+      return true;
     }
     var name = String(booking.fullName || "")
       .trim()
@@ -1009,17 +1017,14 @@
       paymentType: payload.paymentType || "down"
     };
     rememberVerifiedBooking(fake, payload.email);
-    var stay = stayKeyFor(fake, payload.email);
     var gid = getBookingGroupId(fake);
     for (var email in cache) {
       if (!Object.prototype.hasOwnProperty.call(cache, email)) continue;
       (cache[email] || []).forEach(function (b) {
         if (!b) return;
-        if (
-          (payload.id && String(b.id) === String(payload.id)) ||
-          (gid && getBookingGroupId(b) === gid) ||
-          (stay && stayKeyFor(b, email) === stay)
-        ) {
+        var sameBooking = payload.id && String(b.id) === String(payload.id);
+        var sameGroup = gid && getBookingGroupId(b) === gid && String(b.id || "").indexOf(String(gid)) === 0;
+        if (sameBooking || sameGroup) {
           copyPaymentApprovalFields(fake, b);
           applyRememberedVerification(b, email);
         }
@@ -3341,29 +3346,42 @@
     };
   }
 
-  function matchLiveBooking(cacheBooking, live, emailKey) {
-    if (!cacheBooking || !live) return false;
-    if (live.id && String(cacheBooking.id) === String(live.id)) return true;
-    var gid = getBookingGroupId(cacheBooking);
-    if (gid && live.id && String(live.id).indexOf(String(gid)) === 0) return true;
-    var stayA = stayKeyFor(cacheBooking, emailKey);
-    var stayB = stayKeyFor(
-      { email: live.email, checkIn: live.checkIn, checkOut: live.checkOut },
-      live.email
-    );
-    if (stayA && stayB && stayA === stayB) return true;
-    var n1 = String(cacheBooking.fullName || "").trim().toLowerCase();
-    var n2 = String(live.fullName || "").trim().toLowerCase();
-    return !!(
-      n1 &&
-      n2 &&
-      n1 === n2 &&
-      dateOnlyIso(cacheBooking.checkIn) === dateOnlyIso(live.checkIn)
-    );
+  function matchLiveBooking(cacheBooking, live) {
+    if (!cacheBooking || !live || !live.id || !cacheBooking.id) return false;
+    var liveId = String(live.id);
+    var cacheId = String(cacheBooking.id);
+    if (cacheId === liveId) return true;
+    var cacheGroup = String(getBookingGroupId(cacheBooking) || "");
+    var liveGroup = "";
+    var liveCut = liveId.indexOf("__");
+    if (liveCut > 0) liveGroup = liveId.slice(0, liveCut);
+    // Facility rows of one request share a group. A different request with the
+    // same guest name or dates must keep its own status.
+    if (cacheGroup && (liveId === cacheGroup || liveId.indexOf(cacheGroup + "__") === 0)) return true;
+    if (liveGroup && (cacheId === liveGroup || cacheId.indexOf(liveGroup + "__") === 0)) return true;
+    if (cacheBooking.parentBookingId && String(cacheBooking.parentBookingId) === liveId) return true;
+    return false;
   }
 
   function overlayLiveDecisionOnBooking(target, live) {
     if (!target || !live) return false;
+    var targetStatus = String(target.status || "").toLowerCase();
+    var targetWorkflow = String(target.workflow || "").toLowerCase();
+    if (
+      targetStatus === "cancelled" ||
+      targetStatus === "canceled" ||
+      targetWorkflow === "cancelled" ||
+      targetWorkflow === "canceled"
+    ) {
+      return false;
+    }
+    var createdMs = new Date(target.submittedAt || target.createdAt || target.created_at || 0).getTime();
+    var liveDecisionMs = new Date(
+      live.paymentVerifiedAt || live.checkedInAt || live.paymentRejectedAt || 0
+    ).getTime();
+    if (createdMs && liveDecisionMs && !isNaN(liveDecisionMs) && liveDecisionMs + 1000 < createdMs) {
+      return false;
+    }
     var before =
       String(target.status || "") +
       "|" +
