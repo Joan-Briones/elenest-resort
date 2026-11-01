@@ -2814,7 +2814,7 @@
       return;
     }
     swalConfirm({
-      icon: "question",
+      icon: "success",
       title: "Confirm this booking?",
       text:
         "The guest will be notified that they can pay online. Payment must be completed within 3 hours of when the booking was created. If that time has passed, the unpaid booking is cancelled and the room is released.",
