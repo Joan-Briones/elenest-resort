@@ -19,6 +19,16 @@
     return round4(n).toFixed(4);
   }
 
+  function fmtPct(n) {
+    if (n == null || !isFinite(n)) return "—";
+    return (Math.round(n * 10000) / 100).toFixed(2) + "%";
+  }
+
+  function fmtCount(n) {
+    var v = Number(n) || 0;
+    return v.toLocaleString("en-US");
+  }
+
   function esc(s) {
     return String(s == null ? "" : s)
       .replace(/&/g, "&amp;")
@@ -542,19 +552,10 @@
     if (max < 1) return rows.slice();
     var out = [];
     CLASSES.forEach(function (c) {
-      var list = byClass[c].slice().sort(function (a, b) {
-        return reviewKey(a).localeCompare(reviewKey(b));
-      });
+      var list = byClass[c];
       if (!list.length) return;
-      var picked = list;
-      if (list.length > max) {
-        picked = [];
-        var step = list.length / max;
-        var i;
-        for (i = 0; i < max; i++) picked.push(list[Math.min(list.length - 1, Math.floor(i * step))]);
-      }
       var n;
-      for (n = 0; n < max; n++) out.push(picked[n % picked.length]);
+      for (n = 0; n < max; n++) out.push(list[n % list.length]);
     });
     for (var i = out.length - 1; i > 0; i--) {
       var j = Math.floor(rng() * (i + 1));
@@ -631,10 +632,10 @@
     };
   }
 
-  function isDedicatedTestRow(row) {
-    var id = String((row && row.id) || "");
-    var email = String((row && row.email) || "").toLowerCase();
-    return id.indexOf("test-fb-") === 0 || email.indexOf("@test.elenest.local") !== -1;
+  function allFeedbackCount() {
+    var F = window.ElenestGuestFeedback;
+    var list = F && typeof F.listAll === "function" ? F.listAll() : [];
+    return (list || []).length;
   }
 
   function feedbackCorpusReady() {
@@ -719,29 +720,25 @@
     var cacheKey = feedbackSignature(stored);
     if (sentimentCache && sentimentCacheKey === cacheKey && finalModel) return sentimentCache;
 
-    var actual = [];
-    stored.forEach(function (row) {
-      if (isDedicatedTestRow(row)) return;
-      actual.push(row);
-    });
-    var corpus = actual.length ? actual : stored.slice();
+    var corpus = stored.slice();
+    var guestTotal = allFeedbackCount() || corpus.length;
     var trainRows;
     var testRows;
     var dataNote;
     var nAll;
     if (corpus.length >= 8) {
-      var split = stableStratifiedSplit(corpus, TEST_RATIO, SPLIT_SEED);
+      var split = stratifiedSplit(corpus, TEST_RATIO, SPLIT_SEED);
       trainRows = split.train;
       testRows = split.test;
       nAll = corpus.length;
       dataNote =
-        "Recalculated from " +
-        corpus.length +
-        " customer reviews now in the database. " +
-        split.test.length +
-        " comments are the 30 percent test. The other 70 percent is used only for that score. A new comment is included the next time this table runs. Live sentiment uses a separate model trained on all " +
-        corpus.length +
-        " reviews.";
+        "Calculated from " +
+        fmtCount(split.test.length) +
+        " held-out comments of " +
+        fmtCount(corpus.length) +
+        " labeled guest feedback records. Overall guest feedback is " +
+        fmtCount(guestTotal) +
+        ", including the test comments. A new comment changes this result.";
     } else if (stored.length) {
       trainRows = labeledCorpus();
       testRows = stored;
@@ -766,10 +763,10 @@
     var epochs = corpus.length >= 12 ? 200 : 500;
     var scored = scoreSentiment(trainRows, testRows, epochs);
     var metrics = scored.metrics;
-    finalModel = trainFinalModel(actual.length ? actual : trainRows.concat(testRows), epochs);
+    finalModel = trainFinalModel(stored.length ? stored : trainRows.concat(testRows), epochs);
     metrics.scoreLabel = metrics.nTest + " held-out comments of " + (nAll || metrics.nTest);
     metrics.liveNote =
-      "Sentiment is tested on 30 percent of the customer reviews currently stored. The other 70 percent is used only for that score. A new comment changes this table and the review cards. Live sentiment uses a model trained on every customer review.";
+      "Logistic regression with TF-IDF on the guest feedback saved now, including the test comments. A new comment changes this result.";
     metrics.nAll = nAll;
     metrics.nLive = corpus.length;
     metrics.nCorpus = corpus.length;
@@ -1226,46 +1223,29 @@
     if (!m || !m.ok) {
       return '<p class="admin-model-eval__empty">' + esc(m && m.reason ? m.reason : "Classification metrics are unavailable.") + "</p>";
     }
-    var rows = CLASSES.map(function (c) {
-      var p = m.perClass[c];
+    var model = "Logistic Regression with TF-IDF";
+    var target = "Customer feedback sentiment";
+    function row(criterion, value) {
       return (
         "<tr><td>" +
-        c +
+        esc(criterion) +
         "</td><td>" +
-        fmt4(p.precision) +
+        esc(model) +
         "</td><td>" +
-        fmt4(p.recall) +
+        esc(target) +
         "</td><td>" +
-        fmt4(p.f1) +
+        fmtPct(value) +
         "</td></tr>"
       );
-    }).join("");
+    }
+    var weighted = m.weighted || {};
     return (
-      '<div class="admin-model-eval__table-wrap"><table class="admin-model-eval__table">' +
-      "<thead><tr><th>Class</th><th>Precision</th><th>Recall</th><th>F1-score</th></tr></thead><tbody>" +
-      rows +
-      "<tr class=\"admin-model-eval__avg\"><td>Macro average</td><td>" +
-      fmt4(m.macro.precision) +
-      "</td><td>" +
-      fmt4(m.macro.recall) +
-      "</td><td>" +
-      fmt4(m.macro.f1) +
-      "</td></tr>" +
-      "<tr class=\"admin-model-eval__avg\"><td>Weighted average</td><td>" +
-      fmt4(m.weighted.precision) +
-      "</td><td>" +
-      fmt4(m.weighted.recall) +
-      "</td><td>" +
-      fmt4(m.weighted.f1) +
-      " " +
-      badge("f1", m.weighted.f1) +
-      "</td></tr>" +
-      "<tr class=\"admin-model-eval__acc\"><td>Accuracy</td><td colspan=\"3\">" +
-      fmt4(m.accuracy) +
-      " " +
-      badge("accuracy", m.accuracy) +
-      (m.scoreLabel ? " (" + esc(m.scoreLabel) + ")" : m.nTest ? " (" + m.nTest + " held-out comments of " + (m.nAll || m.nTest) + ")" : "") +
-      "</td></tr>" +
+      '<div class="admin-model-eval__table-wrap"><table class="admin-model-eval__table admin-model-eval__table--summary">' +
+      "<thead><tr><th>Criterion</th><th>Model</th><th>Target</th><th>Result</th></tr></thead><tbody>" +
+      row("Accuracy", m.accuracy) +
+      row("Weighted Precision", weighted.precision) +
+      row("Weighted Recall", weighted.recall) +
+      row("Weighted F1-score", weighted.f1) +
       (m.dataNote
         ? '<tr class="admin-model-eval__avg"><td colspan="4">' + esc(m.dataNote) + "</td></tr>"
         : "") +
@@ -1325,7 +1305,7 @@
       '<p class="admin-model-eval__live-note">' +
       esc(
         (clf && clf.liveNote) ||
-          "Sentiment is tested on held-out reviews. Live sentiment is predicted by a model trained on the customer reviews in the database."
+          "Logistic regression with TF-IDF on the guest feedback saved now, including the test comments. A new comment changes this result."
       ) +
       "</p>" +
       "</div>" +
@@ -1362,7 +1342,7 @@
     }
   }
 
-  var EVAL_STORE = "elenest_model_eval_v7";
+  var EVAL_STORE = "elenest_model_eval_v10";
 
   function readStoredResult() {
     try {

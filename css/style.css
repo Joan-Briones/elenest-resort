@@ -14865,6 +14865,24 @@ header #bookNavUser button.book-nav-appointments:not(.book-nav-icon-btn).is-acti
   font-variant-numeric: tabular-nums;
 }
 
+.admin-app .admin-model-eval__table--summary th:nth-child(2),
+.admin-app .admin-model-eval__table--summary th:nth-child(3),
+.admin-app .admin-model-eval__table--summary td:nth-child(2),
+.admin-app .admin-model-eval__table--summary td:nth-child(3) {
+  text-align: left;
+  font-variant-numeric: normal;
+}
+
+.admin-app .admin-model-eval__table--summary td:nth-child(4) {
+  text-align: right;
+  font-weight: 700;
+}
+
+.admin-app .admin-model-eval__table--summary .admin-model-eval__avg td {
+  text-align: left;
+  font-weight: 500;
+}
+
 .admin-app .admin-model-eval__avg td {
   background: #f8fafc;
   font-weight: 600;

@@ -4172,13 +4172,7 @@
   function renderManagerGuestReviews() {
     function paint(list) {
       var rows = (list || []).filter(function (f) {
-        if (!f) return false;
-        var id = String(f.id || "");
-        var email = String(f.email || f.guest_email || "").toLowerCase();
-        if (id.indexOf("test-fb-") === 0 || email.indexOf("@test.elenest.local") !== -1) return false;
-        var GF = window.ElenestGuestFeedback;
-        if (GF && typeof GF.isTestFeedback === "function" && GF.isTestFeedback(f)) return false;
-        return true;
+        return !!f;
       });
       var homeKpis = computeHomeStyleReviewKpis(rows);
       var pos = 0;

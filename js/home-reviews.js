@@ -60,10 +60,7 @@
     if (api && typeof api.listAll === "function") list = api.listAll();
     else if (api && typeof api.listLive === "function") list = api.listLive();
     return (list || []).filter(function (item) {
-      if (!item) return false;
-      if (String(item.id || "").indexOf("test-fb-") === 0) return false;
-      if (api && typeof api.isTestFeedback === "function" && api.isTestFeedback(item)) return false;
-      return true;
+      return !!item;
     });
   }
 
