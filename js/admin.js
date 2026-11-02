@@ -659,12 +659,6 @@
     }
 
     return ready.then(function () {
-      var EV = window.ElenestModelEvaluation;
-      if (EV && typeof EV.evaluateSentiment === "function") {
-        try {
-          EV.evaluateSentiment();
-        } catch (ePrep) {}
-      }
       var list =
         GF && typeof GF.listAll === "function" ? GF.listAll() : getAllReviewRecordsForHomeKpis();
       var i;

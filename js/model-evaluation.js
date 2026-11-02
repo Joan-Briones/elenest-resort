@@ -567,6 +567,7 @@
 
   var sentimentCache = null;
   var sentimentCacheKey = "";
+  var trainingEnabled = false;
 
   function storedFeedbackRows() {
     var rows = collectLiveFeedback();
@@ -699,7 +700,18 @@
     return stars === 3 ? "neu" : "";
   }
 
+  function reportsSectionOpen() {
+    var host = getModelEvalHost();
+    if (!host) return false;
+    var section = host.closest ? host.closest("section") : null;
+    if (!section) return true;
+    return !section.hidden && !section.hasAttribute("hidden");
+  }
+
   function evaluateSentiment() {
+    if (!trainingEnabled) {
+      return { ok: false, reason: "Loading stored feedback for evaluation…", retryable: true };
+    }
     var stored = storedFeedbackRows();
     if (!feedbackCorpusReady()) {
       return { ok: false, reason: "Loading stored feedback for evaluation…", retryable: true };
@@ -1441,7 +1453,8 @@
 
   function recomputeAndRender() {
     var host = getModelEvalHost();
-    if (!host) return Promise.resolve();
+    if (!host || !reportsSectionOpen()) return Promise.resolve();
+    trainingEnabled = true;
     if (computeInFlight) {
       computeQueued = true;
       return computeInFlight;
@@ -1528,6 +1541,7 @@
         clearTimeout(renderTimer);
         renderTimer = null;
       }
+      if (!reportsSectionOpen()) return;
       recomputeAndRender();
     });
     window.addEventListener("elenest-bookings-updated", function () {
@@ -1536,6 +1550,7 @@
         clearTimeout(renderTimer);
         renderTimer = null;
       }
+      if (!reportsSectionOpen()) return;
       recomputeAndRender();
     });
     window.addEventListener("storage", function (e) {
@@ -1564,17 +1579,13 @@
   }
 
   function startEarly() {
+    bindLiveUpdates();
     if (!getModelEvalHost()) return;
     if (!lastResult) lastResult = readStoredResult();
     if (lastResult && lastResult.classification && lastResult.regression && lastResult.regression.ok) {
       paintNow(lastResult.classification, lastResult.regression);
     }
-    var kick = function () {
-      if (document.hidden) return;
-      prefetch();
-    };
-    if (window.requestIdleCallback) requestIdleCallback(kick, { timeout: 1200 });
-    else setTimeout(kick, 400);
+    if (reportsSectionOpen()) prefetch();
   }
 
   function syncPaint() {
