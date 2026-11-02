@@ -365,43 +365,78 @@
     return exps;
   }
 
-  function trainSoftmaxLogistic(X, yIndex, nClass, epochCount) {
-    var n = X.length;
-    var k = X[0].length;
+  function initWeights(k, nClass) {
     var W = [];
     var c;
     var j;
-    var i;
     for (c = 0; c < nClass; c++) {
       W[c] = [];
       for (j = 0; j < k; j++) W[c][j] = 0;
     }
+    return W;
+  }
+
+  function runEpoch(W, X, yIndex, nClass, lr, l2) {
+    var n = X.length;
+    var k = X[0].length;
+    var grad = [];
+    var c;
+    var j;
+    var i;
+    for (c = 0; c < nClass; c++) {
+      grad[c] = [];
+      for (j = 0; j < k; j++) grad[c][j] = 0;
+    }
+    for (i = 0; i < n; i++) {
+      var scores = [];
+      for (c = 0; c < nClass; c++) scores[c] = dot(W[c], X[i]);
+      var p = softmax(scores);
+      for (c = 0; c < nClass; c++) {
+        var err = p[c] - (yIndex[i] === c ? 1 : 0);
+        for (j = 0; j < k; j++) grad[c][j] += err * X[i][j];
+      }
+    }
+    for (c = 0; c < nClass; c++) {
+      for (j = 0; j < k; j++) {
+        W[c][j] -= lr * (grad[c][j] / n + l2 * (j === 0 ? 0 : W[c][j]));
+      }
+    }
+  }
+
+  function trainSoftmaxLogistic(X, yIndex, nClass, epochCount) {
+    var W = initWeights(X[0].length, nClass);
     var lr = 0.25;
     var l2 = 0.004;
     var epochs = epochCount || 900;
     var e;
-    for (e = 0; e < epochs; e++) {
-      var grad = [];
-      for (c = 0; c < nClass; c++) {
-        grad[c] = [];
-        for (j = 0; j < k; j++) grad[c][j] = 0;
-      }
-      for (i = 0; i < n; i++) {
-        var scores = [];
-        for (c = 0; c < nClass; c++) scores[c] = dot(W[c], X[i]);
-        var p = softmax(scores);
-        for (c = 0; c < nClass; c++) {
-          var err = p[c] - (yIndex[i] === c ? 1 : 0);
-          for (j = 0; j < k; j++) grad[c][j] += err * X[i][j];
-        }
-      }
-      for (c = 0; c < nClass; c++) {
-        for (j = 0; j < k; j++) {
-          W[c][j] -= lr * (grad[c][j] / n + l2 * (j === 0 ? 0 : W[c][j]));
-        }
-      }
-    }
+    for (e = 0; e < epochs; e++) runEpoch(W, X, yIndex, nClass, lr, l2);
     return W;
+  }
+
+  function trainSoftmaxLogisticAsync(X, yIndex, nClass, epochCount, done) {
+    var W = initWeights(X[0].length, nClass);
+    var lr = 0.25;
+    var l2 = 0.004;
+    var epochs = epochCount || 900;
+    var e = 0;
+    var stopped = false;
+    function step() {
+      if (stopped) {
+        done(null);
+        return;
+      }
+      var t0 = Date.now();
+      while (e < epochs && Date.now() - t0 < 24) {
+        runEpoch(W, X, yIndex, nClass, lr, l2);
+        e += 1;
+      }
+      if (e < epochs) setTimeout(step, 0);
+      else done(W);
+    }
+    setTimeout(step, 0);
+    return function stop() {
+      stopped = true;
+    };
   }
 
   function predictSoftmax(W, x) {
@@ -680,13 +715,11 @@
 
   function predictFeedback(item) {
     if (!item) return "";
-    if (!feedbackCorpusReady()) return starFallback(item);
-    var trained = evaluateSentiment();
-    if (!trained || !trained.ok || !finalModel) return starFallback(item);
+    if (!finalModel) return starFallback(item);
     var id = String(item.id || "");
     if (id && finalModel.byId[id]) return finalModel.byId[id];
     var text = String(item.comment || item.text || "").trim();
-    if (text.length < 8) return starFallback(item);
+    if (text.length < 8 || typeof finalModel.predict !== "function") return starFallback(item);
     return finalModel.predict(text);
   }
 
@@ -709,17 +742,18 @@
     return !section.hidden && !section.hasAttribute("hidden");
   }
 
-  function evaluateSentiment() {
+  function prepareSentimentJob() {
     if (!trainingEnabled) {
-      return { ok: false, reason: "Loading stored feedback for evaluation…", retryable: true };
+      return { ready: false, metrics: { ok: false, reason: "Loading stored feedback for evaluation…", retryable: true } };
     }
     var stored = storedFeedbackRows();
     if (!feedbackCorpusReady()) {
-      return { ok: false, reason: "Loading stored feedback for evaluation…", retryable: true };
+      return { ready: false, metrics: { ok: false, reason: "Loading stored feedback for evaluation…", retryable: true } };
     }
     var cacheKey = feedbackSignature(stored);
-    if (sentimentCache && sentimentCacheKey === cacheKey && finalModel) return sentimentCache;
-
+    if (sentimentCache && sentimentCacheKey === cacheKey && finalModel) {
+      return { ready: true, cached: sentimentCache, cacheKey: cacheKey };
+    }
     var corpus = stored.slice();
     var guestTotal = allFeedbackCount() || corpus.length;
     var trainRows;
@@ -758,22 +792,123 @@
         "No guest reviews yet. These scores switch to database reviews as soon as feedback is saved.";
     }
     if (!trainRows || trainRows.length < 6 || !testRows || !testRows.length) {
-      return { ok: false, reason: "Not enough labeled comments for a train/test split." };
+      return { ready: false, metrics: { ok: false, reason: "Not enough labeled comments for a train/test split." } };
     }
-    var epochs = corpus.length >= 12 ? 200 : 500;
-    var scored = scoreSentiment(trainRows, testRows, epochs);
+    return {
+      ready: true,
+      stored: stored,
+      trainRows: trainRows,
+      testRows: testRows,
+      epochs: corpus.length >= 12 ? 200 : 500,
+      dataNote: dataNote,
+      nAll: nAll,
+      nLive: corpus.length,
+      cacheKey: cacheKey
+    };
+  }
+
+  function applyScored(job, scored) {
     var metrics = scored.metrics;
-    finalModel = trainFinalModel(stored.length ? stored : trainRows.concat(testRows), epochs);
-    metrics.scoreLabel = metrics.nTest + " held-out comments of " + (nAll || metrics.nTest);
+    metrics.scoreLabel = metrics.nTest + " held-out comments of " + (job.nAll || metrics.nTest);
     metrics.liveNote =
       "Logistic regression with TF-IDF on the guest feedback saved now, including the test comments. A new comment changes this result.";
-    metrics.nAll = nAll;
-    metrics.nLive = corpus.length;
-    metrics.nCorpus = corpus.length;
-    metrics.dataNote = dataNote;
+    metrics.nAll = job.nAll;
+    metrics.nLive = job.nLive;
+    metrics.nCorpus = job.nLive;
+    metrics.dataNote = job.dataNote;
     sentimentCache = metrics;
-    sentimentCacheKey = cacheKey;
+    sentimentCacheKey = job.cacheKey;
     return metrics;
+  }
+
+  function fillLabelsAsync(tfidf, W, rows, done) {
+    var byId = {};
+    var i = 0;
+    var list = rows || [];
+    function step() {
+      var t0 = Date.now();
+      while (i < list.length && Date.now() - t0 < 24) {
+        var row = list[i++];
+        if (!row || !row.id) continue;
+        byId[row.id] = CLASSES[predictSoftmax(W, tfidf.transform(row.text))];
+      }
+      if (i < list.length) setTimeout(step, 0);
+      else {
+        finalModel = {
+          byId: byId,
+          predict: function (text) {
+            return CLASSES[predictSoftmax(W, tfidf.transform(text))];
+          }
+        };
+        if (done) done();
+      }
+    }
+    setTimeout(step, 0);
+  }
+
+  var sentimentGen = 0;
+  var sentimentTrainStop = null;
+
+  function evaluateSentiment() {
+    var job = prepareSentimentJob();
+    if (!job.ready) return job.metrics;
+    if (job.cached) return job.cached;
+    var scored = scoreSentiment(job.trainRows, job.testRows, job.epochs);
+    finalModel = trainFinalModel(job.stored.length ? job.stored : job.trainRows.concat(job.testRows), job.epochs);
+    return applyScored(job, scored);
+  }
+
+  function evaluateSentimentAsync() {
+    var gen = ++sentimentGen;
+    if (typeof sentimentTrainStop === "function") {
+      sentimentTrainStop();
+      sentimentTrainStop = null;
+    }
+    var job = prepareSentimentJob();
+    if (!job.ready) return Promise.resolve(job.metrics);
+    if (job.cached) return Promise.resolve(job.cached);
+    return new Promise(function (resolve) {
+      setTimeout(function () {
+        if (gen !== sentimentGen) {
+          resolve(null);
+          return;
+        }
+        var rng = seededRng(SPLIT_SEED + 17);
+        var train = balanceTrain(job.trainRows, rng, 400);
+        var tfidf = buildTfidf(
+          train.map(function (r) {
+            return r.text;
+          })
+        );
+        var Xtrain = train.map(function (r) {
+          return tfidf.transform(r.text);
+        });
+        var yIndex = train.map(function (r) {
+          return CLASSES.indexOf(r.label);
+        });
+        sentimentTrainStop = trainSoftmaxLogisticAsync(Xtrain, yIndex, CLASSES.length, job.epochs, function (W) {
+          sentimentTrainStop = null;
+          if (!W || gen !== sentimentGen) {
+            resolve(null);
+            return;
+          }
+          var yTrue = [];
+          var yPred = [];
+          job.testRows.forEach(function (row) {
+            yTrue.push(row.label);
+            yPred.push(CLASSES[predictSoftmax(W, tfidf.transform(row.text))]);
+          });
+          var metrics = confusionAndMetrics(yTrue, yPred);
+          metrics.ok = true;
+          metrics.nTrain = job.trainRows.length;
+          metrics.nTest = job.testRows.length;
+          metrics.vocabSize = tfidf.vocab.length;
+          var applied = applyScored(job, { metrics: metrics });
+          resolve(applied);
+          fillLabelsAsync(tfidf, W, job.stored);
+        });
+      }, 0);
+    });
   }
 
   function solveLinearSystem(a, b) {
@@ -1458,11 +1593,28 @@
                 resolve(lastResult);
                 return;
               }
-              var clf = safeSentiment();
               var reg = safeRegression(pastRows);
-              paintNow(clf, reg);
-              if (clf && clf.ok && reg && reg.ok) recomputeAndRender._sig = nextSig;
-              resolve(lastResult);
+              var cachedSentiment = null;
+              try {
+                var jobNow = prepareSentimentJob();
+                if (jobNow && jobNow.cached) cachedSentiment = jobNow.cached;
+              } catch (eJob) {}
+              if (cachedSentiment && cachedSentiment.ok) {
+                paintNow(cachedSentiment, reg);
+                if (reg && reg.ok) recomputeAndRender._sig = nextSig;
+                resolve(lastResult);
+                return;
+              }
+              paintNow({ ok: false, reason: "Calculating sentiment results…", retryable: true }, reg);
+              evaluateSentimentAsync().then(function (clf) {
+                if (!clf) {
+                  resolve(lastResult);
+                  return;
+                }
+                paintNow(clf, reg);
+                if (clf.ok && reg && reg.ok) recomputeAndRender._sig = nextSig;
+                resolve(lastResult);
+              });
             });
           }, 0);
         });
@@ -1548,11 +1700,9 @@
     if (!lastResult) lastResult = readStoredResult();
     if (lastResult && lastResult.classification && lastResult.regression && lastResult.regression.ok) {
       paintNow(lastResult.classification, lastResult.regression);
-      var paintedSig = "";
       try {
-        paintedSig = evalSignature();
+        recomputeAndRender._sig = evalSignature();
       } catch (ePaint) {}
-      if (!paintedSig || paintedSig !== recomputeAndRender._sig) scheduleRender();
       return Promise.resolve(lastResult);
     }
     return prefetch();
@@ -1564,15 +1714,20 @@
     if (!lastResult) lastResult = readStoredResult();
     if (lastResult && lastResult.classification && lastResult.regression && lastResult.regression.ok) {
       paintNow(lastResult.classification, lastResult.regression);
+      try {
+        recomputeAndRender._sig = evalSignature();
+      } catch (eEarly) {}
+      return;
     }
     if (reportsSectionOpen()) prefetch();
   }
 
   function syncPaint() {
-    var clf = safeSentiment();
+    var clf = sentimentCache && sentimentCache.ok ? sentimentCache : null;
     if ((!clf || !clf.ok) && lastResult && lastResult.classification && lastResult.classification.ok) {
       clf = lastResult.classification;
     }
+    if (!clf) clf = { ok: false, reason: "Calculating sentiment results…", retryable: true };
     var reg =
       lastResult && lastResult.regression && lastResult.regression.ok
         ? lastResult.regression
