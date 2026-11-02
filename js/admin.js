@@ -505,10 +505,12 @@
 
   var homeReviewKpisCache = null;
   var homeReviewKpisPromise = null;
+  var homeReviewKpisGen = 0;
 
   function invalidateFullReviewsCache() {
     homeReviewKpisCache = null;
     homeReviewKpisPromise = null;
+    homeReviewKpisGen += 1;
   }
 
   function yieldToUi() {
@@ -518,6 +520,8 @@
   }
 
   function isRecommendableReview(f) {
+    var cl = displayedSentiment(f);
+    if (cl === "pos" || cl === "neg" || cl === "neu") return cl === "pos";
     var raw = String((f && (f.sentiment || f.sentimentLabel)) || "")
       .trim()
       .toLowerCase();
@@ -580,7 +584,7 @@
       acc.starN += 1;
     }
     if (isRecommendableReview(row)) acc.recommend += 1;
-    var cl = classifySentimentFromStars(s);
+    var cl = displayedSentiment(row);
     if (cl === "pos") acc.pos += 1;
     else if (cl === "neg") acc.neg += 1;
     else acc.neu += 1;
@@ -636,56 +640,51 @@
         });
     }
 
-    return fetchPage(0, 500, "id, stars, sentiment, created_at").catch(function () {
-      return fetchPage(0, 500, "id, stars, created_at");
+    return fetchPage(0, 500, "id, stars, sentiment, comment, created_at").catch(function () {
+      return fetchPage(0, 500, "id, stars, comment, created_at").catch(function () {
+        return fetchPage(0, 500, "id, stars, created_at");
+      });
     });
   }
 
   function loadHistoricalFeedbackRowsInto(acc) {
     var HD = window.ElenestHistoricalData;
     var GF = window.ElenestGuestFeedback;
-    var tasks = [];
-
+    var ready = Promise.resolve();
+    if (GF && GF.ready && typeof GF.ready.then === "function") ready = GF.ready;
     if (GF && typeof GF.ensureHistoricalLoaded === "function") {
-      tasks.push(
-        GF.ensureHistoricalLoaded().then(function () {
-          var list =
-            typeof GF.listAll === "function" ? GF.listAll() : getAllReviewRecordsForHomeKpis();
-          var i;
-          for (i = 0; i < (list || []).length; i++) accumulateReviewRow(acc, list[i]);
-        })
-      );
+      ready = ready.then(function () {
+        return GF.ensureHistoricalLoaded();
+      });
     }
 
-    if (HD && typeof HD.loadFeedback === "function") {
-      tasks.push(
-        HD.loadFeedback()
-          .then(function (result) {
-            var rows = (result && result.rows) || [];
-            var i = 0;
-            function chunk() {
-              var end = Math.min(i + 400, rows.length);
-              for (; i < end; i++) accumulateReviewRow(acc, rows[i]);
-              if (i < rows.length) return yieldToUi().then(chunk);
-              return acc;
-            }
-            return chunk();
-          })
-          .catch(function () {
+    return ready.then(function () {
+      var EV = window.ElenestModelEvaluation;
+      if (EV && typeof EV.evaluateSentiment === "function") {
+        try {
+          EV.evaluateSentiment();
+        } catch (ePrep) {}
+      }
+      var list =
+        GF && typeof GF.listAll === "function" ? GF.listAll() : getAllReviewRecordsForHomeKpis();
+      var i;
+      for (i = 0; i < (list || []).length; i++) accumulateReviewRow(acc, list[i]);
+      if (!HD || typeof HD.loadFeedback !== "function") return acc;
+      return HD.loadFeedback()
+        .then(function (result) {
+          var rows = (result && result.rows) || [];
+          var n = 0;
+          function chunk() {
+            var end = Math.min(n + 400, rows.length);
+            for (; n < end; n++) accumulateReviewRow(acc, rows[n]);
+            if (n < rows.length) return yieldToUi().then(chunk);
             return acc;
-          })
-      );
-    }
-
-    if (!tasks.length) {
-      var local = getAllReviewRecordsForHomeKpis();
-      var j;
-      for (j = 0; j < (local || []).length; j++) accumulateReviewRow(acc, local[j]);
-      return Promise.resolve(acc);
-    }
-
-    return Promise.all(tasks).then(function () {
-      return acc;
+          }
+          return chunk();
+        })
+        .catch(function () {
+          return acc;
+        });
     });
   }
 
@@ -693,12 +692,15 @@
   function loadHomeReviewKpis(force) {
     if (force) {
       homeReviewKpisCache = null;
-      if (homeReviewKpisPromise) return homeReviewKpisPromise;
-    } else {
-      if (homeReviewKpisCache) return Promise.resolve(homeReviewKpisCache);
-      if (homeReviewKpisPromise) return homeReviewKpisPromise;
+      homeReviewKpisPromise = null;
+      homeReviewKpisGen += 1;
+    } else if (homeReviewKpisCache) {
+      return Promise.resolve(homeReviewKpisCache);
+    } else if (homeReviewKpisPromise) {
+      return homeReviewKpisPromise;
     }
 
+    var generation = homeReviewKpisGen;
     var acc = createEmptyReviewKpiAccumulator();
     homeReviewKpisPromise = loadHistoricalFeedbackRowsInto(acc)
       .then(function () {
@@ -708,12 +710,14 @@
         return fetchSupabaseFeedbackPagesInto(acc);
       })
       .then(function () {
+        if (generation !== homeReviewKpisGen) return homeReviewKpisCache;
         var kpis = finalizeReviewKpiAccumulator(acc);
         homeReviewKpisCache = kpis;
         homeReviewKpisPromise = null;
         return kpis;
       })
       .catch(function () {
+        if (generation !== homeReviewKpisGen) return homeReviewKpisCache;
         homeReviewKpisPromise = null;
         var fallbackList = getAllReviewRecordsForHomeKpis();
         var fallback = computeHomeStyleReviewKpis(fallbackList);
@@ -1001,7 +1005,7 @@
     var neuCount = 0;
 
     list.forEach(function (f) {
-      var cl = classifySentimentFromStars(f.stars);
+      var cl = displayedSentiment(f);
       var weight = cl === "neg" ? 3 : cl === "neu" ? 1 : 0.25;
       if (cl === "neg") negCount++;
       else if (cl === "neu") neuCount++;
@@ -1084,7 +1088,7 @@
     };
 
     feedbackList.forEach(function (f) {
-      var cl = classifySentimentFromStars(f.stars);
+      var cl = displayedSentiment(f);
       var band = cl === "pos" ? "pos" : cl === "neg" ? "neg" : "neu";
       var cats = detectFeedbackCategories(f.comment);
       cats.forEach(function (cat) {
@@ -5856,6 +5860,17 @@
     return "neu";
   }
 
+  function displayedSentiment(f) {
+    var EV = window.ElenestModelEvaluation;
+    if (EV && typeof EV.classify === "function") {
+      try {
+        var cl = EV.classify(f);
+        if (cl === "pos" || cl === "neg" || cl === "neu") return cl;
+      } catch (eCl) {}
+    }
+    return classifySentimentFromStars(f && (f.stars != null ? f.stars : f && f.rating));
+  }
+
   function mondayOfWeekContaining(d) {
     var x = new Date(d.getFullYear(), d.getMonth(), d.getDate());
     var dow = x.getDay();
@@ -5940,7 +5955,7 @@
       if (isNaN(dt.getTime())) return;
       var key = periodFn(dt);
       if (key == null || idx[key] == null) return;
-      var cl = classifySentimentFromStars(f.stars);
+      var cl = displayedSentiment(f);
       if (cl === "pos") buckets[idx[key]].pos++;
       else if (cl === "neg") buckets[idx[key]].neg++;
       else buckets[idx[key]].neu++;
@@ -6778,7 +6793,7 @@
     var neu = 0;
     var neg = 0;
     sentimentList.forEach(function (f) {
-      var cl = classifySentimentFromStars(f.stars);
+      var cl = displayedSentiment(f);
       if (cl === "pos") pos++;
       else if (cl === "neg") neg++;
       else neu++;
@@ -7718,7 +7733,7 @@
       if (predictiveScriptPromise) return predictiveScriptPromise;
       predictiveScriptPromise = new Promise(function (resolve, reject) {
         var s = document.createElement("script");
-        s.src = "../js/predictive-analytics.js?v=20261101-testdata1";
+        s.src = "../js/predictive-analytics.js?v=20261102-livetime";
         s.async = true;
         s.onload = function () {
           resolve(window.ElenestPredictiveAnalytics || null);
@@ -8156,8 +8171,11 @@
       refreshActiveSection();
     });
     window.addEventListener("elenest-feedback-updated", function () {
-      // Soft refresh in background — do not clear cache until new KPIs are ready.
       loadHomeReviewKpis(true).then(function () {
+        renderDashboard();
+        paintSentimentSection();
+        renderReportsGuestReviews();
+        renderAnalytics();
         refreshActiveSection();
       });
     });

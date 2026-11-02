@@ -31,6 +31,13 @@
   }
 
   function classifySentiment(f) {
+    var EV = window.ElenestModelEvaluation;
+    if (EV && typeof EV.classify === "function") {
+      try {
+        var cl = EV.classify(f);
+        if (cl === "pos" || cl === "neg" || cl === "neu") return cl;
+      } catch (eCl) {}
+    }
     var raw = String((f && (f.sentiment || f.sentimentLabel)) || "")
       .trim()
       .toLowerCase();

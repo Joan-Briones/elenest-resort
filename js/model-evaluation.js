@@ -204,6 +204,9 @@
       var label = labelFromStars(item.stars || item.rating);
       if (!label) return;
       out.push({
+        id: String(item.id || ""),
+        email: String(item.email || item.guest_email || ""),
+        createdAt: String(item.createdAt || item.created_at || ""),
         text: text,
         label: label,
         source: "guest_feedback",
@@ -411,6 +414,21 @@
     };
   }
 
+  function stableUnit(seed, key) {
+    var s = String(seed) + "|" + String(key || "");
+    var h = 2166136261;
+    var i;
+    for (i = 0; i < s.length; i++) {
+      h ^= s.charCodeAt(i);
+      h = Math.imul(h, 16777619);
+    }
+    return (h >>> 0) / 4294967296;
+  }
+
+  function reviewKey(row) {
+    return String((row && (row.id || row.text)) || "");
+  }
+
   function stratifiedSplit(rows, ratio, seed) {
     var byClass = {};
     CLASSES.forEach(function (c) {
@@ -435,6 +453,18 @@
       test = test.concat(list.slice(0, nTest));
       train = train.concat(list.slice(nTest));
     });
+    return { train: train, test: test };
+  }
+
+  function stableStratifiedSplit(rows, ratio, seed) {
+    var train = [];
+    var test = [];
+    (rows || []).forEach(function (row) {
+      if (!row || !row.label) return;
+      if (stableUnit(seed, row.label + "|" + reviewKey(row)) < ratio) test.push(row);
+      else train.push(row);
+    });
+    if (train.length < 6 || !test.length) return stratifiedSplit(rows, ratio, seed);
     return { train: train, test: test };
   }
 
@@ -512,10 +542,19 @@
     if (max < 1) return rows.slice();
     var out = [];
     CLASSES.forEach(function (c) {
-      var list = byClass[c];
+      var list = byClass[c].slice().sort(function (a, b) {
+        return reviewKey(a).localeCompare(reviewKey(b));
+      });
       if (!list.length) return;
-      var i;
-      for (i = 0; i < max; i++) out.push(list[i % list.length]);
+      var picked = list;
+      if (list.length > max) {
+        picked = [];
+        var step = list.length / max;
+        var i;
+        for (i = 0; i < max; i++) picked.push(list[Math.min(list.length - 1, Math.floor(i * step))]);
+      }
+      var n;
+      for (n = 0; n < max; n++) out.push(picked[n % picked.length]);
     });
     for (var i = out.length - 1; i > 0; i--) {
       var j = Math.floor(rng() * (i + 1));
@@ -574,53 +613,123 @@
     metrics.nTrain = trainRows.length;
     metrics.nTest = testRows.length;
     metrics.vocabSize = tfidf.vocab.length;
-    return metrics;
+    return { metrics: metrics, tfidf: tfidf, W: W };
+  }
+
+  function modelFromFit(tfidf, W, rows) {
+    var byId = {};
+    (rows || []).forEach(function (row) {
+      if (!row || !row.id) return;
+      byId[row.id] = CLASSES[predictSoftmax(W, tfidf.transform(row.text))];
+    });
+    return {
+      byId: byId,
+      predict: function (text) {
+        return CLASSES[predictSoftmax(W, tfidf.transform(text))];
+      }
+    };
+  }
+
+  function isDedicatedTestRow(row) {
+    var id = String((row && row.id) || "");
+    var email = String((row && row.email) || "").toLowerCase();
+    return id.indexOf("test-fb-") === 0 || email.indexOf("@test.elenest.local") !== -1;
+  }
+
+  function feedbackCorpusReady() {
+    var GF = window.ElenestGuestFeedback;
+    if (!GF || typeof GF.isHistoricalLoaded !== "function") return true;
+    return !!GF.isHistoricalLoaded();
+  }
+
+  var finalModel = null;
+
+  function trainFinalModel(rows, epochs) {
+    var rng = seededRng(SPLIT_SEED + 91);
+    var train = balanceTrain(rows, rng, 400);
+    var tfidf = buildTfidf(
+      train.map(function (r) {
+        return r.text;
+      })
+    );
+    var Xtrain = train.map(function (r) {
+      return tfidf.transform(r.text);
+    });
+    var yIndex = train.map(function (r) {
+      return CLASSES.indexOf(r.label);
+    });
+    var W = trainSoftmaxLogistic(Xtrain, yIndex, CLASSES.length, epochs);
+    var byId = {};
+    rows.forEach(function (row) {
+      var pred = CLASSES[predictSoftmax(W, tfidf.transform(row.text))];
+      if (row.id) byId[row.id] = pred;
+    });
+    return {
+      byId: byId,
+      predict: function (text) {
+        return CLASSES[predictSoftmax(W, tfidf.transform(text))];
+      }
+    };
+  }
+
+  function starFallback(item) {
+    return labelFromStars(item && (item.stars || item.rating));
+  }
+
+  function predictFeedback(item) {
+    if (!item) return "";
+    if (!feedbackCorpusReady()) return starFallback(item);
+    var trained = evaluateSentiment();
+    if (!trained || !trained.ok || !finalModel) return starFallback(item);
+    var id = String(item.id || "");
+    if (id && finalModel.byId[id]) return finalModel.byId[id];
+    var text = String(item.comment || item.text || "").trim();
+    if (text.length < 8) return starFallback(item);
+    return finalModel.predict(text);
+  }
+
+  function classifyFeedback(item) {
+    var label = predictFeedback(item);
+    if (label === "Positive") return "pos";
+    if (label === "Negative") return "neg";
+    if (label === "Neutral") return "neu";
+    var stars = Number(item && (item.stars || item.rating)) || 0;
+    if (stars >= 4) return "pos";
+    if (stars > 0 && stars <= 2) return "neg";
+    return stars === 3 ? "neu" : "";
   }
 
   function evaluateSentiment() {
     var stored = storedFeedbackRows();
+    if (!feedbackCorpusReady()) {
+      return { ok: false, reason: "Loading stored feedback for evaluation…", retryable: true };
+    }
     var cacheKey = feedbackSignature(stored);
-    if (sentimentCache && sentimentCacheKey === cacheKey) return sentimentCache;
+    if (sentimentCache && sentimentCacheKey === cacheKey && finalModel) return sentimentCache;
 
-    var historical = stored.filter(function (row) {
-      return row.historical;
+    var actual = [];
+    stored.forEach(function (row) {
+      if (isDedicatedTestRow(row)) return;
+      actual.push(row);
     });
-    var fresh = stored.filter(function (row) {
-      return !row.historical;
-    });
-    var baseRows = historical.length ? historical : stored;
-    var liveSplit = baseRows.length
-      ? stratifiedSplit(baseRows, TEST_RATIO, SPLIT_SEED)
-      : { train: [], test: [] };
+    var corpus = actual.length ? actual : stored.slice();
     var trainRows;
     var testRows;
     var dataNote;
     var nAll;
-    if (historical.length && liveSplit.train.length >= 6 && liveSplit.test.length >= 2) {
-      trainRows = liveSplit.train;
-      testRows = liveSplit.test.concat(fresh);
-      nAll = stored.length;
-      dataNote = fresh.length
-        ? "Same held-out historical test, plus " +
-          fresh.length +
-          " new guest review" +
-          (fresh.length === 1 ? "" : "s") +
-          " from the database."
-        : "Held-out test on " +
-          liveSplit.test.length +
-          " of " +
-          historical.length +
-          " stored guest reviews.";
-    } else if (liveSplit.train.length >= 6 && liveSplit.test.length >= 2) {
-      trainRows = liveSplit.train;
-      testRows = liveSplit.test;
-      nAll = stored.length;
+    if (corpus.length >= 8) {
+      var split = stableStratifiedSplit(corpus, TEST_RATIO, SPLIT_SEED);
+      trainRows = split.train;
+      testRows = split.test;
+      nAll = corpus.length;
       dataNote =
-        "Held-out test on " +
-        liveSplit.test.length +
-        " of " +
-        stored.length +
-        " guest reviews stored in the database.";
+        "Recalculated from " +
+        corpus.length +
+        " customer reviews now in the database. " +
+        split.test.length +
+        " comments are the 30 percent test. The other 70 percent is used only for that score. A new comment is included the next time this table runs. Live sentiment uses a separate model trained on all " +
+        corpus.length +
+        " reviews.";
     } else if (stored.length) {
       trainRows = labeledCorpus();
       testRows = stored;
@@ -639,12 +748,19 @@
       dataNote =
         "No guest reviews yet. These scores switch to database reviews as soon as feedback is saved.";
     }
-    if (trainRows.length < 6 || !testRows.length) {
+    if (!trainRows || trainRows.length < 6 || !testRows || !testRows.length) {
       return { ok: false, reason: "Not enough labeled comments for a train/test split." };
     }
-    var metrics = scoreSentiment(trainRows, testRows, stored.length >= 12 ? 200 : 500);
+    var epochs = corpus.length >= 12 ? 200 : 500;
+    var scored = scoreSentiment(trainRows, testRows, epochs);
+    var metrics = scored.metrics;
+    finalModel = trainFinalModel(actual.length ? actual : trainRows.concat(testRows), epochs);
+    metrics.scoreLabel = metrics.nTest + " held-out comments of " + (nAll || metrics.nTest);
+    metrics.liveNote =
+      "Sentiment is tested on 30 percent of the customer reviews currently stored. The other 70 percent is used only for that score. A new comment changes this table and the review cards. Live sentiment uses a model trained on every customer review.";
     metrics.nAll = nAll;
-    metrics.nLive = stored.length;
+    metrics.nLive = corpus.length;
+    metrics.nCorpus = corpus.length;
     metrics.dataNote = dataNote;
     sentimentCache = metrics;
     sentimentCacheKey = cacheKey;
@@ -916,7 +1032,17 @@
       sum += String(row.status || "").length;
       sum += String(row.checkIn || row.check_in || "").length;
     });
-    return rows.length + ":" + Math.round(sum);
+    var ids = rows.map(function (row) {
+      return (
+        String(row.id || "") +
+        "@" +
+        String(row.checkIn || row.check_in || "").slice(0, 10) +
+        ":" +
+        String(row.status || "")
+      );
+    });
+    ids.sort();
+    return rows.length + ":" + Math.round(sum) + ":" + ids.join(",");
   }
 
   function monthlyBookingSeries(pastRows) {
@@ -1072,7 +1198,8 @@
       " test months)" +
       (liveCount
         ? ". Includes " + liveCount + " reservation" + (liveCount === 1 ? "" : "s") + " from the database."
-        : "");
+        : "") +
+      " A new reservation changes this table the next time it runs.";
     metrics.features = "year level and seasonal month (sine/cosine)";
     metrics.target = "Monthly reservation count";
     return metrics;
@@ -1125,7 +1252,7 @@
       fmt4(m.accuracy) +
       " " +
       badge("accuracy", m.accuracy) +
-      (m.nTest ? " (" + m.nTest + " held-out comments of " + (m.nAll || m.nTest) + ")" : "") +
+      (m.scoreLabel ? " (" + esc(m.scoreLabel) + ")" : m.nTest ? " (" + m.nTest + " held-out comments of " + (m.nAll || m.nTest) + ")" : "") +
       "</td></tr>" +
       (m.dataNote
         ? '<tr class="admin-model-eval__avg"><td colspan="4">' + esc(m.dataNote) + "</td></tr>"
@@ -1183,7 +1310,12 @@
       '<div class="admin-model-eval__head">' +
       "<h3>Model Evaluation</h3>" +
       '<span class="admin-model-eval__live" aria-live="polite">Live</span>' +
-      '<p class="admin-model-eval__live-note">Sentiment scores and forecast error are recalculated from guest reviews and reservations in the database.</p>' +
+      '<p class="admin-model-eval__live-note">' +
+      esc(
+        (clf && clf.liveNote) ||
+          "Sentiment is tested on held-out reviews. Live sentiment is predicted by a model trained on the customer reviews in the database."
+      ) +
+      "</p>" +
       "</div>" +
       '<div class="admin-model-eval__grid">' +
       '<section class="admin-model-eval__panel">' +
@@ -1218,7 +1350,7 @@
     }
   }
 
-  var EVAL_STORE = "elenest_model_eval_v3";
+  var EVAL_STORE = "elenest_model_eval_v7";
 
   function readStoredResult() {
     try {
@@ -1227,6 +1359,11 @@
       var parsed = JSON.parse(raw);
       if (!parsed || !parsed.classification || !parsed.classification.ok) return null;
       if (!parsed.regression || !parsed.regression.ok) return null;
+      var currentSig = "";
+      try {
+        currentSig = evalSignature();
+      } catch (eSig) {}
+      if (parsed.signature && currentSig && parsed.signature !== currentSig) return null;
       return { classification: parsed.classification, regression: parsed.regression };
     } catch (e) {
       return null;
@@ -1238,7 +1375,12 @@
     try {
       sessionStorage.setItem(
         EVAL_STORE,
-        JSON.stringify({ classification: clf, regression: reg, savedAt: Date.now() })
+        JSON.stringify({
+          classification: clf,
+          regression: reg,
+          signature: evalSignature(),
+          savedAt: Date.now()
+        })
       );
     } catch (e2) {}
   }
@@ -1295,11 +1437,15 @@
   }
 
   var computeInFlight = null;
+  var computeQueued = false;
 
   function recomputeAndRender() {
     var host = getModelEvalHost();
     if (!host) return Promise.resolve();
-    if (computeInFlight) return computeInFlight;
+    if (computeInFlight) {
+      computeQueued = true;
+      return computeInFlight;
+    }
     if (!lastResult) {
       paintNow({ ok: false, reason: "Loading stored feedback for evaluation…" }, { loading: true });
     }
@@ -1330,9 +1476,17 @@
       })
       .then(function (result) {
         computeInFlight = null;
+        if (computeQueued) {
+          computeQueued = false;
+          return recomputeAndRender();
+        }
         return result;
       }, function (err) {
         computeInFlight = null;
+        if (computeQueued) {
+          computeQueued = false;
+          return recomputeAndRender();
+        }
         throw err;
       });
     return computeInFlight;
@@ -1365,17 +1519,31 @@
       recomputeAndRender._sig = "";
       sentimentCache = null;
       sentimentCacheKey = "";
-      scheduleRender();
+      finalModel = null;
+      lastResult = null;
+      try {
+        sessionStorage.removeItem(EVAL_STORE);
+      } catch (eStore) {}
+      if (renderTimer) {
+        clearTimeout(renderTimer);
+        renderTimer = null;
+      }
+      recomputeAndRender();
     });
     window.addEventListener("elenest-bookings-updated", function () {
       recomputeAndRender._sig = "";
-      scheduleRender();
+      if (renderTimer) {
+        clearTimeout(renderTimer);
+        renderTimer = null;
+      }
+      recomputeAndRender();
     });
     window.addEventListener("storage", function (e) {
       if (!e || e.key !== "elenest_feedback") return;
       recomputeAndRender._sig = "";
       sentimentCache = null;
       sentimentCacheKey = "";
+      finalModel = null;
       scheduleRender();
     });
   }
@@ -1385,7 +1553,11 @@
     if (!lastResult) lastResult = readStoredResult();
     if (lastResult && lastResult.classification && lastResult.regression && lastResult.regression.ok) {
       paintNow(lastResult.classification, lastResult.regression);
-      scheduleRender();
+      var paintedSig = "";
+      try {
+        paintedSig = evalSignature();
+      } catch (ePaint) {}
+      if (!paintedSig || paintedSig !== recomputeAndRender._sig) scheduleRender();
       return Promise.resolve(lastResult);
     }
     return prefetch();
@@ -1405,11 +1577,27 @@
     else setTimeout(kick, 400);
   }
 
+  function syncPaint() {
+    var clf = safeSentiment();
+    if ((!clf || !clf.ok) && lastResult && lastResult.classification && lastResult.classification.ok) {
+      clf = lastResult.classification;
+    }
+    var reg =
+      lastResult && lastResult.regression && lastResult.regression.ok
+        ? lastResult.regression
+        : safeRegression(pastBookingRowsCache);
+    paintNow(clf, reg);
+    return lastResult;
+  }
+
   window.ElenestModelEvaluation = {
     render: render,
     prefetch: prefetch,
+    syncPaint: syncPaint,
     evaluateSentiment: evaluateSentiment,
-    evaluateRegression: evaluateRegression
+    evaluateRegression: evaluateRegression,
+    predictFeedback: predictFeedback,
+    classify: classifyFeedback
   };
 
   if (document.readyState === "loading") {

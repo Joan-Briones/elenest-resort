@@ -2336,8 +2336,9 @@
 
   function refresh(options) {
     options = options || {};
-    // One in-flight forecast at a time (filter changes / live updates reuse it).
+    // Keep the latest booking or feedback change and run it when the current forecast finishes.
     if (state.inFlight) {
+      state.pendingRefresh = options;
       return state.inFlight;
     }
     readFiltersFromDom();
@@ -2383,23 +2384,32 @@
           btn.disabled = false;
           btn.textContent = "Refresh";
         }
+        var next = state.pendingRefresh;
+        state.pendingRefresh = null;
+        if (next) refresh(next);
       });
     return state.inFlight;
   }
 
   function scheduleVisibleRefresh(options) {
     options = options || {};
-    if (!isPredictiveSectionVisible()) return;
+    if (!isPredictiveSectionVisible()) {
+      state.needsLiveRefresh = true;
+      return;
+    }
     if (state.refreshTimer) clearTimeout(state.refreshTimer);
     state.refreshTimer = setTimeout(function () {
       state.refreshTimer = null;
-      if (!isPredictiveSectionVisible()) return;
+      if (!isPredictiveSectionVisible()) {
+        state.needsLiveRefresh = true;
+        return;
+      }
+      state.needsLiveRefresh = false;
       refresh({
         persist: false,
-        preferLocal: true,
-        skipIfLoading: true
+        preferLocal: true
       });
-    }, options.delay != null ? options.delay : 450);
+    }, options.delay != null ? options.delay : 250);
   }
 
   function bindUi() {

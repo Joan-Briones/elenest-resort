@@ -342,10 +342,12 @@
 
   var fullReviewsCache = null;
   var fullReviewsLoadPromise = null;
+  var fullReviewsGen = 0;
 
   function invalidateFullReviewsCache() {
     fullReviewsCache = null;
     fullReviewsLoadPromise = null;
+    fullReviewsGen += 1;
   }
 
   function mergeReviewListsById(primary, secondary) {
@@ -353,8 +355,19 @@
     (primary || []).concat(secondary || []).forEach(function (item) {
       if (!item) return;
       var id = String(item.id || "");
-      if (!id || byId[id]) return;
-      byId[id] = item;
+      if (!id) return;
+      if (!byId[id]) {
+        byId[id] = item;
+        return;
+      }
+      var prev = byId[id];
+      if (!String(prev.comment || "").trim() && String(item.comment || "").trim()) {
+        prev.comment = item.comment;
+      }
+      if (!(prev.createdAt || prev.created_at) && (item.createdAt || item.created_at)) {
+        prev.createdAt = item.createdAt || item.created_at;
+      }
+      if (!Number(prev.stars) && Number(item.stars)) prev.stars = item.stars;
     });
     return Object.keys(byId).map(function (id) {
       return byId[id];
@@ -382,9 +395,11 @@
         });
     }
 
-    return fetchPage(0, 1000, [], "id, stars, sentiment, created_at")
+    return fetchPage(0, 1000, [], "id, stars, sentiment, comment, created_at")
       .catch(function () {
-        return fetchPage(0, 1000, [], "id, stars, created_at");
+        return fetchPage(0, 1000, [], "id, stars, comment, created_at").catch(function () {
+          return fetchPage(0, 1000, [], "id, stars, created_at");
+        });
       })
       .then(function (rows) {
         return (rows || []).map(function (row) {
@@ -394,7 +409,7 @@
             sentiment: row.sentiment || "",
             createdAt: row.created_at || "",
             name: "",
-            comment: "",
+            comment: row.comment || "",
             photo: "",
             bookingId: ""
           };
@@ -429,10 +444,16 @@
   }
 
   function loadFullReviewRecordsForHomeKpis(force) {
-    if (!force && fullReviewsCache && fullReviewsCache.length > 200) {
+    if (force) {
+      fullReviewsCache = null;
+      fullReviewsLoadPromise = null;
+      fullReviewsGen += 1;
+    } else if (fullReviewsCache && fullReviewsCache.length > 200) {
       return Promise.resolve(fullReviewsCache);
+    } else if (fullReviewsLoadPromise) {
+      return fullReviewsLoadPromise;
     }
-    if (!force && fullReviewsLoadPromise) return fullReviewsLoadPromise;
+    var generation = fullReviewsGen;
 
     var GF = window.ElenestGuestFeedback;
     var HD = window.ElenestHistoricalData;
@@ -459,6 +480,7 @@
       fetchAllGuestFeedbackFromSupabase()
     ])
       .then(function (parts) {
+        if (generation !== fullReviewsGen) return fullReviewsCache || [];
         var local = readAllReviewRecordsForHomeKpis();
         var fromFiles = parts[1] || [];
         var fromDb = parts[2] || [];
@@ -471,6 +493,7 @@
         return merged;
       })
       .catch(function () {
+        if (generation !== fullReviewsGen) return fullReviewsCache || [];
         fullReviewsLoadPromise = null;
         var fallback = readAllReviewRecordsForHomeKpis();
         fullReviewsCache = fallback;
@@ -481,6 +504,8 @@
   }
 
   function isRecommendableReview(f) {
+    var cl = displayedSentiment(f);
+    if (cl === "pos" || cl === "neg" || cl === "neu") return cl === "pos";
     var raw = String((f && (f.sentiment || f.sentimentLabel)) || "")
       .trim()
       .toLowerCase();
@@ -2190,6 +2215,17 @@
     if (s === 3) return "neu";
     if (s > 0 && s <= 2) return "neg";
     return "neu";
+  }
+
+  function displayedSentiment(f) {
+    var EV = window.ElenestModelEvaluation;
+    if (EV && typeof EV.classify === "function") {
+      try {
+        var cl = EV.classify(f);
+        if (cl === "pos" || cl === "neg" || cl === "neu") return cl;
+      } catch (eCl) {}
+    }
+    return classifySentimentFromStars(f && (f.stars != null ? f.stars : f && f.rating));
   }
 
   function stayNights(b) {
@@ -4135,13 +4171,21 @@
 
   function renderManagerGuestReviews() {
     function paint(list) {
-      var rows = list || [];
+      var rows = (list || []).filter(function (f) {
+        if (!f) return false;
+        var id = String(f.id || "");
+        var email = String(f.email || f.guest_email || "").toLowerCase();
+        if (id.indexOf("test-fb-") === 0 || email.indexOf("@test.elenest.local") !== -1) return false;
+        var GF = window.ElenestGuestFeedback;
+        if (GF && typeof GF.isTestFeedback === "function" && GF.isTestFeedback(f)) return false;
+        return true;
+      });
       var homeKpis = computeHomeStyleReviewKpis(rows);
       var pos = 0;
       var neu = 0;
       var neg = 0;
       rows.forEach(function (f) {
-        var cl = classifySentimentFromStars(f.stars);
+        var cl = displayedSentiment(f);
         if (cl === "pos") pos += 1;
         else if (cl === "neg") neg += 1;
         else neu += 1;
@@ -4201,7 +4245,7 @@
         var iso = f.createdAt || f.created_at || f.submittedAt || "";
         var mk2 = monthKeyFromIso(iso);
         if (!mk2 || !byKey[mk2]) return;
-        var cl2 = classifySentimentFromStars(f.stars);
+        var cl2 = displayedSentiment(f);
         if (cl2 === "pos") byKey[mk2].pos += 1;
         else if (cl2 === "neg") byKey[mk2].neg += 1;
         else byKey[mk2].neu += 1;
@@ -4367,6 +4411,12 @@
     var revenueSrc = canvasDataUrl("managerReportRevenueChart");
     var reviewsSrc = canvasDataUrl("managerReportReviewsChart");
     var modelHost = document.getElementById("managerModelEvaluation");
+    var EV = window.ElenestModelEvaluation;
+    if (EV && typeof EV.syncPaint === "function") {
+      try {
+        EV.syncPaint();
+      } catch (eSync) {}
+    }
     var modelHtml =
       modelHost && modelHost.innerHTML
         ? '<div class="mgr-doc__model-eval">' + modelHost.innerHTML + "</div>"
