@@ -587,7 +587,9 @@
     if (max < 1) return rows.slice();
     var out = [];
     CLASSES.forEach(function (c) {
-      var list = byClass[c];
+      var list = byClass[c].slice().sort(function (a, b) {
+        return reviewKey(a).localeCompare(reviewKey(b));
+      });
       if (!list.length) return;
       var n;
       for (n = 0; n < max; n++) out.push(list[n % list.length]);
@@ -761,7 +763,7 @@
     var dataNote;
     var nAll;
     if (corpus.length >= 8) {
-      var split = stratifiedSplit(corpus, TEST_RATIO, SPLIT_SEED);
+      var split = stableStratifiedSplit(corpus, TEST_RATIO, SPLIT_SEED);
       trainRows = split.train;
       testRows = split.test;
       nAll = corpus.length;
@@ -772,7 +774,7 @@
         fmtCount(corpus.length) +
         " labeled guest feedback records. Overall guest feedback is " +
         fmtCount(guestTotal) +
-        ", including the test comments. A new comment changes this result.";
+        ", including the test comments. A new comment changes this result by that one comment. The other reviews stay in the same test.";
     } else if (stored.length) {
       trainRows = labeledCorpus();
       testRows = stored;
@@ -811,7 +813,7 @@
     var metrics = scored.metrics;
     metrics.scoreLabel = metrics.nTest + " held-out comments of " + (job.nAll || metrics.nTest);
     metrics.liveNote =
-      "Logistic regression with TF-IDF on the guest feedback saved now, including the test comments. A new comment changes this result.";
+      "Logistic regression with TF-IDF on the guest feedback saved now, including the test comments. A new comment changes this result by that one comment.";
     metrics.nAll = job.nAll;
     metrics.nLive = job.nLive;
     metrics.nCorpus = job.nLive;
@@ -1440,7 +1442,7 @@
       '<p class="admin-model-eval__live-note">' +
       esc(
         (clf && clf.liveNote) ||
-          "Logistic regression with TF-IDF on the guest feedback saved now, including the test comments. A new comment changes this result."
+          "Logistic regression with TF-IDF on the guest feedback saved now, including the test comments. A new comment changes this result by that one comment."
       ) +
       "</p>" +
       "</div>" +
@@ -1477,7 +1479,7 @@
     }
   }
 
-  var EVAL_STORE = "elenest_model_eval_v10";
+  var EVAL_STORE = "elenest_model_eval_v11";
 
   function readStoredResult() {
     try {
