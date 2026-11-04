@@ -2946,6 +2946,72 @@ body.subpage .pay-deadline-alert.is-expired .pay-deadline-alert__title {
   color: #1a1a1a;
 }
 
+/* Photos, Rules, and Activities: the faded label sits behind the title,
+   inside this block. It must not climb into the photo above. */
+.gallery .heading,
+.services .heading,
+.news .heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  overflow: hidden;
+  width: 100%;
+  max-width: 100%;
+}
+
+.gallery > .container,
+.services > .container,
+.news > .container {
+  padding-left: max(var(--page-gutter, 1rem), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--page-gutter, 1rem), env(safe-area-inset-right, 0px));
+}
+
+.gallery .heading h1,
+.services .heading h1,
+.news .heading h1 {
+  position: absolute;
+  top: 0.22em;
+  left: 0;
+  right: auto;
+  z-index: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  line-height: 1;
+  white-space: nowrap;
+  max-width: 100%;
+  overflow: hidden;
+  /* Same scale as the WELCOME word: large, and clipped inside this heading. */
+  font-size: clamp(2.5rem, 14vw, 100px);
+  font-size: min(100px, 15.5cqi);
+}
+
+.gallery .heading h2,
+.services .heading h2,
+.news .heading h2 {
+  position: relative;
+  z-index: 1;
+  display: block;
+  margin: 36px 0 12px;
+  max-width: 100%;
+  font-size: clamp(2rem, 4.5vw, 3rem);
+  line-height: 1.15;
+  overflow-wrap: break-word;
+  color: #1a1a1a;
+}
+
+.gallery .heading p,
+.services .heading p,
+.news .heading p {
+  position: relative;
+  grid-row: 2;
+  grid-column: 1;
+  z-index: 1;
+  margin-top: 0.85rem;
+  max-width: 42rem;
+  font-size: clamp(0.95rem, 3.6vw, 1.05rem);
+  line-height: 1.65;
+}
+
 .about .heading h1 {
   top: -6px;
   left: 0;
@@ -3464,6 +3530,7 @@ body.subpage .pay-deadline-alert.is-expired .pay-deadline-alert__title {
 /*--------gallery---------*/
 .gallery {
   position: relative;
+  background: var(--page-bg, #faf8f9);
 }
 
 .gallery .items {
@@ -3645,6 +3712,7 @@ body.subpage .pay-deadline-alert.is-expired .pay-deadline-alert__title {
 /*--------services---------*/
 .services {
   position: relative;
+  background: var(--page-bg, #faf8f9);
 }
 
 .grid2 {
