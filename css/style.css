@@ -2946,17 +2946,15 @@ body.subpage .pay-deadline-alert.is-expired .pay-deadline-alert__title {
   color: #1a1a1a;
 }
 
-/* Photos, Rules, and Activities: the faded label sits on the same line
-   as the title, behind those words, on every screen size. */
+/* Photos, Rules, and Activities: the faded word is locked to the title
+   itself, including when the title wraps on a phone. */
 .gallery .heading,
 .services .heading,
 .news .heading {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
+  display: block;
   overflow: hidden;
   width: 100%;
   max-width: 100%;
-  padding-top: 10px;
 }
 
 .gallery > .container,
@@ -2966,42 +2964,53 @@ body.subpage .pay-deadline-alert.is-expired .pay-deadline-alert__title {
   padding-right: max(var(--page-gutter, 1rem), env(safe-area-inset-right, 0px));
 }
 
-.gallery .heading h1,
-.services .heading h1,
-.news .heading h1 {
-  grid-area: 1 / 1;
+.gallery .heading__lockup,
+.services .heading__lockup,
+.news .heading__lockup {
   position: relative;
-  top: auto;
-  left: auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: center;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  container-type: inline-size;
+}
+
+.gallery .heading__lockup h1,
+.services .heading__lockup h1,
+.news .heading__lockup h1 {
+  grid-area: 1 / 1;
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
   right: auto;
   align-self: center;
   justify-self: start;
   z-index: 0;
-  margin: 0;
+  margin: 0 !important;
   padding: 0;
   pointer-events: none;
-  line-height: 1.2;
+  line-height: 0.95;
   white-space: nowrap;
   max-width: 100%;
   overflow: hidden;
-  /* Same scale as the WELCOME word, kept inside this heading. */
-  font-size: clamp(2.5rem, 14vw, 100px);
-  font-size: min(100px, 15.5cqi);
+  font-size: clamp(2.4rem, 15cqi, 6.25rem);
 }
 
-.gallery .heading h2,
-.services .heading h2,
-.news .heading h2 {
+.gallery .heading__lockup h2,
+.services .heading__lockup h2,
+.news .heading__lockup h2 {
   grid-area: 1 / 1;
   position: relative;
   align-self: center;
   z-index: 1;
   display: block;
-  margin: 0;
-  padding: 0.12em 0;
+  margin: 0 !important;
+  padding: 0.08em 0;
   max-width: 100%;
   font-size: clamp(2rem, 4.5vw, 3rem);
-  line-height: 1.15;
+  line-height: 1.12;
   overflow-wrap: break-word;
   color: #1a1a1a;
 }
