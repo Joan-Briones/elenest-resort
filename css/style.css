@@ -2975,6 +2975,8 @@ body.subpage .pay-deadline-alert.is-expired .pay-deadline-alert__title {
   max-width: 100%;
   overflow: hidden;
   container-type: inline-size;
+  /* Room for the faded word to sit a little above the title without touching the photo. */
+  padding-top: clamp(18px, 6.5cqi, 32px);
 }
 
 .gallery .heading__lockup h1,
@@ -2989,6 +2991,7 @@ body.subpage .pay-deadline-alert.is-expired .pay-deadline-alert__title {
   justify-self: start;
   z-index: 0;
   margin: 0 !important;
+  transform: translateY(-0.22em);
   padding: 0;
   pointer-events: none;
   line-height: 0.95;
