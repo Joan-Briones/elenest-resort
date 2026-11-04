@@ -23022,14 +23022,23 @@ textarea {
   -webkit-overflow-scrolling: touch;
 }
 
-/* SweetAlert2 — above all site overlays, never clipped */
+/* SweetAlert2 — stay inside the screen on phones, tablets, and desktops */
 .swal2-container {
   z-index: var(--ui-z-alert) !important;
   box-sizing: border-box !important;
-  padding: var(--ui-overlay-pad-y) var(--ui-overlay-pad-x) var(--ui-overlay-pad-b) var(--ui-overlay-pad-l) !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 100% !important;
+  max-height: 100dvh !important;
+  padding:
+    max(16px, env(safe-area-inset-top, 0px))
+    max(16px, env(safe-area-inset-right, 0px))
+    max(16px, env(safe-area-inset-bottom, 0px))
+    max(16px, env(safe-area-inset-left, 0px)) !important;
   overflow-x: hidden !important;
   overflow-y: auto !important;
-  align-items: flex-start !important;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
 }
 
 .swal2-container.swal2-backdrop-show,
@@ -23038,33 +23047,73 @@ textarea {
 }
 
 .swal2-popup {
-  width: min(28rem, calc(100vw - 24px)) !important;
-  max-width: calc(100vw - 24px) !important;
-  max-height: var(--ui-dialog-max-h) !important;
+  width: min(26.5rem, 100%) !important;
+  max-width: 100% !important;
+  max-height: calc(100dvh - 32px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)) !important;
   margin: auto !important;
+  padding: 1.35rem 1.15rem 1.15rem !important;
+  border-radius: 18px !important;
   display: flex !important;
   flex-direction: column !important;
-  overflow: hidden !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
   box-sizing: border-box !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+.swal2-title {
+  margin: 0 !important;
+  padding: 0.2rem 0 0 !important;
+  font-size: clamp(1.2rem, 5vw, 1.55rem) !important;
+  line-height: 1.25 !important;
+  overflow-wrap: anywhere;
 }
 
 .swal2-html-container {
-  overflow-y: auto !important;
+  margin: 0.55rem 0 0 !important;
+  padding: 0 !important;
   max-height: none !important;
-  overflow-wrap: break-word;
+  overflow-x: hidden !important;
+  overflow-y: visible !important;
+  overflow-wrap: anywhere;
+  font-size: clamp(0.92rem, 3.7vw, 1.02rem) !important;
+  line-height: 1.45 !important;
+}
+
+.swal2-icon {
+  margin: 0.1rem auto 0.15rem !important;
+  flex: 0 0 auto;
 }
 
 .swal2-actions {
+  display: flex !important;
+  flex-direction: row !important;
   flex-wrap: wrap !important;
-  width: 100%;
-  max-width: 100%;
-  margin: 1rem 0 0 !important;
-  gap: 8px;
+  align-items: stretch !important;
+  justify-content: stretch !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 1.05rem 0 0 !important;
+  padding: 0 !important;
+  gap: 10px !important;
+  box-sizing: border-box !important;
+  flex-shrink: 0 !important;
 }
 
 .swal2-styled {
-  min-height: 40px;
-  box-sizing: border-box;
+  flex: 1 1 calc(50% - 10px) !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  min-height: 46px !important;
+  padding: 0.7rem 0.9rem !important;
+  border-radius: 12px !important;
+  font-size: 0.98rem !important;
+  font-weight: 600 !important;
+  line-height: 1.2 !important;
+  white-space: normal !important;
 }
 
 .role-login-menu,
@@ -23134,10 +23183,14 @@ textarea {
   .avail-modal__actions,
   .weather-modal__actions,
   .admin-reservation-modal__footer,
-  .customer-notif-detail__actions,
-  .swal2-actions {
+  .customer-notif-detail__actions {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .swal2-actions {
+    flex-direction: column !important;
+    align-items: stretch !important;
   }
 
   .book-unit-modal__footer {
@@ -23159,11 +23212,16 @@ textarea {
   .weather-modal__actions .btn,
   .admin-reservation-modal__footer .btn,
   .payment-success-btn,
-  .welcome-modal__ok,
-  .swal2-styled {
+  .welcome-modal__ok {
     width: 100%;
     margin-left: 0 !important;
     margin-right: 0 !important;
+  }
+
+  .swal2-styled {
+    flex: 0 0 auto !important;
+    width: 100% !important;
+    margin: 0 !important;
   }
 
   .customer-notif-panel,
