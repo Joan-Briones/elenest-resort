@@ -98,11 +98,14 @@
         </div>
         <div>
           <label for="guestReviewComment">Comment <span class="req-mark">*</span></label>
-          <textarea id="guestReviewComment" name="comment" rows="4" required placeholder="Share your experience"></textarea>
+          <textarea id="guestReviewComment" name="comment" rows="6" required placeholder="Share your experience" aria-describedby="guestReviewCommentNote guestReviewWordCount guestReviewWordError"></textarea>
+          <p id="guestReviewCommentNote" class="guest-review-comment__note">Please share your honest feedback, suggestions, and recommendations to help us improve our resort's services. Thank you for taking the time to share your thoughts!</p>
+          <p id="guestReviewWordCount" class="guest-review-comment__count" aria-live="polite">0 words</p>
+          <p id="guestReviewWordError" class="guest-review-comment__error" role="alert" hidden></p>
         </div>
         <p id="guestReviewMsg" class="auth-msg" hidden></p>
         <div class="guest-review-modal__actions">
-          <button type="submit" class="btn" id="guestReviewSubmit">Submit Review</button>
+          <button type="submit" class="btn" id="guestReviewSubmit" disabled>Submit Review</button>
           <button type="button" class="guest-review-modal__dismiss" id="guestReviewModalDismiss">Close</button>
         </div>
       </form>
@@ -120,9 +123,9 @@
   <script src="../js/auth.js?v=20260918-role1"></script>
   <script src="../js/ui-button-loading.js?v=20261012-btns1"></script>
   <script src="../js/feedback-photos.js"></script>
-  <script src="../js/guest-feedback.js?v=20261101-testdata1"></script>
+  <script src="../js/guest-feedback.js?v=20261104-words50"></script>
   <script src="../js/header-nav.js?v=20260922-menu2"></script>
-  <script src="../js/reviews-page.js?v=20261102-sentiment1"></script>
+  <script src="../js/reviews-page.js?v=20261104-words50"></script>
   <script src="../js/role-login.js"></script>
 </body>
 </html>

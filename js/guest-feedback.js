@@ -1082,37 +1082,52 @@
       return loadAll(true);
     },
 
-    add: function (entry) {
-      var id = (entry && entry.id) || rid();
-      var bookingId = String((entry && entry.bookingId) || "").trim();
-      if (!bookingId) {
-        return Promise.reject(
-          new Error("Reviews are only available from your post-stay email link.")
-        );
-      }
-      var row = entryToRow(
-        Object.assign(
-          {
-            id: id
-          },
-          entry || {}
-        )
-      );
-      row.booking_id = bookingId;
-      if (!row.comment) {
-        return Promise.reject(new Error("Comment is required."));
-      }
-
-      var Photos = window.ElenestFeedbackPhotos;
-      var photoPromise =
-        Photos && typeof Photos.preparePhotoUrl === "function" && row.photo_url
-          ? Photos.preparePhotoUrl(row.id, row.photo_url)
-          : Promise.resolve(row.photo_url || "");
-
-      return photoPromise.then(function (photoUrl) {
-        row.photo_url = photoUrl || "";
-        return persistRow(row);
-      });
-    }
+    add: add
   };
+
+  function countFeedbackWords(text) {
+    var value = String(text || "").trim();
+    if (!value) return 0;
+    return value.split(/\s+/).length;
+  }
+
+  function feedbackWordMessage(count) {
+    var n = Number(count) || 0;
+    var noun = n === 1 ? "word" : "words";
+    return "Please write at least 50 words. Your comment currently has " + n + " " + noun + ".";
+  }
+
+  function add(entry) {
+    var id = (entry && entry.id) || rid();
+    var bookingId = String((entry && entry.bookingId) || "").trim();
+    if (!bookingId) {
+      return Promise.reject(
+        new Error("Reviews are only available from your post-stay email link.")
+      );
+    }
+    var row = entryToRow(
+      Object.assign(
+        {
+          id: id
+        },
+        entry || {}
+      )
+    );
+    row.booking_id = bookingId;
+    var commentWords = countFeedbackWords(row.comment);
+    if (commentWords < 50) {
+      return Promise.reject(new Error(feedbackWordMessage(commentWords)));
+    }
+
+    var Photos = window.ElenestFeedbackPhotos;
+    var photoPromise =
+      Photos && typeof Photos.preparePhotoUrl === "function" && row.photo_url
+        ? Photos.preparePhotoUrl(row.id, row.photo_url)
+        : Promise.resolve(row.photo_url || "");
+
+    return photoPromise.then(function (photoUrl) {
+      row.photo_url = photoUrl || "";
+      return persistRow(row);
+    });
+  }
 })();

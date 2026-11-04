@@ -2946,8 +2946,8 @@ body.subpage .pay-deadline-alert.is-expired .pay-deadline-alert__title {
   color: #1a1a1a;
 }
 
-/* Photos, Rules, and Activities: the faded label sits behind the title,
-   inside this block. It must not climb into the photo above. */
+/* Photos, Rules, and Activities: the faded label sits on the same line
+   as the title, behind those words, on every screen size. */
 .gallery .heading,
 .services .heading,
 .news .heading {
@@ -2956,6 +2956,7 @@ body.subpage .pay-deadline-alert.is-expired .pay-deadline-alert__title {
   overflow: hidden;
   width: 100%;
   max-width: 100%;
+  padding-top: 10px;
 }
 
 .gallery > .container,
@@ -2968,19 +2969,22 @@ body.subpage .pay-deadline-alert.is-expired .pay-deadline-alert__title {
 .gallery .heading h1,
 .services .heading h1,
 .news .heading h1 {
-  position: absolute;
-  top: 0.22em;
-  left: 0;
+  grid-area: 1 / 1;
+  position: relative;
+  top: auto;
+  left: auto;
   right: auto;
+  align-self: center;
+  justify-self: start;
   z-index: 0;
   margin: 0;
   padding: 0;
   pointer-events: none;
-  line-height: 1;
+  line-height: 1.2;
   white-space: nowrap;
   max-width: 100%;
   overflow: hidden;
-  /* Same scale as the WELCOME word: large, and clipped inside this heading. */
+  /* Same scale as the WELCOME word, kept inside this heading. */
   font-size: clamp(2.5rem, 14vw, 100px);
   font-size: min(100px, 15.5cqi);
 }
@@ -2988,10 +2992,13 @@ body.subpage .pay-deadline-alert.is-expired .pay-deadline-alert__title {
 .gallery .heading h2,
 .services .heading h2,
 .news .heading h2 {
+  grid-area: 1 / 1;
   position: relative;
+  align-self: center;
   z-index: 1;
   display: block;
-  margin: 36px 0 12px;
+  margin: 0;
+  padding: 0.12em 0;
   max-width: 100%;
   font-size: clamp(2rem, 4.5vw, 3rem);
   line-height: 1.15;
@@ -18259,8 +18266,35 @@ body.guest-review-open {
   padding: 12px 14px;
   font: inherit;
   resize: vertical;
-  min-height: 110px;
+  min-height: 140px;
+  max-height: 320px;
   background: #fff;
+}
+
+.guest-review-comment__note {
+  margin: 8px 0 0;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: #5c5360;
+}
+
+.guest-review-comment__count {
+  margin: 8px 0 0;
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1.4;
+  color: #8a3d52;
+}
+
+.guest-review-comment__count.is-ready {
+  color: #3d6b22;
+}
+
+.guest-review-comment__error {
+  margin: 6px 0 0;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: #9f2340;
 }
 
 .guest-review-modal__actions {

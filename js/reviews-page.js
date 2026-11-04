@@ -325,6 +325,44 @@
     return resolved || "Guest";
   }
 
+  var MIN_REVIEW_WORDS = 50;
+
+  function countCommentWords(text) {
+    var value = String(text || "").trim();
+    if (!value) return 0;
+    return value.split(/\s+/).length;
+  }
+
+  function reviewWordMessage(count) {
+    var n = Number(count) || 0;
+    var noun = n === 1 ? "word" : "words";
+    return "Please write at least 50 words. Your comment currently has " + n + " " + noun + ".";
+  }
+
+  function updateReviewWordCount(showError) {
+    var commentEl = document.getElementById("guestReviewComment");
+    var countEl = document.getElementById("guestReviewWordCount");
+    var errorEl = document.getElementById("guestReviewWordError");
+    var submitBtn = document.getElementById("guestReviewSubmit");
+    var count = countCommentWords(commentEl ? commentEl.value : "");
+    var ready = count >= MIN_REVIEW_WORDS;
+    if (countEl) {
+      countEl.textContent = count === 1 ? "1 word" : count + " words";
+      countEl.classList.toggle("is-ready", ready);
+    }
+    if (errorEl) {
+      if (!ready && showError) {
+        errorEl.hidden = false;
+        errorEl.textContent = reviewWordMessage(count);
+      } else {
+        errorEl.hidden = true;
+        errorEl.textContent = "";
+      }
+    }
+    if (submitBtn) submitBtn.disabled = !ready;
+    return count;
+  }
+
   function setReviewMsg(ok, text) {
     var el = document.getElementById("guestReviewMsg");
     if (!el) return;
@@ -381,6 +419,7 @@
     }
     form.setAttribute("data-selected-stars", "0");
     clearReviewMsg();
+    updateReviewWordCount(true);
     overlay.removeAttribute("hidden");
     document.body.classList.add("guest-review-open");
     var closeBtn = document.getElementById("guestReviewModalClose");
@@ -442,6 +481,7 @@
     if (!overlay || !form) return;
 
     var starsEl = document.getElementById("guestReviewStars");
+    var commentEl = document.getElementById("guestReviewComment");
     var closeX = document.getElementById("guestReviewModalClose");
     var dismiss = document.getElementById("guestReviewModalDismiss");
 
@@ -474,6 +514,14 @@
       });
     }
 
+    if (commentEl) {
+      commentEl.addEventListener("input", function () {
+        updateReviewWordCount(true);
+        clearReviewMsg();
+      });
+    }
+    updateReviewWordCount(true);
+
     form.addEventListener("submit", function (e) {
       e.preventDefault();
       var bookingId = String(
@@ -494,8 +542,15 @@
         setReviewMsg(false, "A valid guest email is required for this review.");
         return;
       }
-      if (!selectedStars || !comment) {
-        setReviewMsg(false, "Please provide a star rating and comment.");
+      var wordCount = countCommentWords(comment);
+      if (wordCount < MIN_REVIEW_WORDS) {
+        updateReviewWordCount(true);
+        setReviewMsg(false, reviewWordMessage(wordCount));
+        if (commentEl) commentEl.focus();
+        return;
+      }
+      if (!selectedStars) {
+        setReviewMsg(false, "Please choose a star rating.");
         return;
       }
       if (alreadyReviewedBooking(bookingId)) {

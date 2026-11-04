@@ -313,8 +313,8 @@ begin
   if v_email = '' or position('@' in v_email) = 0 then
     raise exception 'A valid email is required';
   end if;
-  if v_comment = '' then
-    raise exception 'Comment is required';
+  if coalesce(array_length(regexp_split_to_array(v_comment, '[[:space:]]+'), 1), 0) < 50 then
+    raise exception 'Please write at least 50 words.';
   end if;
   if v_stars < 1 or v_stars > 5 then
     raise exception 'Stars must be between 1 and 5';
