@@ -645,6 +645,9 @@
     addRow("Email", b.email || item.accountEmail);
     addRow("Record key", item.accountEmail);
     addRow("Submitted", fmtWhen(b.submittedAt));
+    if (b.cancellationReason || b.cancellation_reason) {
+      addRow("Cancellation reason", b.cancellationReason || b.cancellation_reason);
+    }
     if (approvedAt) addRow("Approved at", fmtWhen(approvedAt));
     if (approvedBy) addRow("Approved by", approvedBy);
     main.appendChild(details);
@@ -2000,6 +2003,9 @@
     addCell("Room type", labelRoomType(b.roomType));
     addCell("Email", b.email || item.accountEmail);
     addCell("Record key", item.accountEmail);
+    if (b.cancellationReason || b.cancellation_reason) {
+      addCell("Cancellation reason", b.cancellationReason || b.cancellation_reason);
+    }
 
     card.appendChild(meta);
 

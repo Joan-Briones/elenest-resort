@@ -27304,3 +27304,134 @@ html[data-theme="dark"] .book-facility-loading__spinner {
 html[data-theme="dark"] .payment-qr-lightbox__close {
   background: #2a2430 !important;
 }
+
+html[data-theme="dark"] .admin-payments-period {
+  background: #221e28 !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  border-color: rgba(196, 107, 130, 0.38) !important;
+}
+
+html[data-theme="dark"] .admin-app .admin-payments-period__mode.btn.btn--outline:not(.admin-payments-period__mode--active),
+html[data-theme="dark"] .subpage .admin-payments-period__mode.btn.btn--outline:not(.admin-payments-period__mode--active) {
+  background: #2a2430 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.35) !important;
+}
+
+html[data-theme="dark"] .admin-app .admin-payments-period__mode.admin-payments-period__mode--active,
+html[data-theme="dark"] .admin-app .admin-payments-period__mode.admin-payments-period__mode--active:hover,
+html[data-theme="dark"] .subpage .admin-payments-period__mode.admin-payments-period__mode--active,
+html[data-theme="dark"] .subpage .admin-payments-period__mode.admin-payments-period__mode--active:hover {
+  background: #c46b82 !important;
+  border-color: #c46b82 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html[data-theme="dark"] .admin-payments-period__field span,
+html[data-theme="dark"] .admin-payments-period__summary,
+html[data-theme="dark"] .admin-app #section-payments .admin-payment-kpi-card p,
+html[data-theme="dark"] .admin-app #section-payments .admin-payment-kpi-card h4 {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html[data-theme="dark"] #section-manager-user .admin-settings-field,
+html[data-theme="dark"] #section-manager-user .admin-settings-field strong,
+html[data-theme="dark"] #section-manager-user .admin-settings-field span,
+html[data-theme="dark"] #section-manager-user p,
+html[data-theme="dark"] #section-manager-user p strong,
+html[data-theme="dark"] #section-manager-user h2,
+html[data-theme="dark"] #section-manager-user h3,
+html[data-theme="dark"] #section-manager-user .section-title {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+.checkin-cancel-modal {
+  width: min(440px, 100%);
+  text-align: left;
+}
+
+.checkin-cancel-modal__title {
+  margin: 0 0 8px;
+  color: #2f1b24;
+}
+
+.checkin-cancel-modal__lead {
+  margin: 0 0 14px;
+  color: #3d3340;
+  line-height: 1.45;
+}
+
+.checkin-cancel-modal__label {
+  display: block;
+  margin: 0 0 6px;
+  font-weight: 700;
+  color: #2f1b24;
+}
+
+.checkin-cancel-modal__reason {
+  width: 100%;
+  min-height: 96px;
+  resize: vertical;
+}
+
+.checkin-cancel-modal__actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.checkin-cancel-modal__actions .btn {
+  flex: 1 1 0;
+}
+
+html[data-theme="dark"] .checkin-cancel-modal {
+  background: #221e28 !important;
+  color: #ffffff !important;
+  border-color: rgba(196, 107, 130, 0.38) !important;
+}
+
+html[data-theme="dark"] .checkin-cancel-modal .checkin-cancel-modal__title,
+html[data-theme="dark"] .checkin-cancel-modal .checkin-cancel-modal__lead,
+html[data-theme="dark"] .checkin-cancel-modal .checkin-cancel-modal__label,
+html[data-theme="dark"] .checkin-cancel-modal #checkinCancelError {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html[data-theme="dark"] #checkinCancelBackBtn {
+  background: #2a2430 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.35) !important;
+}
+
+html[data-theme="dark"] .checkin-ticket__actions .btn--outline,
+html[data-theme="dark"] .checkin-ticket__actions .btn.btn--outline {
+  background: #2a2430 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.35) !important;
+}
+
+html[data-theme="dark"] .checkin-ticket__meta-item dt {
+  color: #f3b7c8 !important;
+  -webkit-text-fill-color: #f3b7c8 !important;
+}
+
+html[data-theme="dark"] .checkin-ticket__meta-item dd,
+html[data-theme="dark"] .checkin-ticket__guest,
+html[data-theme="dark"] .checkin-ticket__id,
+html[data-theme="dark"] .reception-records-search label,
+html[data-theme="dark"] #section-checkin .form-grid label,
+html[data-theme="dark"] #section-checkout .form-grid label,
+html[data-theme="dark"] #section-customer-record .form-grid label,
+html[data-theme="dark"] .reception-records-split__heading,
+html[data-theme="dark"] .reception-records-split__empty {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}

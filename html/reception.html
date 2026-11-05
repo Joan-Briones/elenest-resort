@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Receptionist Dashboard | Elenest Resort</title>
   <link rel="icon" type="image/png" href="../Images/icon.png">
-  <link rel="stylesheet" href="../css/style.css?v=20261105-darktext2">
+  <link rel="stylesheet" href="../css/style.css?v=20261106-checkincancel1">
   <script src="../js/theme.js?v=20261020-theme1"></script>
   <script src="../js/ui-motion.js?v=20261014-motion1" defer></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
@@ -331,6 +331,20 @@
     </div>
   </div>
 
+  <div id="checkinCancelOverlay" class="admin-settings-overlay" hidden>
+    <div class="admin-settings-modal checkin-cancel-modal" role="dialog" aria-modal="true" aria-labelledby="checkinCancelTitle">
+      <h3 id="checkinCancelTitle" class="checkin-cancel-modal__title">Cancel check-in</h3>
+      <p id="checkinCancelLead" class="checkin-cancel-modal__lead">Are you sure you want to cancel this check-in?</p>
+      <label class="checkin-cancel-modal__label" for="checkinCancelReason">Reason for cancellation <span class="req-mark">*</span></label>
+      <textarea id="checkinCancelReason" class="checkin-cancel-modal__reason" rows="3" required placeholder="Enter the reason for cancellation"></textarea>
+      <p id="checkinCancelError" class="auth-msg auth-msg--err" hidden>A reason is required before this check-in can be cancelled.</p>
+      <div class="checkin-cancel-modal__actions">
+        <button type="button" class="btn" id="checkinCancelConfirmBtn" disabled>Confirm Cancellation</button>
+        <button type="button" class="btn btn--outline" id="checkinCancelBackBtn">Back</button>
+      </div>
+    </div>
+  </div>
+
   <div id="receptionBookingDetailOverlay" class="admin-settings-overlay" hidden>
     <div class="admin-settings-modal" role="dialog" aria-modal="true" aria-labelledby="receptionBookingDetailTitle">
       <h3 id="receptionBookingDetailTitle">Booking details</h3>
@@ -407,7 +421,7 @@
   <script src="../js/activity-logs.js?v=20260917-actlog1"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
   <script src="../js/staff-boot-loading.js?v=20261008-boot2"></script>
-  <script src="../js/reception.js?v=20261012-btns1"></script>
+  <script src="../js/reception.js?v=20261106-checkincancel1"></script>
   <script src="../js/mobile-tables.js?v=20260929-mobile7"></script>
   <script src="../js/header-nav.js?v=20260922-menu2"></script>
 </body>

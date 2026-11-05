@@ -3830,6 +3830,9 @@
     addRow("Swimming pool", labelPoolForBooking(b));
     addRow("Event", labelEventType(b.eventType));
     addRow("Special request", b.request);
+    if (b.cancellationReason || b.cancellation_reason) {
+      addRow("Cancellation reason", b.cancellationReason || b.cancellation_reason);
+    }
 
     details.appendChild(summ);
     details.appendChild(dl);
@@ -4041,6 +4044,15 @@
     grid.appendChild(buildAdminReservationField("Payment status", paymentStatusLabel(b)));
     grid.appendChild(buildAdminReservationField("Booking status", bookingStatusLabel(b)));
     grid.appendChild(buildAdminReservationField("Arrival status", arrivalStatusLabelForBooking(b)));
+    if (b.cancellationReason || b.cancellation_reason) {
+      grid.appendChild(
+        buildAdminReservationField(
+          "Cancellation reason",
+          b.cancellationReason || b.cancellation_reason,
+          "admin-reservation-field--wide"
+        )
+      );
+    }
     if (
       window.ElenestPaymentFlow &&
       typeof window.ElenestPaymentFlow.isFutureBooking === "function" &&

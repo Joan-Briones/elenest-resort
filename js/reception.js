@@ -21,6 +21,120 @@
     window.alert(text);
   }
 
+  function notifyReceptionSuccess(message) {
+    var text = message || "Done.";
+    if (typeof Swal !== "undefined" && typeof Swal.fire === "function") {
+      Swal.fire({ icon: "success", title: "Check-in cancelled", text: text });
+      return;
+    }
+    if (window.ElenestErrors && typeof window.ElenestErrors.toast === "function") {
+      window.ElenestErrors.toast(text);
+      return;
+    }
+    window.alert(text);
+  }
+
+  var checkinCancelState = null;
+
+  function cancellationReasonText(booking) {
+    if (!booking) return "";
+    return String(booking.cancellationReason || booking.cancellation_reason || "").trim();
+  }
+
+  function openCheckInCancelDialog(item) {
+    var overlay = document.getElementById("checkinCancelOverlay");
+    var reason = document.getElementById("checkinCancelReason");
+    var error = document.getElementById("checkinCancelError");
+    var confirmBtn = document.getElementById("checkinCancelConfirmBtn");
+    if (!overlay || !reason || !confirmBtn) return;
+    checkinCancelState = { item: item };
+    reason.value = "";
+    confirmBtn.disabled = true;
+    if (error) error.hidden = true;
+    setHidden(overlay, false);
+    try {
+      reason.focus();
+    } catch (e) {}
+  }
+
+  function closeCheckInCancelDialog() {
+    var overlay = document.getElementById("checkinCancelOverlay");
+    if (overlay) setHidden(overlay, true);
+    checkinCancelState = null;
+  }
+
+  function submitCheckInCancellation() {
+    var reasonEl = document.getElementById("checkinCancelReason");
+    var confirmBtn = document.getElementById("checkinCancelConfirmBtn");
+    var error = document.getElementById("checkinCancelError");
+    var reason = String((reasonEl && reasonEl.value) || "").trim();
+    if (!reason) {
+      if (error) error.hidden = false;
+      if (confirmBtn) confirmBtn.disabled = true;
+      if (reasonEl) reasonEl.focus();
+      return;
+    }
+    if (!checkinCancelState || !checkinCancelState.item || !checkinCancelState.item.booking) return;
+    var item = checkinCancelState.item;
+    var booking = item.booking;
+    var BL = window.ElenestButtonLoading;
+    if (BL && confirmBtn) BL.set(confirmBtn, true);
+    Promise.resolve(
+      patchBooking(item.accountEmail, booking.id, {
+        status: "Cancelled",
+        workflow: "cancelled",
+        slotLocked: false,
+        cancellationReason: reason,
+        cancelledAt: new Date().toISOString(),
+        cancelledBy: getStaffEmail()
+      })
+    )
+      .then(function (ok) {
+        if (BL && confirmBtn) BL.set(confirmBtn, false);
+        if (ok === false) {
+          notifyReceptionError("Could not cancel this check-in. Please try again.");
+          return;
+        }
+        closeCheckInCancelDialog();
+        refreshReceptionLists();
+        notifyReceptionSuccess("The check-in is now Cancelled and the reason was saved.");
+      })
+      .catch(function () {
+        if (BL && confirmBtn) BL.set(confirmBtn, false);
+        notifyReceptionError("Could not cancel this check-in. Please try again.");
+      });
+  }
+
+  function bindCheckInCancelDialog() {
+    var reason = document.getElementById("checkinCancelReason");
+    var confirmBtn = document.getElementById("checkinCancelConfirmBtn");
+    var backBtn = document.getElementById("checkinCancelBackBtn");
+    var overlay = document.getElementById("checkinCancelOverlay");
+    if (reason && confirmBtn && reason.getAttribute("data-cancel-bound") !== "1") {
+      reason.setAttribute("data-cancel-bound", "1");
+      reason.addEventListener("input", function () {
+        var ok = String(reason.value || "").trim().length > 0;
+        confirmBtn.disabled = !ok;
+        var error = document.getElementById("checkinCancelError");
+        if (error && ok) error.hidden = true;
+      });
+    }
+    if (backBtn && backBtn.getAttribute("data-cancel-bound") !== "1") {
+      backBtn.setAttribute("data-cancel-bound", "1");
+      backBtn.addEventListener("click", closeCheckInCancelDialog);
+    }
+    if (confirmBtn && confirmBtn.getAttribute("data-cancel-bound") !== "1") {
+      confirmBtn.setAttribute("data-cancel-bound", "1");
+      confirmBtn.addEventListener("click", submitCheckInCancellation);
+    }
+    if (overlay && overlay.getAttribute("data-cancel-bound") !== "1") {
+      overlay.setAttribute("data-cancel-bound", "1");
+      overlay.addEventListener("click", function (e) {
+        if (e.target === overlay) closeCheckInCancelDialog();
+      });
+    }
+  }
+
   function paginateItems(items, page, pageSize) {
     var list = Array.isArray(items) ? items : [];
     var size = Math.max(1, Number(pageSize) || RECEPTION_PAGE_SIZE);
@@ -1860,27 +1974,11 @@
       confirmBtn.setAttribute("aria-label", "Confirm check-in for " + guestName);
 
       var cancelBookingBtn = makeReceptionActionBtn(
-        "Cancel booking",
+        "Cancel Check-In",
         "btn btn--outline btn--small",
-        "Cancel booking for " + guestName,
+        "Cancel check-in for " + guestName,
         function () {
-          if (!window.confirm("Mark this booking as cancelled?")) return;
-          var BL = window.ElenestButtonLoading;
-          if (BL) BL.set(cancelBookingBtn, true);
-          Promise.resolve(
-            patchBooking(item.accountEmail, b.id, {
-              status: "Cancelled",
-              workflow: "cancelled",
-              slotLocked: false
-            })
-          )
-            .then(function () {
-              refreshReceptionLists();
-            })
-            .catch(function () {
-              if (BL) BL.set(cancelBookingBtn, false);
-              notifyReceptionError("Could not cancel this booking. Please try again.");
-            });
+          openCheckInCancelDialog(item);
         }
       );
 
@@ -1993,6 +2091,9 @@
     if (b.checkedInAt) addDtDd("Checked in", fmtWhen(b.checkedInAt));
     if (b.checkedOutAt) addDtDd("Checked out", fmtWhen(b.checkedOutAt));
     if (b.request) addDtDd("Special requests", b.request);
+    var cancelReason = cancellationReasonText(b);
+    if (cancelReason) addDtDd("Cancellation reason", cancelReason);
+    if (b.cancelledAt) addDtDd("Cancelled at", fmtWhen(b.cancelledAt));
     var recUA = window.ElenestUnitAvailability;
     if (recUA && typeof recUA.swimmingPoolLabelForBooking === "function") {
       addDtDd("Swimming pool", recUA.swimmingPoolLabelForBooking(b));
@@ -2113,27 +2214,11 @@
     }
 
     var cancelBookingBtn = makeReceptionActionBtn(
-      "Cancel booking",
+      "Cancel Check-In",
       "btn btn--outline btn--small",
-      "Cancel booking for " + guestName,
+      "Cancel check-in for " + guestName,
       function () {
-        if (!window.confirm("Mark this booking as cancelled?")) return;
-        var BL = window.ElenestButtonLoading;
-        if (BL) BL.set(cancelBookingBtn, true);
-        Promise.resolve(
-          patchBooking(item.accountEmail, b.id, {
-            status: "Cancelled",
-            workflow: "cancelled",
-            slotLocked: false
-          })
-        )
-          .then(function () {
-            refreshReceptionLists();
-          })
-          .catch(function () {
-            if (BL) BL.set(cancelBookingBtn, false);
-            notifyReceptionError("Could not cancel this booking. Please try again.");
-          });
+        openCheckInCancelDialog(item);
       }
     );
 
@@ -3121,6 +3206,7 @@
         if (e.target === bookingDetailOverlay) closeReceptionBookingDetail();
       });
     }
+    bindCheckInCancelDialog();
   }
 
   if (document.readyState === "loading") {
