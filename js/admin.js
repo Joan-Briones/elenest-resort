@@ -5715,7 +5715,6 @@
       compact: true,
       hideLegend: true,
       hideTitle: true,
-      overlay: true,
       tipId: "adminReportReviewsTip"
     });
     updateSentimentPeriodButtonsUI();
@@ -6109,13 +6108,16 @@
 
   var sentimentChartMetaById = {};
 
-  function appendSmoothPath(ctx, pts, startWithMove) {
+  function appendSmoothPath(ctx, pts, startWithMove, clampY) {
+    function cy(y) {
+      return typeof clampY === "function" ? clampY(y) : y;
+    }
     if (!pts || !pts.length) return;
-    if (startWithMove !== false) ctx.moveTo(pts[0].x, pts[0].y);
-    else ctx.lineTo(pts[0].x, pts[0].y);
+    if (startWithMove !== false) ctx.moveTo(pts[0].x, cy(pts[0].y));
+    else ctx.lineTo(pts[0].x, cy(pts[0].y));
     if (pts.length === 1) return;
     if (pts.length === 2) {
-      ctx.lineTo(pts[1].x, pts[1].y);
+      ctx.lineTo(pts[1].x, cy(pts[1].y));
       return;
     }
     var i;
@@ -6124,31 +6126,32 @@
       var p1 = pts[i];
       var p2 = pts[i + 1];
       var p3 = pts[i + 2] || p2;
+      var tension = typeof clampY === "function" ? 10 : 6;
       ctx.bezierCurveTo(
-        p1.x + (p2.x - p0.x) / 6,
-        p1.y + (p2.y - p0.y) / 6,
-        p2.x - (p3.x - p1.x) / 6,
-        p2.y - (p3.y - p1.y) / 6,
+        p1.x + (p2.x - p0.x) / tension,
+        cy(p1.y + (p2.y - p0.y) / tension),
+        p2.x - (p3.x - p1.x) / tension,
+        cy(p2.y - (p3.y - p1.y) / tension),
         p2.x,
-        p2.y
+        cy(p2.y)
       );
     }
   }
 
-  function fillSmoothBand(ctx, lowerPts, upperPts, fillStyle) {
+  function fillSmoothBand(ctx, lowerPts, upperPts, fillStyle, clampY) {
     if (!upperPts || upperPts.length < 2 || !lowerPts || lowerPts.length < 2) return;
     ctx.beginPath();
-    appendSmoothPath(ctx, upperPts, true);
-    appendSmoothPath(ctx, lowerPts.slice().reverse(), false);
+    appendSmoothPath(ctx, upperPts, true, clampY);
+    appendSmoothPath(ctx, lowerPts.slice().reverse(), false, clampY);
     ctx.closePath();
     ctx.fillStyle = fillStyle;
     ctx.fill();
   }
 
-  function strokeSmoothEdge(ctx, pts, color, width) {
+  function strokeSmoothEdge(ctx, pts, color, width, clampY) {
     if (!pts || pts.length < 2) return;
     ctx.beginPath();
-    appendSmoothPath(ctx, pts, true);
+    appendSmoothPath(ctx, pts, true, clampY);
     ctx.strokeStyle = color;
     ctx.lineWidth = width == null ? 2.2 : width;
     ctx.lineJoin = "round";
@@ -6436,19 +6439,31 @@
     posGrad.addColorStop(1, "rgba(127, 193, 66, 0.06)");
 
     if (hasAny && pts.length >= 2) {
+      var clampY = overlay
+        ? function (y) {
+            return Math.max(y0, Math.min(yBase, y));
+          }
+        : null;
       if (overlay) {
-        fillSmoothBand(ctx, basePts, negPts, negGrad);
-        fillSmoothBand(ctx, basePts, neuPts, neuGrad);
-        fillSmoothBand(ctx, basePts, posPts, posGrad);
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(x0, y0, chartW, chartH);
+        ctx.clip();
+        fillSmoothBand(ctx, basePts, negPts, negGrad, clampY);
+        fillSmoothBand(ctx, basePts, neuPts, neuGrad, clampY);
+        fillSmoothBand(ctx, basePts, posPts, posGrad, clampY);
+        strokeSmoothEdge(ctx, negPts, cNeg, 2, clampY);
+        strokeSmoothEdge(ctx, neuPts, cNeu, 2, clampY);
+        strokeSmoothEdge(ctx, posPts, cPos, 2.4, clampY);
+        ctx.restore();
       } else {
         fillSmoothBand(ctx, basePts, negPts, negGrad);
         fillSmoothBand(ctx, negPts, neuPts, neuGrad);
         fillSmoothBand(ctx, neuPts, posPts, posGrad);
+        strokeSmoothEdge(ctx, negPts, cNeg, 2);
+        strokeSmoothEdge(ctx, neuPts, cNeu, 2);
+        strokeSmoothEdge(ctx, posPts, cPos, 2.4);
       }
-
-      strokeSmoothEdge(ctx, negPts, cNeg, 2);
-      strokeSmoothEdge(ctx, neuPts, cNeu, 2);
-      strokeSmoothEdge(ctx, posPts, cPos, 2.4);
     }
 
     var hoverIndex = sentimentChartMetaById[canvasId].hoverIndex;
