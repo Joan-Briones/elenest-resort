@@ -21,10 +21,12 @@
     window.alert(text);
   }
 
-  function notifyReceptionSuccess(message) {
+  function notifyReceptionSuccess(message, title) {
     var text = message || "Done.";
     if (typeof Swal !== "undefined" && typeof Swal.fire === "function") {
-      Swal.fire({ icon: "success", title: "Check-in cancelled", text: text });
+      var opts = { icon: "success", title: title || text };
+      if (title) opts.text = text;
+      Swal.fire(opts);
       return;
     }
     if (window.ElenestErrors && typeof window.ElenestErrors.toast === "function") {
@@ -97,7 +99,10 @@
         }
         closeCheckInCancelDialog();
         refreshReceptionLists();
-        notifyReceptionSuccess("The check-in is now Cancelled and the reason was saved.");
+        notifyReceptionSuccess(
+          "The check-in is now Cancelled and the reason was saved.",
+          "Check-in cancelled"
+        );
       })
       .catch(function () {
         if (BL && confirmBtn) BL.set(confirmBtn, false);
@@ -131,6 +136,83 @@
       overlay.setAttribute("data-cancel-bound", "1");
       overlay.addEventListener("click", function (e) {
         if (e.target === overlay) closeCheckInCancelDialog();
+      });
+    }
+  }
+
+  var customerRecordDeleteState = null;
+
+  function openCustomerRecordDeleteDialog(item) {
+    var overlay = document.getElementById("customerRecordDeleteOverlay");
+    var confirmBtn = document.getElementById("customerRecordDeleteConfirmBtn");
+    if (!overlay || !item || !item.booking) return;
+    customerRecordDeleteState = { item: item };
+    if (confirmBtn) confirmBtn.disabled = false;
+    setHidden(overlay, false);
+    try {
+      if (confirmBtn) confirmBtn.focus();
+    } catch (e) {}
+  }
+
+  function closeCustomerRecordDeleteDialog(force) {
+    var overlay = document.getElementById("customerRecordDeleteOverlay");
+    var confirmBtn = document.getElementById("customerRecordDeleteConfirmBtn");
+    if (!force && confirmBtn && confirmBtn.getAttribute("aria-busy") === "true") return;
+    if (overlay) setHidden(overlay, true);
+    if (confirmBtn) confirmBtn.disabled = false;
+    customerRecordDeleteState = null;
+  }
+
+  function submitCustomerRecordDelete() {
+    if (!customerRecordDeleteState || !customerRecordDeleteState.item || !customerRecordDeleteState.item.booking) {
+      return;
+    }
+    var item = customerRecordDeleteState.item;
+    var booking = item.booking;
+    var confirmBtn = document.getElementById("customerRecordDeleteConfirmBtn");
+    var BL = window.ElenestButtonLoading;
+    var work = function () {
+      return Promise.resolve(removeBooking(item.accountEmail, booking.id)).then(function (removed) {
+        if (!removed) throw new Error("Could not delete this record. Please try again.");
+        closeCustomerRecordDeleteDialog(true);
+        refreshReceptionListsNow();
+        notifyReceptionSuccess("Customer record deleted successfully.");
+      });
+    };
+    if (BL && confirmBtn) {
+      BL.run(confirmBtn, work).catch(function (err) {
+        notifyReceptionError((err && err.message) || "Could not delete this record. Please try again.");
+      });
+      return;
+    }
+    work().catch(function (err) {
+      notifyReceptionError((err && err.message) || "Could not delete this record. Please try again.");
+    });
+  }
+
+  function bindCustomerRecordDeleteDialog() {
+    var confirmBtn = document.getElementById("customerRecordDeleteConfirmBtn");
+    var cancelBtn = document.getElementById("customerRecordDeleteCancelBtn");
+    var overlay = document.getElementById("customerRecordDeleteOverlay");
+    if (confirmBtn && confirmBtn.getAttribute("data-delete-bound") !== "1") {
+      confirmBtn.setAttribute("data-delete-bound", "1");
+      confirmBtn.addEventListener("click", submitCustomerRecordDelete);
+    }
+    if (cancelBtn && cancelBtn.getAttribute("data-delete-bound") !== "1") {
+      cancelBtn.setAttribute("data-delete-bound", "1");
+      cancelBtn.addEventListener("click", function () {
+        closeCustomerRecordDeleteDialog();
+      });
+    }
+    if (overlay && overlay.getAttribute("data-delete-bound") !== "1") {
+      overlay.setAttribute("data-delete-bound", "1");
+      overlay.addEventListener("click", function (e) {
+        if (e.target === overlay) closeCustomerRecordDeleteDialog();
+      });
+      document.addEventListener("keydown", function (e) {
+        if (e.key !== "Escape") return;
+        if (!overlay || overlay.hidden) return;
+        closeCustomerRecordDeleteDialog();
       });
     }
   }
@@ -2016,23 +2098,7 @@
         "delete",
         "Delete record for " + guestName,
         function () {
-          var ok = window.confirm(
-            b.checkedOutAt
-              ? "Delete this checked-out customer record?"
-              : "Delete this customer record?"
-          );
-          if (!ok) return;
-          var BL = window.ElenestButtonLoading;
-          var work = function () {
-            return Promise.resolve(removeBooking(item.accountEmail, b.id)).then(function (removed) {
-              if (!removed) throw new Error("Could not delete this record. Please try again.");
-              renderCheckIn();
-              renderCheckOut();
-              renderRecords();
-            });
-          };
-          if (BL) BL.run(delBtn, work);
-          else work();
+          openCustomerRecordDeleteDialog(item);
         }
       );
       actions.appendChild(delBtn);
@@ -3207,6 +3273,7 @@
       });
     }
     bindCheckInCancelDialog();
+    bindCustomerRecordDeleteDialog();
   }
 
   if (document.readyState === "loading") {

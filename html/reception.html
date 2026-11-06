@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Receptionist Dashboard | Elenest Resort</title>
   <link rel="icon" type="image/png" href="../Images/icon.png">
-  <link rel="stylesheet" href="../css/style.css?v=20261106-checkincancel1">
+  <link rel="stylesheet" href="../css/style.css?v=20261106-recorddelete1">
   <script src="../js/theme.js?v=20261020-theme1"></script>
   <script src="../js/ui-motion.js?v=20261014-motion1" defer></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
@@ -345,6 +345,17 @@
     </div>
   </div>
 
+  <div id="customerRecordDeleteOverlay" class="admin-settings-overlay" hidden>
+    <div class="admin-settings-modal checkin-cancel-modal records-delete-modal" role="dialog" aria-modal="true" aria-labelledby="customerRecordDeleteTitle" aria-describedby="customerRecordDeleteLead">
+      <h3 id="customerRecordDeleteTitle" class="checkin-cancel-modal__title">Delete customer record</h3>
+      <p id="customerRecordDeleteLead" class="checkin-cancel-modal__lead">Are you sure you want to delete this customer record? This action cannot be undone.</p>
+      <div class="checkin-cancel-modal__actions">
+        <button type="button" class="btn" id="customerRecordDeleteConfirmBtn">Confirm Delete</button>
+        <button type="button" class="btn btn--outline" id="customerRecordDeleteCancelBtn">Cancel</button>
+      </div>
+    </div>
+  </div>
+
   <div id="receptionBookingDetailOverlay" class="admin-settings-overlay" hidden>
     <div class="admin-settings-modal" role="dialog" aria-modal="true" aria-labelledby="receptionBookingDetailTitle">
       <h3 id="receptionBookingDetailTitle">Booking details</h3>
@@ -421,7 +432,7 @@
   <script src="../js/activity-logs.js?v=20260917-actlog1"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
   <script src="../js/staff-boot-loading.js?v=20261008-boot2"></script>
-  <script src="../js/reception.js?v=20261106-checkincancel1"></script>
+  <script src="../js/reception.js?v=20261106-recorddelete1"></script>
   <script src="../js/mobile-tables.js?v=20260929-mobile7"></script>
   <script src="../js/header-nav.js?v=20260922-menu2"></script>
 </body>

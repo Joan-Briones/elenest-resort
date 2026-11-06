@@ -27403,7 +27403,8 @@ html[data-theme="dark"] .checkin-cancel-modal #checkinCancelError {
   -webkit-text-fill-color: #ffffff !important;
 }
 
-html[data-theme="dark"] #checkinCancelBackBtn {
+html[data-theme="dark"] #checkinCancelBackBtn,
+html[data-theme="dark"] #customerRecordDeleteCancelBtn {
   background: #2a2430 !important;
   color: #ffffff !important;
   -webkit-text-fill-color: #ffffff !important;
