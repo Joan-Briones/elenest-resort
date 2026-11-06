@@ -27,13 +27,20 @@
     });
   }
 
+  function menuCap() {
+    return Math.max(280, Math.round(window.innerHeight - 72));
+  }
+
+  function fitOpenMenu() {
+    if (!isMobileNav() || !menulist.classList.contains("is-open")) return;
+    var next = menulist.scrollHeight || 0;
+    menulist.style.maxHeight = Math.max(0, Math.min(next, menuCap())) + "px";
+  }
+
   function openMenu() {
     menulist.classList.add("is-open");
     setToggleState(true);
-    // Cap height so the panel cannot inflate into a huge blank region
-    var next = menulist.scrollHeight || 0;
-    var cap = Math.round(Math.min(window.innerHeight * 0.7, 520));
-    menulist.style.maxHeight = Math.max(0, Math.min(next, cap)) + "px";
+    fitOpenMenu();
   }
 
   function syncViewport() {
@@ -44,9 +51,7 @@
       return;
     }
     if (menulist.classList.contains("is-open")) {
-      var next = menulist.scrollHeight || 0;
-      var cap = Math.round(Math.min(window.innerHeight * 0.7, 520));
-      menulist.style.maxHeight = Math.max(0, Math.min(next, cap)) + "px";
+      fitOpenMenu();
     } else {
       menulist.style.maxHeight = "0px";
     }
@@ -91,12 +96,17 @@
       });
       dropdown.classList.toggle("is-open", willOpen);
       toggle.setAttribute("aria-expanded", willOpen ? "true" : "false");
-      if (menulist.classList.contains("is-open")) {
-        var next = menulist.scrollHeight || 0;
-        var cap = Math.round(Math.min(window.innerHeight * 0.7, 520));
-        menulist.style.maxHeight = Math.max(0, Math.min(next, cap)) + "px";
-      }
+      if (menulist.classList.contains("is-open")) fitOpenMenu();
     });
+  });
+
+  menulist.addEventListener("click", function () {
+    if (!isMobileNav()) return;
+    if (typeof requestAnimationFrame === "function") {
+      requestAnimationFrame(function () { requestAnimationFrame(fitOpenMenu); });
+    } else {
+      setTimeout(fitOpenMenu, 0);
+    }
   });
 
   window.addEventListener("resize", syncViewport);

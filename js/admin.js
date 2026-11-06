@@ -8298,16 +8298,29 @@
     });
 
     // Dropdown open/close
+    function fitMobileNav() {
+      var menulist = document.getElementById("menulist");
+      if (!menulist || !menulist.classList.contains("is-open")) return;
+      if (window.innerWidth > 1500) return;
+      var cap = Math.max(280, window.innerHeight - 72);
+      menulist.style.maxHeight = Math.min(menulist.scrollHeight, cap) + "px";
+    }
+
     function openMenu() {
       if (!settingsMenu || !settingsToggle) return;
       setHidden(settingsMenu, false);
       settingsToggle.setAttribute("aria-expanded", "true");
+      fitMobileNav();
+      if (typeof requestAnimationFrame === "function") {
+        requestAnimationFrame(fitMobileNav);
+      }
     }
 
     function closeMenu() {
       if (!settingsMenu || !settingsToggle) return;
       setHidden(settingsMenu, true);
       settingsToggle.setAttribute("aria-expanded", "false");
+      fitMobileNav();
     }
 
     if (settingsToggle && settingsMenu) {

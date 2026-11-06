@@ -474,9 +474,18 @@
     var hasHall = selectionHasEventHall(sel);
     var confirmed = !!(wizardState.unitSelectionConfirmed && hasSelectedFacilities());
 
-    setFacilityPoolNoteVisible(document.getElementById("bookUnitRoomPoolNote"), hasRoom);
-    setFacilityPoolNoteVisible(document.getElementById("bookUnitHallPoolNote"), hasHall);
-    setFacilityPoolNoteVisible(document.getElementById("bookUnitCottagePoolNote"), hasCottage);
+    setFacilityPoolNoteVisible(
+      document.getElementById("bookUnitRoomPoolNote"),
+      unitPickerTab === "room"
+    );
+    setFacilityPoolNoteVisible(
+      document.getElementById("bookUnitHallPoolNote"),
+      unitPickerTab === "hall"
+    );
+    setFacilityPoolNoteVisible(
+      document.getElementById("bookUnitCottagePoolNote"),
+      unitPickerTab === "cottage"
+    );
 
     setFacilityPoolNoteVisible(
       document.getElementById("bookUnitRoomPoolSummaryNote"),
