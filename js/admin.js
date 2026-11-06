@@ -181,7 +181,7 @@
   }
 
   var ADMIN_PAGE_SIZE = 5;
-  var SENTIMENT_COMMENTS_PAGE_SIZE = 3;
+  var SENTIMENT_COMMENTS_PAGE_SIZE = 2;
   var SENTIMENT_DETAILS_PAGE_SIZE = 5;
   var adminListPages = {
     bookingReview: 1,
@@ -362,6 +362,7 @@
     host.appendChild(info);
     host.appendChild(nav);
 
+    if (host.id === "sentimentCommentsPager") return;
     // Keep reports pagination collapsed when its sibling list is still hidden.
     var listSibling = host.previousElementSibling;
     if (listSibling && listSibling.hasAttribute("hidden")) {
@@ -4521,6 +4522,7 @@
       card.appendChild(txt);
       host.appendChild(card);
     });
+    if (pager) pager.removeAttribute("hidden");
     renderPaginationControls(pager, pageState, function (page) {
       adminListPages.sentimentComments = page;
       renderSentimentFeedbackList();

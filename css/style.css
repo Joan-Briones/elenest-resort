@@ -15089,16 +15089,17 @@ header #bookNavUser button.book-nav-appointments:not(.book-nav-icon-btn).is-acti
 }
 
 .admin-app #section-sentiment .sentiment-feedback-list {
-  flex: 1 1 auto;
-  gap: 22px;
-  max-height: min(52vh, 480px);
-  overflow-y: auto;
-  padding: 4px 4px 8px 0;
+  flex: 0 1 auto;
+  gap: 16px;
+  max-height: none;
+  overflow: visible;
+  padding: 4px 0 0;
 }
 
 .admin-app #section-sentiment #sentimentCommentsPager {
-  margin-top: auto;
+  margin-top: 12px;
   padding-top: 12px;
+  flex-shrink: 0;
 }
 
 .admin-app #section-sentiment #sentimentCommentsPager.admin-pagination {
