@@ -6272,10 +6272,11 @@
     });
 
     var prev = sentimentChartMetaById[canvasId] || {};
-    var tip =
-      prev.tip ||
-      document.getElementById(opts.tipId || "") ||
-      (canvas.parentElement && canvas.parentElement.querySelector(".admin-report-chart-tooltip"));
+    var tip = opts.noTooltip
+      ? null
+      : prev.tip ||
+        document.getElementById(opts.tipId || "") ||
+        (canvas.parentElement && canvas.parentElement.querySelector(".admin-report-chart-tooltip"));
 
     sentimentChartMetaById[canvasId] = {
       canvas: canvas,
@@ -6539,7 +6540,12 @@
         neg: p.neg
       };
     });
-    bindSentimentChartInteractions(canvasId);
+    if (opts.noTooltip) {
+      hideSentimentChartTooltip(canvasId);
+      sentimentChartMetaById[canvasId].hoverIndex = null;
+    } else {
+      bindSentimentChartInteractions(canvasId);
+    }
   }
 
   function updateSentimentPeriodButtonsUI() {
@@ -6824,11 +6830,15 @@
   }
 
   function renderSentimentOverview() {
-    var chart = buildLiveSentimentChartData(currentSentimentPeriod);
-    var cfg = chart.cfg;
-    var buckets = chart.buckets;
+    var cfg = getSentimentPeriodConfig(currentSentimentPeriod);
+    var buckets = cfg.buildBuckets();
+    var sentimentList = getSentimentFeedback();
+    bucketFeedbackByPeriod(sentimentList, buckets, cfg.periodFn);
     var subEl = document.getElementById("sentimentChartSub");
-    if (subEl) subEl.textContent = cfg.sub;
+    if (subEl) {
+      subEl.textContent =
+        "This week's guest comments classified by Model Evaluation — older weeks stay in the Comment Archive.";
+    }
 
     var barPos = document.getElementById("sentimentBarPos");
     var barNeu = document.getElementById("sentimentBarNeu");
@@ -6838,8 +6848,7 @@
     var pctNeg = document.getElementById("sentimentPctNeg");
     var totalEl = document.getElementById("sentimentTotalCount");
 
-    var allList = chart.list;
-    var sentimentList = getSentimentFeedback();
+    var allList = getFeedback();
     var weeklyRec = getFeedbackForWeeklyRecommendation(sentimentList);
 
     if (!allList.length) {
@@ -6857,7 +6866,7 @@
         hideTitle: true,
         hideLegend: true,
         overlay: true,
-        tipId: "adminSentimentPeriodTip"
+        noTooltip: true
       });
       renderSentimentRecommendations(
         buildSentimentRecommendationsPayload({
@@ -6928,7 +6937,7 @@
       hideTitle: true,
       hideLegend: true,
       overlay: true,
-      tipId: "adminSentimentPeriodTip"
+      noTooltip: true
     });
 
     renderSentimentRecommendations(
