@@ -463,31 +463,20 @@
   }
 
   function getFeedback() {
-    var GF = window.ElenestGuestFeedback;
-    var list = [];
-    if (GF && typeof GF.listLive === "function") {
-      list = GF.listLive() || [];
-    } else {
-      try {
-        var raw = localStorage.getItem("elenest_feedback");
-        var parsed = raw ? JSON.parse(raw) : [];
-        list = Array.isArray(parsed) ? parsed : [];
-      } catch (e) {
-        list = [];
-      }
+    if (window.ElenestGuestFeedback && typeof window.ElenestGuestFeedback.listLive === "function") {
+      return window.ElenestGuestFeedback.listLive();
     }
-    return (list || []).filter(function (f) {
-      if (!f) return false;
-      if (GF && typeof GF.isHistoricalFeedback === "function" && GF.isHistoricalFeedback(f)) {
-        return false;
-      }
-      if (GF && typeof GF.isTestFeedback === "function" && GF.isTestFeedback(f)) {
-        return false;
-      }
-      var id = String(f.id || "");
-      if (id.indexOf("past-fb-") === 0 || id.indexOf("test-fb-") === 0) return false;
-      return true;
-    });
+    if (window.ElenestGuestFeedback && typeof window.ElenestGuestFeedback.listAll === "function") {
+      return window.ElenestGuestFeedback.listAll();
+    }
+    try {
+      var raw = localStorage.getItem("elenest_feedback");
+      if (!raw) return [];
+      var parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (e) {
+      return [];
+    }
   }
 
   /**
@@ -5695,7 +5684,6 @@
       compact: true,
       hideLegend: true,
       hideTitle: true,
-      overlay: true,
       tipId: "adminReportReviewsTip"
     });
     updateSentimentPeriodButtonsUI();
@@ -6039,7 +6027,7 @@
           return weekStartKeyFromDate(dt);
         },
         sub:
-          "Live guest comments only — last 8 weeks. Not sample or archive data."
+          "Live guest reviews classified by Model Evaluation — last 8 weeks (weeks start Monday)."
       };
     }
     if (period === "day") {
@@ -6051,7 +6039,7 @@
           return dt.getFullYear() + "-" + pad2(dt.getMonth() + 1) + "-" + pad2(dt.getDate());
         },
         sub:
-          "Live guest comments only — last 14 days. Not sample or archive data."
+          "Live guest reviews classified by Model Evaluation — last 14 days."
       };
     }
     return {
@@ -6062,7 +6050,7 @@
         return dt.getFullYear() + "-" + pad2(dt.getMonth() + 1);
       },
       sub:
-        "Live guest comments only — last 6 months. Not sample or archive data."
+        "Live guest reviews classified by Model Evaluation — last 6 months."
     };
   }
 
@@ -6314,9 +6302,9 @@
         ctx.fillText(label, xStart + 14, ly);
         return xStart + 14 + ctx.measureText(label).width + 14;
       };
-      lx = legItem(cPos, "Positive", lx);
-      lx = legItem(cNeu, "Neutral", lx);
-      legItem(cNeg, "Negative", lx);
+      lx = legItem(cPos, "Positive (4–5★)", lx);
+      lx = legItem(cNeu, "Neutral (3★)", lx);
+      legItem(cNeg, "Negative (1–2★)", lx);
     }
 
     if (!hideTitle) {
