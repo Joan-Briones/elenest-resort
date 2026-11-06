@@ -470,30 +470,16 @@
 
   function getFeedback() {
     var GF = window.ElenestGuestFeedback;
-    var list = [];
-    if (GF && typeof GF.listLive === "function") {
-      list = GF.listLive() || [];
-    } else {
-      try {
-        var raw = localStorage.getItem("elenest_feedback");
-        var parsed = raw ? JSON.parse(raw) : [];
-        list = Array.isArray(parsed) ? parsed : [];
-      } catch (e) {
-        list = [];
-      }
+    if (GF && typeof GF.listAll === "function") {
+      return (GF.listAll() || []).filter(Boolean);
     }
-    return (list || []).filter(function (f) {
-      if (!f) return false;
-      if (GF && typeof GF.isHistoricalFeedback === "function" && GF.isHistoricalFeedback(f)) {
-        return false;
-      }
-      if (GF && typeof GF.isTestFeedback === "function" && GF.isTestFeedback(f)) {
-        return false;
-      }
-      var id = String(f.id || "");
-      if (id.indexOf("past-fb-") === 0 || id.indexOf("test-fb-") === 0) return false;
-      return true;
-    });
+    try {
+      var raw = localStorage.getItem("elenest_feedback");
+      var parsed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(parsed) ? parsed.filter(Boolean) : [];
+    } catch (e) {
+      return [];
+    }
   }
 
   /**
@@ -765,8 +751,12 @@
     });
   }
 
-  /** Active Guest Sentiment comments for the current Mon–Sun week (non-archived). */
+  /** All guest comments for sentiment: live + past + test. */
   function getSentimentFeedback() {
+    return getFeedback();
+  }
+
+  function getWeeklyRecommendationFeedback() {
     if (
       window.ElenestGuestFeedback &&
       typeof window.ElenestGuestFeedback.listForSentiment === "function"
@@ -4476,7 +4466,10 @@
     var weekLabel = formatWeekRangeLabel(getCurrentWeekStartDate());
     var weekNote = document.getElementById("sentimentCurrentWeekNote");
     if (weekNote) {
-      weekNote.textContent = "Showing comments for the current week (" + weekLabel + ").";
+      weekNote.textContent =
+        "Showing live, past, and test guest comments (" +
+        weekLabel +
+        " weekly recommendation still uses this week).";
     }
     host.textContent = "";
     var pager = document.getElementById("sentimentCommentsPager");
@@ -4485,9 +4478,7 @@
       if (pager) renderPaginationControls(pager, null);
       var empty = document.createElement("p");
       empty.className = "sentiment-current-week-empty";
-      empty.textContent = getFeedback().length
-        ? "No guest comments yet for this week. Previous weeks are in the Comment Archive."
-        : "No guest comments yet. New reviews will appear here and update the ratings.";
+      empty.textContent = "No guest comments yet. Live, past, and test reviews will appear here.";
       host.appendChild(empty);
       return;
     }
@@ -5671,6 +5662,24 @@
   }
 
   function renderReportsGuestReviews() {
+    var GF = window.ElenestGuestFeedback;
+    if (GF && typeof GF.isHistoricalLoaded === "function" && !GF.isHistoricalLoaded()) {
+      if (!renderReportsGuestReviews._loadingHist) {
+        renderReportsGuestReviews._loadingHist = true;
+        var histReady = GF.ready && typeof GF.ready.then === "function" ? GF.ready : Promise.resolve();
+        histReady
+          .then(function () {
+            return typeof GF.ensureHistoricalLoaded === "function" ? GF.ensureHistoricalLoaded() : null;
+          })
+          .then(function () {
+            renderReportsGuestReviews._loadingHist = false;
+            renderReportsGuestReviews();
+          })
+          .catch(function () {
+            renderReportsGuestReviews._loadingHist = false;
+          });
+      }
+    }
     var list = getFeedback();
     var kpis = computeHomeStyleReviewKpis(list);
     var tallies = tallyDisplayedSentiment(list);
@@ -6837,7 +6846,7 @@
 
     var allList = chart.list;
     var sentimentList = getSentimentFeedback();
-    var weeklyRec = getFeedbackForWeeklyRecommendation(sentimentList);
+    var weeklyRec = getFeedbackForWeeklyRecommendation(getWeeklyRecommendationFeedback());
 
     if (!allList.length) {
       // Empty state: real zeros — never show sample/hardcoded sentiment percentages.
@@ -6882,11 +6891,10 @@
       pNeg = 0;
       if (tAll) {
         totalMsg =
-          "Current week (Mon–Sun): no comments yet. " +
-          tAll +
-          " total review" +
+          tAll.toLocaleString() +
+          " review" +
           (tAll === 1 ? "" : "s") +
-          " on file—older weeks are in the Comment Archive.";
+          " on file.";
       } else {
         totalMsg = "";
       }
@@ -6896,13 +6904,10 @@
       pNeu = Math.round((neu / tSafe) * 100);
       pNeg = Math.max(0, 100 - pPos - pNeu);
       totalMsg =
-        "Current week scope: " +
-        t +
-        " comment" +
+        t.toLocaleString() +
+        " live, past, and test comment" +
         (t === 1 ? "" : "s") +
-        " (" +
-        formatWeekRangeLabel(getCurrentWeekStartDate()) +
-        ").";
+        " on file.";
     }
 
     if (barPos) barPos.style.width = pPos + "%";
@@ -6927,13 +6932,25 @@
   }
 
   function paintSentimentSection() {
-    ensureWeeklySentimentArchive().then(function () {
-      renderSentimentFeedbackList();
-      renderSentimentOverview();
-      initSentimentPeriodFilters();
-      initSentimentRecAcceptHandlers();
-      initSentimentArchiveModals();
-    });
+    var GF = window.ElenestGuestFeedback;
+    var ready = Promise.resolve();
+    if (GF && GF.ready && typeof GF.ready.then === "function") ready = GF.ready;
+    ready
+      .then(function () {
+        return GF && typeof GF.ensureHistoricalLoaded === "function"
+          ? GF.ensureHistoricalLoaded()
+          : null;
+      })
+      .then(function () {
+        return ensureWeeklySentimentArchive();
+      })
+      .then(function () {
+        renderSentimentFeedbackList();
+        renderSentimentOverview();
+        initSentimentPeriodFilters();
+        initSentimentRecAcceptHandlers();
+        initSentimentArchiveModals();
+      });
   }
 
   function renderSentimentSection() {

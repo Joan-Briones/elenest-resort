@@ -768,12 +768,30 @@
     });
   }
 
+  function mergeFeedbackById(a, b) {
+    var byId = {};
+    var extra = [];
+    (a || []).concat(b || []).forEach(function (item) {
+      if (!item) return;
+      var id = String(item.id || "");
+      if (id) byId[id] = item;
+      else extra.push(item);
+    });
+    return Object.keys(byId)
+      .map(function (id) {
+        return byId[id];
+      })
+      .concat(extra);
+  }
+
+  function listAllFeedback() {
+    return mergeFeedbackById(cache, historicalCache);
+  }
+
   function listForSentiment() {
     var currentKey = getCurrentWeekStartKey();
-    return cache.filter(function (item) {
-      if (isHistoricalFeedback(item) || isTestFeedback(item) || item.sentimentArchived) {
-        return false;
-      }
+    return listAllFeedback().filter(function (item) {
+      if (!item || item.sentimentArchived) return false;
       return feedbackWeekKey(item) === currentKey;
     });
   }
@@ -1042,10 +1060,7 @@
   window.ElenestGuestFeedback = {
     ready: ready,
 
-    listAll: function () {
-      if (!historicalCache.length) return cache.slice();
-      return cache.concat(historicalCache);
-    },
+    listAll: listAllFeedback,
 
     listLive: listLive,
 

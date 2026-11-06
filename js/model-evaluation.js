@@ -205,26 +205,28 @@
 
   function collectLiveFeedback() {
     var F = window.ElenestGuestFeedback;
-    var list = F && typeof F.listLive === "function" ? F.listLive() || [] : [];
+    var list =
+      F && typeof F.listAll === "function"
+        ? F.listAll() || []
+        : F && typeof F.listLive === "function"
+          ? F.listLive() || []
+          : [];
     var out = [];
     list.forEach(function (item) {
       if (!item) return;
-      if (isHistoricalReview(item)) return;
-      if (F && typeof F.isTestFeedback === "function" && F.isTestFeedback(item)) return;
-      var id = String(item.id || "");
-      if (id.indexOf("past-fb-") === 0 || id.indexOf("test-fb-") === 0) return;
-      var text = String(item.comment || "").trim();
+      var text = String(item.comment || item.text || "").trim();
       if (text.length < 8) return;
       var label = labelFromStars(item.stars || item.rating);
       if (!label) return;
+      var id = String(item.id || "");
       out.push({
-        id: String(item.id || ""),
+        id: id,
         email: String(item.email || item.guest_email || ""),
         createdAt: String(item.createdAt || item.created_at || ""),
         text: text,
         label: label,
         source: "guest_feedback",
-        historical: false
+        historical: !!(id && id.indexOf("past-fb-") === 0)
       });
     });
     return out;
@@ -675,10 +677,13 @@
 
   function allFeedbackCount() {
     var F = window.ElenestGuestFeedback;
-    var list = F && typeof F.listLive === "function" ? F.listLive() || [] : [];
-    return list.filter(function (item) {
-      return item && !isHistoricalReview(item);
-    }).length;
+    var list =
+      F && typeof F.listAll === "function"
+        ? F.listAll() || []
+        : F && typeof F.listLive === "function"
+          ? F.listLive() || []
+          : [];
+    return list.filter(Boolean).length;
   }
 
   function feedbackCorpusReady() {
@@ -792,7 +797,7 @@
         metrics: {
           ok: false,
           reason:
-            "Waiting for a live guest comment. Charts and these metrics update together when a customer submits a review."
+            "Waiting for guest comments (live, past, or test). Charts and these metrics update together."
         }
       };
     }
@@ -806,7 +811,7 @@
         fmtCount(split.test.length) +
         " held-out comments of " +
         fmtCount(corpus.length) +
-        " guest reviews (" +
+        " live, past, and test guest reviews (" +
         fmtCount(guestTotal) +
         " on file). A new customer comment updates this table and the charts.";
     } else {
@@ -816,7 +821,7 @@
       dataNote =
         "Live with Guest sentiment analysis: scored on " +
         stored.length +
-        " customer comment" +
+        " live, past, and test comment" +
         (stored.length === 1 ? "" : "s") +
         ". Charts and metrics refresh when the next review is submitted.";
     }
@@ -1512,7 +1517,7 @@
     }
   }
 
-  var EVAL_STORE = "elenest_model_eval_v13_livecharts";
+  var EVAL_STORE = "elenest_model_eval_v15_allcomments";
 
   function readStoredResult() {
     try {
@@ -1592,8 +1597,13 @@
 
   function whenFeedbackReady() {
     var GF = window.ElenestGuestFeedback;
-    if (GF && GF.ready && typeof GF.ready.then === "function") return GF.ready;
-    return Promise.resolve();
+    var ready =
+      GF && GF.ready && typeof GF.ready.then === "function" ? GF.ready : Promise.resolve();
+    return ready.then(function () {
+      if (GF && typeof GF.ensureHistoricalLoaded === "function") {
+        return GF.ensureHistoricalLoaded();
+      }
+    });
   }
 
   var computeInFlight = null;

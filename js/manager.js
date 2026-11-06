@@ -4261,7 +4261,20 @@
       }
     }
 
-    paint(readLiveReviewRecordsForKpis());
+    var GF = window.ElenestGuestFeedback;
+    var ready = GF && GF.ready && typeof GF.ready.then === "function" ? GF.ready : Promise.resolve();
+    ready
+      .then(function () {
+        return GF && typeof GF.ensureHistoricalLoaded === "function"
+          ? GF.ensureHistoricalLoaded()
+          : null;
+      })
+      .then(function () {
+        paint(readAllReviewRecordsForHomeKpis());
+      })
+      .catch(function () {
+        paint(readAllReviewRecordsForHomeKpis());
+      });
     var EV = window.ElenestModelEvaluation;
     if (EV && typeof EV.prefetch === "function") {
       try {
