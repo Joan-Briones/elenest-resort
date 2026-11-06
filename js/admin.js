@@ -463,20 +463,31 @@
   }
 
   function getFeedback() {
-    if (window.ElenestGuestFeedback && typeof window.ElenestGuestFeedback.listLive === "function") {
-      return window.ElenestGuestFeedback.listLive();
+    var GF = window.ElenestGuestFeedback;
+    var list = [];
+    if (GF && typeof GF.listLive === "function") {
+      list = GF.listLive() || [];
+    } else {
+      try {
+        var raw = localStorage.getItem("elenest_feedback");
+        var parsed = raw ? JSON.parse(raw) : [];
+        list = Array.isArray(parsed) ? parsed : [];
+      } catch (e) {
+        list = [];
+      }
     }
-    if (window.ElenestGuestFeedback && typeof window.ElenestGuestFeedback.listAll === "function") {
-      return window.ElenestGuestFeedback.listAll();
-    }
-    try {
-      var raw = localStorage.getItem("elenest_feedback");
-      if (!raw) return [];
-      var parsed = JSON.parse(raw);
-      return Array.isArray(parsed) ? parsed : [];
-    } catch (e) {
-      return [];
-    }
+    return (list || []).filter(function (f) {
+      if (!f) return false;
+      if (GF && typeof GF.isHistoricalFeedback === "function" && GF.isHistoricalFeedback(f)) {
+        return false;
+      }
+      if (GF && typeof GF.isTestFeedback === "function" && GF.isTestFeedback(f)) {
+        return false;
+      }
+      var id = String(f.id || "");
+      if (id.indexOf("past-fb-") === 0 || id.indexOf("test-fb-") === 0) return false;
+      return true;
+    });
   }
 
   /**
@@ -5684,6 +5695,7 @@
       compact: true,
       hideLegend: true,
       hideTitle: true,
+      overlay: true,
       tipId: "adminReportReviewsTip"
     });
     updateSentimentPeriodButtonsUI();
