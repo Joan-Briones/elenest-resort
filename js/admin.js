@@ -181,12 +181,17 @@
   }
 
   var ADMIN_PAGE_SIZE = 5;
+  var SENTIMENT_COMMENTS_PAGE_SIZE = 3;
+  var SENTIMENT_DETAILS_PAGE_SIZE = 5;
   var adminListPages = {
     bookingReview: 1,
     paymentVerification: 1,
     arrivalMonitoring: 1,
     paymentHistory: 1,
-    userAccounts: 1
+    userAccounts: 1,
+    sentimentComments: 1,
+    sentimentDetails: 1,
+    sentimentDetailsKey: ""
   };
   var paymentPeriodFilter = {
     mode: "all",
@@ -4473,7 +4478,10 @@
       weekNote.textContent = "Showing comments for the current week (" + weekLabel + ").";
     }
     host.textContent = "";
+    var pager = document.getElementById("sentimentCommentsPager");
     if (!list.length) {
+      adminListPages.sentimentComments = 1;
+      if (pager) renderPaginationControls(pager, null);
       var empty = document.createElement("p");
       empty.className = "sentiment-current-week-empty";
       empty.textContent = getFeedback().length
@@ -4482,7 +4490,13 @@
       host.appendChild(empty);
       return;
     }
-    list.slice(0, 6).forEach(function (f, i) {
+    var pageState = paginateItems(
+      list,
+      adminListPages.sentimentComments,
+      SENTIMENT_COMMENTS_PAGE_SIZE
+    );
+    adminListPages.sentimentComments = pageState.page;
+    pageState.items.forEach(function (f, i) {
       var card = document.createElement("article");
       card.className = "review-card";
       var img = document.createElement("img");
@@ -4506,6 +4520,10 @@
       card.appendChild(stars);
       card.appendChild(txt);
       host.appendChild(card);
+    });
+    renderPaginationControls(pager, pageState, function (page) {
+      adminListPages.sentimentComments = page;
+      renderSentimentFeedbackList();
     });
   }
 
@@ -7422,6 +7440,7 @@
     var overlay = document.getElementById("adminSentimentOverlay");
     var titleEl = document.getElementById("adminSentimentTitle");
     var listEl = document.getElementById("adminSentimentList");
+    var pager = document.getElementById("adminSentimentListPager");
     var closeBtn = document.getElementById("adminSentimentCloseBtn");
     var exampleBanner = document.getElementById("adminSentimentExampleBanner");
     if (!overlay || !titleEl || !listEl || !closeBtn) return;
@@ -7449,8 +7468,14 @@
       }
 
       listEl.textContent = "";
+      if (adminListPages.sentimentDetailsKey !== key) {
+        adminListPages.sentimentDetailsKey = key;
+        adminListPages.sentimentDetails = 1;
+      }
 
       if (!rows.length) {
+        adminListPages.sentimentDetails = 1;
+        if (pager) renderPaginationControls(pager, null);
         var empty = document.createElement("li");
         empty.className = "sentiment-detail-empty";
         if (exampleMode) {
@@ -7465,7 +7490,13 @@
         }
         listEl.appendChild(empty);
       } else {
-        rows.forEach(function (f) {
+        var pageState = paginateItems(
+          rows,
+          adminListPages.sentimentDetails,
+          SENTIMENT_DETAILS_PAGE_SIZE
+        );
+        adminListPages.sentimentDetails = pageState.page;
+        pageState.items.forEach(function (f) {
           var li = document.createElement("li");
           li.className = "sentiment-detail-row";
 
@@ -7490,6 +7521,10 @@
           li.appendChild(head);
           li.appendChild(quote);
           listEl.appendChild(li);
+        });
+        renderPaginationControls(pager, pageState, function (page) {
+          adminListPages.sentimentDetails = page;
+          openSentiment(key);
         });
       }
 

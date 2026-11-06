@@ -15091,9 +15091,18 @@ header #bookNavUser button.book-nav-appointments:not(.book-nav-icon-btn).is-acti
 .admin-app #section-sentiment .sentiment-feedback-list {
   flex: 1 1 auto;
   gap: 22px;
-  max-height: min(68vh, 620px);
+  max-height: min(52vh, 480px);
   overflow-y: auto;
   padding: 4px 4px 8px 0;
+}
+
+.admin-app #section-sentiment #sentimentCommentsPager {
+  margin-top: auto;
+  padding-top: 12px;
+}
+
+.admin-app #section-sentiment #sentimentCommentsPager.admin-pagination {
+  border-top-color: #f1f5f9;
 }
 
 .admin-app #section-sentiment .sentiment-feedback-list .review-card {
@@ -15649,6 +15658,10 @@ header #bookNavUser button.book-nav-appointments:not(.book-nav-icon-btn).is-acti
   padding: 0;
   max-height: min(52vh, 420px);
   overflow-y: auto;
+}
+
+.admin-app #adminSentimentListPager {
+  margin-top: 12px;
 }
 
 .admin-app .sentiment-detail-row {
