@@ -771,7 +771,9 @@
   function listForSentiment() {
     var currentKey = getCurrentWeekStartKey();
     return cache.filter(function (item) {
-      if (isTestFeedback(item) || item.sentimentArchived) return false;
+      if (isHistoricalFeedback(item) || isTestFeedback(item) || item.sentimentArchived) {
+        return false;
+      }
       return feedbackWeekKey(item) === currentKey;
     });
   }

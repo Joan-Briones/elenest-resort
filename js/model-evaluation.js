@@ -205,10 +205,15 @@
 
   function collectLiveFeedback() {
     var F = window.ElenestGuestFeedback;
-    var list = F && typeof F.listAll === "function" ? F.listAll() : [];
+    var list = [];
+    if (F && typeof F.listLive === "function") list = F.listLive() || [];
     var out = [];
     list.forEach(function (item) {
       if (!item) return;
+      if (isHistoricalReview(item)) return;
+      if (F && typeof F.isTestFeedback === "function" && F.isTestFeedback(item)) return;
+      var id = String(item.id || "");
+      if (id.indexOf("past-fb-") === 0 || id.indexOf("test-fb-") === 0) return;
       var text = String(item.comment || "").trim();
       if (text.length < 8) return;
       var label = labelFromStars(item.stars || item.rating);
@@ -220,7 +225,7 @@
         text: text,
         label: label,
         source: "guest_feedback",
-        historical: isHistoricalReview(item)
+        historical: false
       });
     });
     return out;
@@ -671,14 +676,14 @@
 
   function allFeedbackCount() {
     var F = window.ElenestGuestFeedback;
-    var list = F && typeof F.listAll === "function" ? F.listAll() : [];
-    return (list || []).length;
+    var list = F && typeof F.listLive === "function" ? F.listLive() || [] : [];
+    return list.filter(function (item) {
+      return item && !isHistoricalReview(item);
+    }).length;
   }
 
   function feedbackCorpusReady() {
-    var GF = window.ElenestGuestFeedback;
-    if (!GF || typeof GF.isHistoricalLoaded !== "function") return true;
-    return !!GF.isHistoricalLoaded();
+    return true;
   }
 
   var finalModel = null;
@@ -782,39 +787,42 @@
     var testRows;
     var dataNote;
     var nAll;
+    if (!corpus.length) {
+      return {
+        ready: false,
+        metrics: {
+          ok: false,
+          reason:
+            "No live guest comments yet. Sentiment metrics use the same reviews as Guest sentiment analysis — not sample data."
+        }
+      };
+    }
     if (corpus.length >= 8) {
       var split = stableStratifiedSplit(corpus, TEST_RATIO, SPLIT_SEED);
       trainRows = split.train;
       testRows = split.test;
       nAll = corpus.length;
       dataNote =
-        "Calculated from " +
+        "Scored on " +
         fmtCount(split.test.length) +
-        " held-out comments of " +
+        " held-out live comments of " +
         fmtCount(corpus.length) +
-        " labeled guest feedback records. Overall guest feedback is " +
+        " guest reviews. Same live comments as Guest sentiment analysis (" +
         fmtCount(guestTotal) +
-        ", including the test comments. A new comment changes this result by that one comment. The other reviews stay in the same test.";
-    } else if (stored.length) {
-      trainRows = labeledCorpus();
+        " on file). A new comment changes this result.";
+    } else {
+      trainRows = labeledCorpus().concat(stored);
       testRows = stored;
       nAll = stored.length;
       dataNote =
         "Scored on " +
         stored.length +
-        " guest review" +
+        " live guest comment" +
         (stored.length === 1 ? "" : "s") +
-        " from the database. A larger review set will also be used for training.";
-    } else {
-      var baseline = stratifiedSplit(labeledCorpus(), TEST_RATIO, SPLIT_SEED);
-      trainRows = baseline.train;
-      testRows = baseline.test;
-      nAll = labeledCorpus().length;
-      dataNote =
-        "No guest reviews yet. These scores switch to database reviews as soon as feedback is saved.";
+        " — the same reviews as the sentiment charts. Extra training phrases are not counted in these scores.";
     }
     if (!trainRows || trainRows.length < 6 || !testRows || !testRows.length) {
-      return { ready: false, metrics: { ok: false, reason: "Not enough labeled comments for a train/test split." } };
+      return { ready: false, metrics: { ok: false, reason: "Not enough live guest comments for a train/test split." } };
     }
     return {
       ready: true,
@@ -833,7 +841,7 @@
     var metrics = scored.metrics;
     metrics.scoreLabel = metrics.nTest + " held-out comments of " + (job.nAll || metrics.nTest);
     metrics.liveNote =
-      "Logistic regression with TF-IDF on the guest feedback saved now, including the test comments. A new comment changes this result by that one comment.";
+      "Same live guest comments as Guest sentiment analysis and Guest Reviews. Logistic regression with TF-IDF — not sample or archive data.";
     metrics.nAll = job.nAll;
     metrics.nLive = job.nLive;
     metrics.nCorpus = job.nLive;
@@ -1499,7 +1507,7 @@
     }
   }
 
-  var EVAL_STORE = "elenest_model_eval_v11";
+  var EVAL_STORE = "elenest_model_eval_v12_live";
 
   function readStoredResult() {
     try {
@@ -1579,10 +1587,8 @@
 
   function whenFeedbackReady() {
     var GF = window.ElenestGuestFeedback;
-    var waits = [];
-    if (GF && GF.ready && typeof GF.ready.then === "function") waits.push(GF.ready);
-    if (GF && typeof GF.ensureHistoricalLoaded === "function") waits.push(GF.ensureHistoricalLoaded());
-    return waits.length ? Promise.all(waits) : Promise.resolve();
+    if (GF && GF.ready && typeof GF.ready.then === "function") return GF.ready;
+    return Promise.resolve();
   }
 
   var computeInFlight = null;
