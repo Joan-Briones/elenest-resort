@@ -4216,12 +4216,12 @@
       var sub = document.getElementById("managerReportReviewsSub");
       if (sub) {
         sub.textContent = total
-          ? "Live from guest sentiment — " +
+          ? "Same totals as the home page — " +
             total.toLocaleString() +
-            " guest review" +
+            " review" +
             (total === 1 ? "" : "s") +
-            ". Same source as Sentiment Analytics."
-          : "Live from guest sentiment. Charts stay empty until guests submit reviews.";
+            " on file."
+          : "Same totals as the home page. Charts update when new reviews are saved.";
       }
 
       var now = new Date();
@@ -4261,7 +4261,12 @@
       }
     }
 
-    paint(readLiveReviewRecordsForKpis());
+    paint(readAllReviewRecordsForHomeKpis());
+
+    // Reuse cache — do not force-reload on every paint (keeps analytics smooth).
+    loadFullReviewRecordsForHomeKpis(false).then(function (list) {
+      paint(list || []);
+    });
   }
 
   function printTable(headers, rows, foot) {
