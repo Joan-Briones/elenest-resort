@@ -778,7 +778,15 @@
     }
     var cacheKey = feedbackSignature(stored);
     if (sentimentCache && sentimentCacheKey === cacheKey && finalModel) {
-      return { ready: true, cached: sentimentCache, cacheKey: cacheKey };
+      return {
+        ready: true,
+        cached: sentimentCache,
+        cacheKey: cacheKey,
+        stored: stored,
+        trainRows: stored,
+        testRows: stored,
+        epochs: stored.length >= 12 ? 200 : 500
+      };
     }
     var corpus = stored.slice();
     var guestTotal = allFeedbackCount() || corpus.length;
@@ -887,9 +895,16 @@
   function evaluateSentiment() {
     var job = prepareSentimentJob();
     if (!job.ready) return job.metrics;
-    if (job.cached) return job.cached;
+    if (job.cached) {
+      if (!finalModel && job.stored && job.stored.length) {
+        finalModel = trainFinalModel(job.stored, job.epochs || 200);
+      }
+      notifySentimentModelReady();
+      return job.cached;
+    }
     var scored = scoreSentiment(job.trainRows, job.testRows, job.epochs);
     finalModel = trainFinalModel(job.stored.length ? job.stored : job.trainRows.concat(job.testRows), job.epochs);
+    notifySentimentModelReady();
     return applyScored(job, scored);
   }
 
@@ -901,7 +916,13 @@
     }
     var job = prepareSentimentJob();
     if (!job.ready) return Promise.resolve(job.metrics);
-    if (job.cached) return Promise.resolve(job.cached);
+    if (job.cached) {
+      if (!finalModel && job.stored && job.stored.length) {
+        finalModel = trainFinalModel(job.stored, job.epochs || 200);
+      }
+      notifySentimentModelReady();
+      return Promise.resolve(job.cached);
+    }
     return new Promise(function (resolve) {
       setTimeout(function () {
         if (gen !== sentimentGen) {
@@ -1512,7 +1533,7 @@
     }
   }
 
-  var EVAL_STORE = "elenest_model_eval_v13_livecharts";
+  var EVAL_STORE = "elenest_model_eval_v14_evalcharts";
 
   function readStoredResult() {
     try {
@@ -1619,10 +1640,12 @@
               if (
                 nextSig &&
                 nextSig === recomputeAndRender._sig &&
+                finalModel &&
                 lastResult &&
                 lastResult.regression &&
                 lastResult.regression.ok
               ) {
+                notifySentimentModelReady();
                 resolve(lastResult);
                 return;
               }
@@ -1697,7 +1720,6 @@
       recomputeAndRender._sig = "";
       sentimentCache = null;
       sentimentCacheKey = "";
-      finalModel = null;
       lastResult = null;
       try {
         sessionStorage.removeItem(EVAL_STORE);
@@ -1732,10 +1754,6 @@
     if (!lastResult) lastResult = readStoredResult();
     if (lastResult && lastResult.classification && lastResult.regression && lastResult.regression.ok) {
       paintNow(lastResult.classification, lastResult.regression);
-      try {
-        recomputeAndRender._sig = evalSignature();
-      } catch (ePaint) {}
-      return Promise.resolve(lastResult);
     }
     return prefetch();
   }
@@ -1746,12 +1764,8 @@
     if (!lastResult) lastResult = readStoredResult();
     if (lastResult && lastResult.classification && lastResult.regression && lastResult.regression.ok) {
       paintNow(lastResult.classification, lastResult.regression);
-      try {
-        recomputeAndRender._sig = evalSignature();
-      } catch (eEarly) {}
-      return;
     }
-    if (viewerNeedsSentimentModel()) prefetch();
+    prefetch();
   }
 
   function syncPaint() {
@@ -1775,7 +1789,10 @@
     evaluateSentiment: evaluateSentiment,
     evaluateRegression: evaluateRegression,
     predictFeedback: predictFeedback,
-    classify: classifyFeedback
+    classify: classifyFeedback,
+    hasModel: function () {
+      return !!finalModel;
+    }
   };
 
   if (document.readyState === "loading") {

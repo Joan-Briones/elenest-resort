@@ -5715,6 +5715,7 @@
       compact: true,
       hideLegend: true,
       hideTitle: true,
+      overlay: true,
       tipId: "adminReportReviewsTip"
     });
     updateSentimentPeriodButtonsUI();
