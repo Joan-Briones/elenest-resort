@@ -4053,7 +4053,7 @@
     var maxT = Math.max(
       1,
       working.reduce(function (a, b) {
-        return Math.max(a, b.pos, b.neu, b.neg);
+        return Math.max(a, b.pos + b.neu + b.neg);
       }, 0)
     );
     var niceMax = maxT;
@@ -4089,8 +4089,8 @@
       return {
         x: x,
         yNeg: yBase - (b.neg / niceMax) * plotH,
-        yNeu: yBase - (b.neu / niceMax) * plotH,
-        yPos: yBase - (b.pos / niceMax) * plotH,
+        yNeu: yBase - ((b.neg + b.neu) / niceMax) * plotH,
+        yPos: yBase - ((b.neg + b.neu + b.pos) / niceMax) * plotH,
         yBase: yBase,
         total: b.pos + b.neu + b.neg,
         pos: b.pos,
@@ -4123,13 +4123,9 @@
       var posGrad = ctx.createLinearGradient(0, y0, 0, yBase);
       posGrad.addColorStop(0, "rgba(127, 193, 66, 0.32)");
       posGrad.addColorStop(1, "rgba(127, 193, 66, 0.06)");
-      ctx.save();
-      ctx.beginPath();
-      ctx.rect(x0, y0, chartW, chartH);
-      ctx.clip();
       fillMgrSmoothBand(ctx, basePts, negPts, negGrad);
-      fillMgrSmoothBand(ctx, basePts, neuPts, neuGrad);
-      fillMgrSmoothBand(ctx, basePts, posPts, posGrad);
+      fillMgrSmoothBand(ctx, negPts, neuPts, neuGrad);
+      fillMgrSmoothBand(ctx, neuPts, posPts, posGrad);
 
       function strokeEdge(ptsEdge, color, width) {
         ctx.beginPath();
@@ -4143,7 +4139,6 @@
       strokeEdge(negPts, cNeg, 2);
       strokeEdge(neuPts, cNeu, 2);
       strokeEdge(posPts, cPos, 2.4);
-      ctx.restore();
 
       pts.forEach(function (p) {
         [
