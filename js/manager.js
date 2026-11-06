@@ -4216,12 +4216,12 @@
       var sub = document.getElementById("managerReportReviewsSub");
       if (sub) {
         sub.textContent = total
-          ? "Same totals as the home page — " +
+          ? "Live guest reviews classified by Model Evaluation — " +
             total.toLocaleString() +
             " review" +
             (total === 1 ? "" : "s") +
-            " on file."
-          : "Same totals as the home page. Charts update when new reviews are saved.";
+            ". Same Positive / Negative / Neutral model as evaluation metrics."
+          : "Live from Model Evaluation. Charts stay empty until guests submit reviews.";
       }
 
       var now = new Date();
@@ -4261,12 +4261,13 @@
       }
     }
 
-    paint(readAllReviewRecordsForHomeKpis());
-
-    // Reuse cache — do not force-reload on every paint (keeps analytics smooth).
-    loadFullReviewRecordsForHomeKpis(false).then(function (list) {
-      paint(list || []);
-    });
+    paint(readLiveReviewRecordsForKpis());
+    var EV = window.ElenestModelEvaluation;
+    if (EV && typeof EV.prefetch === "function") {
+      try {
+        EV.prefetch();
+      } catch (ePrefetch) {}
+    }
   }
 
   function printTable(headers, rows, foot) {
@@ -4805,6 +4806,9 @@
       }
     });
 
+    window.addEventListener("elenest-sentiment-model-ready", function () {
+      renderManagerGuestReviews();
+    });
     window.addEventListener("elenest-feedback-updated", function () {
       invalidateFullReviewsCache();
       loadFullReviewRecordsForHomeKpis(true).then(function () {

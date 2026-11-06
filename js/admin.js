@@ -5640,77 +5640,64 @@
   }
 
   function renderReportsGuestReviews() {
-    function paintFromKpis(kpis) {
-      if (!kpis) return;
-      var total = Number(kpis.total) || 0;
-      var setText = function (id, text) {
-        var el = document.getElementById(id);
-        if (el) el.textContent = text;
-      };
-      var setWidth = function (id, width) {
-        var el = document.getElementById(id);
-        if (el) el.style.width = width;
-      };
+    var list = getFeedback();
+    var kpis = computeHomeStyleReviewKpis(list);
+    var tallies = tallyDisplayedSentiment(list);
+    var chart = buildLiveSentimentChartData(currentSentimentPeriod);
+    var total = Number(kpis.total) || 0;
+    var setText = function (id, text) {
+      var el = document.getElementById(id);
+      if (el) el.textContent = text;
+    };
+    var setWidth = function (id, width) {
+      var el = document.getElementById(id);
+      if (el) el.style.width = width;
+    };
 
-      setText(
-        "adminReportReviewsAvg",
-        total && kpis.average ? Number(kpis.average).toFixed(1) + "/5" : "—"
-      );
-      setText("adminReportReviewsPos", total ? kpis.recommend + "%" : "—");
-      setText("adminReportReviewsTotal", String(total));
+    setText(
+      "adminReportReviewsAvg",
+      total && kpis.average ? Number(kpis.average).toFixed(1) + "/5" : "—"
+    );
+    setText("adminReportReviewsPos", total ? kpis.recommend + "%" : "—");
+    setText("adminReportReviewsTotal", String(total));
 
-      setText("adminReportPctPos", (kpis.pctPos || 0) + "%");
-      setText("adminReportPctNeg", (kpis.pctNeg || 0) + "%");
-      setText("adminReportPctNeu", (kpis.pctNeu || 0) + "%");
-      setWidth("adminReportBarPos", (kpis.pctPos || 0) + "%");
-      setWidth("adminReportBarNeg", (kpis.pctNeg || 0) + "%");
-      setWidth("adminReportBarNeu", (kpis.pctNeu || 0) + "%");
+    setText("adminReportPctPos", tallies.pctPos + "%");
+    setText("adminReportPctNeg", tallies.pctNeg + "%");
+    setText("adminReportPctNeu", tallies.pctNeu + "%");
+    setWidth("adminReportBarPos", tallies.pctPos + "%");
+    setWidth("adminReportBarNeg", tallies.pctNeg + "%");
+    setWidth("adminReportBarNeu", tallies.pctNeu + "%");
 
-      var sub = document.getElementById("adminReportReviewsSub");
-      if (sub) {
-        sub.textContent = total
-          ? "Same totals as the home page — " +
-            total.toLocaleString() +
-            " review" +
-            (total === 1 ? "" : "s") +
-            " on file."
-          : "Same totals as the home page. Charts update when new reviews are saved.";
-      }
-
-      drawSentimentStackedChart(
-        "adminReportReviewsChart",
-        kpis.buckets || buildSentimentMonthBuckets(6),
-        {
-          skipExample: true,
-          compact: true,
-          hideLegend: true,
-          hideTitle: true,
-          tipId: "adminReportReviewsTip"
-        }
-      );
-      if (
-        window.ElenestGuestFeedback &&
-        typeof window.ElenestGuestFeedback.mountRecentReviewNames === "function"
-      ) {
-        window.ElenestGuestFeedback.mountRecentReviewNames(
-          document.getElementById("adminReportGuestReviewsCard")
-        );
-      }
+    var sub = document.getElementById("adminReportReviewsSub");
+    if (sub) {
+      sub.textContent = total
+        ? "Live guest reviews classified by Model Evaluation — " +
+          total.toLocaleString() +
+          " review" +
+          (total === 1 ? "" : "s") +
+          ". Same Positive / Negative / Neutral model as the metrics below."
+        : "Live from Model Evaluation. Charts stay empty until guests submit reviews.";
     }
 
-    // Instant paint from cache / live estimate — never block the UI.
-    if (homeReviewKpisCache) {
-      paintFromKpis(homeReviewKpisCache);
-    } else {
-      var liveAcc = createEmptyReviewKpiAccumulator();
-      var live = getLiveReviewRecordsForKpis();
-      var i;
-      for (i = 0; i < live.length; i++) accumulateReviewRow(liveAcc, live[i]);
-      paintFromKpis(finalizeReviewKpiAccumulator(liveAcc));
+    drawSentimentStackedChart("adminReportReviewsChart", chart.buckets, {
+      skipExample: true,
+      compact: true,
+      hideLegend: true,
+      hideTitle: true,
+      tipId: "adminReportReviewsTip"
+    });
+    updateSentimentPeriodButtonsUI();
+    initSentimentPeriodFilters();
+    var EV = window.ElenestModelEvaluation;
+    if (EV && typeof EV.prefetch === "function") EV.prefetch();
+    if (
+      window.ElenestGuestFeedback &&
+      typeof window.ElenestGuestFeedback.mountRecentReviewNames === "function"
+    ) {
+      window.ElenestGuestFeedback.mountRecentReviewNames(
+        document.getElementById("adminReportGuestReviewsCard")
+      );
     }
-
-    // One shared background load; reuses cache after first success.
-    loadHomeReviewKpis(false).then(paintFromKpis);
   }
 
   function formatTrendPeso(n) {
@@ -5949,11 +5936,40 @@
     return buckets;
   }
 
+  function feedbackCreatedAt(f) {
+    return (f && (f.createdAt || f.created_at || f.submittedAt || f.submitted_at)) || "";
+  }
+
+  function tallyDisplayedSentiment(list) {
+    var pos = 0;
+    var neu = 0;
+    var neg = 0;
+    (list || []).forEach(function (f) {
+      var cl = displayedSentiment(f);
+      if (cl === "pos") pos += 1;
+      else if (cl === "neg") neg += 1;
+      else neu += 1;
+    });
+    var total = pos + neu + neg;
+    var pctPos = total ? Math.round((pos / total) * 100) : 0;
+    var pctNeu = total ? Math.round((neu / total) * 100) : 0;
+    var pctNeg = total ? Math.max(0, 100 - pctPos - pctNeu) : 0;
+    return {
+      pos: pos,
+      neu: neu,
+      neg: neg,
+      total: total,
+      pctPos: pctPos,
+      pctNeu: pctNeu,
+      pctNeg: pctNeg
+    };
+  }
+
   function bucketFeedbackByPeriod(feedbackList, buckets, periodFn) {
     var idx = {};
     buckets.forEach(function (b, i) { idx[b.key] = i; });
-    feedbackList.forEach(function (f) {
-      var raw = f.createdAt;
+    (feedbackList || []).forEach(function (f) {
+      var raw = feedbackCreatedAt(f);
       if (!raw) return;
       var dt = new Date(raw);
       if (isNaN(dt.getTime())) return;
@@ -5971,8 +5987,8 @@
     buckets.forEach(function (b) {
       idx[b.key] = true;
     });
-    return feedbackList.filter(function (f) {
-      var raw = f.createdAt;
+    return (feedbackList || []).filter(function (f) {
+      var raw = feedbackCreatedAt(f);
       if (!raw) return false;
       var dt = new Date(raw);
       if (isNaN(dt.getTime())) return false;
@@ -6011,7 +6027,7 @@
           return weekStartKeyFromDate(dt);
         },
         sub:
-          "Live from Supabase guest reviews — last 8 weeks (weeks start Monday). Stacked area shows positive, negative, and neutral counts."
+          "Live guest reviews classified by Model Evaluation — last 8 weeks (weeks start Monday)."
       };
     }
     if (period === "day") {
@@ -6023,7 +6039,7 @@
           return dt.getFullYear() + "-" + pad2(dt.getMonth() + 1) + "-" + pad2(dt.getDate());
         },
         sub:
-          "Live from Supabase guest reviews — last 14 days. Stacked area shows positive, negative, and neutral (3-star) responses."
+          "Live guest reviews classified by Model Evaluation — last 14 days."
       };
     }
     return {
@@ -6034,7 +6050,7 @@
         return dt.getFullYear() + "-" + pad2(dt.getMonth() + 1);
       },
       sub:
-        "Live from Supabase guest reviews — last 6 months. Stacked area fills the timeline (no large empty bar gaps)."
+        "Live guest reviews classified by Model Evaluation — last 6 months."
     };
   }
 
@@ -6046,23 +6062,17 @@
     return filterFeedbackMatchingBuckets(all, buckets, cfg.periodFn);
   }
 
-  function fillExampleSentimentBuckets(buckets) {
-    var samples = [
-      { pos: 12, neu: 3, neg: 1 },
-      { pos: 15, neu: 2, neg: 0 },
-      { pos: 10, neu: 4, neg: 2 },
-      { pos: 14, neu: 3, neg: 1 },
-      { pos: 11, neu: 5, neg: 1 },
-      { pos: 16, neu: 2, neg: 1 },
-      { pos: 9, neu: 3, neg: 2 },
-      { pos: 13, neu: 2, neg: 1 }
-    ];
-    buckets.forEach(function (b, i) {
-      var s = samples[i % samples.length];
-      b.pos = s.pos;
-      b.neu = s.neu;
-      b.neg = s.neg;
-    });
+  /** Live guest reviews only — same source as Guest sentiment analysis (no historical sample JSON). */
+  function buildLiveSentimentChartData(period) {
+    var cfg = getSentimentPeriodConfig(period || currentSentimentPeriod);
+    var buckets = cfg.buildBuckets();
+    var list = getFeedback();
+    bucketFeedbackByPeriod(list, buckets, cfg.periodFn);
+    return {
+      cfg: cfg,
+      buckets: buckets,
+      list: list
+    };
   }
 
   var sentimentChartMetaById = {};
@@ -6382,48 +6392,51 @@
     posGrad.addColorStop(0, "rgba(127, 193, 66, 0.32)");
     posGrad.addColorStop(1, "rgba(127, 193, 66, 0.06)");
 
-    fillSmoothBand(ctx, basePts, negPts, negGrad);
-    fillSmoothBand(ctx, negPts, neuPts, neuGrad);
-    fillSmoothBand(ctx, neuPts, posPts, posGrad);
+    if (hasAny && pts.length >= 2) {
+      fillSmoothBand(ctx, basePts, negPts, negGrad);
+      fillSmoothBand(ctx, negPts, neuPts, neuGrad);
+      fillSmoothBand(ctx, neuPts, posPts, posGrad);
 
-    strokeSmoothEdge(ctx, negPts, cNeg, 2);
-    strokeSmoothEdge(ctx, neuPts, cNeu, 2);
-    strokeSmoothEdge(ctx, posPts, cPos, 2.4);
+      strokeSmoothEdge(ctx, negPts, cNeg, 2);
+      strokeSmoothEdge(ctx, neuPts, cNeu, 2);
+      strokeSmoothEdge(ctx, posPts, cPos, 2.4);
+    }
 
     var hoverIndex = sentimentChartMetaById[canvasId].hoverIndex;
-    pts.forEach(function (p, idx) {
-      var active = hoverIndex === idx;
-      var r = active ? 5.2 : 3.6;
-      // Vertical guide on hover
-      if (active) {
-        ctx.save();
-        ctx.strokeStyle = "rgba(61, 51, 64, 0.12)";
-        ctx.lineWidth = 1;
-        ctx.setLineDash([4, 4]);
-        ctx.beginPath();
-        ctx.moveTo(p.x, y0);
-        ctx.lineTo(p.x, yBase);
-        ctx.stroke();
-        ctx.restore();
-      }
-      [
-        { y: p.yNeg, color: cNeg },
-        { y: p.yNeu, color: cNeu },
-        { y: p.yPos, color: cPos }
-      ].forEach(function (dot) {
-        ctx.beginPath();
-        ctx.arc(p.x, dot.y, r + 1.1, 0, Math.PI * 2);
-        ctx.fillStyle = "#ffffff";
-        ctx.fill();
-        ctx.beginPath();
-        ctx.arc(p.x, dot.y, r, 0, Math.PI * 2);
-        ctx.fillStyle = dot.color;
-        ctx.fill();
-        ctx.lineWidth = 1.4;
-        ctx.strokeStyle = "#ffffff";
-        ctx.stroke();
+    if (hasAny) {
+      pts.forEach(function (p, idx) {
+        var active = hoverIndex === idx;
+        var r = active ? 5.2 : 3.6;
+        if (active) {
+          ctx.save();
+          ctx.strokeStyle = "rgba(61, 51, 64, 0.12)";
+          ctx.lineWidth = 1;
+          ctx.setLineDash([4, 4]);
+          ctx.beginPath();
+          ctx.moveTo(p.x, y0);
+          ctx.lineTo(p.x, yBase);
+          ctx.stroke();
+          ctx.restore();
+        }
+        [
+          { y: p.yNeg, color: cNeg },
+          { y: p.yNeu, color: cNeu },
+          { y: p.yPos, color: cPos }
+        ].forEach(function (dot) {
+          ctx.beginPath();
+          ctx.arc(p.x, dot.y, r + 1.1, 0, Math.PI * 2);
+          ctx.fillStyle = "#ffffff";
+          ctx.fill();
+          ctx.beginPath();
+          ctx.arc(p.x, dot.y, r, 0, Math.PI * 2);
+          ctx.fillStyle = dot.color;
+          ctx.fill();
+          ctx.lineWidth = 1.4;
+          ctx.strokeStyle = "#ffffff";
+          ctx.stroke();
+        });
       });
-    });
+    }
 
     drawProChartBaseline(ctx, x0, y0, chartW, chartH);
 
@@ -6475,18 +6488,19 @@
 
   function initSentimentPeriodFilters() {
     if (sentimentPeriodFiltersBound) return;
-    var wrap = document.getElementById("sentimentPeriodFilters");
-    if (!wrap) return;
     sentimentPeriodFiltersBound = true;
-    wrap.addEventListener("click", function (e) {
+    document.addEventListener("click", function (e) {
       var btn = e.target && e.target.closest ? e.target.closest("[data-sentiment-period]") : null;
-      if (!btn || !wrap.contains(btn)) return;
+      if (!btn) return;
+      var wrap = btn.closest ? btn.closest(".sentiment-period-filters") : null;
+      if (!wrap) return;
       var p = btn.getAttribute("data-sentiment-period");
       if (p !== "month" && p !== "week" && p !== "day") return;
       if (p === currentSentimentPeriod) return;
       currentSentimentPeriod = p;
       updateSentimentPeriodButtonsUI();
       renderSentimentOverview();
+      renderReportsGuestReviews();
     });
   }
 
@@ -6746,8 +6760,9 @@
   }
 
   function renderSentimentOverview() {
-    var cfg = getSentimentPeriodConfig(currentSentimentPeriod);
-    var buckets = cfg.buildBuckets();
+    var chart = buildLiveSentimentChartData(currentSentimentPeriod);
+    var cfg = chart.cfg;
+    var buckets = chart.buckets;
     var subEl = document.getElementById("sentimentChartSub");
     if (subEl) subEl.textContent = cfg.sub;
 
@@ -6759,7 +6774,7 @@
     var pctNeg = document.getElementById("sentimentPctNeg");
     var totalEl = document.getElementById("sentimentTotalCount");
 
-    var allList = getFeedback();
+    var allList = chart.list;
     var sentimentList = getSentimentFeedback();
     var weeklyRec = getFeedbackForWeeklyRecommendation(sentimentList);
 
@@ -6773,7 +6788,6 @@
       if (pctNeg) pctNeg.textContent = "0%";
       if (totalEl) totalEl.textContent = "0 reviews on file";
 
-      bucketFeedbackByPeriod([], buckets, cfg.periodFn);
       drawSentimentStackedChart("adminSentimentPeriodChart", buckets, {
         skipExample: true,
         hideTitle: true,
@@ -6789,9 +6803,6 @@
       updateSentimentPeriodButtonsUI();
       return;
     }
-
-    bucketFeedbackByPeriod(allList, buckets, cfg.periodFn);
-    var filtered = filterFeedbackMatchingBuckets(allList, buckets, cfg.periodFn);
 
     var pos = 0;
     var neu = 0;
@@ -6877,6 +6888,8 @@
 
   function renderSentimentSection() {
     paintSentimentSection();
+    var EV = window.ElenestModelEvaluation;
+    if (EV && typeof EV.prefetch === "function") EV.prefetch();
     var GF = window.ElenestGuestFeedback;
     // One background pull from Supabase; realtime events re-paint via elenest-feedback-updated.
     if (GF && typeof GF.refresh === "function" && !renderSentimentSection._pulling) {
@@ -8173,6 +8186,10 @@
     });
     window.addEventListener("elenest-payment-methods-updated", function () {
       refreshActiveSection();
+    });
+    window.addEventListener("elenest-sentiment-model-ready", function () {
+      paintSentimentSection();
+      renderReportsGuestReviews();
     });
     window.addEventListener("elenest-feedback-updated", function () {
       loadHomeReviewKpis(true).then(function () {

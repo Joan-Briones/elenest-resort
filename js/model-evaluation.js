@@ -744,6 +744,26 @@
     return !section.hidden && !section.hasAttribute("hidden");
   }
 
+  function viewerNeedsSentimentModel() {
+    var ids = ["section-reports", "section-sentiment", "section-analytics"];
+    var i;
+    for (i = 0; i < ids.length; i++) {
+      var el = document.getElementById(ids[i]);
+      if (el && !el.hidden) return true;
+    }
+    return reportsSectionOpen();
+  }
+
+  var lastModelReadyAt = 0;
+  function notifySentimentModelReady() {
+    var now = Date.now();
+    if (now - lastModelReadyAt < 250) return;
+    lastModelReadyAt = now;
+    try {
+      window.dispatchEvent(new CustomEvent("elenest-sentiment-model-ready"));
+    } catch (eNotify) {}
+  }
+
   function prepareSentimentJob() {
     if (!trainingEnabled) {
       return { ready: false, metrics: { ok: false, reason: "Loading stored feedback for evaluation…", retryable: true } };
@@ -907,7 +927,7 @@
           metrics.vocabSize = tfidf.vocab.length;
           var applied = applyScored(job, { metrics: metrics });
           resolve(applied);
-          fillLabelsAsync(tfidf, W, job.stored);
+          fillLabelsAsync(tfidf, W, job.stored, notifySentimentModelReady);
         });
       }, 0);
     });
@@ -1570,7 +1590,7 @@
 
   function recomputeAndRender() {
     var host = getModelEvalHost();
-    if (!host || !reportsSectionOpen()) return Promise.resolve();
+    if (!host || !viewerNeedsSentimentModel()) return Promise.resolve();
     trainingEnabled = true;
     if (computeInFlight) {
       computeQueued = true;
@@ -1675,7 +1695,7 @@
         clearTimeout(renderTimer);
         renderTimer = null;
       }
-      if (!reportsSectionOpen()) return;
+      if (!viewerNeedsSentimentModel()) return;
       recomputeAndRender();
     });
     window.addEventListener("elenest-bookings-updated", function () {
@@ -1684,7 +1704,7 @@
         clearTimeout(renderTimer);
         renderTimer = null;
       }
-      if (!reportsSectionOpen()) return;
+      if (!viewerNeedsSentimentModel()) return;
       recomputeAndRender();
     });
     window.addEventListener("storage", function (e) {
@@ -1721,7 +1741,7 @@
       } catch (eEarly) {}
       return;
     }
-    if (reportsSectionOpen()) prefetch();
+    if (viewerNeedsSentimentModel()) prefetch();
   }
 
   function syncPaint() {
