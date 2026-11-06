@@ -293,7 +293,7 @@
             <a href="#section-sentiment" class="btn btn--outline btn--small admin-report-link-btn">Sentiment details</a>
           </div>
           <p class="booking-card__sub admin-report-chart-sub" id="adminReportReviewsSub">
-            Live from guest feedback in the database.
+            Live from Guest sentiment analysis — same guest reviews, not sample data.
           </p>
           <div class="admin-report-reviews-kpis" aria-live="polite">
             <div class="admin-report-reviews-kpi">
@@ -332,20 +332,53 @@
           <div class="admin-report-reviews-chart-block">
             <div class="admin-report-reviews-chart-head">
               <p class="admin-report-reviews-chart-title">Composition over time</p>
-              <div class="admin-report-chart-legend admin-report-reviews-legend" aria-label="Review sentiment legend">
-                <span class="admin-report-chart-legend__item">
-                  <span class="admin-report-chart-legend__swatch admin-report-chart-legend__swatch--pos" aria-hidden="true"></span>
-                  Positive
-                </span>
-                <span class="admin-report-chart-legend__item">
-                  <span class="admin-report-chart-legend__swatch admin-report-chart-legend__swatch--neu" aria-hidden="true"></span>
-                  Neutral
-                </span>
-                <span class="admin-report-chart-legend__item">
-                  <span class="admin-report-chart-legend__swatch admin-report-chart-legend__swatch--neg" aria-hidden="true"></span>
-                  Negative
-                </span>
+              <div class="sentiment-chart-header__right">
+                <div
+                  class="sentiment-period-filters"
+                  id="adminReportReviewsPeriodFilters"
+                  role="group"
+                  aria-label="Guest reviews reporting interval"
+                >
+                  <button
+                    type="button"
+                    class="btn btn--outline btn--small sentiment-period-btn sentiment-period-btn--active"
+                    data-sentiment-period="month"
+                    aria-pressed="true"
+                  >
+                    Monthly
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn--outline btn--small sentiment-period-btn"
+                    data-sentiment-period="week"
+                    aria-pressed="false"
+                  >
+                    Weekly
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn--outline btn--small sentiment-period-btn"
+                    data-sentiment-period="day"
+                    aria-pressed="false"
+                  >
+                    Daily
+                  </button>
+                </div>
               </div>
+            </div>
+            <div class="admin-report-chart-legend admin-report-reviews-legend" aria-label="Review sentiment legend">
+              <span class="admin-report-chart-legend__item">
+                <span class="admin-report-chart-legend__swatch admin-report-chart-legend__swatch--pos" aria-hidden="true"></span>
+                Positive
+              </span>
+              <span class="admin-report-chart-legend__item">
+                <span class="admin-report-chart-legend__swatch admin-report-chart-legend__swatch--neu" aria-hidden="true"></span>
+                Neutral
+              </span>
+              <span class="admin-report-chart-legend__item">
+                <span class="admin-report-chart-legend__swatch admin-report-chart-legend__swatch--neg" aria-hidden="true"></span>
+                Negative
+              </span>
             </div>
             <div class="admin-report-chart-wrap admin-report-reviews-chart-wrap">
               <canvas
@@ -657,45 +690,47 @@
         <div class="split-2">
           <article class="card admin-sentiment-metric-card">
             <h3 class="admin-sentiment-h3">Aggregate distribution</h3>
-            <p class="booking-card__sub admin-sentiment-sub" style="margin: 0 0 12px;">
+            <p class="booking-card__sub admin-sentiment-sub">
               Classification: <strong>Positive</strong> (4–5 stars), <strong>Negative</strong> (1–2 stars), <strong>Neutral</strong> (3 stars).
-              <span id="sentimentTotalCount" class="admin-sentiment-total" style="display: block; margin-top: 8px;"></span>
+              <span id="sentimentTotalCount" class="admin-sentiment-total"></span>
             </p>
-            <div class="sentiment-row">
-              <label class="admin-sentiment-label">Positive</label>
-              <div class="sentiment-bar"><span class="positive" id="sentimentBarPos" style="width: 0%;"></span></div>
-              <strong id="sentimentPctPos">0%</strong>
-              <button
-                type="button"
-                class="btn btn--outline btn--small sentiment-view-btn"
-                data-sentiment="positive"
-              >
-                Details
-              </button>
-            </div>
-            <div class="sentiment-row">
-              <label class="admin-sentiment-label">Negative</label>
-              <div class="sentiment-bar"><span class="negative" id="sentimentBarNeg" style="width: 0%;"></span></div>
-              <strong id="sentimentPctNeg">0%</strong>
-              <button
-                type="button"
-                class="btn btn--outline btn--small sentiment-view-btn"
-                data-sentiment="negative"
-              >
-                Details
-              </button>
-            </div>
-            <div class="sentiment-row" style="margin-bottom: 0;">
-              <label class="admin-sentiment-label">Neutral</label>
-              <div class="sentiment-bar"><span class="neutral" id="sentimentBarNeu" style="width: 0%;"></span></div>
-              <strong id="sentimentPctNeu">0%</strong>
-              <button
-                type="button"
-                class="btn btn--outline btn--small sentiment-view-btn"
-                data-sentiment="neutral"
-              >
-                Details
-              </button>
+            <div class="admin-sentiment-rows">
+              <div class="sentiment-row">
+                <label class="admin-sentiment-label">Positive</label>
+                <div class="sentiment-bar"><span class="positive" id="sentimentBarPos" style="width: 0%;"></span></div>
+                <strong id="sentimentPctPos">0%</strong>
+                <button
+                  type="button"
+                  class="btn btn--outline btn--small sentiment-view-btn"
+                  data-sentiment="positive"
+                >
+                  Details
+                </button>
+              </div>
+              <div class="sentiment-row">
+                <label class="admin-sentiment-label">Negative</label>
+                <div class="sentiment-bar"><span class="negative" id="sentimentBarNeg" style="width: 0%;"></span></div>
+                <strong id="sentimentPctNeg">0%</strong>
+                <button
+                  type="button"
+                  class="btn btn--outline btn--small sentiment-view-btn"
+                  data-sentiment="negative"
+                >
+                  Details
+                </button>
+              </div>
+              <div class="sentiment-row">
+                <label class="admin-sentiment-label">Neutral</label>
+                <div class="sentiment-bar"><span class="neutral" id="sentimentBarNeu" style="width: 0%;"></span></div>
+                <strong id="sentimentPctNeu">0%</strong>
+                <button
+                  type="button"
+                  class="btn btn--outline btn--small sentiment-view-btn"
+                  data-sentiment="neutral"
+                >
+                  Details
+                </button>
+              </div>
             </div>
           </article>
           <article class="card admin-sentiment-metric-card">
@@ -721,7 +756,7 @@
           </div>
         </aside>
 
-        <div class="card admin-report-chart-card admin-sentiment-chart-card" style="margin-top: 18px;">
+        <div class="card admin-report-chart-card admin-sentiment-chart-card">
           <div class="sentiment-chart-header">
             <h3 class="admin-sentiment-h3" style="margin: 0 0 8px;">Composition over time</h3>
             <div class="sentiment-chart-header__right">
