@@ -6272,11 +6272,10 @@
     });
 
     var prev = sentimentChartMetaById[canvasId] || {};
-    var tip = opts.noTooltip
-      ? null
-      : prev.tip ||
-        document.getElementById(opts.tipId || "") ||
-        (canvas.parentElement && canvas.parentElement.querySelector(".admin-report-chart-tooltip"));
+    var tip =
+      prev.tip ||
+      document.getElementById(opts.tipId || "") ||
+      (canvas.parentElement && canvas.parentElement.querySelector(".admin-report-chart-tooltip"));
 
     sentimentChartMetaById[canvasId] = {
       canvas: canvas,
@@ -6540,12 +6539,7 @@
         neg: p.neg
       };
     });
-    if (opts.noTooltip) {
-      hideSentimentChartTooltip(canvasId);
-      sentimentChartMetaById[canvasId].hoverIndex = null;
-    } else {
-      bindSentimentChartInteractions(canvasId);
-    }
+    bindSentimentChartInteractions(canvasId);
   }
 
   function updateSentimentPeriodButtonsUI() {
@@ -6830,15 +6824,7 @@
   }
 
   function renderSentimentOverview() {
-    var cfg = getSentimentPeriodConfig(currentSentimentPeriod);
-    var buckets = cfg.buildBuckets();
-    var sentimentList = getSentimentFeedback();
-    bucketFeedbackByPeriod(sentimentList, buckets, cfg.periodFn);
-    var subEl = document.getElementById("sentimentChartSub");
-    if (subEl) {
-      subEl.textContent =
-        "This week's guest comments classified by Model Evaluation — older weeks stay in the Comment Archive.";
-    }
+    var chart = buildLiveSentimentChartData(currentSentimentPeriod);
 
     var barPos = document.getElementById("sentimentBarPos");
     var barNeu = document.getElementById("sentimentBarNeu");
@@ -6848,7 +6834,8 @@
     var pctNeg = document.getElementById("sentimentPctNeg");
     var totalEl = document.getElementById("sentimentTotalCount");
 
-    var allList = getFeedback();
+    var allList = chart.list;
+    var sentimentList = getSentimentFeedback();
     var weeklyRec = getFeedbackForWeeklyRecommendation(sentimentList);
 
     if (!allList.length) {
@@ -6861,13 +6848,6 @@
       if (pctNeg) pctNeg.textContent = "0%";
       if (totalEl) totalEl.textContent = "0 reviews on file";
 
-      drawSentimentStackedChart("adminSentimentPeriodChart", buckets, {
-        skipExample: true,
-        hideTitle: true,
-        hideLegend: true,
-        overlay: true,
-        noTooltip: true
-      });
       renderSentimentRecommendations(
         buildSentimentRecommendationsPayload({
           allListLen: 0,
@@ -6931,14 +6911,6 @@
     if (pctNeu) pctNeu.textContent = pNeu + "%";
     if (pctNeg) pctNeg.textContent = pNeg + "%";
     if (totalEl) totalEl.textContent = totalMsg;
-
-    drawSentimentStackedChart("adminSentimentPeriodChart", buckets, {
-      skipExample: true,
-      hideTitle: true,
-      hideLegend: true,
-      overlay: true,
-      noTooltip: true
-    });
 
     renderSentimentRecommendations(
       buildSentimentRecommendationsPayload({
