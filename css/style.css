@@ -15043,23 +15043,49 @@ header #bookNavUser button.book-nav-appointments:not(.book-nav-icon-btn).is-acti
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
-  gap: 28px;
-  min-height: 240px;
-  padding: 12px 0 4px;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 0;
+  padding: 8px 0 0;
 }
 
 .admin-app #section-sentiment .sentiment-row {
-  grid-template-columns: minmax(88px, 110px) minmax(80px, 1fr) 52px auto;
-  gap: 14px 16px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  grid-template-areas:
+    "label pct btn"
+    "bar bar bar";
+  gap: 8px 12px;
   align-items: center;
   margin-bottom: 0;
-  padding: 10px 0;
+  padding: 16px 0;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.admin-app #section-sentiment .sentiment-row:last-child {
+  border-bottom: 0;
+  padding-bottom: 4px;
+}
+
+.admin-app #section-sentiment .sentiment-row .admin-sentiment-label {
+  grid-area: label;
+}
+
+.admin-app #section-sentiment .sentiment-row .sentiment-bar {
+  grid-area: bar;
+  min-width: 0;
+}
+
+.admin-app #section-sentiment .sentiment-row strong {
+  grid-area: pct;
 }
 
 .admin-app #section-sentiment .sentiment-view-btn {
+  grid-area: btn;
   justify-self: end;
   white-space: nowrap;
+  width: auto;
+  min-width: 0;
 }
 
 .admin-app #section-sentiment .sentiment-feedback-list {
@@ -15131,7 +15157,7 @@ header #bookNavUser button.book-nav-appointments:not(.book-nav-icon-btn).is-acti
   .admin-app #section-sentiment .admin-sentiment-rows {
     min-height: 0;
     justify-content: flex-start;
-    gap: 18px;
+    gap: 4px;
   }
 
   .admin-app #section-sentiment .sentiment-feedback-list {
@@ -15149,12 +15175,7 @@ header #bookNavUser button.book-nav-appointments:not(.book-nav-icon-btn).is-acti
   }
 
   .admin-app #section-sentiment .sentiment-row {
-    grid-template-columns: minmax(72px, auto) 1fr auto;
-  }
-
-  .admin-app #section-sentiment .sentiment-view-btn {
-    grid-column: 1 / -1;
-    justify-self: start;
+    grid-template-columns: minmax(0, 1fr) auto auto;
   }
 }
 
