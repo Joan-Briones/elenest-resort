@@ -15087,6 +15087,36 @@ header #bookNavUser button.book-nav-appointments:not(.book-nav-icon-btn).is-acti
 
 .admin-app #section-sentiment .admin-sentiment-chart-card {
   margin-top: 24px;
+  padding: 20px 22px 18px;
+}
+
+.admin-app #section-sentiment .admin-sentiment-chart-card .admin-report-reviews-chart-head {
+  margin-bottom: 8px;
+}
+
+.admin-app #section-sentiment .admin-sentiment-chart-card .admin-report-reviews-chart-title {
+  color: #1f2937;
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+}
+
+.admin-app #section-sentiment .admin-sentiment-chart-card .admin-report-reviews-legend {
+  margin: 0;
+}
+
+.admin-app #section-sentiment .sentiment-chart-toolbar {
+  margin: 0 0 10px;
+  gap: 10px 16px;
+}
+
+.admin-app #section-sentiment .sentiment-chart-toolbar .admin-report-chart-sub {
+  margin: 0;
+  flex: 1 1 220px;
+}
+
+.admin-app #section-sentiment .admin-sentiment-period-chart-wrap {
+  margin-top: 0;
+  min-height: 280px;
 }
 
 .admin-app #section-sentiment .admin-sentiment-recommendations {

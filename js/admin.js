@@ -6210,7 +6210,13 @@
     if (!canvas) return;
 
     var compact = !!opts.compact;
-    var prep = prepareChartContext(canvas, compact ? 640 : 720, compact ? 210 : 240, compact ? 180 : 200);
+    var overlay = !!opts.overlay;
+    var prep = prepareChartContext(
+      canvas,
+      compact ? 640 : 720,
+      compact ? 210 : overlay ? 280 : 240,
+      compact ? 180 : overlay ? 240 : 200
+    );
     if (!prep) return;
     var ctx = prep.ctx;
     var w = prep.w;
@@ -6251,8 +6257,8 @@
     ctx.fillStyle = "#ffffff";
     ctx.fillRect(0, 0, w, h);
 
-    var cPos = "#5f9e2e";
-    var cNeu = "#7b7480";
+    var cPos = overlay ? "#7fc142" : "#5f9e2e";
+    var cNeu = overlay ? "#8b8490" : "#7b7480";
     var cNeg = "#c46b82";
     var textInk = "#3d3340";
     var textMute = "#8a8490";
@@ -6315,6 +6321,7 @@
     var maxT = Math.max(
       1,
       working.reduce(function (a, b) {
+        if (overlay) return Math.max(a, b.pos, b.neu, b.neg);
         return Math.max(a, b.pos + b.neu + b.neg);
       }, 0)
     );
@@ -6355,8 +6362,12 @@
       return {
         x: x,
         yNeg: yBase - (neg / niceMax) * plotH,
-        yNeu: yBase - ((neg + neu) / niceMax) * plotH,
-        yPos: yBase - ((neg + neu + pos) / niceMax) * plotH,
+        yNeu: overlay
+          ? yBase - (neu / niceMax) * plotH
+          : yBase - ((neg + neu) / niceMax) * plotH,
+        yPos: overlay
+          ? yBase - (pos / niceMax) * plotH
+          : yBase - ((neg + neu + pos) / niceMax) * plotH,
         yBase: yBase,
         total: pos + neu + neg,
         pos: pos,
@@ -6393,9 +6404,15 @@
     posGrad.addColorStop(1, "rgba(127, 193, 66, 0.06)");
 
     if (hasAny && pts.length >= 2) {
-      fillSmoothBand(ctx, basePts, negPts, negGrad);
-      fillSmoothBand(ctx, negPts, neuPts, neuGrad);
-      fillSmoothBand(ctx, neuPts, posPts, posGrad);
+      if (overlay) {
+        fillSmoothBand(ctx, basePts, negPts, negGrad);
+        fillSmoothBand(ctx, basePts, neuPts, neuGrad);
+        fillSmoothBand(ctx, basePts, posPts, posGrad);
+      } else {
+        fillSmoothBand(ctx, basePts, negPts, negGrad);
+        fillSmoothBand(ctx, negPts, neuPts, neuGrad);
+        fillSmoothBand(ctx, neuPts, posPts, posGrad);
+      }
 
       strokeSmoothEdge(ctx, negPts, cNeg, 2);
       strokeSmoothEdge(ctx, neuPts, cNeu, 2);
@@ -6791,6 +6808,8 @@
       drawSentimentStackedChart("adminSentimentPeriodChart", buckets, {
         skipExample: true,
         hideTitle: true,
+        hideLegend: true,
+        overlay: true,
         tipId: "adminSentimentPeriodTip"
       });
       renderSentimentRecommendations(
@@ -6860,6 +6879,8 @@
     drawSentimentStackedChart("adminSentimentPeriodChart", buckets, {
       skipExample: true,
       hideTitle: true,
+      hideLegend: true,
+      overlay: true,
       tipId: "adminSentimentPeriodTip"
     });
 
