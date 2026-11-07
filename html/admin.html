@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Dashboard | Elenest Resort</title>
   <link rel="icon" type="image/png" href="../Images/icon.png">
-  <link rel="stylesheet" href="../css/style.css?v=20261107-settings1">
+  <link rel="stylesheet" href="../css/style.css?v=20261107-archiveclose1">
   <script src="../js/theme.js?v=20261020-theme1"></script>
   <script src="../js/ui-motion.js?v=20261014-motion1" defer></script>
   <link rel="stylesheet" href="../css/predictive-analytics.css?v=20261020-theme1">
@@ -101,7 +101,7 @@
       </div>
     </div>
   </header>
-  <script src="../js/header-nav.js?v=20261107-settings1"></script>
+  <script src="../js/header-nav.js?v=20261107-navnames3"></script>
 
   <main class="container">
     <section class="section admin-section" id="section-dashboard">
@@ -1317,7 +1317,10 @@
       aria-modal="true"
       aria-labelledby="sentimentCommentArchiveTitle"
     >
-      <h3 id="sentimentCommentArchiveTitle">Comment Archive</h3>
+      <div class="sentiment-archive-modal__head">
+        <h3 id="sentimentCommentArchiveTitle">Comment Archive</h3>
+        <button type="button" id="sentimentCommentArchiveCloseX" class="sentiment-archive-modal__close" aria-label="Close">&times;</button>
+      </div>
       <p class="note" style="margin: 6px 0 14px;">
         Guest comments from completed weeks (Monday—Sunday) are moved here automatically at the start of each new week.
       </p>
@@ -1418,7 +1421,7 @@
   <script src="../js/supabase-client.js"></script>
   <script src="../js/ui-button-loading.js?v=20261012-btns1"></script>
   <script src="../js/elenest-errors.js?v=20260922-ux1"></script>
-  <script src="../js/auth.js?v=20261107-staffname2"></script>
+  <script src="../js/auth.js?v=20261107-adminhint1"></script>
   <script src="../js/access-control.js?v=20260918-role2"></script>
   <script src="../js/password-toggle.js"></script>
   <script src="../js/payment-flow.js?v=20261101-cancel1"></script>
@@ -1443,7 +1446,7 @@
   <!-- predictive-analytics.js is lazy-loaded when that section opens -->
   <script src="../js/model-evaluation.js?v=20261107-allcomments1"></script>
   <script src="../js/staff-boot-loading.js?v=20261008-boot2"></script>
-  <script src="../js/admin.js?v=20261107-settings1"></script>
+  <script src="../js/admin.js?v=20261107-archiveclose1"></script>
   <script src="../js/mobile-tables.js?v=20261107-btnstack1"></script>
 </body>
 </html>

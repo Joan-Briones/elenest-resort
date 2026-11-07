@@ -7123,6 +7123,7 @@
     var commentOpen = document.getElementById("sentimentCommentArchiveOpen");
     var recOpen = document.getElementById("sentimentRecommendationArchiveOpen");
     var commentClose = document.getElementById("sentimentCommentArchiveClose");
+    var commentCloseX = document.getElementById("sentimentCommentArchiveCloseX");
     var recClose = document.getElementById("sentimentRecommendationArchiveClose");
 
     if (commentOpen && commentOverlay && !commentOpen.dataset.bound) {
@@ -7132,11 +7133,16 @@
         setHidden(commentOverlay, false);
       });
     }
+    function closeCommentArchive() {
+      setHidden(commentOverlay, true);
+    }
     if (commentClose && commentOverlay && !commentClose.dataset.bound) {
       commentClose.dataset.bound = "1";
-      commentClose.addEventListener("click", function () {
-        setHidden(commentOverlay, true);
-      });
+      commentClose.addEventListener("click", closeCommentArchive);
+    }
+    if (commentCloseX && commentOverlay && !commentCloseX.dataset.bound) {
+      commentCloseX.dataset.bound = "1";
+      commentCloseX.addEventListener("click", closeCommentArchive);
     }
     if (commentOverlay && !commentOverlay.dataset.bound) {
       commentOverlay.dataset.bound = "1";

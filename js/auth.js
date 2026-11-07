@@ -168,7 +168,7 @@
         '<p class="staff-identity-popover__status" id="staffIdentityStatus" hidden></p>' +
         "</form>" +
         '<p class="staff-identity-popover__role" id="staffIdentityRole"></p>' +
-        '<p class="staff-identity-popover__hint" id="staffIdentityHint">Tap your name to edit it.</p>';
+        '<p class="staff-identity-popover__hint" id="staffIdentityHint" hidden>Tap your name to edit it.</p>';
       document.body.appendChild(pop);
     }
     if (!document.getElementById("staffIdentityEdit")) {
@@ -184,7 +184,7 @@
         '<p class="staff-identity-popover__status" id="staffIdentityStatus" hidden></p>' +
         "</form>" +
         '<p class="staff-identity-popover__role" id="staffIdentityRole"></p>' +
-        '<p class="staff-identity-popover__hint" id="staffIdentityHint">Tap your name to edit it.</p>';
+        '<p class="staff-identity-popover__hint" id="staffIdentityHint" hidden>Tap your name to edit it.</p>';
     }
     var nameNode = document.getElementById("staffIdentityName");
     var roleNode = document.getElementById("staffIdentityRole");
@@ -194,6 +194,15 @@
     var hintNode = document.getElementById("staffIdentityHint");
     if (nameNode && nameNode.tagName !== "INPUT") nameNode.textContent = name || "Staff";
     if (roleNode) roleNode.textContent = role || "";
+    if (hintNode) {
+      var openingAsAdmin =
+        (document.body && document.body.classList.contains("admin-app")) ||
+        String(role || "").trim().toLowerCase() === "admin";
+      if (openingAsAdmin) {
+        hintNode.hidden = true;
+        hintNode.textContent = "";
+      }
+    }
 
     if (item.getAttribute("data-identity-bound") === "1") return;
     item.setAttribute("data-identity-bound", "1");
@@ -208,10 +217,23 @@
       statusNode.hidden = !message;
     }
 
+    function profileIsAdmin() {
+      var latest = sessionUser || (typeof getCurrentUser === "function" ? getCurrentUser() : null);
+      if (latest && normalizeRole(latest.role) === "admin") return true;
+      if (document.body && document.body.classList.contains("admin-app")) return true;
+      return String(role || "").trim().toLowerCase() === "admin";
+    }
+
+    function syncHint() {
+      if (!hintNode) return;
+      hintNode.hidden = profileIsAdmin();
+      if (profileIsAdmin()) hintNode.textContent = "";
+    }
+
     function showNameButton() {
       if (editForm) editForm.hidden = true;
       if (nameNode) nameNode.hidden = false;
-      if (hintNode) hintNode.hidden = false;
+      syncHint();
       setNameStatus("");
     }
 
