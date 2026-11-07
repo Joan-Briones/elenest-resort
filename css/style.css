@@ -28888,3 +28888,70 @@ html[data-theme="dark"] .sentiment-archive-modal__close {
     height: 44px;
   }
 }
+
+/* Open submenu names follow the theme on phones, iPads, and laptops. */
+html:not([data-theme="dark"]) header #menulist .admin-nav-dropdown.is-open > .admin-nav-dropdown-menu,
+html:not([data-theme="dark"]) body.admin-app header #menulist .admin-nav-dropdown-menu,
+html:not([data-theme="dark"]) body[data-staff-portal] header #menulist .admin-nav-dropdown-menu {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  color: #1a1220 !important;
+}
+
+html:not([data-theme="dark"]) header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item,
+html:not([data-theme="dark"]) header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item:link,
+html:not([data-theme="dark"]) header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item:visited,
+html:not([data-theme="dark"]) header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item:hover,
+html:not([data-theme="dark"]) header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item:focus,
+html:not([data-theme="dark"]) header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item:active,
+html:not([data-theme="dark"]) header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item:not(.primary-btn):not(.staff-access-btn):not(.role-login-trigger) {
+  color: #1a1220 !important;
+  -webkit-text-fill-color: #1a1220 !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  opacity: 1 !important;
+}
+
+html[data-theme="dark"] header #menulist .admin-nav-dropdown.is-open > .admin-nav-dropdown-menu,
+html[data-theme="dark"] body.admin-app header #menulist .admin-nav-dropdown-menu,
+html[data-theme="dark"] body[data-staff-portal] header #menulist .admin-nav-dropdown-menu {
+  background: #2a2432 !important;
+  background-color: #2a2432 !important;
+  color: #f7f2f5 !important;
+}
+
+html[data-theme="dark"] header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item,
+html[data-theme="dark"] header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item:link,
+html[data-theme="dark"] header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item:visited,
+html[data-theme="dark"] header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item:hover,
+html[data-theme="dark"] header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item:focus,
+html[data-theme="dark"] header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item:active,
+html[data-theme="dark"] header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item:not(.primary-btn):not(.staff-access-btn):not(.role-login-trigger):not(.active),
+html[data-theme="dark"] header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item.active {
+  color: #f7f2f5 !important;
+  -webkit-text-fill-color: #f7f2f5 !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  opacity: 1 !important;
+}
+
+html:not([data-theme="dark"]) header #menulist .admin-settings-menu:not([hidden]),
+html:not([data-theme="dark"]) header #menulist .admin-settings-item {
+  background: #ffffff !important;
+  color: #1a1220 !important;
+  -webkit-text-fill-color: #1a1220 !important;
+}
+
+html[data-theme="dark"] header #menulist .admin-settings-menu:not([hidden]) {
+  background: #2a2432 !important;
+  color: #f7f2f5 !important;
+}
+
+html[data-theme="dark"] header #menulist .admin-settings-item,
+html[data-theme="dark"] header #menulist .admin-settings-item:hover,
+html[data-theme="dark"] header #menulist .admin-settings-item:focus,
+html[data-theme="dark"] header #menulist .admin-settings-item:active {
+  background: transparent !important;
+  color: #f7f2f5 !important;
+  -webkit-text-fill-color: #f7f2f5 !important;
+}
