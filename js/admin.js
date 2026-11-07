@@ -7125,6 +7125,7 @@
     var commentClose = document.getElementById("sentimentCommentArchiveClose");
     var commentCloseX = document.getElementById("sentimentCommentArchiveCloseX");
     var recClose = document.getElementById("sentimentRecommendationArchiveClose");
+    var recCloseX = document.getElementById("sentimentRecommendationArchiveCloseX");
 
     if (commentOpen && commentOverlay && !commentOpen.dataset.bound) {
       commentOpen.dataset.bound = "1";
@@ -7158,11 +7159,16 @@
         setHidden(recOverlay, false);
       });
     }
+    function closeRecommendationArchive() {
+      setHidden(recOverlay, true);
+    }
     if (recClose && recOverlay && !recClose.dataset.bound) {
       recClose.dataset.bound = "1";
-      recClose.addEventListener("click", function () {
-        setHidden(recOverlay, true);
-      });
+      recClose.addEventListener("click", closeRecommendationArchive);
+    }
+    if (recCloseX && recOverlay && !recCloseX.dataset.bound) {
+      recCloseX.dataset.bound = "1";
+      recCloseX.addEventListener("click", closeRecommendationArchive);
     }
     if (recOverlay && !recOverlay.dataset.bound) {
       recOverlay.dataset.bound = "1";
