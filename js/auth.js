@@ -167,8 +167,7 @@
         "</div>" +
         '<p class="staff-identity-popover__status" id="staffIdentityStatus" hidden></p>' +
         "</form>" +
-        '<p class="staff-identity-popover__role" id="staffIdentityRole"></p>' +
-        '<p class="staff-identity-popover__hint" id="staffIdentityHint" hidden>Tap your name to edit it.</p>';
+        '<p class="staff-identity-popover__role" id="staffIdentityRole"></p>';
       document.body.appendChild(pop);
     }
     if (!document.getElementById("staffIdentityEdit")) {
@@ -183,8 +182,7 @@
         "</div>" +
         '<p class="staff-identity-popover__status" id="staffIdentityStatus" hidden></p>' +
         "</form>" +
-        '<p class="staff-identity-popover__role" id="staffIdentityRole"></p>' +
-        '<p class="staff-identity-popover__hint" id="staffIdentityHint" hidden>Tap your name to edit it.</p>';
+        '<p class="staff-identity-popover__role" id="staffIdentityRole"></p>';
     }
     var nameNode = document.getElementById("staffIdentityName");
     var roleNode = document.getElementById("staffIdentityRole");
@@ -217,17 +215,10 @@
       statusNode.hidden = !message;
     }
 
-    function profileIsAdmin() {
-      var latest = sessionUser || (typeof getCurrentUser === "function" ? getCurrentUser() : null);
-      if (latest && normalizeRole(latest.role) === "admin") return true;
-      if (document.body && document.body.classList.contains("admin-app")) return true;
-      return String(role || "").trim().toLowerCase() === "admin";
-    }
-
     function syncHint() {
       if (!hintNode) return;
-      hintNode.hidden = profileIsAdmin();
-      if (profileIsAdmin()) hintNode.textContent = "";
+      hintNode.hidden = true;
+      hintNode.textContent = "";
     }
 
     function showNameButton() {
