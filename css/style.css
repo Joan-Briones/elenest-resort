@@ -2453,7 +2453,10 @@ body:not(.subpage) #availModalReserveBtn:not([hidden]):hover {
 .avail-guest-stepper {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
+  width: max-content;
+  max-width: 100%;
   padding: 4px;
   border-radius: 999px;
   background: #fff;
@@ -2461,6 +2464,7 @@ body:not(.subpage) #availModalReserveBtn:not([hidden]):hover {
 }
 
 .avail-guest-stepper button {
+  flex: 0 0 32px;
   width: 32px;
   height: 32px;
   border: 0;
@@ -2479,20 +2483,51 @@ body:not(.subpage) #availModalReserveBtn:not([hidden]):hover {
   cursor: not-allowed;
 }
 
-.avail-guest-stepper span,
-.avail-guest-stepper input[type="number"] {
-  width: 2.75rem;
-  min-width: 2.75rem;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  background: transparent;
+.avail-guest-stepper:focus-within {
+  box-shadow: 0 0 0 3px rgba(196, 107, 130, 0.18);
+}
+
+/* Beat later .subpage/input field chrome so Adults and both Children counters match */
+.avail-guest-bar .avail-guest-stepper span,
+.avail-guest-bar .avail-guest-stepper input[type="number"],
+.subpage .avail-guest-bar .avail-guest-stepper input[type="number"],
+body.subpage .avail-guest-bar .avail-guest-stepper input[type="number"] {
+  display: block;
+  flex: 0 0 2.75rem;
+  width: 2.75rem !important;
+  min-width: 2.75rem !important;
+  max-width: 2.75rem !important;
+  height: 32px !important;
+  min-height: 32px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  outline: none !important;
   text-align: center;
   font: inherit;
+  font-size: inherit !important;
   font-weight: 700;
+  line-height: 32px;
   color: #1f2937;
+  -webkit-text-fill-color: #1f2937;
   -moz-appearance: textfield;
   appearance: textfield;
+  -webkit-appearance: none;
+}
+
+.avail-guest-bar .avail-guest-stepper input[type="number"]:focus,
+.subpage .avail-guest-bar .avail-guest-stepper input[type="number"]:focus,
+body.subpage .avail-guest-bar .avail-guest-stepper input[type="number"]:focus,
+.subpage .avail-guest-bar .avail-guest-stepper input[type="number"]:not(.swal2-input):not(.swal2-file):focus,
+body.subpage .avail-guest-bar .avail-guest-stepper input[type="number"]:not(.swal2-input):not(.swal2-file):focus {
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  outline: none !important;
+  background: transparent !important;
 }
 
 .avail-guest-stepper input[type="number"]::-webkit-outer-spin-button,
@@ -26869,6 +26904,18 @@ html[data-theme="dark"] select {
   color: #f7f2f5 !important;
   -webkit-text-fill-color: #f7f2f5 !important;
   border-color: rgba(196, 107, 130, 0.38) !important;
+}
+
+html[data-theme="dark"] .avail-guest-bar .avail-guest-stepper input[type="number"],
+html[data-theme="dark"] body.subpage .avail-guest-bar .avail-guest-stepper input[type="number"],
+html[data-theme="dark"] body.subpage .avail-guest-bar .avail-guest-stepper input[type="number"]:not(.swal2-input):not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="hidden"]):not([type="range"]),
+html[data-theme="dark"] .avail-guest-bar .avail-guest-stepper input[type="number"]:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="hidden"]):not([type="range"]) {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  color: #f7f2f5 !important;
+  -webkit-text-fill-color: #f7f2f5 !important;
 }
 
 html[data-theme="dark"] ::placeholder {
