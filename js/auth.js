@@ -1896,7 +1896,11 @@
   }
 
   function passwordResetRedirectUrl() {
-    return publicHtmlBaseUrl() + "reset-password.html";
+    var base = publicHtmlBaseUrl();
+    if (/elenest-resort\.onrender\.com/i.test(base) || /^https:\/\/(www\.)?elenestresort\.com\/html\/$/i.test(base)) {
+      return "https://elenestresort.com/reset-password";
+    }
+    return base + "reset-password.html";
   }
 
   function roleMayResetOwnPassword(role) {

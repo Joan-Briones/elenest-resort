@@ -24,6 +24,12 @@
   RewriteCond %{REQUEST_URI} ^/html/[^/]+\.html$
   RewriteRule ^html/(.+)\.html$ https://elenestresort.com/$1 [R=301,L,QSA]
 
+  # /html/reset-password (no .html) is not a file and was returning Not Found.
+  RewriteCond %{THE_REQUEST} \s/+html/[^?\s/.]+/?[\s?] [NC]
+  RewriteCond %{REQUEST_URI} ^/html/([^/.]+)/?$
+  RewriteCond %{DOCUMENT_ROOT}/html/%1.html -f
+  RewriteRule ^html/([^/.]+)/?$ https://elenestresort.com/$1 [R=301,L,QSA]
+
   RewriteCond %{THE_REQUEST} \s/+[^?\s/]+\.html[\s?] [NC]
   RewriteCond %{REQUEST_URI} ^/[^/]+\.html$
   RewriteRule ^([^/]+)\.html$ https://elenestresort.com/$1 [R=301,L,QSA]
