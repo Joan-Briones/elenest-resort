@@ -23929,46 +23929,60 @@ textarea {
     overscroll-behavior: contain;
   }
 
-  .book-unit-picker__groups,
+  #bookUnitModalHost.book-unit-picker__groups {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+  }
+
   .book-unit-picker__list {
     align-content: start;
-    align-items: start;
-    gap: 8px;
+    align-items: stretch;
+    gap: 10px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .book-unit-tab-panel,
   .book-unit-picker__group,
   .book-facility-card {
     height: auto;
-    min-height: 0;
-    align-self: start;
-  }
-
-  .book-unit-picker__list {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    min-height: auto;
+    align-self: stretch;
   }
 
   .book-facility-card__media {
-    aspect-ratio: 16 / 10;
-    height: 92px;
-    max-height: 92px;
+    position: relative;
+    aspect-ratio: 4 / 3;
+    height: auto;
+    max-height: none;
+    overflow: hidden;
+    flex: 0 0 auto;
   }
 
   .book-unit-modal__dialog .book-facility-card__media img,
-  .book-unit-modal__dialog .book-facility-card__media .facility-swipe .room-img,
+  .book-unit-modal__dialog .book-facility-card__media .facility-swipe .room-img {
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    object-fit: cover;
+  }
+
   .book-unit-modal__dialog .book-unit-confirm__photo img {
     width: 100%;
     height: 100%;
-    max-height: none;
+    max-height: 100%;
     object-fit: cover;
   }
 
   .book-facility-card__body {
+    position: relative;
     padding: 6px 8px 8px;
   }
 
   .book-facility-card__name {
     white-space: normal;
+    overflow: hidden;
     font-size: 0.78rem;
     -webkit-line-clamp: 2;
     display: -webkit-box;
@@ -28450,14 +28464,6 @@ html[data-theme="dark"] .reception-records-split__empty {
     scroll-margin-top: 8px;
   }
 
-  .book-unit-tab-panel + .book-unit-tab-panel .book-unit-picker__section-title {
-    margin-top: 14px;
-  }
-
-  #bookUnitModalHost .book-unit-tab-panel[hidden] {
-    display: block !important;
-  }
-
   .book-step2-facilities__subtype {
     margin: 0 0 6px;
     color: #3d3340;
@@ -28465,7 +28471,8 @@ html[data-theme="dark"] .reception-records-split__empty {
 
   .book-unit-picker__list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px;
+    align-items: stretch;
+    gap: 10px;
   }
 
   .book-unit-modal .book-facility-card {
@@ -28473,17 +28480,50 @@ html[data-theme="dark"] .reception-records-split__empty {
     flex-direction: column;
     width: 100%;
     min-width: 0;
+    height: auto;
+    min-height: auto;
+    overflow: hidden;
     border-radius: 12px;
   }
 
   .book-unit-modal .book-facility-card__media {
+    position: relative;
     width: 100%;
-    aspect-ratio: 1 / 1;
+    height: auto;
+    min-height: 96px;
+    max-height: none;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
     flex: 0 0 auto;
   }
 
+  .book-unit-modal .book-facility-card__media .facility-swipe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+  }
+
+  .book-unit-modal .book-facility-card__media .facility-swipe__viewport,
+  .book-unit-modal .book-facility-card__media .facility-swipe__track,
+  .book-unit-modal .book-facility-card__media .facility-swipe__slide {
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+  }
+
   .book-unit-modal .book-facility-card__body {
-    padding: 6px 8px 8px;
+    position: relative;
+    flex: 0 0 auto;
+    padding: 8px 8px 10px;
+  }
+
+  .book-unit-modal .book-facility-card__pool-perk {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
   }
 
   .book-unit-modal .book-facility-card__name {

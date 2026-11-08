@@ -653,10 +653,8 @@
     return !!(window.matchMedia && window.matchMedia("(max-width: 700px)").matches);
   }
 
-  function setUnitPickerTab(tab, opts) {
-    opts = opts || {};
+  function setUnitPickerTab(tab) {
     unitPickerTab = tab === "cottage" || tab === "hall" ? tab : "room";
-    var stacked = facilityPickerIsStacked();
     document.querySelectorAll("[data-book-unit-tab]").forEach(function (btn) {
       var tabName = btn.getAttribute("data-book-unit-tab");
       btn.hidden = false;
@@ -665,22 +663,11 @@
       btn.setAttribute("aria-selected", on ? "true" : "false");
     });
     document.querySelectorAll("[data-book-unit-panel]").forEach(function (panel) {
-      var show = stacked || panel.getAttribute("data-book-unit-panel") === unitPickerTab;
-      panel.hidden = !show;
+      panel.hidden = panel.getAttribute("data-book-unit-panel") !== unitPickerTab;
     });
     syncEventHallPoolNote();
-    if (stacked && opts.scroll) {
-      var panel = document.querySelector(
-        '#bookUnitModalHost [data-book-unit-panel="' + unitPickerTab + '"]'
-      );
-      if (panel && typeof panel.scrollIntoView === "function") {
-        try {
-          panel.scrollIntoView({ block: "start", behavior: "smooth" });
-        } catch (err) {
-          panel.scrollIntoView(true);
-        }
-      }
-    }
+    var host = document.getElementById("bookUnitModalHost");
+    if (host) host.scrollTop = 0;
   }
 
   function emptyUnitSelection() {
