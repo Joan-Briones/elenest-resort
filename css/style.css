@@ -7717,10 +7717,12 @@ body.subpage .book-details-summary__hint {
   box-shadow: 0 6px 14px rgba(47, 27, 36, 0.08);
 }
 
-.book-unit-confirm__photo img {
+.book-unit-modal__dialog .book-unit-confirm__photo img {
   display: block;
   width: 100%;
   height: 100%;
+  max-width: none;
+  max-height: 100%;
   object-fit: cover;
 }
 
@@ -7794,6 +7796,8 @@ body.subpage .book-details-summary__hint {
 }
 
 .book-unit-modal__footer .book-unit-modal__actions {
+  position: static;
+  bottom: auto;
   flex: 0 0 auto;
   align-items: center;
   justify-content: flex-end;
@@ -27697,7 +27701,8 @@ html[data-theme="dark"] .manager-msg-pill {
 
 html[data-theme="dark"] .book-unit-modal__header,
 html[data-theme="dark"] .book-unit-modal header.book-unit-modal__header,
-html[data-theme="dark"] .book-unit-modal__footer {
+html[data-theme="dark"] .book-unit-modal__footer,
+html[data-theme="dark"] .book-unit-modal__dialog > .book-unit-modal__actions {
   background: #221e28 !important;
   color: #f7f2f5 !important;
   border-color: rgba(196, 107, 130, 0.28) !important;
@@ -28321,23 +28326,33 @@ html[data-theme="dark"] .reception-records-split__empty {
   margin: 0;
 }
 
-/* iOS and Android: full-height sheet, all three facility sections, larger photos. */
+/* iOS and Android: sheet fills the visible screen. The list scrolls above the confirm bar. */
 @media (max-width: 700px) {
   .book-unit-modal:not([hidden]) {
     align-items: stretch;
-    justify-content: flex-end;
+    justify-content: stretch;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    height: 100dvh;
+    max-height: 100%;
+    max-height: 100dvh;
     padding: 0;
+    overflow: hidden;
+    overscroll-behavior: none;
   }
 
   .book-unit-modal__dialog {
+    display: flex;
+    flex-direction: column;
     width: 100%;
     max-width: 100%;
-    height: 100vh;
-    height: 100dvh;
-    max-height: 100vh;
-    max-height: 100dvh;
+    height: 100%;
+    max-height: 100%;
+    min-height: 0;
     margin: 0;
     border-radius: 0;
+    overflow: hidden;
   }
 
   .book-unit-modal__header,
@@ -28409,7 +28424,16 @@ html[data-theme="dark"] .reception-records-split__empty {
 
   #bookUnitModalHost,
   #receptionWiRoomModalHost {
-    padding: 8px 10px 10px;
+    flex: 1 1 0%;
+    height: 0;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    padding: 8px 10px 16px;
+    scroll-padding-top: 8px;
+    scroll-padding-bottom: 16px;
   }
 
   .book-unit-picker__groups {
@@ -28479,9 +28503,81 @@ html[data-theme="dark"] .reception-records-split__empty {
     line-height: 1.3;
   }
 
-  .book-unit-modal__footer {
-    padding: 8px 12px max(10px, env(safe-area-inset-bottom, 0px));
+  .book-unit-modal__footer,
+  .book-unit-modal__dialog > .book-unit-modal__actions {
+    position: relative;
+    z-index: 4;
+    flex: 0 0 auto;
+    flex-direction: column;
+    align-items: stretch;
     gap: 8px;
+    width: 100%;
+    margin: 0;
+    padding: 8px 12px calc(12px + env(safe-area-inset-bottom, 0px));
+    background: #fff;
+    border-top: 1px solid #f1f5f9;
+  }
+
+  .book-unit-modal__footer .book-unit-modal__actions {
+    position: static;
+    bottom: auto;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    border-top: 0;
+  }
+
+  .book-unit-modal__footer .book-unit-modal__actions .btn,
+  .book-unit-modal__dialog > .book-unit-modal__actions .btn {
+    width: 100%;
+  }
+
+  .book-unit-modal .book-unit-confirm {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .book-unit-modal .book-unit-confirm__body {
+    max-height: 132px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .book-unit-modal .book-unit-confirm__box {
+    align-items: center;
+    gap: 8px;
+    padding: 2px 2px 4px;
+  }
+
+  .book-unit-modal .book-unit-confirm__facility {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    width: auto;
+    max-width: 100%;
+    gap: 8px;
+  }
+
+  .book-unit-modal .book-unit-confirm__photo {
+    width: 64px;
+    height: 52px;
+  }
+
+  .book-unit-modal .book-unit-confirm__name {
+    flex: 1 1 auto;
+    width: auto;
+    max-width: none;
+    text-align: left;
+    font-size: 0.82rem;
+  }
+
+  .book-unit-modal .book-unit-confirm__schedule {
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .book-unit-modal .book-facility-card__media .facility-swipe__prev,
