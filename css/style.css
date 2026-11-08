@@ -748,6 +748,20 @@ header #bookNavUser .btn--small {
   text-decoration: none;
 }
 
+/* Extra Data Privacy link: keep Sign In on screen just above the phone menu. */
+@media (min-width: 1101px) and (max-width: 1240px) {
+  body:not(.admin-app) header ul li a:not(.staff-access-btn) {
+    padding-left: 0.4rem;
+    padding-right: 0.4rem;
+  }
+
+  body:not(.admin-app) header ul li a.role-login-trigger.staff-access-btn {
+    min-width: 4.75rem;
+    padding-left: 0.85rem;
+    padding-right: 0.85rem;
+  }
+}
+
 header ul li a.role-login-trigger.staff-access-btn,
 .role-login-trigger.staff-access-btn,
 a.role-login-trigger.staff-access-btn {
