@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Elenest Resort</title>
+</head>
+<body>
+  <p>Opening the password page… <a id="go" href="/reset-password">Continue</a></p>
+  <script>
+    (function () {
+      var hash = window.location.hash || "";
+      var search = window.location.search || "";
+      var query = new URLSearchParams(String(hash).replace(/^#/, ""));
+      var type = query.get("type") || "";
+      var dest = "/reset-password";
+      if (type && type !== "recovery" && !query.get("token_hash")) dest = "/";
+      var next = dest + search + hash;
+      var link = document.getElementById("go");
+      if (link) link.href = next;
+      window.location.replace(next);
+    })();
+  </script>
+</body>
+</html>

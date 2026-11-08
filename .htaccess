@@ -9,6 +9,8 @@
   RewriteRule ^reset-password\.html$ html/reset-password.html [L,QSA]
   RewriteRule ^reset-password/$ html/reset-password.html [L,QSA]
   RewriteRule ^html/reset-password/?$ html/reset-password.html [L,QSA]
+  # Supabase Site URL is stored as /html/** so reset emails open that path.
+  RewriteRule ^html/\*\*/?$ html/email-link.html [L]
 
   # These rules apply only when the project is the domain root.
   # Local XAMPP (/Elenest_Resort/...) keeps its current /html/ paths.
