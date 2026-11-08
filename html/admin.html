@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Dashboard | Elenest Resort</title>
   <link rel="icon" type="image/png" href="../Images/icon.png">
-  <link rel="stylesheet" href="../css/style.css?v=20261105-darkadmin1">
+  <link rel="stylesheet" href="../css/style.css?v=20261107-menutheme1">
   <script src="../js/theme.js?v=20261020-theme1"></script>
   <script src="../js/ui-motion.js?v=20261014-motion1" defer></script>
   <link rel="stylesheet" href="../css/predictive-analytics.css?v=20261020-theme1">
@@ -101,7 +101,7 @@
       </div>
     </div>
   </header>
-  <script src="../js/header-nav.js?v=20260922-menu2"></script>
+  <script src="../js/header-nav.js?v=20261107-navnames3"></script>
 
   <main class="container">
     <section class="section admin-section" id="section-dashboard">
@@ -293,7 +293,7 @@
             <a href="#section-sentiment" class="btn btn--outline btn--small admin-report-link-btn">Sentiment details</a>
           </div>
           <p class="booking-card__sub admin-report-chart-sub" id="adminReportReviewsSub">
-            Live from guest feedback in the database.
+            Live guest reviews classified by Model Evaluation — not sample data.
           </p>
           <div class="admin-report-reviews-kpis" aria-live="polite">
             <div class="admin-report-reviews-kpi">
@@ -332,20 +332,53 @@
           <div class="admin-report-reviews-chart-block">
             <div class="admin-report-reviews-chart-head">
               <p class="admin-report-reviews-chart-title">Composition over time</p>
-              <div class="admin-report-chart-legend admin-report-reviews-legend" aria-label="Review sentiment legend">
-                <span class="admin-report-chart-legend__item">
-                  <span class="admin-report-chart-legend__swatch admin-report-chart-legend__swatch--pos" aria-hidden="true"></span>
-                  Positive
-                </span>
-                <span class="admin-report-chart-legend__item">
-                  <span class="admin-report-chart-legend__swatch admin-report-chart-legend__swatch--neu" aria-hidden="true"></span>
-                  Neutral
-                </span>
-                <span class="admin-report-chart-legend__item">
-                  <span class="admin-report-chart-legend__swatch admin-report-chart-legend__swatch--neg" aria-hidden="true"></span>
-                  Negative
-                </span>
+              <div class="sentiment-chart-header__right">
+                <div
+                  class="sentiment-period-filters"
+                  id="adminReportReviewsPeriodFilters"
+                  role="group"
+                  aria-label="Guest reviews reporting interval"
+                >
+                  <button
+                    type="button"
+                    class="btn btn--outline btn--small sentiment-period-btn sentiment-period-btn--active"
+                    data-sentiment-period="month"
+                    aria-pressed="true"
+                  >
+                    Monthly
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn--outline btn--small sentiment-period-btn"
+                    data-sentiment-period="week"
+                    aria-pressed="false"
+                  >
+                    Weekly
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn--outline btn--small sentiment-period-btn"
+                    data-sentiment-period="day"
+                    aria-pressed="false"
+                  >
+                    Daily
+                  </button>
+                </div>
               </div>
+            </div>
+            <div class="admin-report-chart-legend admin-report-reviews-legend" aria-label="Review sentiment legend">
+              <span class="admin-report-chart-legend__item">
+                <span class="admin-report-chart-legend__swatch admin-report-chart-legend__swatch--pos" aria-hidden="true"></span>
+                Positive
+              </span>
+              <span class="admin-report-chart-legend__item">
+                <span class="admin-report-chart-legend__swatch admin-report-chart-legend__swatch--neu" aria-hidden="true"></span>
+                Neutral
+              </span>
+              <span class="admin-report-chart-legend__item">
+                <span class="admin-report-chart-legend__swatch admin-report-chart-legend__swatch--neg" aria-hidden="true"></span>
+                Negative
+              </span>
             </div>
             <div class="admin-report-chart-wrap admin-report-reviews-chart-wrap">
               <canvas
@@ -657,50 +690,53 @@
         <div class="split-2">
           <article class="card admin-sentiment-metric-card">
             <h3 class="admin-sentiment-h3">Aggregate distribution</h3>
-            <p class="booking-card__sub admin-sentiment-sub" style="margin: 0 0 12px;">
+            <p class="booking-card__sub admin-sentiment-sub">
               Classification: <strong>Positive</strong> (4–5 stars), <strong>Negative</strong> (1–2 stars), <strong>Neutral</strong> (3 stars).
-              <span id="sentimentTotalCount" class="admin-sentiment-total" style="display: block; margin-top: 8px;"></span>
+              <span id="sentimentTotalCount" class="admin-sentiment-total"></span>
             </p>
-            <div class="sentiment-row">
-              <label class="admin-sentiment-label">Positive</label>
-              <div class="sentiment-bar"><span class="positive" id="sentimentBarPos" style="width: 0%;"></span></div>
-              <strong id="sentimentPctPos">0%</strong>
-              <button
-                type="button"
-                class="btn btn--outline btn--small sentiment-view-btn"
-                data-sentiment="positive"
-              >
-                Details
-              </button>
-            </div>
-            <div class="sentiment-row">
-              <label class="admin-sentiment-label">Negative</label>
-              <div class="sentiment-bar"><span class="negative" id="sentimentBarNeg" style="width: 0%;"></span></div>
-              <strong id="sentimentPctNeg">0%</strong>
-              <button
-                type="button"
-                class="btn btn--outline btn--small sentiment-view-btn"
-                data-sentiment="negative"
-              >
-                Details
-              </button>
-            </div>
-            <div class="sentiment-row" style="margin-bottom: 0;">
-              <label class="admin-sentiment-label">Neutral</label>
-              <div class="sentiment-bar"><span class="neutral" id="sentimentBarNeu" style="width: 0%;"></span></div>
-              <strong id="sentimentPctNeu">0%</strong>
-              <button
-                type="button"
-                class="btn btn--outline btn--small sentiment-view-btn"
-                data-sentiment="neutral"
-              >
-                Details
-              </button>
+            <div class="admin-sentiment-rows">
+              <div class="sentiment-row">
+                <label class="admin-sentiment-label">Positive</label>
+                <div class="sentiment-bar"><span class="positive" id="sentimentBarPos" style="width: 0%;"></span></div>
+                <strong id="sentimentPctPos">0%</strong>
+                <button
+                  type="button"
+                  class="btn btn--outline btn--small sentiment-view-btn"
+                  data-sentiment="positive"
+                >
+                  Details
+                </button>
+              </div>
+              <div class="sentiment-row">
+                <label class="admin-sentiment-label">Negative</label>
+                <div class="sentiment-bar"><span class="negative" id="sentimentBarNeg" style="width: 0%;"></span></div>
+                <strong id="sentimentPctNeg">0%</strong>
+                <button
+                  type="button"
+                  class="btn btn--outline btn--small sentiment-view-btn"
+                  data-sentiment="negative"
+                >
+                  Details
+                </button>
+              </div>
+              <div class="sentiment-row">
+                <label class="admin-sentiment-label">Neutral</label>
+                <div class="sentiment-bar"><span class="neutral" id="sentimentBarNeu" style="width: 0%;"></span></div>
+                <strong id="sentimentPctNeu">0%</strong>
+                <button
+                  type="button"
+                  class="btn btn--outline btn--small sentiment-view-btn"
+                  data-sentiment="neutral"
+                >
+                  Details
+                </button>
+              </div>
             </div>
           </article>
           <article class="card admin-sentiment-metric-card">
             <h3 class="admin-sentiment-h3">Recent guest comments</h3>
             <div class="sentiment-feedback-list"></div>
+            <div id="sentimentCommentsPager" class="admin-pagination" hidden></div>
           </article>
         </div>
 
@@ -720,59 +756,6 @@
             <p class="admin-sentiment-rec-footnote" id="sentimentRecFootnote"></p>
           </div>
         </aside>
-
-        <div class="card admin-report-chart-card admin-sentiment-chart-card" style="margin-top: 18px;">
-          <div class="sentiment-chart-header">
-            <h3 class="admin-sentiment-h3" style="margin: 0 0 8px;">Composition over time</h3>
-            <div class="sentiment-chart-header__right">
-              <span class="admin-sentiment-live" aria-live="polite">Live</span>
-              <div
-                class="sentiment-period-filters"
-                id="sentimentPeriodFilters"
-                role="group"
-                aria-label="Reporting interval"
-              >
-              <button
-                type="button"
-                class="btn btn--outline btn--small sentiment-period-btn sentiment-period-btn--active"
-                data-sentiment-period="month"
-                aria-pressed="true"
-              >
-                Monthly
-              </button>
-              <button
-                type="button"
-                class="btn btn--outline btn--small sentiment-period-btn"
-                data-sentiment-period="week"
-                aria-pressed="false"
-              >
-                Weekly
-              </button>
-              <button
-                type="button"
-                class="btn btn--outline btn--small sentiment-period-btn"
-                data-sentiment-period="day"
-                aria-pressed="false"
-              >
-                Daily
-              </button>
-              </div>
-            </div>
-          </div>
-          <p class="booking-card__sub admin-report-chart-sub" id="sentimentChartSub" style="margin: 0 0 8px;">
-            Live from Supabase guest reviews — last 6 months. Stacked area fills the timeline (no large empty bar gaps).
-          </p>
-          <div class="admin-report-chart-wrap admin-sentiment-period-chart-wrap">
-            <canvas
-              id="adminSentimentPeriodChart"
-              width="720"
-              height="240"
-              class="admin-pro-chart admin-sentiment-period-chart"
-              aria-label="Guest reviews composition over time"
-            ></canvas>
-            <div class="admin-report-chart-tooltip" id="adminSentimentPeriodTip" hidden></div>
-          </div>
-        </div>
       </div>
     </section>
 
@@ -1318,6 +1301,7 @@
 
       <div class="admin-settings-profile" style="margin-top: 0;">
         <ul id="adminSentimentList" class="sentiment-comments-list sentiment-comments-list--detail"></ul>
+        <div id="adminSentimentListPager" class="admin-pagination" hidden></div>
       </div>
 
       <div class="admin-settings-modal__actions">
@@ -1333,7 +1317,10 @@
       aria-modal="true"
       aria-labelledby="sentimentCommentArchiveTitle"
     >
-      <h3 id="sentimentCommentArchiveTitle">Comment Archive</h3>
+      <div class="sentiment-archive-modal__head">
+        <h3 id="sentimentCommentArchiveTitle">Comment Archive</h3>
+        <button type="button" id="sentimentCommentArchiveCloseX" class="sentiment-archive-modal__close" aria-label="Close">&times;</button>
+      </div>
       <p class="note" style="margin: 6px 0 14px;">
         Guest comments from completed weeks (Monday—Sunday) are moved here automatically at the start of each new week.
       </p>
@@ -1351,7 +1338,10 @@
       aria-modal="true"
       aria-labelledby="sentimentRecommendationArchiveTitle"
     >
-      <h3 id="sentimentRecommendationArchiveTitle">Recommendation Archive</h3>
+      <div class="sentiment-archive-modal__head">
+        <h3 id="sentimentRecommendationArchiveTitle">Recommendation Archive</h3>
+        <button type="button" id="sentimentRecommendationArchiveCloseX" class="sentiment-archive-modal__close" aria-label="Close">&times;</button>
+      </div>
       <p class="note" style="margin: 6px 0 14px;">
         Weekly recommendations generated from each week's guest comments are saved here when that week ends.
       </p>
@@ -1434,7 +1424,7 @@
   <script src="../js/supabase-client.js"></script>
   <script src="../js/ui-button-loading.js?v=20261012-btns1"></script>
   <script src="../js/elenest-errors.js?v=20260922-ux1"></script>
-  <script src="../js/auth.js?v=20260922-ux3"></script>
+  <script src="../js/auth.js?v=20261107-nohint1"></script>
   <script src="../js/access-control.js?v=20260918-role2"></script>
   <script src="../js/password-toggle.js"></script>
   <script src="../js/payment-flow.js?v=20261101-cancel1"></script>
@@ -1445,7 +1435,7 @@
   <script src="../js/notifications.js?v=20261101-panelx1"></script>
   <script src="../js/staff-notifications-ui.js?v=20261101-panelx1"></script>
   <script src="../js/contact-messages.js?v=20260911-staffnotif1"></script>
-  <script src="../js/guest-feedback.js?v=20261101-testdata1"></script>
+  <script src="../js/guest-feedback.js?v=20261107-allcomments1"></script>
   <script src="../js/content-store.js?v=20260718-gallery"></script>
   <script src="../js/unit-availability.js?v=20261020-decline1"></script>
   <script>
@@ -1457,10 +1447,10 @@
   <script src="../js/calendar-access.js?v=20261012-btns1"></script>
   <script src="../js/activity-logs.js?v=20260917-actlog3"></script>
   <!-- predictive-analytics.js is lazy-loaded when that section opens -->
-  <script src="../js/model-evaluation.js?v=20261102-stable1"></script>
+  <script src="../js/model-evaluation.js?v=20261107-allcomments1"></script>
   <script src="../js/staff-boot-loading.js?v=20261008-boot2"></script>
-  <script src="../js/admin.js?v=20261105-checkincancel1"></script>
-  <script src="../js/mobile-tables.js?v=20260929-mobile7"></script>
+  <script src="../js/admin.js?v=20261107-archiveclose2"></script>
+  <script src="../js/mobile-tables.js?v=20261107-btnstack1"></script>
 </body>
 </html>
 

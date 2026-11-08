@@ -170,15 +170,12 @@ header {
   border-top: 0 none transparent;
   border-bottom: 0 none transparent;
   outline: none;
-  /* Flat at rest — elevation fades in via .is-scrolled */
+  /* Flat at rest — elevation fades in via .is-scrolled.
+     No backdrop-filter: on iOS/Android it clips the dropdown that hangs below the bar. */
   box-shadow: none;
-  backdrop-filter: saturate(140%) blur(8px);
-  -webkit-backdrop-filter: saturate(140%) blur(8px);
   transition:
     box-shadow 0.38s var(--ease-soft, cubic-bezier(0.4, 0, 0.2, 1)),
     border-color 0.38s var(--ease-soft, cubic-bezier(0.4, 0, 0.2, 1)),
-    backdrop-filter 0.38s var(--ease-soft, cubic-bezier(0.4, 0, 0.2, 1)),
-    -webkit-backdrop-filter 0.38s var(--ease-soft, cubic-bezier(0.4, 0, 0.2, 1)),
     min-height 0.28s var(--ease-soft, cubic-bezier(0.4, 0, 0.2, 1)),
     padding 0.28s var(--ease-soft, cubic-bezier(0.4, 0, 0.2, 1));
 }
@@ -189,8 +186,6 @@ header.is-scrolled {
   box-shadow:
     0 6px 16px rgba(45, 32, 38, 0.14),
     0 14px 36px rgba(196, 107, 130, 0.28);
-  backdrop-filter: saturate(160%) blur(12px);
-  -webkit-backdrop-filter: saturate(160%) blur(12px);
 }
 
 header.is-compact {
@@ -491,7 +486,7 @@ body.subpage .staff-header-user__role {
   position: fixed;
   z-index: 2400;
   min-width: 180px;
-  max-width: min(260px, calc(100vw - 16px));
+  max-width: min(280px, calc(100vw - 16px));
   padding: 12px 14px;
   background: #ffffff;
   color: #1f1218;
@@ -505,11 +500,88 @@ body.subpage .staff-header-user__role {
 }
 
 .staff-identity-popover__name {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 44px;
   margin: 0;
-  font-size: 0.95rem;
+  padding: 8px 2px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 1rem;
   font-weight: 700;
   line-height: 1.25;
+  text-align: left;
   word-break: break-word;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.staff-identity-popover__edit[hidden] {
+  display: none !important;
+}
+
+.staff-identity-popover__label {
+  display: block;
+  margin: 0 0 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #6b7280;
+}
+
+.staff-identity-popover__input {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  margin: 0;
+  padding: 8px 10px;
+  border: 1px solid rgba(196, 107, 130, 0.45);
+  border-radius: 8px;
+  background: #fff;
+  color: #1f1218;
+  font-size: 16px;
+  line-height: 1.3;
+}
+
+.staff-identity-popover__actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.staff-identity-popover__save,
+.staff-identity-popover__cancel {
+  flex: 1 1 0;
+  min-height: 44px;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.staff-identity-popover__save {
+  border: 0;
+  background: #c46b82;
+  color: #fff;
+}
+
+.staff-identity-popover__cancel {
+  border: 1px solid #d1d5db;
+  background: #fff;
+  color: #1f1218;
+}
+
+.staff-identity-popover__status {
+  margin: 8px 0 0;
+  font-size: 0.78rem;
+  line-height: 1.35;
+  color: #9a3412;
 }
 
 .staff-identity-popover__role {
@@ -1090,10 +1162,10 @@ header .navlinks span.fa-bars {
 
   header #menulist,
   header .navlinks > ul.site-nav-list {
-    position: absolute;
-    top: calc(100% + 0.35rem);
-    left: var(--header-pad-x, 0.85rem);
-    right: var(--header-pad-x, 0.85rem);
+    position: fixed;
+    top: calc(env(safe-area-inset-top, 0px) + 4.85rem);
+    left: max(0.75rem, env(safe-area-inset-left, 0px));
+    right: max(0.75rem, env(safe-area-inset-right, 0px));
     width: auto;
     max-width: none;
     flex-direction: column;
@@ -1104,11 +1176,13 @@ header .navlinks span.fa-bars {
     overflow-y: hidden;
     transition: max-height 0.35s ease;
     text-align: left;
-    z-index: 1200;
-    background: #c46b82;
-    border: 1px solid rgba(196, 107, 130, 0.16);
+    z-index: 2000;
+    background: #ffffff;
+    background-color: #ffffff;
+    color: #1a1220;
+    border: 1px solid rgba(196, 107, 130, 0.35);
     border-radius: 0.85rem;
-    box-shadow: 0 16px 34px rgba(196, 107, 130, 0.18);
+    box-shadow: 0 16px 34px rgba(45, 32, 38, 0.18);
     padding: 0;
     pointer-events: none;
     box-sizing: border-box;
@@ -1127,6 +1201,10 @@ header .navlinks span.fa-bars {
     overflow-x: hidden;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    max-height: min(72dvh, 34rem) !important;
+    background: #ffffff;
+    background-color: #ffffff;
+    color: #1a1220;
   }
 
   header ul li {
@@ -1138,7 +1216,8 @@ header .navlinks span.fa-bars {
   header ul li a {
     display: block;
     width: 100%;
-    color: #ffffff;
+    color: #1a1220;
+    -webkit-text-fill-color: #1a1220;
     font-weight: 700;
     font-size: 0.875rem;
     white-space: normal;
@@ -1149,8 +1228,9 @@ header .navlinks span.fa-bars {
   }
 
   header ul li a:hover {
-    color: var(--header-pink-dark);
-    background: rgba(255, 255, 255, 0.88);
+    color: #1a1220;
+    -webkit-text-fill-color: #1a1220;
+    background: rgba(196, 107, 130, 0.16);
   }
 
   header #menulist a.active,
@@ -1275,10 +1355,10 @@ header .navlinks span.fa-bars {
 
   body.admin-app header #menulist,
   body.admin-app header .navlinks > ul.site-nav-list {
-    position: absolute;
-    top: calc(100% + 0.35rem);
-    left: var(--header-pad-x, 0.85rem);
-    right: var(--header-pad-x, 0.85rem);
+    position: fixed;
+    top: calc(env(safe-area-inset-top, 0px) + 4.85rem);
+    left: max(0.75rem, env(safe-area-inset-left, 0px));
+    right: max(0.75rem, env(safe-area-inset-right, 0px));
     width: auto;
     max-width: none;
     flex-direction: column;
@@ -1289,11 +1369,13 @@ header .navlinks span.fa-bars {
     overflow-y: hidden;
     transition: max-height 0.35s ease;
     text-align: left;
-    z-index: 1200;
-    background: #c46b82;
-    border: 1px solid rgba(196, 107, 130, 0.16);
+    z-index: 2000;
+    background: #ffffff;
+    background-color: #ffffff;
+    color: #1a1220;
+    border: 1px solid rgba(196, 107, 130, 0.35);
     border-radius: 0.85rem;
-    box-shadow: 0 16px 34px rgba(196, 107, 130, 0.18);
+    box-shadow: 0 16px 34px rgba(45, 32, 38, 0.18);
     padding: 0;
     pointer-events: none;
     box-sizing: border-box;
@@ -1312,6 +1394,10 @@ header .navlinks span.fa-bars {
     overflow-x: hidden;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    max-height: min(72dvh, 34rem) !important;
+    background: #ffffff;
+    background-color: #ffffff;
+    color: #1a1220;
   }
 
   body.admin-app header ul li {
@@ -1323,7 +1409,8 @@ header .navlinks span.fa-bars {
   body.admin-app header ul li a {
     display: block;
     width: 100%;
-    color: #ffffff;
+    color: #1a1220;
+    -webkit-text-fill-color: #1a1220;
     font-weight: 700;
     font-size: 0.875rem;
     white-space: normal;
@@ -1334,8 +1421,9 @@ header .navlinks span.fa-bars {
   }
 
   body.admin-app header ul li a:hover {
-    color: #1f1218;
-    background: rgba(255, 255, 255, 0.88);
+    color: #1a1220;
+    -webkit-text-fill-color: #1a1220;
+    background: rgba(196, 107, 130, 0.16);
   }
 
   body.admin-app header #menulist a.active,
@@ -1587,6 +1675,15 @@ input {
   outline: none;
   border: none;
   width: 100%;
+}
+
+.staff-identity-popover__input {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid rgba(196, 107, 130, 0.45);
+  border-radius: 8px;
+  font-size: 16px !important;
+  touch-action: manipulation;
 }
 
 .book {
@@ -2370,7 +2467,10 @@ body:not(.subpage) #availModalReserveBtn:not([hidden]):hover {
 .avail-guest-stepper {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
+  width: max-content;
+  max-width: 100%;
   padding: 4px;
   border-radius: 999px;
   background: #fff;
@@ -2378,6 +2478,7 @@ body:not(.subpage) #availModalReserveBtn:not([hidden]):hover {
 }
 
 .avail-guest-stepper button {
+  flex: 0 0 32px;
   width: 32px;
   height: 32px;
   border: 0;
@@ -2396,20 +2497,51 @@ body:not(.subpage) #availModalReserveBtn:not([hidden]):hover {
   cursor: not-allowed;
 }
 
-.avail-guest-stepper span,
-.avail-guest-stepper input[type="number"] {
-  width: 2.75rem;
-  min-width: 2.75rem;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  background: transparent;
+.avail-guest-stepper:focus-within {
+  box-shadow: 0 0 0 3px rgba(196, 107, 130, 0.18);
+}
+
+/* Beat later .subpage/input field chrome so Adults and both Children counters match */
+.avail-guest-bar .avail-guest-stepper span,
+.avail-guest-bar .avail-guest-stepper input[type="number"],
+.subpage .avail-guest-bar .avail-guest-stepper input[type="number"],
+body.subpage .avail-guest-bar .avail-guest-stepper input[type="number"] {
+  display: block;
+  flex: 0 0 2.75rem;
+  width: 2.75rem !important;
+  min-width: 2.75rem !important;
+  max-width: 2.75rem !important;
+  height: 32px !important;
+  min-height: 32px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  outline: none !important;
   text-align: center;
   font: inherit;
+  font-size: inherit !important;
   font-weight: 700;
+  line-height: 32px;
   color: #1f2937;
+  -webkit-text-fill-color: #1f2937;
   -moz-appearance: textfield;
   appearance: textfield;
+  -webkit-appearance: none;
+}
+
+.avail-guest-bar .avail-guest-stepper input[type="number"]:focus,
+.subpage .avail-guest-bar .avail-guest-stepper input[type="number"]:focus,
+body.subpage .avail-guest-bar .avail-guest-stepper input[type="number"]:focus,
+.subpage .avail-guest-bar .avail-guest-stepper input[type="number"]:not(.swal2-input):not(.swal2-file):focus,
+body.subpage .avail-guest-bar .avail-guest-stepper input[type="number"]:not(.swal2-input):not(.swal2-file):focus {
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  outline: none !important;
+  background: transparent !important;
 }
 
 .avail-guest-stepper input[type="number"]::-webkit-outer-spin-button,
@@ -3384,8 +3516,9 @@ body.subpage .pay-deadline-alert.is-expired .pay-deadline-alert__title {
 
 .rooms .items .image img {
   width: 100%;
-  height: 168px;
+  height: 132px;
   object-fit: cover;
+  object-position: center 28%;
   display: block;
   transition: transform 0.35s ease;
 }
@@ -6433,7 +6566,23 @@ body.subpage #children.book-guest-input--over {
 }
 
 .book-facility-pool-notes--modal {
-  margin: 12px 0 0;
+  margin: 8px 0 0;
+  gap: 0;
+  max-height: 2.8rem;
+  overflow: hidden;
+}
+
+.book-facility-pool-notes--modal .book-facility-pool-note {
+  padding: 7px 10px;
+}
+
+.book-facility-pool-notes--modal .book-facility-pool-note p {
+  font-size: 0.78rem;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
 }
 
 .book-facility-pool-note {
@@ -6683,8 +6832,8 @@ body.facility-detail-open {
 .facility-detail-modal__media .facility-swipe__viewport,
 .facility-detail-modal__media .facility-swipe__slide {
   border-radius: 0;
-  height: min(52vh, 460px);
-  min-height: 280px;
+  height: min(28vh, 240px);
+  min-height: 150px;
   background: #1c1719;
 }
 
@@ -6699,7 +6848,7 @@ body.facility-detail-open {
   height: 100% !important;
   max-height: none !important;
   object-fit: cover !important;
-  object-position: center 45% !important;
+  object-position: center 28% !important;
   margin: 0 !important;
   border: 0 !important;
   border-radius: 0 !important;
@@ -6784,7 +6933,7 @@ body.facility-detail-open {
 
 .facility-detail-modal__intro {
   margin: 0;
-  padding: 26px 32px 22px;
+  padding: 14px 18px 12px;
   position: static;
   top: auto;
   left: auto;
@@ -6829,7 +6978,7 @@ body.facility-detail-open {
 .facility-detail-modal__title {
   margin: 0 0 14px;
   font-family: "Playfair Display", "Cormorant Garamond", Georgia, serif;
-  font-size: clamp(1.95rem, 3.3vw, 2.6rem);
+  font-size: clamp(1.35rem, 2.4vw, 1.85rem);
   font-weight: 600;
   line-height: 1.1;
   color: #1f1218;
@@ -7189,8 +7338,8 @@ body.facility-detail-open {
 
   .facility-detail-modal__media .facility-swipe__viewport,
   .facility-detail-modal__media .facility-swipe__slide {
-    height: min(42vh, 320px);
-    min-height: 220px;
+    height: min(24vh, 180px);
+    min-height: 120px;
   }
 
   .facility-detail-modal__media .facility-swipe__expand {
@@ -7950,6 +8099,25 @@ body.book-unit-modal-open {
   background: #fff;
 }
 
+/* Keep text boxes fixed. Guests type inside them; they cannot drag the box. */
+textarea:not(.swal2-textarea),
+.subpage textarea:not(.swal2-textarea),
+#request,
+#managerEditRequest {
+  resize: none;
+  overflow-y: auto;
+  -webkit-appearance: none;
+  appearance: none;
+  touch-action: manipulation;
+}
+
+#request,
+.book-flow-form textarea {
+  height: 120px;
+  min-height: 120px;
+  max-height: 120px;
+}
+
 .subpage select {
   /* Make native dropdowns easier to tap/read (Windows selects vary by browser). */
   min-height: 42px;
@@ -8194,9 +8362,9 @@ body.book-unit-modal-open {
   margin-bottom: 0;
   display: block;
   width: 100%;
-  height: 190px;
+  height: 148px;
   object-fit: cover;
-  object-position: center;
+  object-position: center 28%;
 }
 
 .facility-swipe .room-img[src*="small-room-bed"] {
@@ -12401,10 +12569,10 @@ button.btn--disabled {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
-  min-width: 36px;
-  min-height: 36px;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
   padding: 0;
   border-radius: 8px;
   border: 1px solid #f0c9d4;
@@ -13034,6 +13202,126 @@ header #bookNavUser button.book-nav-appointments:not(.book-nav-icon-btn).is-acti
 
 .appointments-board {
   min-height: 100px;
+}
+
+.appointments-modal,
+.appointments-modal * {
+  box-sizing: border-box;
+}
+
+.appointments-modal .booking-carousel,
+.appointments-modal .booking-carousel__shell,
+.appointments-modal .booking-carousel__viewport,
+.appointments-modal .booking-carousel__track,
+.appointments-modal .booking-carousel__slide,
+.appointments-modal .booking-card {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.appointments-modal .booking-card__name-row,
+.appointments-modal .booking-card__top,
+.appointments-modal .booking-card__row {
+  min-width: 0;
+  max-width: 100%;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.appointments-modal .booking-card__name-row .booking-card__name,
+.appointments-modal .booking-card__label,
+.appointments-modal .booking-card__value,
+.appointments-modal .booking-card__value--note {
+  min-width: 0;
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  text-align: left;
+}
+
+.appointments-modal .booking-card__name-row .booking-card__name {
+  flex: 1 1 8rem;
+}
+
+.appointments-modal .booking-card__delete {
+  margin-left: auto;
+}
+
+.appointments-modal .book-status-stepper__list {
+  flex-direction: column;
+}
+
+.appointments-modal .book-status-stepper__step {
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+}
+
+.appointments-modal .booking-dl,
+.appointments-modal .booking-card__details .booking-dl {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.appointments-modal .booking-card__details {
+  width: 100%;
+  max-width: 100%;
+}
+
+@media (max-width: 760px) {
+  .appointments-overlay:not([hidden]) {
+    align-items: flex-end;
+    justify-content: center;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .appointments-modal {
+    width: 100%;
+    max-width: 100%;
+    max-height: 100svh;
+    margin: 0;
+    border-radius: 18px 18px 0 0;
+    padding:
+      16px
+      12px
+      calc(12px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .appointments-modal__head h3 {
+    font-size: 1.15rem;
+  }
+
+  .appointments-modal__lead {
+    font-size: 0.86rem;
+  }
+
+  .appointments-modal #appointmentsBoard {
+    max-height: min(68svh, calc(100svh - 180px));
+    padding: 4px 0 8px;
+    overflow-x: hidden;
+  }
+
+  .appointments-modal .booking-carousel__shell {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  .appointments-modal .booking-carousel__arrow {
+    display: none;
+  }
+
+  .appointments-modal .booking-carousel__slide {
+    padding: 0;
+  }
+
+  .appointments-modal .booking-card {
+    padding: 14px 12px 12px;
+  }
+
+  .appointments-modal .admin-settings-modal__actions,
+  .appointments-modal .admin-settings-modal__actions .btn {
+    width: 100%;
+  }
 }
 
 .appointments-strip {
@@ -14529,7 +14817,7 @@ header #bookNavUser button.book-nav-appointments:not(.book-nav-icon-btn).is-acti
 }
 
 .admin-app .admin-report-reviews-legend {
-  margin: 0;
+  margin: 0 0 8px;
   gap: 8px 12px;
 }
 
@@ -15031,8 +15319,146 @@ header #bookNavUser button.book-nav-appointments:not(.book-nav-icon-btn).is-acti
   }
 }
 
+.admin-app #section-sentiment .admin-sentiment-hero {
+  padding: 28px 28px 32px;
+}
+
+.admin-app #section-sentiment .split-2 {
+  grid-template-columns: minmax(300px, 1fr) minmax(340px, 1.15fr);
+  gap: 24px;
+  align-items: stretch;
+}
+
+.admin-app #section-sentiment .admin-sentiment-metric-card {
+  display: flex;
+  flex-direction: column;
+  padding: 22px 24px 24px;
+  min-height: 100%;
+}
+
+.admin-app #section-sentiment .admin-sentiment-sub {
+  margin: 0 0 8px;
+}
+
+.admin-app #section-sentiment .admin-sentiment-total {
+  display: block;
+  margin-top: 10px;
+}
+
+.admin-app #section-sentiment .admin-sentiment-rows {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 0;
+  padding: 8px 0 0;
+}
+
 .admin-app #section-sentiment .sentiment-row {
-  grid-template-columns: minmax(168px, 190px) 1fr 56px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  grid-template-areas:
+    "label pct btn"
+    "bar bar bar";
+  gap: 8px 12px;
+  align-items: center;
+  margin-bottom: 0;
+  padding: 16px 0;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.admin-app #section-sentiment .sentiment-row:last-child {
+  border-bottom: 0;
+  padding-bottom: 4px;
+}
+
+.admin-app #section-sentiment .sentiment-row .admin-sentiment-label {
+  grid-area: label;
+}
+
+.admin-app #section-sentiment .sentiment-row .sentiment-bar {
+  grid-area: bar;
+  min-width: 0;
+}
+
+.admin-app #section-sentiment .sentiment-row strong {
+  grid-area: pct;
+}
+
+.admin-app #section-sentiment .sentiment-view-btn {
+  grid-area: btn;
+  justify-self: end;
+  white-space: nowrap;
+  width: auto;
+  min-width: 0;
+}
+
+.admin-app #section-sentiment .sentiment-feedback-list {
+  flex: 0 1 auto;
+  gap: 16px;
+  max-height: none;
+  overflow: visible;
+  padding: 4px 0 0;
+}
+
+.admin-app #section-sentiment #sentimentCommentsPager {
+  margin-top: 12px;
+  padding-top: 12px;
+  flex-shrink: 0;
+}
+
+.admin-app #section-sentiment #sentimentCommentsPager.admin-pagination {
+  border-top-color: #f1f5f9;
+}
+
+.admin-app #section-sentiment .sentiment-feedback-list .review-card {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  column-gap: 14px;
+  row-gap: 4px;
+  align-items: start;
+}
+
+.admin-app #section-sentiment .sentiment-feedback-list .review-img {
+  grid-row: 1 / span 4;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 0;
+}
+
+.admin-app #section-sentiment .admin-sentiment-recommendations {
+  margin-top: 24px;
+}
+
+@media (max-width: 1100px) {
+  .admin-app #section-sentiment .split-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-app #section-sentiment .admin-sentiment-rows {
+    min-height: 0;
+    justify-content: flex-start;
+    gap: 4px;
+  }
+
+  .admin-app #section-sentiment .sentiment-feedback-list {
+    max-height: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .admin-app #section-sentiment .admin-sentiment-hero {
+    padding: 18px 16px 22px;
+  }
+
+  .admin-app #section-sentiment .admin-sentiment-metric-card {
+    padding: 16px;
+  }
+
+  .admin-app #section-sentiment .sentiment-row {
+    grid-template-columns: minmax(0, 1fr) auto auto;
+  }
 }
 
 .admin-app .admin-sentiment-hero .section-title.admin-sentiment-title {
@@ -15054,8 +15480,8 @@ header #bookNavUser button.book-nav-appointments:not(.book-nav-icon-btn).is-acti
   flex-wrap: wrap;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 12px 16px;
-  margin-bottom: 18px;
+  gap: 16px 20px;
+  margin-bottom: 24px;
 }
 
 .admin-app .admin-sentiment-header-row .admin-sentiment-lede {
@@ -15225,7 +15651,7 @@ header #bookNavUser button.book-nav-appointments:not(.book-nav-icon-btn).is-acti
 
 .admin-app #section-sentiment .sentiment-bar {
   background: #e2e8f0;
-  height: 11px;
+  height: 14px;
 }
 
 .admin-app #section-sentiment .sentiment-bar .positive {
@@ -15507,6 +15933,10 @@ header #bookNavUser button.book-nav-appointments:not(.book-nav-icon-btn).is-acti
   overflow-y: auto;
 }
 
+.admin-app #adminSentimentListPager {
+  margin-top: 12px;
+}
+
 .admin-app .sentiment-detail-row {
   margin-bottom: 14px;
   padding: 14px;
@@ -15687,15 +16117,32 @@ body.admin-app header ul li .admin-nav-dropdown-toggle:focus-visible {
 }
 
 @media only screen and (max-width: 1500px) {
-  body.admin-app .admin-nav-dropdown-menu {
+  body.admin-app .admin-nav-dropdown-menu,
+  body.admin-app .admin-settings-menu {
     position: static;
     min-width: 0;
+    width: auto;
+    right: auto;
+    top: auto;
     padding: 0;
     margin: 0;
     background: transparent;
     border: none;
     border-radius: 0;
     box-shadow: none;
+  }
+
+  body.admin-app .admin-settings-menu:not([hidden]) {
+    display: block;
+    margin: 4px 10px 8px;
+    padding: 8px;
+    background: #fff;
+    border-radius: 12px;
+  }
+
+  body.admin-app .admin-settings-item {
+    min-height: 48px;
+    font-size: 1rem;
   }
 
   body.admin-app .admin-nav-dropdown-toggle {
@@ -16652,8 +17099,14 @@ body[data-staff-portal="manager"] .admin-nav-dropdown.is-open .admin-nav-dropdow
 }
 
 .manager-report-tools {
-  justify-content: flex-end;
-  align-items: flex-end;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 11.5rem), 1fr));
+  gap: 10px 12px;
+  align-items: end;
+  justify-content: stretch;
+  width: 100%;
+  min-width: 0;
+  flex: 1 1 100%;
 }
 
 .manager-report-tools__field {
@@ -16662,6 +17115,7 @@ body[data-staff-portal="manager"] .admin-nav-dropdown.is-open .admin-nav-dropdow
   gap: 3px;
   margin: 0;
   min-width: 0;
+  max-width: 100%;
 }
 
 .manager-report-tools__field span {
@@ -16674,17 +17128,29 @@ body[data-staff-portal="manager"] .admin-nav-dropdown.is-open .admin-nav-dropdow
 }
 
 .manager-report-tools__field input,
-.manager-report-tools__field select {
+.manager-report-tools__field select,
+.manager-report-tools .btn {
   margin: 0;
-  min-height: 40px;
-  min-width: 138px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  min-height: 44px;
   padding: 6px 10px;
+  box-sizing: border-box;
+}
+
+.manager-report-tools__field input,
+.manager-report-tools__field select {
   border: 1px solid rgba(196, 107, 130, 0.28);
   border-radius: 10px;
   background: #fff;
   color: #3d3340;
   font-family: inherit;
   font-size: 0.86rem;
+}
+
+#section-analytics .manager-report-tools #managerDownloadReport {
+  grid-column: 1 / -1;
 }
 
 @media (max-width: 1100px) {
@@ -17671,8 +18137,11 @@ footer i,
 }
 
 @media only screen and (max-width: 1100px) {
-  header #menulist {
+  header #menulist,
+  header .navlinks > ul.site-nav-list {
     background: #ffffff !important;
+    background-color: #ffffff !important;
+    color: #1a1220 !important;
   }
 }
 
@@ -17946,27 +18415,150 @@ body.subpage header .admin-nav-dropdown-menu a.admin-nav-dropdown-item[href^="#s
   background: rgba(196, 107, 130, 0.28) !important;
 }
 
+@media only screen and (max-width: 1500px) {
+  body.admin-app header #menulist,
+  body.admin-app header .navlinks > ul.site-nav-list {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    color: #1a1220 !important;
+  }
+}
+
+/* Open menu names stay dark on the white sheet. iOS paints <button> labels
+   with -webkit-text-fill-color, so color alone is not enough. */
 @media only screen and (max-width: 1100px) {
-  header #menulist li a:not(.primary-btn) {
-    color: var(--text-on-light) !important;
+  header #menulist > li > a:not(.primary-btn):not(.staff-access-btn):not(.role-login-trigger),
+  header #menulist > li > a:not(.primary-btn):not(.staff-access-btn):not(.role-login-trigger):link,
+  header #menulist > li > a:not(.primary-btn):not(.staff-access-btn):not(.role-login-trigger):visited,
+  header #menulist .admin-nav-dropdown-toggle,
+  header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item,
+  header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item:link,
+  header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item:visited,
+  body.admin-app header #menulist .admin-nav-dropdown-toggle,
+  body.admin-app header ul li .admin-nav-dropdown-toggle,
+  body[data-staff-portal="manager"] header #menulist .admin-nav-dropdown-toggle,
+  body[data-staff-portal="manager"] header ul li .admin-nav-dropdown-toggle {
+    color: #1a1220 !important;
+    -webkit-text-fill-color: #1a1220 !important;
+    background: transparent !important;
+    opacity: 1 !important;
   }
 
-  header #menulist li a.primary-btn {
-    background: var(--header-pink) !important;
-    color: var(--text-on-dark) !important;
-    -webkit-text-fill-color: var(--text-on-dark) !important;
+  header #menulist > li > a:not(.primary-btn):not(.staff-access-btn):not(.role-login-trigger):hover,
+  header #menulist > li > a:not(.primary-btn):not(.staff-access-btn):not(.role-login-trigger):focus-visible,
+  header #menulist > li > a:not(.primary-btn):not(.staff-access-btn):not(.role-login-trigger):active,
+  header #menulist > li > a:not(.primary-btn):not(.staff-access-btn):not(.role-login-trigger).active,
+  header #menulist > li > a[href^="#section-"].active:not(.admin-nav-dropdown-item),
+  body.subpage header #menulist > li > a.active:not(.primary-btn):not(.admin-nav-dropdown-item),
+  body.subpage header #menulist #adminSettingsToggle.active,
+  body.subpage header #menulist #staffSettingsToggle.active,
+  header #menulist .admin-nav-dropdown-toggle:hover,
+  header #menulist .admin-nav-dropdown-toggle:focus-visible,
+  header #menulist .admin-nav-dropdown-toggle:active,
+  header #menulist .admin-nav-dropdown-toggle.active,
+  header #menulist .admin-nav-dropdown.is-open > .admin-nav-dropdown-toggle,
+  body.admin-app header #menulist .admin-nav-dropdown-toggle:hover,
+  body.admin-app header #menulist .admin-nav-dropdown-toggle:focus-visible,
+  body.admin-app header #menulist .admin-nav-dropdown-toggle:active,
+  body.admin-app header #menulist .admin-nav-dropdown-toggle.active,
+  body.admin-app header #menulist .admin-nav-dropdown.is-open > .admin-nav-dropdown-toggle,
+  body.admin-app header ul li .admin-nav-dropdown-toggle:hover,
+  body.admin-app header ul li .admin-nav-dropdown-toggle:active,
+  body.admin-app header ul li .admin-nav-dropdown-toggle.active,
+  body.admin-app .admin-nav-dropdown.is-open .admin-nav-dropdown-toggle,
+  body[data-staff-portal="manager"] header #menulist .admin-nav-dropdown-toggle:hover,
+  body[data-staff-portal="manager"] header #menulist .admin-nav-dropdown-toggle:focus-visible,
+  body[data-staff-portal="manager"] header #menulist .admin-nav-dropdown-toggle:active,
+  body[data-staff-portal="manager"] header #menulist .admin-nav-dropdown-toggle.active,
+  body[data-staff-portal="manager"] header #menulist .admin-nav-dropdown.is-open > .admin-nav-dropdown-toggle,
+  body[data-staff-portal="manager"] header ul li .admin-nav-dropdown-toggle:hover,
+  body[data-staff-portal="manager"] header ul li .admin-nav-dropdown-toggle:active,
+  body[data-staff-portal="manager"] .admin-nav-dropdown.is-open .admin-nav-dropdown-toggle,
+  header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item:hover,
+  header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item:focus-visible,
+  header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item:active,
+  header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item.active {
+    color: #1a1220 !important;
+    -webkit-text-fill-color: #1a1220 !important;
+    background: rgba(196, 107, 130, 0.16) !important;
   }
 
+  header #menulist li a.primary-btn,
+  header #menulist li a.staff-access-btn,
+  header #menulist li a.role-login-trigger {
+    background: #ffffff !important;
+    color: #1a1220 !important;
+    -webkit-text-fill-color: #1a1220 !important;
+    border: 2px solid #c46b82 !important;
+  }
+
+  header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item,
   body[data-staff-portal="manager"] header .admin-nav-dropdown-menu a.admin-nav-dropdown-item,
   body[data-staff-portal="manager"] header .admin-nav-dropdown-menu a.admin-nav-dropdown-item:link,
   body[data-staff-portal="manager"] header .admin-nav-dropdown-menu a.admin-nav-dropdown-item:visited,
   body[data-staff-portal="manager"] header .admin-nav-dropdown-menu a.admin-nav-dropdown-item:hover,
   body[data-staff-portal="manager"] header .admin-nav-dropdown-menu a.admin-nav-dropdown-item:focus-visible,
+  body[data-staff-portal="manager"] header .admin-nav-dropdown-menu a.admin-nav-dropdown-item:active,
   body[data-staff-portal="manager"] header .admin-nav-dropdown-menu a.admin-nav-dropdown-item.active {
     white-space: normal !important;
     padding: 0.55rem 1rem 0.55rem 1.75rem !important;
     border-radius: 0 !important;
     font-weight: 600 !important;
+    color: #1a1220 !important;
+    -webkit-text-fill-color: #1a1220 !important;
+    background: transparent !important;
+  }
+
+  body[data-staff-portal="manager"] header .admin-nav-dropdown-menu a.admin-nav-dropdown-item:hover,
+  body[data-staff-portal="manager"] header .admin-nav-dropdown-menu a.admin-nav-dropdown-item:focus-visible,
+  body[data-staff-portal="manager"] header .admin-nav-dropdown-menu a.admin-nav-dropdown-item:active,
+  body[data-staff-portal="manager"] header .admin-nav-dropdown-menu a.admin-nav-dropdown-item.active {
+    color: #1a1220 !important;
+    -webkit-text-fill-color: #1a1220 !important;
+    background: rgba(196, 107, 130, 0.16) !important;
+  }
+}
+
+@media only screen and (max-width: 1500px) {
+  body.admin-app header #menulist > li > a:not(.primary-btn):not(.admin-nav-dropdown-item),
+  body.admin-app header #menulist > li > a:not(.primary-btn):not(.admin-nav-dropdown-item):link,
+  body.admin-app header #menulist > li > a:not(.primary-btn):not(.admin-nav-dropdown-item):visited,
+  body.admin-app header #menulist .admin-nav-dropdown-toggle,
+  body.admin-app header ul li .admin-nav-dropdown-toggle,
+  body.admin-app header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item,
+  body.admin-app header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item:link,
+  body.admin-app header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item:visited {
+    color: #1a1220 !important;
+    -webkit-text-fill-color: #1a1220 !important;
+    background: transparent !important;
+    opacity: 1 !important;
+    white-space: normal !important;
+  }
+
+  body.admin-app header #menulist > li > a:not(.primary-btn):not(.admin-nav-dropdown-item):hover,
+  body.admin-app header #menulist > li > a:not(.primary-btn):not(.admin-nav-dropdown-item):focus-visible,
+  body.admin-app header #menulist > li > a:not(.primary-btn):not(.admin-nav-dropdown-item):active,
+  body.admin-app header #menulist > li > a:not(.primary-btn):not(.admin-nav-dropdown-item).active,
+  body.admin-app header #menulist > li > a[href^="#section-"].active:not(.admin-nav-dropdown-item),
+  body.admin-app header #menulist #adminSettingsToggle.active,
+  body.admin-app header #menulist .admin-nav-dropdown-toggle:hover,
+  body.admin-app header #menulist .admin-nav-dropdown-toggle:focus-visible,
+  body.admin-app header #menulist .admin-nav-dropdown-toggle:active,
+  body.admin-app header #menulist .admin-nav-dropdown-toggle.active,
+  body.admin-app header #menulist .admin-nav-dropdown.is-open > .admin-nav-dropdown-toggle,
+  body.admin-app header ul li .admin-nav-dropdown-toggle:hover,
+  body.admin-app header ul li .admin-nav-dropdown-toggle:focus-visible,
+  body.admin-app header ul li .admin-nav-dropdown-toggle:active,
+  body.admin-app header ul li .admin-nav-dropdown-toggle.active,
+  body.admin-app .admin-nav-dropdown.is-open .admin-nav-dropdown-toggle,
+  body.admin-app header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item:hover,
+  body.admin-app header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item:focus-visible,
+  body.admin-app header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item:active,
+  body.admin-app header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item.active,
+  body.admin-app header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item[href^="#section-"].active {
+    color: #1a1220 !important;
+    -webkit-text-fill-color: #1a1220 !important;
+    background: rgba(196, 107, 130, 0.16) !important;
   }
 }
 
@@ -23253,6 +23845,198 @@ textarea {
   }
 }
 
+/* Phone facility picker: fill the screen, keep cards compact, scroll the list. */
+@media (max-width: 900px) {
+  .book-unit-modal:not([hidden]) {
+    align-items: stretch;
+    justify-content: flex-end;
+    padding: 0;
+    height: 100%;
+    max-height: 100dvh;
+    max-height: 100svh;
+    overflow: hidden;
+  }
+
+  .book-unit-modal__dialog {
+    width: 100%;
+    max-width: 100%;
+    height: 100dvh;
+    height: 100svh;
+    max-height: 100dvh;
+    max-height: 100svh;
+    margin: 0;
+    border-radius: 0;
+  }
+
+  .book-unit-modal__header {
+    padding:
+      max(10px, env(safe-area-inset-top, 0px))
+      14px
+      8px;
+  }
+
+  .book-unit-modal__title {
+    font-size: 1.02rem;
+    margin-bottom: 2px;
+  }
+
+  .book-unit-modal__dates,
+  .book-unit-modal__capacity {
+    font-size: 0.78rem;
+    line-height: 1.35;
+  }
+
+  .book-unit-modal__capacity {
+    margin-top: 4px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+
+  .book-unit-tabs {
+    margin-top: 8px;
+    gap: 6px;
+  }
+
+  .book-unit-modal__header .facilities-tab {
+    padding: 7px 12px;
+    font-size: 0.8rem;
+  }
+
+  .book-unit-modal__header {
+    flex: 0 1 auto;
+    overflow: hidden;
+  }
+
+  .book-facility-pool-notes--modal {
+    margin-top: 6px;
+    max-height: 2.5rem;
+  }
+
+  #bookUnitModalHost,
+  #receptionWiRoomModalHost {
+    flex: 1 1 auto;
+    min-height: 38svh;
+    padding: 8px 12px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+
+  .book-unit-picker__groups,
+  .book-unit-picker__list {
+    align-content: start;
+    align-items: start;
+    gap: 8px;
+  }
+
+  .book-unit-tab-panel,
+  .book-unit-picker__group,
+  .book-facility-card {
+    height: auto;
+    min-height: 0;
+    align-self: start;
+  }
+
+  .book-unit-picker__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .book-facility-card__media {
+    aspect-ratio: 16 / 10;
+    height: 92px;
+    max-height: 92px;
+  }
+
+  .book-unit-modal__dialog .book-facility-card__media img,
+  .book-unit-modal__dialog .book-facility-card__media .facility-swipe .room-img,
+  .book-unit-modal__dialog .book-unit-confirm__photo img {
+    width: 100%;
+    height: 100%;
+    max-height: none;
+    object-fit: cover;
+  }
+
+  .book-facility-card__body {
+    padding: 6px 8px 8px;
+  }
+
+  .book-facility-card__name {
+    white-space: normal;
+    font-size: 0.78rem;
+    -webkit-line-clamp: 2;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+  }
+
+  .book-facility-card__capacity,
+  .book-facility-card__price {
+    font-size: 0.72rem;
+  }
+
+  .book-unit-modal__footer {
+    flex: 0 0 auto;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: 8px 12px calc(10px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .book-unit-confirm,
+  .book-unit-confirm__body,
+  .book-unit-confirm__box {
+    flex: 0 0 auto;
+    width: 100%;
+    height: auto;
+  }
+
+  .book-unit-confirm__body {
+    max-height: 96px;
+  }
+
+  .book-unit-confirm__box {
+    padding: 6px 8px;
+  }
+
+  .book-unit-modal__footer .book-unit-modal__actions,
+  .book-unit-modal__footer .book-unit-modal__actions .btn {
+    width: 100%;
+  }
+
+  .book-unit-modal__footer .book-flow-btn-main {
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 380px) {
+  .book-unit-picker__list {
+    grid-template-columns: 1fr;
+  }
+}
+
+html[data-theme="dark"] .book-facility-card,
+html[data-theme="dark"] .book-facility-card--selected,
+html[data-theme="dark"] .book-unit-confirm__box {
+  background: #2a2430;
+  color: #f7f2f5;
+  border-color: rgba(196, 107, 130, 0.38);
+}
+
+html[data-theme="dark"] .book-facility-card__name,
+html[data-theme="dark"] .book-facility-card__capacity,
+html[data-theme="dark"] .book-unit-confirm__name,
+html[data-theme="dark"] .book-unit-confirm__schedule {
+  color: #f7f2f5;
+}
+
+html[data-theme="dark"] .book-unit-modal__header,
+html[data-theme="dark"] .book-unit-modal__footer {
+  background: #221e28;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .payment-success-overlay,
   .welcome-modal-overlay,
@@ -24576,18 +25360,31 @@ body:not(.subpage) .news .box {
   }
 
   body.subpage .staff-header-user__meta {
-    display: none !important;
+    display: flex !important;
+    min-width: 0 !important;
+  }
+
+  body.subpage .staff-header-user__name,
+  body.subpage .staff-header-user__role {
+    display: block !important;
+    max-width: 9.5rem !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  body.subpage .staff-header-user__name {
+    font-size: 0.78rem !important;
   }
 
   body.subpage .staff-header-user__inner {
-    max-width: none !important;
-    width: 34px !important;
-    height: 34px !important;
-    min-width: 34px !important;
-    padding: 0 !important;
-    border-radius: 50% !important;
-    justify-content: center !important;
-    gap: 0 !important;
+    max-width: min(46vw, 11rem) !important;
+    width: auto !important;
+    height: auto !important;
+    min-width: 0 !important;
+    padding: 0.12rem 0.5rem 0.12rem 0.18rem !important;
+    border-radius: 999px !important;
+    justify-content: flex-start !important;
+    gap: 0.35rem !important;
   }
 
   body.subpage .staff-header-user__icon {
@@ -24657,14 +25454,22 @@ body:not(.subpage) .news .box {
   }
 
   header ul li a,
+  header ul li a:link,
+  header ul li a:visited,
+  header ul li a:active,
+  header ul li a:focus,
   body.admin-app header ul li a,
-  body.admin-app .admin-nav-dropdown-toggle {
-    color: #ffffff !important;
-    -webkit-text-fill-color: #ffffff !important;
+  body.admin-app header ul li a:active,
+  body.admin-app .admin-nav-dropdown-toggle,
+  body.admin-app .admin-nav-dropdown-toggle:active,
+  body.admin-app .admin-nav-dropdown-toggle:focus {
+    color: #1a1220 !important;
+    -webkit-text-fill-color: #1a1220 !important;
     font-size: 0.95rem !important;
     padding: 0.85rem 1rem !important;
     min-height: 44px !important;
     background: transparent !important;
+    opacity: 1 !important;
   }
 
   /* Active item must NOT be white-on-white (that looked like a blank bar) */
@@ -26119,6 +26924,18 @@ html[data-theme="dark"] select {
   border-color: rgba(196, 107, 130, 0.38) !important;
 }
 
+html[data-theme="dark"] .avail-guest-bar .avail-guest-stepper input[type="number"],
+html[data-theme="dark"] body.subpage .avail-guest-bar .avail-guest-stepper input[type="number"],
+html[data-theme="dark"] body.subpage .avail-guest-bar .avail-guest-stepper input[type="number"]:not(.swal2-input):not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="hidden"]):not([type="range"]),
+html[data-theme="dark"] .avail-guest-bar .avail-guest-stepper input[type="number"]:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="hidden"]):not([type="range"]) {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  color: #f7f2f5 !important;
+  -webkit-text-fill-color: #f7f2f5 !important;
+}
+
 html[data-theme="dark"] ::placeholder {
   color: #b7aab3;
 }
@@ -26575,9 +27392,25 @@ html[data-theme="dark"] .staff-identity-popover {
   border-color: rgba(196, 107, 130, 0.35) !important;
 }
 
-html[data-theme="dark"] .staff-identity-popover__hint {
+html[data-theme="dark"] .staff-identity-popover__hint,
+html[data-theme="dark"] .staff-identity-popover__label,
+html[data-theme="dark"] .staff-identity-popover__status {
   color: #e4d5dc !important;
   -webkit-text-fill-color: #e4d5dc !important;
+}
+
+html[data-theme="dark"] .staff-identity-popover__cancel {
+  background: #2a2430 !important;
+  color: #f7f2f5 !important;
+  -webkit-text-fill-color: #f7f2f5 !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+html[data-theme="dark"] .staff-identity-popover__input {
+  background: #1c1822 !important;
+  color: #f7f2f5 !important;
+  -webkit-text-fill-color: #f7f2f5 !important;
+  border-color: rgba(196, 107, 130, 0.45) !important;
 }
 
 html[data-theme="dark"] .news {
@@ -27421,7 +28254,8 @@ html[data-theme="dark"] .checkin-cancel-modal #checkinCancelError {
   -webkit-text-fill-color: #ffffff !important;
 }
 
-html[data-theme="dark"] #checkinCancelBackBtn {
+html[data-theme="dark"] #checkinCancelBackBtn,
+html[data-theme="dark"] #customerRecordDeleteCancelBtn {
   background: #2a2430 !important;
   color: #ffffff !important;
   -webkit-text-fill-color: #ffffff !important;
@@ -27681,4 +28515,737 @@ html[data-theme="dark"] .book-unit-modal .book-unit-tabs .facilities-tab:not(.fa
   background: #2a2430;
   color: #f7f2f5;
   border-color: rgba(196, 107, 130, 0.45);
+}
+
+/* Dark mode: panels that stayed white were showing light text on a light fill. */
+html[data-theme="dark"] .admin-model-eval__table-wrap,
+html[data-theme="dark"] .admin-app .admin-model-eval__table-wrap,
+html[data-theme="dark"] .admin-app .admin-model-eval__table,
+html[data-theme="dark"] .admin-app .admin-model-eval__table th,
+html[data-theme="dark"] .admin-app .admin-model-eval__table td,
+html[data-theme="dark"] .admin-app .admin-model-eval__avg td,
+html[data-theme="dark"] .admin-app .admin-model-eval__acc td,
+html[data-theme="dark"] .admin-app .admin-model-eval__live-note,
+html[data-theme="dark"] .admin-app .admin-model-eval__empty,
+html[data-theme="dark"] .admin-app .admin-model-eval__remark,
+html[data-theme="dark"] .sentiment-archive-week,
+html[data-theme="dark"] .admin-app .sentiment-archive-week,
+html[data-theme="dark"] .sentiment-archive-week-summary,
+html[data-theme="dark"] .admin-app .sentiment-archive-week-summary,
+html[data-theme="dark"] .sentiment-archive-rec-card,
+html[data-theme="dark"] .admin-app .sentiment-archive-rec-card,
+html[data-theme="dark"] .sentiment-archive-comment,
+html[data-theme="dark"] .admin-app .sentiment-archive-comment,
+html[data-theme="dark"] .admin-sentiment-archive-modal,
+html[data-theme="dark"] .admin-app .admin-sentiment-archive-modal {
+  background: #1c1822 !important;
+  background-image: none !important;
+  color: #f4eef2 !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+html[data-theme="dark"] .admin-app .admin-model-eval__live-note,
+html[data-theme="dark"] .admin-app .admin-model-eval__empty,
+html[data-theme="dark"] .admin-app .admin-model-eval__remark,
+html[data-theme="dark"] .admin-app .admin-model-eval__panel h3,
+html[data-theme="dark"] .admin-app .admin-model-eval__head h2,
+html[data-theme="dark"] .admin-app .admin-model-eval__head h3,
+html[data-theme="dark"] .sentiment-archive-week-summary,
+html[data-theme="dark"] .admin-app .sentiment-archive-week-summary,
+html[data-theme="dark"] .sentiment-archive-rec-title,
+html[data-theme="dark"] .admin-app .sentiment-archive-rec-title,
+html[data-theme="dark"] .sentiment-archive-rec-meta,
+html[data-theme="dark"] .admin-app .sentiment-archive-rec-meta,
+html[data-theme="dark"] .sentiment-archive-rec-summary,
+html[data-theme="dark"] .admin-app .sentiment-archive-rec-summary,
+html[data-theme="dark"] .sentiment-archive-rec-item,
+html[data-theme="dark"] .admin-app .sentiment-archive-rec-item,
+html[data-theme="dark"] .sentiment-archive-rec-item p,
+html[data-theme="dark"] .admin-app .sentiment-archive-rec-item p,
+html[data-theme="dark"] .sentiment-archive-comment,
+html[data-theme="dark"] .admin-app .sentiment-archive-comment,
+html[data-theme="dark"] .sentiment-archive-comment-head,
+html[data-theme="dark"] .admin-app .sentiment-archive-comment-head,
+html[data-theme="dark"] .sentiment-archive-comment blockquote,
+html[data-theme="dark"] .admin-app .sentiment-archive-comment blockquote,
+html[data-theme="dark"] .admin-sentiment-archive-modal,
+html[data-theme="dark"] .admin-sentiment-archive-modal p,
+html[data-theme="dark"] .admin-sentiment-archive-modal h3,
+html[data-theme="dark"] .admin-app .admin-sentiment-archive-modal p,
+html[data-theme="dark"] .admin-app .admin-sentiment-archive-modal h3 {
+  color: #f4eef2 !important;
+  -webkit-text-fill-color: #f4eef2 !important;
+}
+
+html[data-theme="dark"] .sentiment-archive-comment-stars,
+html[data-theme="dark"] .admin-app .sentiment-archive-comment-stars {
+  color: #f5c451 !important;
+  -webkit-text-fill-color: #f5c451 !important;
+}
+
+html[data-theme="dark"] .sentiment-archive-rec-item,
+html[data-theme="dark"] .admin-app .sentiment-archive-rec-item,
+html[data-theme="dark"] .sentiment-archive-comment,
+html[data-theme="dark"] .admin-app .sentiment-archive-comment {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+@media (max-width: 760px) {
+  .admin-sentiment-archive-modal,
+  .admin-app .admin-sentiment-archive-modal {
+    width: 100%;
+    max-width: 100%;
+    max-height: calc(100svh - 12px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+    margin-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  .admin-app .admin-model-eval {
+    padding: 14px 12px 16px;
+  }
+
+  .admin-app .admin-model-eval__table th,
+  .admin-app .admin-model-eval__table td,
+  .admin-app .admin-model-eval__live-note {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+}
+
+/* Dark mode: white cards whose text inherited the light body color. */
+html[data-theme="dark"] .admin-payment-method-item,
+html[data-theme="dark"] .payment-method-card,
+html[data-theme="dark"] .m-record-section,
+html[data-theme="dark"] .sentiment-archive-week,
+html[data-theme="dark"] .admin-app .sentiment-archive-week,
+html[data-theme="dark"] .sentiment-archive-week-summary,
+html[data-theme="dark"] .admin-app .sentiment-archive-week-summary,
+html[data-theme="dark"] .sentiment-archive-rec-card,
+html[data-theme="dark"] .admin-app .sentiment-archive-rec-card,
+html[data-theme="dark"] .sentiment-archive-comment,
+html[data-theme="dark"] .admin-app .sentiment-archive-comment {
+  background: #1c1822 !important;
+  background-image: none !important;
+  color: #f4eef2 !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+html[data-theme="dark"] .m-record-section {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  font-size: 0.82rem;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+html[data-theme="dark"] .admin-payment-method-item strong,
+html[data-theme="dark"] .admin-payment-method-item .booking-dl dt,
+html[data-theme="dark"] .admin-payment-method-item .booking-dl dd,
+html[data-theme="dark"] .payment-method-card__provider,
+html[data-theme="dark"] .payment-method-card__meta dt,
+html[data-theme="dark"] .payment-method-card__meta dd,
+html[data-theme="dark"] .payment-method-card__instructions,
+html[data-theme="dark"] .m-record-section,
+html[data-theme="dark"] .sentiment-archive-week-summary,
+html[data-theme="dark"] .admin-app .sentiment-archive-week-summary,
+html[data-theme="dark"] .sentiment-archive-comment,
+html[data-theme="dark"] .admin-app .sentiment-archive-comment,
+html[data-theme="dark"] .sentiment-archive-comment strong,
+html[data-theme="dark"] .admin-app .sentiment-archive-comment strong,
+html[data-theme="dark"] .sentiment-archive-comment blockquote,
+html[data-theme="dark"] .admin-app .sentiment-archive-comment blockquote,
+html[data-theme="dark"] .sentiment-archive-rec-title,
+html[data-theme="dark"] .admin-app .sentiment-archive-rec-title,
+html[data-theme="dark"] .sentiment-archive-rec-meta,
+html[data-theme="dark"] .admin-app .sentiment-archive-rec-meta,
+html[data-theme="dark"] .sentiment-archive-rec-summary,
+html[data-theme="dark"] .admin-app .sentiment-archive-rec-summary,
+html[data-theme="dark"] .sentiment-archive-rec-item,
+html[data-theme="dark"] .admin-app .sentiment-archive-rec-item,
+html[data-theme="dark"] .sentiment-archive-rec-item p,
+html[data-theme="dark"] .admin-app .sentiment-archive-rec-item p {
+  color: #f4eef2 !important;
+  -webkit-text-fill-color: #f4eef2 !important;
+}
+
+html[data-theme="dark"] .admin-payment-method-item .booking-dl dt,
+html[data-theme="dark"] .payment-method-card__meta dt,
+html[data-theme="dark"] .sentiment-archive-rec-meta,
+html[data-theme="dark"] .admin-app .sentiment-archive-rec-meta {
+  color: #e7d5de !important;
+  -webkit-text-fill-color: #e7d5de !important;
+}
+
+html[data-theme="dark"] .payment-method-card__qr,
+html[data-theme="dark"] .admin-payment-method-item__qr {
+  background: #ffffff !important;
+}
+
+html[data-theme="dark"] .sentiment-archive-comment-stars,
+html[data-theme="dark"] .admin-app .sentiment-archive-comment-stars {
+  color: #f5c451 !important;
+  -webkit-text-fill-color: #f5c451 !important;
+}
+
+.m-record-modal__actions .content-mgmt-item__actions {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  width: 100% !important;
+  gap: 8px !important;
+}
+
+.m-record-modal__actions .cm-icon-btn {
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 48px !important;
+  height: auto !important;
+  justify-content: flex-start;
+  gap: 10px;
+  padding: 10px 14px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.m-record-modal__actions .cm-icon-tip {
+  display: inline !important;
+  position: static !important;
+  transform: none !important;
+  opacity: 1 !important;
+  background: transparent !important;
+  color: inherit !important;
+  padding: 0 !important;
+  font-size: 1rem !important;
+  font-weight: 700;
+  pointer-events: none;
+}
+
+.cm-dialog {
+  position: fixed;
+  inset: 0;
+  z-index: 3200;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 12px;
+  padding-top: max(12px, env(safe-area-inset-top));
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
+  background: rgba(20, 16, 24, 0.55);
+  box-sizing: border-box;
+}
+
+.cm-dialog[hidden] {
+  display: none !important;
+}
+
+.cm-dialog__panel {
+  width: min(520px, 100%);
+  max-height: calc(100svh - 24px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+  overflow: auto;
+  background: #fff;
+  color: #1f1218;
+  border-radius: 16px;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.cm-dialog__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.cm-dialog__head h3 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.cm-dialog__close {
+  min-height: 44px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid #ead7de;
+  background: #fff;
+  color: #a14b63;
+  font-weight: 700;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.cm-dialog label {
+  display: block;
+  margin: 10px 0 6px;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.cm-dialog input,
+.cm-dialog textarea {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid rgba(196, 107, 130, 0.45);
+  border-radius: 10px;
+  background: #fff;
+  color: #1f1218;
+  font-size: 16px !important;
+  line-height: 1.4;
+  box-sizing: border-box;
+  resize: none;
+}
+
+.cm-dialog textarea {
+  min-height: 120px;
+}
+
+.cm-dialog__note {
+  margin: 8px 0 0;
+  color: #6b7280;
+}
+
+.cm-dialog__actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.cm-dialog__actions .btn {
+  flex: 1 1 0;
+  min-height: 48px;
+  touch-action: manipulation;
+}
+
+.cm-dialog__danger {
+  background: #a14b63;
+  color: #fff;
+}
+
+@media (min-width: 760px) {
+  .cm-dialog {
+    align-items: center;
+  }
+}
+
+@media (max-width: 700px) {
+  .btn,
+  .primary-btn,
+  .secondary-btn,
+  button.btn,
+  .admin-save-btn {
+    max-width: 100%;
+    white-space: normal;
+  }
+
+  table[data-m-entry="1"] {
+    display: block;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  table[data-m-entry="1"] thead,
+  table[data-m-entry="1"] tr[data-m-label-row] {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    overflow: hidden !important;
+    clip: rect(0 0 0 0) !important;
+  }
+
+  table[data-m-entry="1"] tbody,
+  table[data-m-entry="1"] tr,
+  table[data-m-entry="1"] th,
+  table[data-m-entry="1"] td {
+    display: block;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+  }
+
+  table[data-m-entry="1"] td[data-label]::before {
+    content: attr(data-label);
+    display: block;
+    margin: 8px 0 4px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #3d2430;
+  }
+
+  .content-mgmt-form .manager-msg-table-wrap {
+    overflow: visible !important;
+  }
+
+  .content-mgmt-actions,
+  .cm-dialog__actions,
+  .book-flow-actions,
+  .avail-modal__actions,
+  .guest-receipt-modal__actions,
+  .payment-rules-modal__actions,
+  .booking-terms-modal__actions,
+  .manager-cal-actions,
+  .staff-access-pin-actions,
+  .contact-map-actions,
+  .facility-card__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .content-mgmt-actions .btn,
+  .cm-dialog__actions .btn,
+  .book-flow-actions .btn,
+  .avail-modal__actions .btn,
+  .guest-receipt-modal__actions .btn,
+  .payment-rules-modal__actions .btn,
+  .booking-terms-modal__actions .btn,
+  .manager-cal-actions .btn,
+  .staff-access-pin-actions .btn,
+  .contact-map-actions .btn,
+  .facility-card__actions .btn,
+  #section-content .content-mgmt-actions .btn {
+    width: 100%;
+    min-height: 48px;
+    white-space: normal;
+  }
+
+  .m-record__view.btn {
+    min-width: 4.5rem;
+    min-height: 44px;
+  }
+}
+
+html[data-theme="dark"] table[data-m-entry="1"] td[data-label]::before,
+html[data-theme="dark"] table[data-m-entry="1"] th {
+  color: #f4eef2 !important;
+  -webkit-text-fill-color: #f4eef2 !important;
+}
+
+/* Touch screens: keep dropdown names dark. A stuck :hover must not turn the label white. */
+@media (hover: none) and (max-width: 1100px) {
+  header #menulist a,
+  header #menulist a:hover,
+  header #menulist a:active,
+  header #menulist a:focus,
+  header #menulist button,
+  header #menulist button:hover,
+  header #menulist button:active,
+  header #menulist .admin-nav-dropdown-toggle,
+  header #menulist .admin-nav-dropdown-toggle:hover,
+  header #menulist .admin-nav-dropdown-toggle:active,
+  body[data-staff-portal] header #menulist a,
+  body[data-staff-portal] header #menulist a:hover,
+  body[data-staff-portal] header #menulist a:active,
+  body[data-staff-portal] header #menulist .admin-nav-dropdown-toggle,
+  body[data-staff-portal] header #menulist .admin-nav-dropdown-toggle:hover,
+  body[data-staff-portal] header #menulist .admin-nav-dropdown-toggle:active {
+    color: #1a1220 !important;
+    -webkit-text-fill-color: #1a1220 !important;
+    opacity: 1 !important;
+  }
+}
+
+@media (hover: none) and (max-width: 1500px) {
+  body.admin-app header #menulist a,
+  body.admin-app header #menulist a:hover,
+  body.admin-app header #menulist a:active,
+  body.admin-app header #menulist button,
+  body.admin-app header #menulist button:hover,
+  body.admin-app header #menulist button:active,
+  body.admin-app header #menulist .admin-nav-dropdown-toggle,
+  body.admin-app header #menulist .admin-nav-dropdown-toggle:hover,
+  body.admin-app header #menulist .admin-nav-dropdown-toggle:active {
+    color: #1a1220 !important;
+    -webkit-text-fill-color: #1a1220 !important;
+    opacity: 1 !important;
+  }
+
+  body.admin-app header #menulist a:hover:not(.active),
+  body.admin-app header #menulist .admin-nav-dropdown-toggle:hover:not(.active) {
+    background: transparent !important;
+    color: #1a1220 !important;
+    -webkit-text-fill-color: #1a1220 !important;
+  }
+}
+
+#adminSettingsToggle,
+#staffSettingsToggle,
+.admin-settings-item {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html[data-theme="dark"] .cm-dialog__panel,
+html[data-theme="dark"] .cm-dialog__close {
+  background: #221e28 !important;
+  color: #f7f2f5 !important;
+  border-color: rgba(196, 107, 130, 0.35) !important;
+}
+
+html[data-theme="dark"] .cm-dialog__head h3,
+html[data-theme="dark"] .cm-dialog label,
+html[data-theme="dark"] .cm-dialog__note,
+html[data-theme="dark"] .cm-dialog__close {
+  color: #f7f2f5 !important;
+  -webkit-text-fill-color: #f7f2f5 !important;
+}
+
+html[data-theme="dark"] .cm-dialog input,
+html[data-theme="dark"] .cm-dialog textarea {
+  background: #1c1822 !important;
+  color: #f7f2f5 !important;
+  -webkit-text-fill-color: #f7f2f5 !important;
+}
+
+/* iPad: reception tables stay inside the screen — no sideways scroll. */
+@media only screen and (min-width: 701px) and (max-width: 1366px) {
+  body[data-staff-portal="reception"] {
+    overflow-x: hidden;
+  }
+
+  body[data-staff-portal="reception"] main,
+  body[data-staff-portal="reception"] .container,
+  body[data-staff-portal="reception"] .card,
+  body[data-staff-portal="reception"] .reception-table-host,
+  body[data-staff-portal="reception"] .reception-table-wrap {
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: hidden;
+  }
+
+  body[data-staff-portal="reception"] .reception-table {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    table-layout: fixed;
+  }
+
+  body[data-staff-portal="reception"] .reception-table th,
+  body[data-staff-portal="reception"] .reception-table td {
+    min-width: 0 !important;
+    max-width: none;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    padding: 6px 4px;
+  }
+
+  body[data-staff-portal="reception"] .reception-table__name { width: 18%; }
+  body[data-staff-portal="reception"] .reception-table__id { width: 14%; }
+  body[data-staff-portal="reception"] .reception-table__facility { width: 16%; }
+  body[data-staff-portal="reception"] .reception-table__stay { width: 22%; }
+  body[data-staff-portal="reception"] .reception-table__status { width: 14%; }
+  body[data-staff-portal="reception"] .reception-table__actions,
+  body[data-staff-portal="reception"] .reception-table__actions--icons { width: 16%; }
+
+  body[data-staff-portal="reception"] .reception-stay__row {
+    grid-template-columns: 8px minmax(0, 1fr);
+    row-gap: 1px;
+  }
+
+  body[data-staff-portal="reception"] .reception-stay__label,
+  body[data-staff-portal="reception"] .reception-stay__value {
+    grid-column: 2;
+    white-space: normal;
+  }
+
+  body[data-staff-portal="reception"] .reception-table__actions-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  body[data-staff-portal="reception"] .reception-table__actions--icons .reception-table__actions-inner {
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+
+  body[data-staff-portal="reception"] .reception-table .btn--small {
+    width: 100%;
+    min-width: 0;
+    padding: 6px 4px;
+    font-size: 0.68rem;
+    white-space: normal;
+  }
+}
+
+/* iPad only: Event Management submenu is a white sheet with dark names. */
+@media only screen and (min-width: 768px) and (max-width: 1366px) and (min-height: 700px) {
+  body[data-staff-portal="manager"] .admin-nav-dropdown-menu,
+  body[data-staff-portal="manager"] .admin-nav-dropdown.is-open .admin-nav-dropdown-menu,
+  body.admin-app .admin-nav-dropdown-menu,
+  body.admin-app .admin-nav-dropdown.is-open .admin-nav-dropdown-menu,
+  html[data-theme="dark"] body[data-staff-portal="manager"] .admin-nav-dropdown-menu,
+  html[data-theme="dark"] body.admin-app .admin-nav-dropdown-menu,
+  html[data-theme="dark"] .admin-nav-dropdown-menu {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    background-image: none !important;
+    color: #1a1220 !important;
+    border-color: rgba(196, 107, 130, 0.28) !important;
+  }
+
+  body[data-staff-portal="manager"] .admin-nav-dropdown-menu a.admin-nav-dropdown-item,
+  body[data-staff-portal="manager"] .admin-nav-dropdown-menu a.admin-nav-dropdown-item:link,
+  body[data-staff-portal="manager"] .admin-nav-dropdown-menu a.admin-nav-dropdown-item:visited,
+  body[data-staff-portal="manager"] .admin-nav-dropdown-menu a.admin-nav-dropdown-item:hover,
+  body[data-staff-portal="manager"] .admin-nav-dropdown-menu a.admin-nav-dropdown-item:focus,
+  body[data-staff-portal="manager"] .admin-nav-dropdown-menu a.admin-nav-dropdown-item:active,
+  body.admin-app .admin-nav-dropdown-menu a.admin-nav-dropdown-item,
+  body.admin-app .admin-nav-dropdown-menu a.admin-nav-dropdown-item:link,
+  body.admin-app .admin-nav-dropdown-menu a.admin-nav-dropdown-item:visited,
+  body.admin-app .admin-nav-dropdown-menu a.admin-nav-dropdown-item:hover,
+  body.admin-app .admin-nav-dropdown-menu a.admin-nav-dropdown-item:focus,
+  body.admin-app .admin-nav-dropdown-menu a.admin-nav-dropdown-item:active,
+  html[data-theme="dark"] body.subpage header .admin-nav-dropdown-menu a.admin-nav-dropdown-item,
+  html[data-theme="dark"] body.subpage header .admin-nav-dropdown-menu a.admin-nav-dropdown-item[href^="#section-"],
+  html[data-theme="dark"] header .admin-nav-dropdown-menu a.admin-nav-dropdown-item,
+  html[data-theme="dark"] header .admin-nav-dropdown-menu a.admin-nav-dropdown-item[href^="#section-"] {
+    color: #1a1220 !important;
+    -webkit-text-fill-color: #1a1220 !important;
+    background: transparent !important;
+    background-color: transparent !important;
+  }
+
+  body[data-staff-portal="manager"] .admin-nav-dropdown-menu a.admin-nav-dropdown-item:hover,
+  body[data-staff-portal="manager"] .admin-nav-dropdown-menu a.admin-nav-dropdown-item:focus-visible,
+  body[data-staff-portal="manager"] .admin-nav-dropdown-menu a.admin-nav-dropdown-item.active,
+  body.admin-app .admin-nav-dropdown-menu a.admin-nav-dropdown-item:hover,
+  body.admin-app .admin-nav-dropdown-menu a.admin-nav-dropdown-item:focus-visible,
+  body.admin-app .admin-nav-dropdown-menu a.admin-nav-dropdown-item.active,
+  html[data-theme="dark"] header .admin-nav-dropdown-menu a.admin-nav-dropdown-item.active,
+  html[data-theme="dark"] body.subpage header .admin-nav-dropdown-menu a.admin-nav-dropdown-item.active,
+  html[data-theme="dark"] body.subpage header .admin-nav-dropdown-menu a.admin-nav-dropdown-item[href^="#section-"].active {
+    color: #1a1220 !important;
+    -webkit-text-fill-color: #1a1220 !important;
+    background: rgba(196, 107, 130, 0.16) !important;
+    background-color: rgba(196, 107, 130, 0.16) !important;
+  }
+}
+
+.sentiment-archive-modal__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 0 2px;
+}
+
+.sentiment-archive-modal__head h3 {
+  margin: 0;
+  flex: 1 1 auto;
+  min-width: 0;
+  line-height: 1.25;
+}
+
+.sentiment-archive-modal__close {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin: 0;
+  padding: 0;
+  border-radius: 10px;
+  border: 1px solid rgba(196, 107, 130, 0.35);
+  background: #fff;
+  color: #3d3340;
+  -webkit-text-fill-color: #3d3340;
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.sentiment-archive-modal__close:hover,
+.sentiment-archive-modal__close:focus-visible {
+  border-color: #c46b82;
+  background: rgba(196, 107, 130, 0.12);
+  color: #1a1220;
+  -webkit-text-fill-color: #1a1220;
+}
+
+html[data-theme="dark"] .sentiment-archive-modal__close {
+  background: #2c2732;
+  color: #f7f2f5;
+  -webkit-text-fill-color: #f7f2f5;
+  border-color: rgba(247, 242, 245, 0.28);
+}
+
+@media (max-width: 700px) {
+  .sentiment-archive-modal__close {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+/* Open submenu names follow the theme on phones, iPads, and laptops. */
+html:not([data-theme="dark"]) header #menulist .admin-nav-dropdown.is-open > .admin-nav-dropdown-menu,
+html:not([data-theme="dark"]) body.admin-app header #menulist .admin-nav-dropdown-menu,
+html:not([data-theme="dark"]) body[data-staff-portal] header #menulist .admin-nav-dropdown-menu {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  color: #1a1220 !important;
+}
+
+html:not([data-theme="dark"]) header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item,
+html:not([data-theme="dark"]) header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item:link,
+html:not([data-theme="dark"]) header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item:visited,
+html:not([data-theme="dark"]) header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item:hover,
+html:not([data-theme="dark"]) header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item:focus,
+html:not([data-theme="dark"]) header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item:active,
+html:not([data-theme="dark"]) header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item:not(.primary-btn):not(.staff-access-btn):not(.role-login-trigger) {
+  color: #1a1220 !important;
+  -webkit-text-fill-color: #1a1220 !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  opacity: 1 !important;
+}
+
+html[data-theme="dark"] header #menulist .admin-nav-dropdown.is-open > .admin-nav-dropdown-menu,
+html[data-theme="dark"] body.admin-app header #menulist .admin-nav-dropdown-menu,
+html[data-theme="dark"] body[data-staff-portal] header #menulist .admin-nav-dropdown-menu {
+  background: #2a2432 !important;
+  background-color: #2a2432 !important;
+  color: #f7f2f5 !important;
+}
+
+html[data-theme="dark"] header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item,
+html[data-theme="dark"] header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item:link,
+html[data-theme="dark"] header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item:visited,
+html[data-theme="dark"] header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item:hover,
+html[data-theme="dark"] header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item:focus,
+html[data-theme="dark"] header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item:active,
+html[data-theme="dark"] header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item:not(.primary-btn):not(.staff-access-btn):not(.role-login-trigger):not(.active),
+html[data-theme="dark"] header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item.active {
+  color: #f7f2f5 !important;
+  -webkit-text-fill-color: #f7f2f5 !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  opacity: 1 !important;
+}
+
+html:not([data-theme="dark"]) header #menulist .admin-settings-menu:not([hidden]),
+html:not([data-theme="dark"]) header #menulist .admin-settings-item {
+  background: #ffffff !important;
+  color: #1a1220 !important;
+  -webkit-text-fill-color: #1a1220 !important;
+}
+
+html[data-theme="dark"] header #menulist .admin-settings-menu:not([hidden]) {
+  background: #2a2432 !important;
+  color: #f7f2f5 !important;
+}
+
+html[data-theme="dark"] header #menulist .admin-settings-item,
+html[data-theme="dark"] header #menulist .admin-settings-item:hover,
+html[data-theme="dark"] header #menulist .admin-settings-item:focus,
+html[data-theme="dark"] header #menulist .admin-settings-item:active {
+  background: transparent !important;
+  color: #f7f2f5 !important;
+  -webkit-text-fill-color: #f7f2f5 !important;
 }

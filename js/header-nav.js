@@ -15,6 +15,16 @@
     toggle.classList.toggle("is-active", open);
   }
 
+  function placeMenu() {
+    var header = menulist.closest("header");
+    if (!header || !isMobileNav()) {
+      menulist.style.top = "";
+      return;
+    }
+    var bottom = header.getBoundingClientRect().bottom;
+    menulist.style.top = Math.round(bottom + 6) + "px";
+  }
+
   function closeMenu() {
     menulist.classList.remove("is-open");
     setToggleState(false);
@@ -27,13 +37,28 @@
     });
   }
 
+  function menuCap() {
+    return Math.max(280, Math.round(window.innerHeight - 72));
+  }
+
+  function fitOpenMenu() {
+    if (!isMobileNav() || !menulist.classList.contains("is-open")) return;
+    placeMenu();
+    /* Measuring while max-height is 0 returns 0 on iOS, which kept the list shut. */
+    var prev = menulist.style.maxHeight;
+    menulist.style.maxHeight = "none";
+    var next = menulist.scrollHeight || menulist.offsetHeight || 0;
+    menulist.style.maxHeight = prev;
+    var height = next > 0 ? Math.min(next, menuCap()) : menuCap();
+    menulist.style.maxHeight = height + "px";
+  }
+
   function openMenu() {
     menulist.classList.add("is-open");
     setToggleState(true);
-    // Cap height so the panel cannot inflate into a huge blank region
-    var next = menulist.scrollHeight || 0;
-    var cap = Math.round(Math.min(window.innerHeight * 0.7, 520));
-    menulist.style.maxHeight = Math.max(0, Math.min(next, cap)) + "px";
+    menulist.style.maxHeight = menuCap() + "px";
+    placeMenu();
+    fitOpenMenu();
   }
 
   function syncViewport() {
@@ -44,9 +69,7 @@
       return;
     }
     if (menulist.classList.contains("is-open")) {
-      var next = menulist.scrollHeight || 0;
-      var cap = Math.round(Math.min(window.innerHeight * 0.7, 520));
-      menulist.style.maxHeight = Math.max(0, Math.min(next, cap)) + "px";
+      fitOpenMenu();
     } else {
       menulist.style.maxHeight = "0px";
     }
@@ -91,15 +114,23 @@
       });
       dropdown.classList.toggle("is-open", willOpen);
       toggle.setAttribute("aria-expanded", willOpen ? "true" : "false");
-      if (menulist.classList.contains("is-open")) {
-        var next = menulist.scrollHeight || 0;
-        var cap = Math.round(Math.min(window.innerHeight * 0.7, 520));
-        menulist.style.maxHeight = Math.max(0, Math.min(next, cap)) + "px";
-      }
+      if (menulist.classList.contains("is-open")) fitOpenMenu();
     });
   });
 
+  menulist.addEventListener("click", function () {
+    if (!isMobileNav()) return;
+    if (typeof requestAnimationFrame === "function") {
+      requestAnimationFrame(function () { requestAnimationFrame(fitOpenMenu); });
+    } else {
+      setTimeout(fitOpenMenu, 0);
+    }
+  });
+
   window.addEventListener("resize", syncViewport);
+  window.addEventListener("scroll", function () {
+    if (menulist.classList.contains("is-open")) placeMenu();
+  }, { passive: true });
   syncViewport();
   window.menutoggle = menutoggle;
 })();

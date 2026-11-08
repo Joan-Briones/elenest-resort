@@ -434,7 +434,7 @@
           esc(clipText(answer, 80)) +
           '</span></td><td class="manager-msg-col-actions">' +
           cmIconActions(
-            cmIconBtn("edit", "", 'data-edit-faq="' + esc(item.id) + '"', "Edit FAQ") +
+            cmIconBtn("edit", "", 'data-edit-faq="' + esc(item.id) + '"', "Edit information") +
               cmIconBtn("delete", "", 'data-del-faq="' + esc(item.id) + '"', "Delete")
           ) +
           "</td></tr>"
@@ -1001,7 +1001,168 @@
     });
   }
 
+  function closeRecordSheet() {
+    var sheet = document.querySelector(".m-record-modal");
+    if (!sheet || sheet.hidden) return;
+    var closeBtn = sheet.querySelector(".m-record-modal__close");
+    if (closeBtn) closeBtn.click();
+  }
+
+  function ensureFaqDialogs() {
+    if (document.getElementById("cmFaqEditModal")) return;
+    var edit = document.createElement("div");
+    edit.id = "cmFaqEditModal";
+    edit.className = "cm-dialog";
+    edit.hidden = true;
+    edit.innerHTML =
+      '<div class="cm-dialog__panel" role="dialog" aria-modal="true" aria-labelledby="cmFaqEditTitle">' +
+      '<div class="cm-dialog__head"><h3 id="cmFaqEditTitle">Edit information</h3>' +
+      '<button type="button" class="cm-dialog__close" data-cm-dialog-close>Close</button></div>' +
+      '<form id="cmFaqEditForm">' +
+      '<label for="cmFaqEditQuestion">Question</label>' +
+      '<input id="cmFaqEditQuestion" type="text" name="question" required maxlength="240" autocomplete="off" enterkeyhint="next">' +
+      '<label for="cmFaqEditAnswer">Answer</label>' +
+      '<textarea id="cmFaqEditAnswer" name="answer" required rows="4" maxlength="1200" enterkeyhint="done"></textarea>' +
+      '<label for="cmFaqEditSort">Order on page</label>' +
+      '<input id="cmFaqEditSort" type="number" name="sortOrder" min="1" step="1" inputmode="numeric">' +
+      '<label for="cmFaqEditCta">Button text (optional)</label>' +
+      '<input id="cmFaqEditCta" type="text" name="cta" maxlength="40" autocomplete="off">' +
+      '<p id="cmFaqEditMsg" class="auth-msg" hidden></p>' +
+      '<div class="cm-dialog__actions">' +
+      '<button type="submit" class="btn" id="cmFaqEditSave">Save</button>' +
+      '<button type="button" class="btn btn--outline" data-cm-dialog-close>Cancel</button>' +
+      "</div></form></div>";
+    var del = document.createElement("div");
+    del.id = "cmFaqDeleteModal";
+    del.className = "cm-dialog";
+    del.hidden = true;
+    del.innerHTML =
+      '<div class="cm-dialog__panel" role="dialog" aria-modal="true" aria-labelledby="cmFaqDeleteTitle">' +
+      '<div class="cm-dialog__head"><h3 id="cmFaqDeleteTitle">Delete this FAQ?</h3>' +
+      '<button type="button" class="cm-dialog__close" data-cm-dialog-close>Close</button></div>' +
+      '<p id="cmFaqDeleteText"></p>' +
+      '<p class="cm-dialog__note">This cannot be undone.</p>' +
+      '<div class="cm-dialog__actions">' +
+      '<button type="button" class="btn cm-dialog__danger" id="cmFaqDeleteConfirm">Delete</button>' +
+      '<button type="button" class="btn btn--outline" data-cm-dialog-close>Cancel</button>' +
+      "</div></div>";
+    document.body.appendChild(edit);
+    document.body.appendChild(del);
+
+    function closeDialog(box) {
+      if (box) box.hidden = true;
+    }
+    [edit, del].forEach(function (box) {
+      box.addEventListener("click", function (e) {
+        if (e.target === box || (e.target.closest && e.target.closest("[data-cm-dialog-close]"))) {
+          e.preventDefault();
+          closeDialog(box);
+        }
+      });
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key !== "Escape") return;
+      if (!edit.hidden) closeDialog(edit);
+      else if (!del.hidden) closeDialog(del);
+    });
+    edit.querySelector("form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      var S = storeOrWarn("cmFaqEditMsg");
+      if (!S) return;
+      var id = edit.getAttribute("data-id") || "";
+      var question = document.getElementById("cmFaqEditQuestion").value.trim();
+      var answer = document.getElementById("cmFaqEditAnswer").value.trim();
+      if (!question || !answer) {
+        setMsg("cmFaqEditMsg", false, "Please fill in both the question and the answer.");
+        return;
+      }
+      var saveBtn = document.getElementById("cmFaqEditSave");
+      if (saveBtn) saveBtn.disabled = true;
+      Promise.resolve(S.upsertFaq({
+        id: id,
+        question: question,
+        answer: answer,
+        sortOrder: document.getElementById("cmFaqEditSort").value,
+        ctaLabel: document.getElementById("cmFaqEditCta").value.trim(),
+        ctaHref: edit.getAttribute("data-cta-href") || ""
+      })).then(function () {
+        closeDialog(edit);
+        renderFaqManager();
+        setMsg("cmFaqMsg", true, "FAQ updated.");
+      }).catch(function () {
+        setMsg("cmFaqEditMsg", false, "Could not save that FAQ. Try again.");
+      }).then(function () {
+        if (saveBtn) saveBtn.disabled = false;
+      });
+    });
+    document.getElementById("cmFaqDeleteConfirm").addEventListener("click", function () {
+      var S = storeOrWarn("cmFaqMsg");
+      if (!S) return;
+      var id = del.getAttribute("data-id") || "";
+      var btn = document.getElementById("cmFaqDeleteConfirm");
+      if (btn) btn.disabled = true;
+      Promise.resolve(S.deleteFaq(id)).then(function () {
+        closeDialog(del);
+        renderFaqManager();
+        setMsg("cmFaqMsg", true, "FAQ deleted.");
+      }).catch(function () {
+        setMsg("cmFaqMsg", false, "Could not delete that FAQ. Try again.");
+        closeDialog(del);
+      }).then(function () {
+        if (btn) btn.disabled = false;
+      });
+    });
+  }
+
+  function openFaqEdit(id) {
+    var S = storeOrWarn("cmFaqMsg");
+    if (!S) return;
+    var item = S.getFaqs().find(function (f) {
+      return String(f.id) === String(id);
+    });
+    if (!item) return;
+    ensureFaqDialogs();
+    closeRecordSheet();
+    var box = document.getElementById("cmFaqEditModal");
+    box.setAttribute("data-id", item.id);
+    box.setAttribute("data-cta-href", item.ctaHref || "");
+    document.getElementById("cmFaqEditQuestion").value = item.question || "";
+    document.getElementById("cmFaqEditAnswer").value = item.answer || "";
+    document.getElementById("cmFaqEditSort").value = item.sortOrder || "";
+    document.getElementById("cmFaqEditCta").value = item.ctaLabel || "";
+    var msg = document.getElementById("cmFaqEditMsg");
+    if (msg) msg.hidden = true;
+    box.hidden = false;
+    var field = document.getElementById("cmFaqEditQuestion");
+    if (field) {
+      field.focus();
+      if (typeof field.setSelectionRange === "function") {
+        var len = field.value.length;
+        field.setSelectionRange(len, len);
+      }
+    }
+  }
+
+  function openFaqDelete(id) {
+    var S = storeOrWarn("cmFaqMsg");
+    if (!S) return;
+    var item = S.getFaqs().find(function (f) {
+      return String(f.id) === String(id);
+    });
+    if (!item) return;
+    ensureFaqDialogs();
+    closeRecordSheet();
+    var box = document.getElementById("cmFaqDeleteModal");
+    box.setAttribute("data-id", item.id);
+    var text = document.getElementById("cmFaqDeleteText");
+    if (text) text.textContent = item.question || "This FAQ";
+    box.hidden = false;
+    var cancel = box.querySelector("[data-cm-dialog-close]");
+    if (cancel) cancel.focus();
+  }
+
   function initFaqHandlers() {
+    ensureFaqDialogs();
     var form = document.getElementById("cmFaqForm");
     var cancel = document.getElementById("cmFaqCancel");
     if (cancel) cancel.addEventListener("click", resetFaqForm);
@@ -1039,31 +1200,14 @@
     document.addEventListener("click", function (e) {
       var editBtn = e.target.closest("[data-edit-faq]");
       if (editBtn) {
-        var S = storeOrWarn("cmFaqMsg");
-        if (!S) return;
-        var item = S.getFaqs().find(function (f) {
-          return String(f.id) === String(editBtn.getAttribute("data-edit-faq"));
-        });
-        if (!item) return;
-        document.getElementById("cmFaqEditId").value = item.id;
-        document.getElementById("cmFaqQuestion").value = item.question || "";
-        document.getElementById("cmFaqAnswer").value = item.answer || "";
-        document.getElementById("cmFaqSort").value = item.sortOrder || "";
-        document.getElementById("cmFaqCtaLabel").value = item.ctaLabel || "";
-        document.getElementById("cmFaqSubmit").textContent = "Save Changes";
-        document.getElementById("cmFaqCancel").hidden = false;
+        e.preventDefault();
+        openFaqEdit(editBtn.getAttribute("data-edit-faq"));
         return;
       }
       var delBtn = e.target.closest("[data-del-faq]");
       if (delBtn) {
-        if (!confirm("Delete this FAQ? This cannot be undone.")) return;
-        var S2 = storeOrWarn("cmFaqMsg");
-        if (!S2) return;
-        withBtnLoading(delBtn, function () {
-          return Promise.resolve(S2.deleteFaq(delBtn.getAttribute("data-del-faq"))).then(function () {
-            renderFaqManager();
-          });
-        });
+        e.preventDefault();
+        openFaqDelete(delBtn.getAttribute("data-del-faq"));
       }
     });
   }

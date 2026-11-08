@@ -1019,7 +1019,7 @@
   function getSectionIdFromHash(h) {
     var id = String(h || "");
     if (id.charAt(0) === "#") id = id.slice(1);
-    var known = ["section-dashboard", "section-messages", "section-content", "section-manage", "section-calendar", "section-analytics", "section-recommendations"];
+    var known = ["section-dashboard", "section-messages", "section-content", "section-manage", "section-calendar", "section-analytics"];
     if (known.indexOf(id) !== -1) return id;
     return "section-dashboard";
   }
@@ -1034,8 +1034,7 @@
     "section-messages": true,
     "section-content": true,
     "section-manage": true,
-    "section-calendar": true,
-    "section-recommendations": true
+    "section-calendar": true
   };
 
   function setActiveNav(targetSectionId) {
@@ -1061,7 +1060,7 @@
     }
     currentSectionId = sectionId;
 
-    ["section-dashboard", "section-messages", "section-content", "section-manage", "section-calendar", "section-analytics", "section-recommendations"].forEach(function (sid) {
+    ["section-dashboard", "section-messages", "section-content", "section-manage", "section-calendar", "section-analytics"].forEach(function (sid) {
       var el = document.getElementById(sid);
       if (!el) return;
       setHidden(el, sid !== sectionId);
@@ -1098,7 +1097,6 @@
       renderReports();
       pullLiveBookings();
     }
-    else if (sectionId === "section-recommendations") renderRecommendations();
   }
 
   window.ElenestManagerContent = {
@@ -1279,69 +1277,6 @@
         renderMarketingSection();
       });
     }
-  }
-
-  function renderRecommendations() {
-    var host = document.getElementById("managerRecommendationsList");
-    if (!host) return;
-    host.textContent = "";
-    var items = [
-      {
-        title: "Guest rooms",
-        text:
-          "Use a pre-arrival checklist for each room: cooling, linens, toiletries, and odor control. Sign off by shift before guest check-in."
-      },
-      {
-        title: "Pool operations",
-        text:
-          "Run pool safety checks every morning and before peak hours. Log water quality, towels, and slip-risk areas in one daily tracker."
-      },
-      {
-        title: "Event hall readiness",
-        text:
-          "Confirm hall setup 24 hours before each event, including sound, lighting, seating, and cooling, to avoid same-day delays."
-      },
-      {
-        title: "Cottages",
-        text:
-          "Inspect each cottage before arrival for maintenance, privacy, and complete amenities so the setup matches what guests booked."
-      },
-      {
-        title: "Front desk response",
-        text:
-          "Set target response times for check-in and guest requests, then monitor completion per shift to keep service consistent."
-      },
-      {
-        title: "Issue follow-up",
-        text:
-          "Assign one owner per reported issue and require closure notes within 24 hours so recurring concerns are resolved quickly."
-      },
-      {
-        title: "Housekeeping handover",
-        text:
-          "Use one shift log for unfinished rooms, missing amenities, and guest requests so the next team can finish prep before check-in."
-      },
-      {
-        title: "Dining and catering",
-        text:
-          "Confirm menu counts, dietary notes, and service times the day before each event. Stage plates, drinks, and backups before guests arrive."
-      }
-    ];
-    items = items.slice(0, 8);
-    host.className = "manager-rec-grid";
-    host.innerHTML = items.map(function (it) {
-      return (
-        '<article class="manager-rec-card">' +
-        '<h4 class="manager-rec-card__title">' +
-        escapeHtml(it.title) +
-        "</h4>" +
-        '<p class="manager-rec-card__text">' +
-        escapeHtml(it.text) +
-        "</p>" +
-        "</article>"
-      );
-    }).join("");
-
   }
 
   function counts() {
@@ -4216,12 +4151,12 @@
       var sub = document.getElementById("managerReportReviewsSub");
       if (sub) {
         sub.textContent = total
-          ? "Same totals as the home page — " +
+          ? "Live guest reviews classified by Model Evaluation — " +
             total.toLocaleString() +
             " review" +
             (total === 1 ? "" : "s") +
-            " on file."
-          : "Same totals as the home page. Charts update when new reviews are saved.";
+            ". Same Positive / Negative / Neutral model as evaluation metrics."
+          : "Live from Model Evaluation. Charts stay empty until guests submit reviews.";
       }
 
       var now = new Date();
@@ -4261,12 +4196,26 @@
       }
     }
 
-    paint(readAllReviewRecordsForHomeKpis());
-
-    // Reuse cache — do not force-reload on every paint (keeps analytics smooth).
-    loadFullReviewRecordsForHomeKpis(false).then(function (list) {
-      paint(list || []);
-    });
+    var GF = window.ElenestGuestFeedback;
+    var ready = GF && GF.ready && typeof GF.ready.then === "function" ? GF.ready : Promise.resolve();
+    ready
+      .then(function () {
+        return GF && typeof GF.ensureHistoricalLoaded === "function"
+          ? GF.ensureHistoricalLoaded()
+          : null;
+      })
+      .then(function () {
+        paint(readAllReviewRecordsForHomeKpis());
+      })
+      .catch(function () {
+        paint(readAllReviewRecordsForHomeKpis());
+      });
+    var EV = window.ElenestModelEvaluation;
+    if (EV && typeof EV.prefetch === "function") {
+      try {
+        EV.prefetch();
+      } catch (ePrefetch) {}
+    }
   }
 
   function printTable(headers, rows, foot) {
@@ -4805,11 +4754,13 @@
       }
     });
 
+    window.addEventListener("elenest-sentiment-model-ready", function () {
+      renderManagerGuestReviews();
+    });
     window.addEventListener("elenest-feedback-updated", function () {
       invalidateFullReviewsCache();
       loadFullReviewRecordsForHomeKpis(true).then(function () {
         renderDashboard();
-        if (currentSectionId === "section-recommendations") renderRecommendations();
         if (currentSectionId === "section-analytics" || currentSectionId === "section-reports") {
           renderManagerGuestReviews();
           renderAnalytics();
@@ -4842,7 +4793,6 @@
         renderAnalytics();
         renderReports();
       }
-      if (currentSectionId === "section-recommendations") renderRecommendations();
     });
 
     var refreshDash = document.getElementById("managerRefreshDashboard");
@@ -5052,15 +5002,6 @@
       });
     }
 
-    var refreshRecommendations = document.getElementById("managerRefreshRecommendations");
-    if (refreshRecommendations) {
-      refreshRecommendations.addEventListener("click", function () {
-        var BL = window.ElenestButtonLoading;
-        if (BL) BL.run(refreshRecommendations, function () { renderRecommendations(); });
-        else renderRecommendations();
-      });
-    }
-
     function refreshAnalyticsReports() {
       return pullLiveBookings();
     }
@@ -5151,7 +5092,6 @@
 
     function bootDashboard() {
       showSection(getSectionIdFromHash(window.location.hash));
-      renderRecommendations();
       renderDashboard();
       pullLiveBookings();
       if (window.ElenestStaffBootLoading && typeof window.ElenestStaffBootLoading.hide === "function") {
@@ -5161,7 +5101,6 @@
 
     bootDashboard();
     function refreshAfterData() {
-      renderRecommendations();
       renderDashboard();
       pullLiveBookings();
     }

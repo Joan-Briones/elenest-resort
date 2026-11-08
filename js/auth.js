@@ -157,21 +157,140 @@
       pop.setAttribute("role", "dialog");
       pop.setAttribute("aria-label", "Signed-in staff");
       pop.innerHTML =
-        '<p class="staff-identity-popover__name" id="staffIdentityName"></p>' +
+        '<button type="button" class="staff-identity-popover__name" id="staffIdentityName"></button>' +
+        '<form class="staff-identity-popover__edit" id="staffIdentityEdit" hidden>' +
+        '<label class="staff-identity-popover__label" for="staffIdentityInput">Display name</label>' +
+        '<input id="staffIdentityInput" class="staff-identity-popover__input" type="text" name="displayName" maxlength="80" autocomplete="name" enterkeyhint="done" inputmode="text">' +
+        '<div class="staff-identity-popover__actions">' +
+        '<button type="submit" class="staff-identity-popover__save" id="staffIdentitySave">Save</button>' +
+        '<button type="button" class="staff-identity-popover__cancel" id="staffIdentityCancel">Cancel</button>' +
+        "</div>" +
+        '<p class="staff-identity-popover__status" id="staffIdentityStatus" hidden></p>' +
+        "</form>" +
         '<p class="staff-identity-popover__role" id="staffIdentityRole"></p>';
       document.body.appendChild(pop);
     }
+    if (!document.getElementById("staffIdentityEdit")) {
+      pop.innerHTML =
+        '<button type="button" class="staff-identity-popover__name" id="staffIdentityName"></button>' +
+        '<form class="staff-identity-popover__edit" id="staffIdentityEdit" hidden>' +
+        '<label class="staff-identity-popover__label" for="staffIdentityInput">Display name</label>' +
+        '<input id="staffIdentityInput" class="staff-identity-popover__input" type="text" name="displayName" maxlength="80" autocomplete="name" enterkeyhint="done" inputmode="text">' +
+        '<div class="staff-identity-popover__actions">' +
+        '<button type="submit" class="staff-identity-popover__save" id="staffIdentitySave">Save</button>' +
+        '<button type="button" class="staff-identity-popover__cancel" id="staffIdentityCancel">Cancel</button>' +
+        "</div>" +
+        '<p class="staff-identity-popover__status" id="staffIdentityStatus" hidden></p>' +
+        "</form>" +
+        '<p class="staff-identity-popover__role" id="staffIdentityRole"></p>';
+    }
     var nameNode = document.getElementById("staffIdentityName");
     var roleNode = document.getElementById("staffIdentityRole");
-    if (nameNode) nameNode.textContent = name || "Staff";
+    var editForm = document.getElementById("staffIdentityEdit");
+    var nameInput = document.getElementById("staffIdentityInput");
+    var statusNode = document.getElementById("staffIdentityStatus");
+    var hintNode = document.getElementById("staffIdentityHint");
+    if (nameNode && nameNode.tagName !== "INPUT") nameNode.textContent = name || "Staff";
     if (roleNode) roleNode.textContent = role || "";
+    if (hintNode) {
+      var openingAsAdmin =
+        (document.body && document.body.classList.contains("admin-app")) ||
+        String(role || "").trim().toLowerCase() === "admin";
+      if (openingAsAdmin) {
+        hintNode.hidden = true;
+        hintNode.textContent = "";
+      }
+    }
 
     if (item.getAttribute("data-identity-bound") === "1") return;
     item.setAttribute("data-identity-bound", "1");
 
+    function editingName() {
+      return !!(editForm && !editForm.hidden);
+    }
+
+    function setNameStatus(message) {
+      if (!statusNode) return;
+      statusNode.textContent = message || "";
+      statusNode.hidden = !message;
+    }
+
+    function syncHint() {
+      if (!hintNode) return;
+      hintNode.hidden = true;
+      hintNode.textContent = "";
+    }
+
+    function showNameButton() {
+      if (editForm) editForm.hidden = true;
+      if (nameNode) nameNode.hidden = false;
+      syncHint();
+      setNameStatus("");
+    }
+
     function closePop() {
+      if (editingName()) return;
+      showNameButton();
       pop.setAttribute("hidden", "");
       item.classList.remove("is-identity-open");
+    }
+
+    function beginNameEdit() {
+      var current = (nameNode && nameNode.textContent) || name || "";
+      if (nameInput) {
+        nameInput.value = String(current).trim();
+      }
+      if (nameNode) nameNode.hidden = true;
+      if (hintNode) hintNode.hidden = true;
+      if (editForm) editForm.hidden = false;
+      setNameStatus("");
+      if (nameInput) {
+        nameInput.focus();
+        if (typeof nameInput.setSelectionRange === "function") {
+          var len = nameInput.value.length;
+          nameInput.setSelectionRange(len, len);
+        }
+      }
+    }
+
+    function saveDisplayName() {
+      var next = String((nameInput && nameInput.value) || "")
+        .trim()
+        .replace(/\s+/g, " ");
+      if (next.length < 2) {
+        setNameStatus("Enter at least 2 characters.");
+        if (nameInput) nameInput.focus();
+        return;
+      }
+      if (next.length > 80) next = next.slice(0, 80);
+      var user = sessionUser;
+      if (!user || !user.id) {
+        setNameStatus("Sign in again, then edit your name.");
+        return;
+      }
+      var saveBtn = document.getElementById("staffIdentitySave");
+      if (saveBtn) saveBtn.disabled = true;
+      setNameStatus("Saving…");
+      updateCurrentUserProfile({ name: next, email: user.email || "" })
+        .then(function (result) {
+          if (!result || !result.ok) {
+            throw new Error((result && result.message) || "Could not save the name.");
+          }
+          var saved = result.user || user;
+          saved.name = next;
+          cacheUser(saved);
+          if (nameNode) nameNode.textContent = next;
+          item.setAttribute("data-staff-name", next);
+          showNameButton();
+          applyStaffHeaderRole(saved);
+        })
+        .catch(function (err) {
+          setNameStatus((err && err.message) || "Could not save the name. Try again.");
+          if (nameInput) nameInput.focus();
+        })
+        .then(function () {
+          if (saveBtn) saveBtn.disabled = false;
+        });
     }
 
     function openPop() {
@@ -192,12 +311,17 @@
         roleNode.textContent = r;
         roleNode.hidden = !r;
       }
+      showNameButton();
       pop.removeAttribute("hidden");
       item.classList.add("is-identity-open");
       var rect = item.getBoundingClientRect();
       var pad = 8;
+      var popWidth = Math.min(280, window.innerWidth - pad * 2);
+      pop.style.width = popWidth + "px";
       var top = Math.round(rect.bottom + 8);
-      var left = Math.round(Math.min(window.innerWidth - 220 - pad, Math.max(pad, rect.right - 200)));
+      var left = Math.round(rect.right - popWidth);
+      if (left < pad) left = pad;
+      if (left + popWidth > window.innerWidth - pad) left = Math.max(pad, window.innerWidth - popWidth - pad);
       pop.style.top = top + "px";
       pop.style.left = left + "px";
     }
@@ -215,15 +339,46 @@
       if (e.target && e.target.closest && e.target.closest(".staff-notif-wrap")) return;
       togglePop(e);
     });
+    if (nameNode) {
+      nameNode.addEventListener("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        beginNameEdit();
+      });
+    }
+    if (editForm) {
+      editForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        saveDisplayName();
+      });
+      editForm.addEventListener("click", function (e) {
+        e.stopPropagation();
+      });
+    }
+    var cancelBtn = document.getElementById("staffIdentityCancel");
+    if (cancelBtn) {
+      cancelBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        showNameButton();
+      });
+    }
     elKeyboard(item, togglePop);
 
     document.addEventListener("click", function (e) {
       if (pop.hasAttribute("hidden")) return;
       if (pop.contains(e.target) || item.contains(e.target)) return;
+      showNameButton();
       closePop();
     });
     document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape") closePop();
+      if (e.key !== "Escape") return;
+      if (editingName()) {
+        showNameButton();
+        return;
+      }
+      closePop();
     });
     window.addEventListener("resize", closePop);
     window.addEventListener("scroll", closePop, true);

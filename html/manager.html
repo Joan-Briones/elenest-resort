@@ -47,7 +47,6 @@
               <a href="#section-content" class="admin-nav-dropdown-item" role="menuitem">Website Content</a>
               <a href="#section-manage" class="admin-nav-dropdown-item" role="menuitem">Reservation Information</a>
               <a href="#section-calendar" class="admin-nav-dropdown-item" role="menuitem">Calendar</a>
-              <a href="#section-recommendations" class="admin-nav-dropdown-item" role="menuitem">Recommendation</a>
             </div>
           </li>
           <li><a href="#section-analytics">Analytics</a></li>
@@ -839,7 +838,7 @@
               <span class="manager-chart-live" aria-live="polite">Live</span>
             </div>
             <p class="booking-card__sub admin-report-chart-sub" id="managerReportReviewsSub">
-              Live from guest feedback in the database.
+              Live guest reviews classified by Model Evaluation — not sample data.
             </p>
             <div class="admin-report-reviews-kpis" aria-live="polite">
               <div class="admin-report-reviews-kpi">
@@ -911,16 +910,6 @@
       </div>
     </section>
 
-    <section class="section admin-section" id="section-recommendations" hidden>
-      <div class="appointments-strip manager-rec-strip">
-        <div class="appointments-strip__head">
-          <h2 class="appointments-strip__title">Recommendations</h2>
-        </div>
-        <div class="card manager-rec-panel">
-          <div id="managerRecommendationsList" class="manager-rec-grid"></div>
-        </div>
-      </div>
-    </section>
   </main>
 
   <div id="managerPrintSheet" class="manager-print-sheet" hidden aria-hidden="true"></div>
@@ -962,14 +951,14 @@
   <script src="../js/supabase-client.js"></script>
   <script src="../js/ui-button-loading.js?v=20261012-btns1"></script>
   <script src="../js/elenest-errors.js?v=20260922-ux1"></script>
-  <script src="../js/auth.js?v=20260922-ux3"></script>
+  <script src="../js/auth.js?v=20261107-nohint1"></script>
   <script src="../js/access-control.js?v=20260918-role2"></script>
   <script src="../js/payment-flow.js?v=20261101-cancel1"></script>
   <script src="../js/historical-data.js?v=20261008-eval1"></script>
   <script src="../js/bookings.js?v=20261101-cancel1"></script>
   <script src="../js/notifications.js?v=20261101-panelx1"></script>
   <script src="../js/staff-notifications-ui.js?v=20261101-panelx1"></script>
-  <script src="../js/guest-feedback.js?v=20261101-testdata1"></script>
+  <script src="../js/guest-feedback.js?v=20261107-allcomments1"></script>
   <script src="../js/contact-messages.js?v=customer-messages-2"></script>
   <script src="../js/content-store.js?v=20260911-facphotos1"></script>
   <script src="../js/unit-availability.js?v=20261020-decline1"></script>
@@ -979,11 +968,11 @@
   <script src="../js/activity-logs.js?v=20260917-actlog1"></script>
   <script src="../js/staff-portal.js?v=20260911-mgrprofile2"></script>
   <script src="../js/cms-marketing.js?v=20261012-btns1"></script>
-  <script src="../js/content-management.js?v=20261012-btns1"></script>
-  <script src="../js/model-evaluation.js?v=20261102-stable1"></script>
+  <script src="../js/content-management.js?v=20261107-faqedit1"></script>
+  <script src="../js/model-evaluation.js?v=20261107-allcomments1"></script>
   <script src="../js/staff-boot-loading.js?v=20261008-boot2"></script>
-  <script src="../js/manager.js?v=20261105-checkincancel1"></script>
-  <script src="../js/mobile-tables.js?v=20260929-mobile7"></script>
+  <script src="../js/manager.js?v=20261107-norec1"></script>
+  <script src="../js/mobile-tables.js?v=20261107-btnstack1"></script>
 
   <div id="managerEditOverlay" class="admin-settings-overlay" hidden>
     <div class="admin-settings-modal manager-edit-modal" role="dialog" aria-modal="true" aria-labelledby="managerEditTitle">
@@ -1102,6 +1091,6 @@
       </form>
     </div>
   </div>
-  <script src="../js/header-nav.js?v=20260922-menu2"></script>
+  <script src="../js/header-nav.js?v=20261107-navnames3"></script>
 </body>
 </html>

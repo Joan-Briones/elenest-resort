@@ -181,12 +181,17 @@
   }
 
   var ADMIN_PAGE_SIZE = 5;
+  var SENTIMENT_COMMENTS_PAGE_SIZE = 2;
+  var SENTIMENT_DETAILS_PAGE_SIZE = 5;
   var adminListPages = {
     bookingReview: 1,
     paymentVerification: 1,
     arrivalMonitoring: 1,
     paymentHistory: 1,
-    userAccounts: 1
+    userAccounts: 1,
+    sentimentComments: 1,
+    sentimentDetails: 1,
+    sentimentDetailsKey: ""
   };
   var paymentPeriodFilter = {
     mode: "all",
@@ -357,6 +362,7 @@
     host.appendChild(info);
     host.appendChild(nav);
 
+    if (host.id === "sentimentCommentsPager") return;
     // Keep reports pagination collapsed when its sibling list is still hidden.
     var listSibling = host.previousElementSibling;
     if (listSibling && listSibling.hasAttribute("hidden")) {
@@ -463,17 +469,14 @@
   }
 
   function getFeedback() {
-    if (window.ElenestGuestFeedback && typeof window.ElenestGuestFeedback.listLive === "function") {
-      return window.ElenestGuestFeedback.listLive();
-    }
-    if (window.ElenestGuestFeedback && typeof window.ElenestGuestFeedback.listAll === "function") {
-      return window.ElenestGuestFeedback.listAll();
+    var GF = window.ElenestGuestFeedback;
+    if (GF && typeof GF.listAll === "function") {
+      return (GF.listAll() || []).filter(Boolean);
     }
     try {
       var raw = localStorage.getItem("elenest_feedback");
-      if (!raw) return [];
-      var parsed = JSON.parse(raw);
-      return Array.isArray(parsed) ? parsed : [];
+      var parsed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(parsed) ? parsed.filter(Boolean) : [];
     } catch (e) {
       return [];
     }
@@ -748,8 +751,12 @@
     });
   }
 
-  /** Active Guest Sentiment comments for the current Mon–Sun week (non-archived). */
+  /** All guest comments for sentiment: live + past + test. */
   function getSentimentFeedback() {
+    return getFeedback();
+  }
+
+  function getWeeklyRecommendationFeedback() {
     if (
       window.ElenestGuestFeedback &&
       typeof window.ElenestGuestFeedback.listForSentiment === "function"
@@ -4459,19 +4466,29 @@
     var weekLabel = formatWeekRangeLabel(getCurrentWeekStartDate());
     var weekNote = document.getElementById("sentimentCurrentWeekNote");
     if (weekNote) {
-      weekNote.textContent = "Showing comments for the current week (" + weekLabel + ").";
+      weekNote.textContent =
+        "Showing live, past, and test guest comments (" +
+        weekLabel +
+        " weekly recommendation still uses this week).";
     }
     host.textContent = "";
+    var pager = document.getElementById("sentimentCommentsPager");
     if (!list.length) {
+      adminListPages.sentimentComments = 1;
+      if (pager) renderPaginationControls(pager, null);
       var empty = document.createElement("p");
       empty.className = "sentiment-current-week-empty";
-      empty.textContent = getFeedback().length
-        ? "No guest comments yet for this week. Previous weeks are in the Comment Archive."
-        : "No guest comments yet. New reviews will appear here and update the ratings.";
+      empty.textContent = "No guest comments yet. Live, past, and test reviews will appear here.";
       host.appendChild(empty);
       return;
     }
-    list.slice(0, 6).forEach(function (f, i) {
+    var pageState = paginateItems(
+      list,
+      adminListPages.sentimentComments,
+      SENTIMENT_COMMENTS_PAGE_SIZE
+    );
+    adminListPages.sentimentComments = pageState.page;
+    pageState.items.forEach(function (f, i) {
       var card = document.createElement("article");
       card.className = "review-card";
       var img = document.createElement("img");
@@ -4495,6 +4512,11 @@
       card.appendChild(stars);
       card.appendChild(txt);
       host.appendChild(card);
+    });
+    if (pager) pager.removeAttribute("hidden");
+    renderPaginationControls(pager, pageState, function (page) {
+      adminListPages.sentimentComments = page;
+      renderSentimentFeedbackList();
     });
   }
 
@@ -5640,77 +5662,83 @@
   }
 
   function renderReportsGuestReviews() {
-    function paintFromKpis(kpis) {
-      if (!kpis) return;
-      var total = Number(kpis.total) || 0;
-      var setText = function (id, text) {
-        var el = document.getElementById(id);
-        if (el) el.textContent = text;
-      };
-      var setWidth = function (id, width) {
-        var el = document.getElementById(id);
-        if (el) el.style.width = width;
-      };
-
-      setText(
-        "adminReportReviewsAvg",
-        total && kpis.average ? Number(kpis.average).toFixed(1) + "/5" : "—"
-      );
-      setText("adminReportReviewsPos", total ? kpis.recommend + "%" : "—");
-      setText("adminReportReviewsTotal", String(total));
-
-      setText("adminReportPctPos", (kpis.pctPos || 0) + "%");
-      setText("adminReportPctNeg", (kpis.pctNeg || 0) + "%");
-      setText("adminReportPctNeu", (kpis.pctNeu || 0) + "%");
-      setWidth("adminReportBarPos", (kpis.pctPos || 0) + "%");
-      setWidth("adminReportBarNeg", (kpis.pctNeg || 0) + "%");
-      setWidth("adminReportBarNeu", (kpis.pctNeu || 0) + "%");
-
-      var sub = document.getElementById("adminReportReviewsSub");
-      if (sub) {
-        sub.textContent = total
-          ? "Same totals as the home page — " +
-            total.toLocaleString() +
-            " review" +
-            (total === 1 ? "" : "s") +
-            " on file."
-          : "Same totals as the home page. Charts update when new reviews are saved.";
-      }
-
-      drawSentimentStackedChart(
-        "adminReportReviewsChart",
-        kpis.buckets || buildSentimentMonthBuckets(6),
-        {
-          skipExample: true,
-          compact: true,
-          hideLegend: true,
-          hideTitle: true,
-          tipId: "adminReportReviewsTip"
-        }
-      );
-      if (
-        window.ElenestGuestFeedback &&
-        typeof window.ElenestGuestFeedback.mountRecentReviewNames === "function"
-      ) {
-        window.ElenestGuestFeedback.mountRecentReviewNames(
-          document.getElementById("adminReportGuestReviewsCard")
-        );
+    var GF = window.ElenestGuestFeedback;
+    if (GF && typeof GF.isHistoricalLoaded === "function" && !GF.isHistoricalLoaded()) {
+      if (!renderReportsGuestReviews._loadingHist) {
+        renderReportsGuestReviews._loadingHist = true;
+        var histReady = GF.ready && typeof GF.ready.then === "function" ? GF.ready : Promise.resolve();
+        histReady
+          .then(function () {
+            return typeof GF.ensureHistoricalLoaded === "function" ? GF.ensureHistoricalLoaded() : null;
+          })
+          .then(function () {
+            renderReportsGuestReviews._loadingHist = false;
+            renderReportsGuestReviews();
+          })
+          .catch(function () {
+            renderReportsGuestReviews._loadingHist = false;
+          });
       }
     }
+    var list = getFeedback();
+    var kpis = computeHomeStyleReviewKpis(list);
+    var tallies = tallyDisplayedSentiment(list);
+    var chart = buildLiveSentimentChartData(currentSentimentPeriod);
+    var total = Number(kpis.total) || 0;
+    var setText = function (id, text) {
+      var el = document.getElementById(id);
+      if (el) el.textContent = text;
+    };
+    var setWidth = function (id, width) {
+      var el = document.getElementById(id);
+      if (el) el.style.width = width;
+    };
 
-    // Instant paint from cache / live estimate — never block the UI.
-    if (homeReviewKpisCache) {
-      paintFromKpis(homeReviewKpisCache);
-    } else {
-      var liveAcc = createEmptyReviewKpiAccumulator();
-      var live = getLiveReviewRecordsForKpis();
-      var i;
-      for (i = 0; i < live.length; i++) accumulateReviewRow(liveAcc, live[i]);
-      paintFromKpis(finalizeReviewKpiAccumulator(liveAcc));
+    setText(
+      "adminReportReviewsAvg",
+      total && kpis.average ? Number(kpis.average).toFixed(1) + "/5" : "—"
+    );
+    setText("adminReportReviewsPos", total ? kpis.recommend + "%" : "—");
+    setText("adminReportReviewsTotal", String(total));
+
+    setText("adminReportPctPos", tallies.pctPos + "%");
+    setText("adminReportPctNeg", tallies.pctNeg + "%");
+    setText("adminReportPctNeu", tallies.pctNeu + "%");
+    setWidth("adminReportBarPos", tallies.pctPos + "%");
+    setWidth("adminReportBarNeg", tallies.pctNeg + "%");
+    setWidth("adminReportBarNeu", tallies.pctNeu + "%");
+
+    var sub = document.getElementById("adminReportReviewsSub");
+    if (sub) {
+      sub.textContent = total
+        ? "Live guest reviews classified by Model Evaluation — " +
+          total.toLocaleString() +
+          " review" +
+          (total === 1 ? "" : "s") +
+          ". Same Positive / Negative / Neutral model as the metrics below."
+        : "Live from Model Evaluation. Charts stay empty until guests submit reviews.";
     }
 
-    // One shared background load; reuses cache after first success.
-    loadHomeReviewKpis(false).then(paintFromKpis);
+    drawSentimentStackedChart("adminReportReviewsChart", chart.buckets, {
+      skipExample: true,
+      compact: true,
+      hideLegend: true,
+      hideTitle: true,
+      overlay: true,
+      tipId: "adminReportReviewsTip"
+    });
+    updateSentimentPeriodButtonsUI();
+    initSentimentPeriodFilters();
+    var EV = window.ElenestModelEvaluation;
+    if (EV && typeof EV.prefetch === "function") EV.prefetch();
+    if (
+      window.ElenestGuestFeedback &&
+      typeof window.ElenestGuestFeedback.mountRecentReviewNames === "function"
+    ) {
+      window.ElenestGuestFeedback.mountRecentReviewNames(
+        document.getElementById("adminReportGuestReviewsCard")
+      );
+    }
   }
 
   function formatTrendPeso(n) {
@@ -5949,11 +5977,40 @@
     return buckets;
   }
 
+  function feedbackCreatedAt(f) {
+    return (f && (f.createdAt || f.created_at || f.submittedAt || f.submitted_at)) || "";
+  }
+
+  function tallyDisplayedSentiment(list) {
+    var pos = 0;
+    var neu = 0;
+    var neg = 0;
+    (list || []).forEach(function (f) {
+      var cl = displayedSentiment(f);
+      if (cl === "pos") pos += 1;
+      else if (cl === "neg") neg += 1;
+      else neu += 1;
+    });
+    var total = pos + neu + neg;
+    var pctPos = total ? Math.round((pos / total) * 100) : 0;
+    var pctNeu = total ? Math.round((neu / total) * 100) : 0;
+    var pctNeg = total ? Math.max(0, 100 - pctPos - pctNeu) : 0;
+    return {
+      pos: pos,
+      neu: neu,
+      neg: neg,
+      total: total,
+      pctPos: pctPos,
+      pctNeu: pctNeu,
+      pctNeg: pctNeg
+    };
+  }
+
   function bucketFeedbackByPeriod(feedbackList, buckets, periodFn) {
     var idx = {};
     buckets.forEach(function (b, i) { idx[b.key] = i; });
-    feedbackList.forEach(function (f) {
-      var raw = f.createdAt;
+    (feedbackList || []).forEach(function (f) {
+      var raw = feedbackCreatedAt(f);
       if (!raw) return;
       var dt = new Date(raw);
       if (isNaN(dt.getTime())) return;
@@ -5971,8 +6028,8 @@
     buckets.forEach(function (b) {
       idx[b.key] = true;
     });
-    return feedbackList.filter(function (f) {
-      var raw = f.createdAt;
+    return (feedbackList || []).filter(function (f) {
+      var raw = feedbackCreatedAt(f);
       if (!raw) return false;
       var dt = new Date(raw);
       if (isNaN(dt.getTime())) return false;
@@ -6011,7 +6068,7 @@
           return weekStartKeyFromDate(dt);
         },
         sub:
-          "Live from Supabase guest reviews — last 8 weeks (weeks start Monday). Stacked area shows positive, negative, and neutral counts."
+          "Live guest reviews classified by Model Evaluation — last 8 weeks (weeks start Monday)."
       };
     }
     if (period === "day") {
@@ -6023,7 +6080,7 @@
           return dt.getFullYear() + "-" + pad2(dt.getMonth() + 1) + "-" + pad2(dt.getDate());
         },
         sub:
-          "Live from Supabase guest reviews — last 14 days. Stacked area shows positive, negative, and neutral (3-star) responses."
+          "Live guest reviews classified by Model Evaluation — last 14 days."
       };
     }
     return {
@@ -6034,7 +6091,7 @@
         return dt.getFullYear() + "-" + pad2(dt.getMonth() + 1);
       },
       sub:
-        "Live from Supabase guest reviews — last 6 months. Stacked area fills the timeline (no large empty bar gaps)."
+        "Live guest reviews classified by Model Evaluation — last 6 months."
     };
   }
 
@@ -6046,34 +6103,31 @@
     return filterFeedbackMatchingBuckets(all, buckets, cfg.periodFn);
   }
 
-  function fillExampleSentimentBuckets(buckets) {
-    var samples = [
-      { pos: 12, neu: 3, neg: 1 },
-      { pos: 15, neu: 2, neg: 0 },
-      { pos: 10, neu: 4, neg: 2 },
-      { pos: 14, neu: 3, neg: 1 },
-      { pos: 11, neu: 5, neg: 1 },
-      { pos: 16, neu: 2, neg: 1 },
-      { pos: 9, neu: 3, neg: 2 },
-      { pos: 13, neu: 2, neg: 1 }
-    ];
-    buckets.forEach(function (b, i) {
-      var s = samples[i % samples.length];
-      b.pos = s.pos;
-      b.neu = s.neu;
-      b.neg = s.neg;
-    });
+  /** Live guest reviews only — same source as Guest sentiment analysis (no historical sample JSON). */
+  function buildLiveSentimentChartData(period) {
+    var cfg = getSentimentPeriodConfig(period || currentSentimentPeriod);
+    var buckets = cfg.buildBuckets();
+    var list = getFeedback();
+    bucketFeedbackByPeriod(list, buckets, cfg.periodFn);
+    return {
+      cfg: cfg,
+      buckets: buckets,
+      list: list
+    };
   }
 
   var sentimentChartMetaById = {};
 
-  function appendSmoothPath(ctx, pts, startWithMove) {
+  function appendSmoothPath(ctx, pts, startWithMove, clampY) {
+    function cy(y) {
+      return typeof clampY === "function" ? clampY(y) : y;
+    }
     if (!pts || !pts.length) return;
-    if (startWithMove !== false) ctx.moveTo(pts[0].x, pts[0].y);
-    else ctx.lineTo(pts[0].x, pts[0].y);
+    if (startWithMove !== false) ctx.moveTo(pts[0].x, cy(pts[0].y));
+    else ctx.lineTo(pts[0].x, cy(pts[0].y));
     if (pts.length === 1) return;
     if (pts.length === 2) {
-      ctx.lineTo(pts[1].x, pts[1].y);
+      ctx.lineTo(pts[1].x, cy(pts[1].y));
       return;
     }
     var i;
@@ -6082,31 +6136,32 @@
       var p1 = pts[i];
       var p2 = pts[i + 1];
       var p3 = pts[i + 2] || p2;
+      var tension = typeof clampY === "function" ? 10 : 6;
       ctx.bezierCurveTo(
-        p1.x + (p2.x - p0.x) / 6,
-        p1.y + (p2.y - p0.y) / 6,
-        p2.x - (p3.x - p1.x) / 6,
-        p2.y - (p3.y - p1.y) / 6,
+        p1.x + (p2.x - p0.x) / tension,
+        cy(p1.y + (p2.y - p0.y) / tension),
+        p2.x - (p3.x - p1.x) / tension,
+        cy(p2.y - (p3.y - p1.y) / tension),
         p2.x,
-        p2.y
+        cy(p2.y)
       );
     }
   }
 
-  function fillSmoothBand(ctx, lowerPts, upperPts, fillStyle) {
+  function fillSmoothBand(ctx, lowerPts, upperPts, fillStyle, clampY) {
     if (!upperPts || upperPts.length < 2 || !lowerPts || lowerPts.length < 2) return;
     ctx.beginPath();
-    appendSmoothPath(ctx, upperPts, true);
-    appendSmoothPath(ctx, lowerPts.slice().reverse(), false);
+    appendSmoothPath(ctx, upperPts, true, clampY);
+    appendSmoothPath(ctx, lowerPts.slice().reverse(), false, clampY);
     ctx.closePath();
     ctx.fillStyle = fillStyle;
     ctx.fill();
   }
 
-  function strokeSmoothEdge(ctx, pts, color, width) {
+  function strokeSmoothEdge(ctx, pts, color, width, clampY) {
     if (!pts || pts.length < 2) return;
     ctx.beginPath();
-    appendSmoothPath(ctx, pts, true);
+    appendSmoothPath(ctx, pts, true, clampY);
     ctx.strokeStyle = color;
     ctx.lineWidth = width == null ? 2.2 : width;
     ctx.lineJoin = "round";
@@ -6200,7 +6255,13 @@
     if (!canvas) return;
 
     var compact = !!opts.compact;
-    var prep = prepareChartContext(canvas, compact ? 640 : 720, compact ? 210 : 240, compact ? 180 : 200);
+    var overlay = !!opts.overlay;
+    var prep = prepareChartContext(
+      canvas,
+      compact ? 640 : 720,
+      compact ? 210 : overlay ? 280 : 240,
+      compact ? 180 : overlay ? 240 : 200
+    );
     if (!prep) return;
     var ctx = prep.ctx;
     var w = prep.w;
@@ -6241,8 +6302,8 @@
     ctx.fillStyle = "#ffffff";
     ctx.fillRect(0, 0, w, h);
 
-    var cPos = "#5f9e2e";
-    var cNeu = "#7b7480";
+    var cPos = overlay ? "#7fc142" : "#5f9e2e";
+    var cNeu = overlay ? "#8b8490" : "#7b7480";
     var cNeg = "#c46b82";
     var textInk = "#3d3340";
     var textMute = "#8a8490";
@@ -6305,6 +6366,7 @@
     var maxT = Math.max(
       1,
       working.reduce(function (a, b) {
+        if (overlay) return Math.max(a, b.pos, b.neu, b.neg);
         return Math.max(a, b.pos + b.neu + b.neg);
       }, 0)
     );
@@ -6345,8 +6407,12 @@
       return {
         x: x,
         yNeg: yBase - (neg / niceMax) * plotH,
-        yNeu: yBase - ((neg + neu) / niceMax) * plotH,
-        yPos: yBase - ((neg + neu + pos) / niceMax) * plotH,
+        yNeu: overlay
+          ? yBase - (neu / niceMax) * plotH
+          : yBase - ((neg + neu) / niceMax) * plotH,
+        yPos: overlay
+          ? yBase - (pos / niceMax) * plotH
+          : yBase - ((neg + neu + pos) / niceMax) * plotH,
         yBase: yBase,
         total: pos + neu + neg,
         pos: pos,
@@ -6382,48 +6448,69 @@
     posGrad.addColorStop(0, "rgba(127, 193, 66, 0.32)");
     posGrad.addColorStop(1, "rgba(127, 193, 66, 0.06)");
 
-    fillSmoothBand(ctx, basePts, negPts, negGrad);
-    fillSmoothBand(ctx, negPts, neuPts, neuGrad);
-    fillSmoothBand(ctx, neuPts, posPts, posGrad);
-
-    strokeSmoothEdge(ctx, negPts, cNeg, 2);
-    strokeSmoothEdge(ctx, neuPts, cNeu, 2);
-    strokeSmoothEdge(ctx, posPts, cPos, 2.4);
+    if (hasAny && pts.length >= 2) {
+      var clampY = overlay
+        ? function (y) {
+            return Math.max(y0, Math.min(yBase, y));
+          }
+        : null;
+      if (overlay) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(x0, y0, chartW, chartH);
+        ctx.clip();
+        fillSmoothBand(ctx, basePts, negPts, negGrad, clampY);
+        fillSmoothBand(ctx, basePts, neuPts, neuGrad, clampY);
+        fillSmoothBand(ctx, basePts, posPts, posGrad, clampY);
+        strokeSmoothEdge(ctx, negPts, cNeg, 2, clampY);
+        strokeSmoothEdge(ctx, neuPts, cNeu, 2, clampY);
+        strokeSmoothEdge(ctx, posPts, cPos, 2.4, clampY);
+        ctx.restore();
+      } else {
+        fillSmoothBand(ctx, basePts, negPts, negGrad);
+        fillSmoothBand(ctx, negPts, neuPts, neuGrad);
+        fillSmoothBand(ctx, neuPts, posPts, posGrad);
+        strokeSmoothEdge(ctx, negPts, cNeg, 2);
+        strokeSmoothEdge(ctx, neuPts, cNeu, 2);
+        strokeSmoothEdge(ctx, posPts, cPos, 2.4);
+      }
+    }
 
     var hoverIndex = sentimentChartMetaById[canvasId].hoverIndex;
-    pts.forEach(function (p, idx) {
-      var active = hoverIndex === idx;
-      var r = active ? 5.2 : 3.6;
-      // Vertical guide on hover
-      if (active) {
-        ctx.save();
-        ctx.strokeStyle = "rgba(61, 51, 64, 0.12)";
-        ctx.lineWidth = 1;
-        ctx.setLineDash([4, 4]);
-        ctx.beginPath();
-        ctx.moveTo(p.x, y0);
-        ctx.lineTo(p.x, yBase);
-        ctx.stroke();
-        ctx.restore();
-      }
-      [
-        { y: p.yNeg, color: cNeg },
-        { y: p.yNeu, color: cNeu },
-        { y: p.yPos, color: cPos }
-      ].forEach(function (dot) {
-        ctx.beginPath();
-        ctx.arc(p.x, dot.y, r + 1.1, 0, Math.PI * 2);
-        ctx.fillStyle = "#ffffff";
-        ctx.fill();
-        ctx.beginPath();
-        ctx.arc(p.x, dot.y, r, 0, Math.PI * 2);
-        ctx.fillStyle = dot.color;
-        ctx.fill();
-        ctx.lineWidth = 1.4;
-        ctx.strokeStyle = "#ffffff";
-        ctx.stroke();
+    if (hasAny) {
+      pts.forEach(function (p, idx) {
+        var active = hoverIndex === idx;
+        var r = active ? 5.2 : 3.6;
+        if (active) {
+          ctx.save();
+          ctx.strokeStyle = "rgba(61, 51, 64, 0.12)";
+          ctx.lineWidth = 1;
+          ctx.setLineDash([4, 4]);
+          ctx.beginPath();
+          ctx.moveTo(p.x, y0);
+          ctx.lineTo(p.x, yBase);
+          ctx.stroke();
+          ctx.restore();
+        }
+        [
+          { y: p.yNeg, color: cNeg },
+          { y: p.yNeu, color: cNeu },
+          { y: p.yPos, color: cPos }
+        ].forEach(function (dot) {
+          ctx.beginPath();
+          ctx.arc(p.x, dot.y, r + 1.1, 0, Math.PI * 2);
+          ctx.fillStyle = "#ffffff";
+          ctx.fill();
+          ctx.beginPath();
+          ctx.arc(p.x, dot.y, r, 0, Math.PI * 2);
+          ctx.fillStyle = dot.color;
+          ctx.fill();
+          ctx.lineWidth = 1.4;
+          ctx.strokeStyle = "#ffffff";
+          ctx.stroke();
+        });
       });
-    });
+    }
 
     drawProChartBaseline(ctx, x0, y0, chartW, chartH);
 
@@ -6475,18 +6562,19 @@
 
   function initSentimentPeriodFilters() {
     if (sentimentPeriodFiltersBound) return;
-    var wrap = document.getElementById("sentimentPeriodFilters");
-    if (!wrap) return;
     sentimentPeriodFiltersBound = true;
-    wrap.addEventListener("click", function (e) {
+    document.addEventListener("click", function (e) {
       var btn = e.target && e.target.closest ? e.target.closest("[data-sentiment-period]") : null;
-      if (!btn || !wrap.contains(btn)) return;
+      if (!btn) return;
+      var wrap = btn.closest ? btn.closest(".sentiment-period-filters") : null;
+      if (!wrap) return;
       var p = btn.getAttribute("data-sentiment-period");
       if (p !== "month" && p !== "week" && p !== "day") return;
       if (p === currentSentimentPeriod) return;
       currentSentimentPeriod = p;
       updateSentimentPeriodButtonsUI();
       renderSentimentOverview();
+      renderReportsGuestReviews();
     });
   }
 
@@ -6746,10 +6834,7 @@
   }
 
   function renderSentimentOverview() {
-    var cfg = getSentimentPeriodConfig(currentSentimentPeriod);
-    var buckets = cfg.buildBuckets();
-    var subEl = document.getElementById("sentimentChartSub");
-    if (subEl) subEl.textContent = cfg.sub;
+    var chart = buildLiveSentimentChartData(currentSentimentPeriod);
 
     var barPos = document.getElementById("sentimentBarPos");
     var barNeu = document.getElementById("sentimentBarNeu");
@@ -6759,9 +6844,9 @@
     var pctNeg = document.getElementById("sentimentPctNeg");
     var totalEl = document.getElementById("sentimentTotalCount");
 
-    var allList = getFeedback();
+    var allList = chart.list;
     var sentimentList = getSentimentFeedback();
-    var weeklyRec = getFeedbackForWeeklyRecommendation(sentimentList);
+    var weeklyRec = getFeedbackForWeeklyRecommendation(getWeeklyRecommendationFeedback());
 
     if (!allList.length) {
       // Empty state: real zeros — never show sample/hardcoded sentiment percentages.
@@ -6773,12 +6858,6 @@
       if (pctNeg) pctNeg.textContent = "0%";
       if (totalEl) totalEl.textContent = "0 reviews on file";
 
-      bucketFeedbackByPeriod([], buckets, cfg.periodFn);
-      drawSentimentStackedChart("adminSentimentPeriodChart", buckets, {
-        skipExample: true,
-        hideTitle: true,
-        tipId: "adminSentimentPeriodTip"
-      });
       renderSentimentRecommendations(
         buildSentimentRecommendationsPayload({
           allListLen: 0,
@@ -6789,9 +6868,6 @@
       updateSentimentPeriodButtonsUI();
       return;
     }
-
-    bucketFeedbackByPeriod(allList, buckets, cfg.periodFn);
-    var filtered = filterFeedbackMatchingBuckets(allList, buckets, cfg.periodFn);
 
     var pos = 0;
     var neu = 0;
@@ -6815,11 +6891,10 @@
       pNeg = 0;
       if (tAll) {
         totalMsg =
-          "Current week (Mon–Sun): no comments yet. " +
-          tAll +
-          " total review" +
+          tAll.toLocaleString() +
+          " review" +
           (tAll === 1 ? "" : "s") +
-          " on file—older weeks are in the Comment Archive.";
+          " on file.";
       } else {
         totalMsg = "";
       }
@@ -6829,13 +6904,10 @@
       pNeu = Math.round((neu / tSafe) * 100);
       pNeg = Math.max(0, 100 - pPos - pNeu);
       totalMsg =
-        "Current week scope: " +
-        t +
-        " comment" +
+        t.toLocaleString() +
+        " live, past, and test comment" +
         (t === 1 ? "" : "s") +
-        " (" +
-        formatWeekRangeLabel(getCurrentWeekStartDate()) +
-        ").";
+        " on file.";
     }
 
     if (barPos) barPos.style.width = pPos + "%";
@@ -6845,12 +6917,6 @@
     if (pctNeu) pctNeu.textContent = pNeu + "%";
     if (pctNeg) pctNeg.textContent = pNeg + "%";
     if (totalEl) totalEl.textContent = totalMsg;
-
-    drawSentimentStackedChart("adminSentimentPeriodChart", buckets, {
-      skipExample: true,
-      hideTitle: true,
-      tipId: "adminSentimentPeriodTip"
-    });
 
     renderSentimentRecommendations(
       buildSentimentRecommendationsPayload({
@@ -6866,17 +6932,31 @@
   }
 
   function paintSentimentSection() {
-    ensureWeeklySentimentArchive().then(function () {
-      renderSentimentFeedbackList();
-      renderSentimentOverview();
-      initSentimentPeriodFilters();
-      initSentimentRecAcceptHandlers();
-      initSentimentArchiveModals();
-    });
+    var GF = window.ElenestGuestFeedback;
+    var ready = Promise.resolve();
+    if (GF && GF.ready && typeof GF.ready.then === "function") ready = GF.ready;
+    ready
+      .then(function () {
+        return GF && typeof GF.ensureHistoricalLoaded === "function"
+          ? GF.ensureHistoricalLoaded()
+          : null;
+      })
+      .then(function () {
+        return ensureWeeklySentimentArchive();
+      })
+      .then(function () {
+        renderSentimentFeedbackList();
+        renderSentimentOverview();
+        initSentimentPeriodFilters();
+        initSentimentRecAcceptHandlers();
+        initSentimentArchiveModals();
+      });
   }
 
   function renderSentimentSection() {
     paintSentimentSection();
+    var EV = window.ElenestModelEvaluation;
+    if (EV && typeof EV.prefetch === "function") EV.prefetch();
     var GF = window.ElenestGuestFeedback;
     // One background pull from Supabase; realtime events re-paint via elenest-feedback-updated.
     if (GF && typeof GF.refresh === "function" && !renderSentimentSection._pulling) {
@@ -7043,7 +7123,9 @@
     var commentOpen = document.getElementById("sentimentCommentArchiveOpen");
     var recOpen = document.getElementById("sentimentRecommendationArchiveOpen");
     var commentClose = document.getElementById("sentimentCommentArchiveClose");
+    var commentCloseX = document.getElementById("sentimentCommentArchiveCloseX");
     var recClose = document.getElementById("sentimentRecommendationArchiveClose");
+    var recCloseX = document.getElementById("sentimentRecommendationArchiveCloseX");
 
     if (commentOpen && commentOverlay && !commentOpen.dataset.bound) {
       commentOpen.dataset.bound = "1";
@@ -7052,11 +7134,16 @@
         setHidden(commentOverlay, false);
       });
     }
+    function closeCommentArchive() {
+      setHidden(commentOverlay, true);
+    }
     if (commentClose && commentOverlay && !commentClose.dataset.bound) {
       commentClose.dataset.bound = "1";
-      commentClose.addEventListener("click", function () {
-        setHidden(commentOverlay, true);
-      });
+      commentClose.addEventListener("click", closeCommentArchive);
+    }
+    if (commentCloseX && commentOverlay && !commentCloseX.dataset.bound) {
+      commentCloseX.dataset.bound = "1";
+      commentCloseX.addEventListener("click", closeCommentArchive);
     }
     if (commentOverlay && !commentOverlay.dataset.bound) {
       commentOverlay.dataset.bound = "1";
@@ -7072,11 +7159,16 @@
         setHidden(recOverlay, false);
       });
     }
+    function closeRecommendationArchive() {
+      setHidden(recOverlay, true);
+    }
     if (recClose && recOverlay && !recClose.dataset.bound) {
       recClose.dataset.bound = "1";
-      recClose.addEventListener("click", function () {
-        setHidden(recOverlay, true);
-      });
+      recClose.addEventListener("click", closeRecommendationArchive);
+    }
+    if (recCloseX && recOverlay && !recCloseX.dataset.bound) {
+      recCloseX.dataset.bound = "1";
+      recCloseX.addEventListener("click", closeRecommendationArchive);
     }
     if (recOverlay && !recOverlay.dataset.bound) {
       recOverlay.dataset.bound = "1";
@@ -7376,6 +7468,7 @@
     var overlay = document.getElementById("adminSentimentOverlay");
     var titleEl = document.getElementById("adminSentimentTitle");
     var listEl = document.getElementById("adminSentimentList");
+    var pager = document.getElementById("adminSentimentListPager");
     var closeBtn = document.getElementById("adminSentimentCloseBtn");
     var exampleBanner = document.getElementById("adminSentimentExampleBanner");
     if (!overlay || !titleEl || !listEl || !closeBtn) return;
@@ -7403,8 +7496,14 @@
       }
 
       listEl.textContent = "";
+      if (adminListPages.sentimentDetailsKey !== key) {
+        adminListPages.sentimentDetailsKey = key;
+        adminListPages.sentimentDetails = 1;
+      }
 
       if (!rows.length) {
+        adminListPages.sentimentDetails = 1;
+        if (pager) renderPaginationControls(pager, null);
         var empty = document.createElement("li");
         empty.className = "sentiment-detail-empty";
         if (exampleMode) {
@@ -7419,7 +7518,13 @@
         }
         listEl.appendChild(empty);
       } else {
-        rows.forEach(function (f) {
+        var pageState = paginateItems(
+          rows,
+          adminListPages.sentimentDetails,
+          SENTIMENT_DETAILS_PAGE_SIZE
+        );
+        adminListPages.sentimentDetails = pageState.page;
+        pageState.items.forEach(function (f) {
           var li = document.createElement("li");
           li.className = "sentiment-detail-row";
 
@@ -7444,6 +7549,10 @@
           li.appendChild(head);
           li.appendChild(quote);
           listEl.appendChild(li);
+        });
+        renderPaginationControls(pager, pageState, function (page) {
+          adminListPages.sentimentDetails = page;
+          openSentiment(key);
         });
       }
 
@@ -8174,6 +8283,10 @@
     window.addEventListener("elenest-payment-methods-updated", function () {
       refreshActiveSection();
     });
+    window.addEventListener("elenest-sentiment-model-ready", function () {
+      paintSentimentSection();
+      renderReportsGuestReviews();
+    });
     window.addEventListener("elenest-feedback-updated", function () {
       loadHomeReviewKpis(true).then(function () {
         renderDashboard();
@@ -8197,16 +8310,29 @@
     });
 
     // Dropdown open/close
+    function fitMobileNav() {
+      var menulist = document.getElementById("menulist");
+      if (!menulist || !menulist.classList.contains("is-open")) return;
+      if (window.innerWidth > 1500) return;
+      var cap = Math.max(280, window.innerHeight - 72);
+      menulist.style.maxHeight = Math.min(menulist.scrollHeight, cap) + "px";
+    }
+
     function openMenu() {
       if (!settingsMenu || !settingsToggle) return;
       setHidden(settingsMenu, false);
       settingsToggle.setAttribute("aria-expanded", "true");
+      fitMobileNav();
+      if (typeof requestAnimationFrame === "function") {
+        requestAnimationFrame(fitMobileNav);
+      }
     }
 
     function closeMenu() {
       if (!settingsMenu || !settingsToggle) return;
       setHidden(settingsMenu, true);
       settingsToggle.setAttribute("aria-expanded", "false");
+      fitMobileNav();
     }
 
     if (settingsToggle && settingsMenu) {

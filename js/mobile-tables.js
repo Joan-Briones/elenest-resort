@@ -17,6 +17,51 @@
     return MQ.matches;
   }
 
+  function isEntryTable(table) {
+    if (!table.closest("form")) return false;
+    return !!table.querySelector(
+      "input:not([type='hidden']):not([type='checkbox']):not([type='radio']):not([type='button']):not([type='submit']), textarea, select"
+    );
+  }
+
+  function labelEntryTable(table) {
+    var labels = headerLabels(table);
+    var pending = null;
+    var bodies = table.tBodies.length ? table.tBodies : [table];
+    Array.prototype.forEach.call(bodies, function (body) {
+      if (!body || !body.rows) return;
+      Array.prototype.forEach.call(body.rows, function (row) {
+        var onlyHeads = row.querySelector("th") && !row.querySelector("td");
+        if (onlyHeads) {
+          pending = Array.prototype.map.call(row.cells, function (cell) {
+            return String(cell.textContent || "").replace(/\s+/g, " ").trim();
+          });
+          row.setAttribute("data-m-label-row", "1");
+          return;
+        }
+        var source = pending && !row.querySelector("th") ? pending : null;
+        if (!source && !row.querySelector("th") && row.cells.length === labels.length) source = labels;
+        pending = null;
+        if (!source) return;
+        Array.prototype.forEach.call(row.cells, function (cell, index) {
+          if (cell.tagName === "TH" || cell.getAttribute("data-label")) return;
+          if (source[index]) cell.setAttribute("data-label", source[index]);
+        });
+      });
+    });
+    table.setAttribute("data-m-entry", "1");
+  }
+
+  function releaseMobile(table) {
+    if (!table) return;
+    table.classList.remove("m-src");
+    try { table.inert = false; } catch (e) {}
+    var host = table.parentNode;
+    if (host) host.classList.remove("m-host");
+    var next = table.nextElementSibling;
+    if (next && next.classList && next.classList.contains("m-record-list")) next.remove();
+  }
+
   function skipTable(table) {
     if (!table || table.tagName !== "TABLE") return true;
     if (table.closest("table") !== table) return true;
@@ -24,6 +69,11 @@
     if (table.getAttribute("data-m-skip") != null) return true;
     var cls = String(table.className || "");
     if (/mgr-doc__/.test(cls)) return true;
+    if (isEntryTable(table)) {
+      labelEntryTable(table);
+      releaseMobile(table);
+      return true;
+    }
     return false;
   }
 
@@ -231,6 +281,17 @@
     parked = [];
   }
 
+  function wakeMoved(node) {
+    if (!node || node.nodeType !== 1) return;
+    try { node.inert = false; } catch (e) {}
+    if (node.removeAttribute) node.removeAttribute("inert");
+    var locked = node.querySelectorAll ? node.querySelectorAll("[inert], button, a") : [];
+    Array.prototype.forEach.call(locked, function (el) {
+      try { el.inert = false; } catch (e2) {}
+      if (el.removeAttribute) el.removeAttribute("inert");
+    });
+  }
+
   function park(nodes, destination) {
     var list = Array.prototype.filter.call(nodes, function (node) {
       return node && node.parentNode;
@@ -241,6 +302,7 @@
       var marker = document.createComment("m-park");
       parent.insertBefore(marker, node);
       destination.appendChild(node);
+      wakeMoved(node);
       parked.push({ marker: marker, nodes: [node] });
     });
   }

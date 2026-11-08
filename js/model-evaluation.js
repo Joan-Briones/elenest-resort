@@ -205,22 +205,28 @@
 
   function collectLiveFeedback() {
     var F = window.ElenestGuestFeedback;
-    var list = F && typeof F.listAll === "function" ? F.listAll() : [];
+    var list =
+      F && typeof F.listAll === "function"
+        ? F.listAll() || []
+        : F && typeof F.listLive === "function"
+          ? F.listLive() || []
+          : [];
     var out = [];
     list.forEach(function (item) {
       if (!item) return;
-      var text = String(item.comment || "").trim();
+      var text = String(item.comment || item.text || "").trim();
       if (text.length < 8) return;
       var label = labelFromStars(item.stars || item.rating);
       if (!label) return;
+      var id = String(item.id || "");
       out.push({
-        id: String(item.id || ""),
+        id: id,
         email: String(item.email || item.guest_email || ""),
         createdAt: String(item.createdAt || item.created_at || ""),
         text: text,
         label: label,
         source: "guest_feedback",
-        historical: isHistoricalReview(item)
+        historical: !!(id && id.indexOf("past-fb-") === 0)
       });
     });
     return out;
@@ -671,14 +677,17 @@
 
   function allFeedbackCount() {
     var F = window.ElenestGuestFeedback;
-    var list = F && typeof F.listAll === "function" ? F.listAll() : [];
-    return (list || []).length;
+    var list =
+      F && typeof F.listAll === "function"
+        ? F.listAll() || []
+        : F && typeof F.listLive === "function"
+          ? F.listLive() || []
+          : [];
+    return list.filter(Boolean).length;
   }
 
   function feedbackCorpusReady() {
-    var GF = window.ElenestGuestFeedback;
-    if (!GF || typeof GF.isHistoricalLoaded !== "function") return true;
-    return !!GF.isHistoricalLoaded();
+    return true;
   }
 
   var finalModel = null;
@@ -744,6 +753,26 @@
     return !section.hidden && !section.hasAttribute("hidden");
   }
 
+  function viewerNeedsSentimentModel() {
+    var ids = ["section-reports", "section-sentiment", "section-analytics"];
+    var i;
+    for (i = 0; i < ids.length; i++) {
+      var el = document.getElementById(ids[i]);
+      if (el && !el.hidden) return true;
+    }
+    return reportsSectionOpen();
+  }
+
+  var lastModelReadyAt = 0;
+  function notifySentimentModelReady() {
+    var now = Date.now();
+    if (now - lastModelReadyAt < 250) return;
+    lastModelReadyAt = now;
+    try {
+      window.dispatchEvent(new CustomEvent("elenest-sentiment-model-ready"));
+    } catch (eNotify) {}
+  }
+
   function prepareSentimentJob() {
     if (!trainingEnabled) {
       return { ready: false, metrics: { ok: false, reason: "Loading stored feedback for evaluation…", retryable: true } };
@@ -762,39 +791,48 @@
     var testRows;
     var dataNote;
     var nAll;
+    if (!corpus.length) {
+      return {
+        ready: false,
+        metrics: {
+          ok: false,
+          reason:
+            "Waiting for guest comments (live, past, or test). Charts and these metrics update together."
+        }
+      };
+    }
     if (corpus.length >= 8) {
       var split = stableStratifiedSplit(corpus, TEST_RATIO, SPLIT_SEED);
       trainRows = split.train;
       testRows = split.test;
       nAll = corpus.length;
       dataNote =
-        "Calculated from " +
+        "Live with Guest sentiment analysis: scored on " +
         fmtCount(split.test.length) +
         " held-out comments of " +
         fmtCount(corpus.length) +
-        " labeled guest feedback records. Overall guest feedback is " +
+        " live, past, and test guest reviews (" +
         fmtCount(guestTotal) +
-        ", including the test comments. A new comment changes this result by that one comment. The other reviews stay in the same test.";
-    } else if (stored.length) {
-      trainRows = labeledCorpus();
+        " on file). A new customer comment updates this table and the charts.";
+    } else {
+      trainRows = labeledCorpus().concat(stored);
       testRows = stored;
       nAll = stored.length;
       dataNote =
-        "Scored on " +
+        "Live with Guest sentiment analysis: scored on " +
         stored.length +
-        " guest review" +
+        " live, past, and test comment" +
         (stored.length === 1 ? "" : "s") +
-        " from the database. A larger review set will also be used for training.";
-    } else {
-      var baseline = stratifiedSplit(labeledCorpus(), TEST_RATIO, SPLIT_SEED);
-      trainRows = baseline.train;
-      testRows = baseline.test;
-      nAll = labeledCorpus().length;
-      dataNote =
-        "No guest reviews yet. These scores switch to database reviews as soon as feedback is saved.";
+        ". Charts and metrics refresh when the next review is submitted.";
     }
     if (!trainRows || trainRows.length < 6 || !testRows || !testRows.length) {
-      return { ready: false, metrics: { ok: false, reason: "Not enough labeled comments for a train/test split." } };
+      return {
+        ready: false,
+        metrics: {
+          ok: false,
+          reason: "Waiting for live guest comments. Charts and metrics update when a customer submits a review."
+        }
+      };
     }
     return {
       ready: true,
@@ -813,7 +851,7 @@
     var metrics = scored.metrics;
     metrics.scoreLabel = metrics.nTest + " held-out comments of " + (job.nAll || metrics.nTest);
     metrics.liveNote =
-      "Logistic regression with TF-IDF on the guest feedback saved now, including the test comments. A new comment changes this result by that one comment.";
+      "Live with Guest sentiment analysis. A new customer comment retrains this model and redraws the charts.";
     metrics.nAll = job.nAll;
     metrics.nLive = job.nLive;
     metrics.nCorpus = job.nLive;
@@ -907,7 +945,7 @@
           metrics.vocabSize = tfidf.vocab.length;
           var applied = applyScored(job, { metrics: metrics });
           resolve(applied);
-          fillLabelsAsync(tfidf, W, job.stored);
+          fillLabelsAsync(tfidf, W, job.stored, notifySentimentModelReady);
         });
       }, 0);
     });
@@ -1479,7 +1517,7 @@
     }
   }
 
-  var EVAL_STORE = "elenest_model_eval_v11";
+  var EVAL_STORE = "elenest_model_eval_v15_allcomments";
 
   function readStoredResult() {
     try {
@@ -1559,10 +1597,13 @@
 
   function whenFeedbackReady() {
     var GF = window.ElenestGuestFeedback;
-    var waits = [];
-    if (GF && GF.ready && typeof GF.ready.then === "function") waits.push(GF.ready);
-    if (GF && typeof GF.ensureHistoricalLoaded === "function") waits.push(GF.ensureHistoricalLoaded());
-    return waits.length ? Promise.all(waits) : Promise.resolve();
+    var ready =
+      GF && GF.ready && typeof GF.ready.then === "function" ? GF.ready : Promise.resolve();
+    return ready.then(function () {
+      if (GF && typeof GF.ensureHistoricalLoaded === "function") {
+        return GF.ensureHistoricalLoaded();
+      }
+    });
   }
 
   var computeInFlight = null;
@@ -1570,7 +1611,7 @@
 
   function recomputeAndRender() {
     var host = getModelEvalHost();
-    if (!host || !reportsSectionOpen()) return Promise.resolve();
+    if (!host) return Promise.resolve();
     trainingEnabled = true;
     if (computeInFlight) {
       computeQueued = true;
@@ -1675,7 +1716,6 @@
         clearTimeout(renderTimer);
         renderTimer = null;
       }
-      if (!reportsSectionOpen()) return;
       recomputeAndRender();
     });
     window.addEventListener("elenest-bookings-updated", function () {
@@ -1684,7 +1724,7 @@
         clearTimeout(renderTimer);
         renderTimer = null;
       }
-      if (!reportsSectionOpen()) return;
+      if (!viewerNeedsSentimentModel()) return;
       recomputeAndRender();
     });
     window.addEventListener("storage", function (e) {
@@ -1721,7 +1761,7 @@
       } catch (eEarly) {}
       return;
     }
-    if (reportsSectionOpen()) prefetch();
+    if (viewerNeedsSentimentModel()) prefetch();
   }
 
   function syncPaint() {
