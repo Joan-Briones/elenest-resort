@@ -3,6 +3,13 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
+  # Password-reset links carry the security code in the #hash.
+  # A redirect drops that code in Gmail on iPhone, Android, and iPad.
+  # Serve the form where the link opened.
+  RewriteRule ^reset-password\.html$ html/reset-password.html [L,QSA]
+  RewriteRule ^reset-password/$ html/reset-password.html [L,QSA]
+  RewriteRule ^html/reset-password/?$ html/reset-password.html [L,QSA]
+
   # These rules apply only when the project is the domain root.
   # Local XAMPP (/Elenest_Resort/...) keeps its current /html/ paths.
   # Render's Apache listens on an internal port. Redirecting to "/" becomes
@@ -22,20 +29,17 @@
 
   RewriteCond %{THE_REQUEST} \s/+html/[^?\s/]+\.html[\s?] [NC]
   RewriteCond %{REQUEST_URI} ^/html/[^/]+\.html$
+  RewriteCond %{REQUEST_URI} !^/html/reset-password\.html$ [NC]
   RewriteRule ^html/(.+)\.html$ https://elenestresort.com/$1 [R=301,L,QSA]
-
-  # /html/reset-password (no .html) is not a file and was returning Not Found.
-  RewriteCond %{THE_REQUEST} \s/+html/[^?\s/.]+/?[\s?] [NC]
-  RewriteCond %{REQUEST_URI} ^/html/([^/.]+)/?$
-  RewriteCond %{DOCUMENT_ROOT}/html/%1.html -f
-  RewriteRule ^html/([^/.]+)/?$ https://elenestresort.com/$1 [R=301,L,QSA]
 
   RewriteCond %{THE_REQUEST} \s/+[^?\s/]+\.html[\s?] [NC]
   RewriteCond %{REQUEST_URI} ^/[^/]+\.html$
+  RewriteCond %{REQUEST_URI} !^/reset-password\.html$ [NC]
   RewriteRule ^([^/]+)\.html$ https://elenestresort.com/$1 [R=301,L,QSA]
 
   RewriteCond %{THE_REQUEST} \s/+[^?\s/]+/[\s?] [NC]
   RewriteCond %{REQUEST_URI} ^/([^/]+)/$
+  RewriteCond %{REQUEST_URI} !^/reset-password/$ [NC]
   RewriteCond %{DOCUMENT_ROOT}/html/%1.html -f
   RewriteRule ^([^/]+)/$ https://elenestresort.com/$1 [R=301,L,QSA]
 

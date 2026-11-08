@@ -9115,6 +9115,36 @@ body.facility-lightbox-open {
 
 .subpage .auth-reset-form .btn {
   width: 100%;
+  min-height: 48px;
+}
+
+body.auth-reset-page {
+  overflow-x: hidden;
+}
+
+body.auth-reset-page main.container {
+  width: min(720px, 100%);
+  box-sizing: border-box;
+  padding-left: max(16px, env(safe-area-inset-left));
+  padding-right: max(16px, env(safe-area-inset-right));
+  padding-bottom: max(28px, env(safe-area-inset-bottom));
+}
+
+body.auth-reset-page .auth-card {
+  width: min(560px, 100%);
+  box-sizing: border-box;
+}
+
+body.auth-reset-page .auth-reset-form input,
+body.auth-reset-page .auth-card input[type="email"],
+body.auth-reset-page .auth-card input[type="password"],
+body.auth-reset-page .auth-card input[type="text"] {
+  font-size: 16px;
+  line-height: 1.3;
+  min-height: 48px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .subpage .auth-card .auth-lead {
@@ -18638,6 +18668,10 @@ body.subpage .booking-form-hint,
 body.subpage .appointments-strip__lead {
   font-size: 0.9375rem;
   color: #111111;
+}
+
+body.auth-reset-page input:not(.swal2-input):not(.swal2-file) {
+  font-size: 16px;
 }
 
 /* Footer copyright: stay white + centered (overrides body.subpage p) */

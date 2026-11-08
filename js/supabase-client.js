@@ -21,13 +21,20 @@
     return;
   }
 
+  var path = "";
+  try {
+    path = window.location.pathname || "";
+  } catch (e) {}
+  var recoveryPage = /reset-password/i.test(path);
+  var authOptions = {
+    persistSession: true,
+    autoRefreshToken: true,
+    detectSessionInUrl: !recoveryPage,
+    flowType: recoveryPage ? "implicit" : "pkce"
+  };
+  if (recoveryPage) authOptions.storageKey = "elenest-password-recovery";
   var client = window.supabase.createClient(config.url, config.publishableKey, {
-    auth: {
-      persistSession: true,
-      autoRefreshToken: true,
-      detectSessionInUrl: true,
-      flowType: "pkce"
-    }
+    auth: authOptions
   });
 
   window.ElenestSupabase = client;

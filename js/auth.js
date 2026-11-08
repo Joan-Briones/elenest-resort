@@ -1896,11 +1896,12 @@
   }
 
   function passwordResetRedirectUrl() {
-    var base = publicHtmlBaseUrl();
-    if (/elenest-resort\.onrender\.com/i.test(base) || /^https:\/\/(www\.)?elenestresort\.com\/html\/$/i.test(base)) {
-      return "https://elenestresort.com/reset-password";
-    }
-    return base + "reset-password.html";
+    try {
+      if (!isPrivateOrLocalHost(window.location.hostname)) {
+        return "https://elenestresort.com/reset-password";
+      }
+    } catch (e) {}
+    return publicHtmlBaseUrl() + "reset-password.html";
   }
 
   function roleMayResetOwnPassword(role) {
@@ -2095,8 +2096,36 @@
     });
   }
 
+  var RECOVERY_GRANT_KEY = "elenest_recovery_grant";
+
+  function readStoredRecoveryGrant() {
+    try {
+      var raw = sessionStorage.getItem(RECOVERY_GRANT_KEY);
+      var parsed = raw ? JSON.parse(raw) : null;
+      if (!parsed || typeof parsed !== "object") return {};
+      return parsed;
+    } catch (e) {
+      return {};
+    }
+  }
+
+  function storeRecoveryGrant(grant) {
+    if (!grant) return;
+    if (!grant.tokenHash && !grant.accessToken && !grant.code) return;
+    try {
+      sessionStorage.setItem(RECOVERY_GRANT_KEY, JSON.stringify(grant));
+    } catch (e) {}
+  }
+
+  function clearRecoveryGrant() {
+    try {
+      sessionStorage.removeItem(RECOVERY_GRANT_KEY);
+    } catch (e) {}
+  }
+
   function recoveryParams() {
     var preset = window.ElenestRecoverySnapshot || {};
+    var stored = readStoredRecoveryGrant();
     var search = new URLSearchParams(window.location.search || "");
     var hash = new URLSearchParams(String(window.location.hash || "").replace(/^#/, ""));
     function first() {
@@ -2105,26 +2134,40 @@
       }
       return "";
     }
-    return {
-      type: first(preset.type, search.get("type"), hash.get("type")),
+    var params = {
+      type: first(preset.type, stored.type, search.get("type"), hash.get("type")),
       tokenHash: first(
         preset.tokenHash,
+        stored.tokenHash,
         search.get("token_hash"),
         hash.get("token_hash"),
         search.get("token"),
         hash.get("token")
       ),
-      code: first(preset.code, search.get("code")),
-      accessToken: first(preset.accessToken, hash.get("access_token"), search.get("access_token")),
-      refreshToken: first(preset.refreshToken, hash.get("refresh_token"), search.get("refresh_token")),
+      code: first(preset.code, stored.code, search.get("code")),
+      accessToken: first(
+        preset.accessToken,
+        stored.accessToken,
+        hash.get("access_token"),
+        search.get("access_token")
+      ),
+      refreshToken: first(
+        preset.refreshToken,
+        stored.refreshToken,
+        hash.get("refresh_token"),
+        search.get("refresh_token")
+      ),
       error: first(
         preset.error,
+        stored.error,
         search.get("error_description"),
         hash.get("error_description"),
         search.get("error"),
         hash.get("error")
       )
     };
+    storeRecoveryGrant(params);
+    return params;
   }
 
   function urlHasRecoveryGrant() {
@@ -2175,19 +2218,21 @@
         message: String(params.error).replace(/\+/g, " ")
       });
     }
-    if (!urlHasRecoveryGrant()) {
+    if (!urlHasRecoveryGrant() || (params.type === "recovery" && !params.tokenHash && !params.accessToken && !params.code)) {
       return Promise.resolve({
         ok: false,
-        message: "Open the password reset link from your email to choose a new password."
+        message:
+          "Open the reset email in Safari or Chrome, then tap the link again. The in-app mail viewer can drop the security code on iPhone, Android, and iPad."
       });
     }
 
     function sessionOrTokens() {
-      return sb.auth.getSession().then(function (result) {
-        if (result.error) throw result.error;
-        var existing = result.data && result.data.session;
-        if (existing && existing.user) return existing;
-        return sessionFromUrlTokens(sb);
+      return sessionFromUrlTokens(sb).then(function (fromUrl) {
+        if (fromUrl && fromUrl.user) return fromUrl;
+        return sb.auth.getSession().then(function (result) {
+          if (result.error) throw result.error;
+          return result.data && result.data.session;
+        });
       });
     }
 
@@ -2224,7 +2269,7 @@
         var msg = (err && err.message) || "This reset link is invalid or has expired. Request a new one.";
         if (/code verifier|pkce|different browser/i.test(msg)) {
           msg =
-            "This reset link was opened in a different browser. Request a new password reset on this phone, then open that new email here.";
+            "This reset link cannot be used on this device. Request a new link here, then open that email in Safari or Chrome.";
         }
         return { ok: false, message: msg };
       });
@@ -2262,6 +2307,7 @@
             return { ok: false, message: updated.error.message || "Could not update the Elenest Resort password." };
           }
           cacheUser(null);
+          clearRecoveryGrant();
           return sb.auth.signOut().catch(function () {}).then(function () {
             return {
               ok: true,

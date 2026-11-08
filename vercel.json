@@ -24,22 +24,29 @@
       "permanent": true
     },
     {
-      "source": "/html/:file.html",
+      "source": "/html/:file((?!reset-password).+).html",
       "destination": "https://elenestresort.com/:file",
       "permanent": true
     },
     {
-      "source": "/html/:file",
-      "destination": "https://elenestresort.com/:file",
-      "permanent": true
-    },
-    {
-      "source": "/:file.html",
+      "source": "/:file((?!reset-password).+).html",
       "destination": "https://elenestresort.com/:file",
       "permanent": true
     }
   ],
   "rewrites": [
+    {
+      "source": "/reset-password.html",
+      "destination": "/html/reset-password.html"
+    },
+    {
+      "source": "/html/reset-password",
+      "destination": "/html/reset-password.html"
+    },
+    {
+      "source": "/html/reset-password/",
+      "destination": "/html/reset-password.html"
+    },
     {
       "source": "/",
       "destination": "/html/index.html"
