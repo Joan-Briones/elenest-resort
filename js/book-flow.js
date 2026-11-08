@@ -474,9 +474,19 @@
     var hasHall = selectionHasEventHall(sel);
     var confirmed = !!(wizardState.unitSelectionConfirmed && hasSelectedFacilities());
 
-    setFacilityPoolNoteVisible(document.getElementById("bookUnitRoomPoolNote"), hasRoom);
-    setFacilityPoolNoteVisible(document.getElementById("bookUnitHallPoolNote"), hasHall);
-    setFacilityPoolNoteVisible(document.getElementById("bookUnitCottagePoolNote"), hasCottage);
+    var stacked = facilityPickerIsStacked();
+    setFacilityPoolNoteVisible(
+      document.getElementById("bookUnitRoomPoolNote"),
+      hasRoom && (!stacked || unitPickerTab === "room")
+    );
+    setFacilityPoolNoteVisible(
+      document.getElementById("bookUnitHallPoolNote"),
+      hasHall && (!stacked || unitPickerTab === "hall")
+    );
+    setFacilityPoolNoteVisible(
+      document.getElementById("bookUnitCottagePoolNote"),
+      hasCottage && (!stacked || unitPickerTab === "cottage")
+    );
 
     setFacilityPoolNoteVisible(
       document.getElementById("bookUnitRoomPoolSummaryNote"),
@@ -639,8 +649,14 @@
     popup.hidden = false;
   }
 
-  function setUnitPickerTab(tab) {
+  function facilityPickerIsStacked() {
+    return !!(window.matchMedia && window.matchMedia("(max-width: 700px)").matches);
+  }
+
+  function setUnitPickerTab(tab, opts) {
+    opts = opts || {};
     unitPickerTab = tab === "cottage" || tab === "hall" ? tab : "room";
+    var stacked = facilityPickerIsStacked();
     document.querySelectorAll("[data-book-unit-tab]").forEach(function (btn) {
       var tabName = btn.getAttribute("data-book-unit-tab");
       btn.hidden = false;
@@ -649,9 +665,22 @@
       btn.setAttribute("aria-selected", on ? "true" : "false");
     });
     document.querySelectorAll("[data-book-unit-panel]").forEach(function (panel) {
-      panel.hidden = panel.getAttribute("data-book-unit-panel") !== unitPickerTab;
+      var show = stacked || panel.getAttribute("data-book-unit-panel") === unitPickerTab;
+      panel.hidden = !show;
     });
     syncEventHallPoolNote();
+    if (stacked && opts.scroll) {
+      var panel = document.querySelector(
+        '#bookUnitModalHost [data-book-unit-panel="' + unitPickerTab + '"]'
+      );
+      if (panel && typeof panel.scrollIntoView === "function") {
+        try {
+          panel.scrollIntoView({ block: "start", behavior: "smooth" });
+        } catch (err) {
+          panel.scrollIntoView(true);
+        }
+      }
+    }
   }
 
   function emptyUnitSelection() {
@@ -799,15 +828,24 @@
     var guestCheck = runGuestCapacityCheck(sel);
     var guestTotal = guestCheck.guests ? guestCheck.guests.total : 0;
     var under6 = guestCheck.guests ? guestCheck.guests.childrenUnder6 : 0;
-    el.textContent =
-      "Selected: " +
-      count +
-      " facility(ies) · Combined capacity: " +
-      combined.totalMax +
-      " pax · Guests counted (ages 6–12): " +
-      guestTotal +
-      " pax" +
-      (under6 > 0 ? " · Children 0–5: " + under6 + " (not counted)" : "");
+    if (facilityPickerIsStacked()) {
+      el.textContent =
+        count +
+        " selected · up to " +
+        combined.totalMax +
+        " pax" +
+        (guestTotal > 0 ? " · " + guestTotal + " guests" : "");
+    } else {
+      el.textContent =
+        "Selected: " +
+        count +
+        " facility(ies) · Combined capacity: " +
+        combined.totalMax +
+        " pax · Guests counted (ages 6–12): " +
+        guestTotal +
+        " pax" +
+        (under6 > 0 ? " · Children 0–5: " + under6 + " (not counted)" : "");
+    }
     el.classList.toggle("book-unit-modal__capacity--warn", !guestCheck.ok);
     el.classList.toggle("book-unit-modal__capacity--ok", guestCheck.ok);
     if (!guestCheck.ok) {
@@ -2420,6 +2458,10 @@
 
     function buildGroup(panel, title, type, items) {
       var allItems = items || [];
+      var heading = document.createElement("h4");
+      heading.className = "book-unit-picker__section-title";
+      heading.textContent = title === "Event Halls" ? "Event Hall" : title;
+      panel.appendChild(heading);
       var wrap = document.createElement("div");
       wrap.className = "book-unit-picker__group";
       wrap.setAttribute("data-unit-group", type);
@@ -6851,8 +6893,12 @@
     }
     bookUnitModal.querySelectorAll("[data-book-unit-tab]").forEach(function (btn) {
       btn.addEventListener("click", function () {
-        setUnitPickerTab(btn.getAttribute("data-book-unit-tab"));
+        setUnitPickerTab(btn.getAttribute("data-book-unit-tab"), { scroll: true });
       });
+    });
+    window.addEventListener("resize", function () {
+      if (!bookUnitModal || bookUnitModal.hasAttribute("hidden")) return;
+      setUnitPickerTab(unitPickerTab);
     });
     var infoOk = document.getElementById("bookUnitInfoOk");
     if (infoOk) infoOk.addEventListener("click", hideBookUnitInfoPopup);

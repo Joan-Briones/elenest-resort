@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/style.css?v=20261105-darkpay1">
+  <link rel="stylesheet" href="../css/style.css?v=20261108-mobilefac2">
   <script src="../js/theme.js?v=20261020-theme1"></script>
   <script src="../js/ui-motion.js?v=20261014-motion1" defer></script>
   <script src="../js/supabase-config.js?v=20260922-iphone13"></script>
@@ -504,13 +504,16 @@
         </nav>
         <div id="bookUnitFacilityPoolModalNotes" class="book-facility-pool-notes book-facility-pool-notes--modal" aria-live="polite">
           <aside id="bookUnitRoomPoolNote" class="book-facility-pool-note book-facility-pool-note--room book-facility-pool-note--modal" hidden aria-hidden="true" role="note" data-facility-pool-note="room">
-            <p><strong>Room:</strong> Swimming pool access is included with your room booking at no additional charge.</p>
+            <p class="book-facility-pool-note__full"><strong>Room:</strong> Swimming pool access is included with your room booking at no additional charge.</p>
+            <p class="book-facility-pool-note__short"><strong>Room:</strong> Pool access is included.</p>
           </aside>
           <aside id="bookUnitHallPoolNote" class="book-facility-pool-note book-facility-pool-note--hall book-facility-pool-note--modal" hidden aria-hidden="true" role="note" data-facility-pool-note="hall">
-            <p><strong>Event Hall:</strong> Swimming pool access is included at no additional charge for <strong>20–25 guests</strong> only. Additional guests are subject to the applicable swimming pool entrance fee.</p>
+            <p class="book-facility-pool-note__full"><strong>Event Hall:</strong> Swimming pool access is included at no additional charge for <strong>20–25 guests</strong> only. Additional guests are subject to the applicable swimming pool entrance fee.</p>
+            <p class="book-facility-pool-note__short"><strong>Event Hall:</strong> Pool included for 20–25 guests.</p>
           </aside>
           <aside id="bookUnitCottagePoolNote" class="book-facility-pool-note book-facility-pool-note--cottage book-facility-pool-note--modal" hidden aria-hidden="true" role="note" data-facility-pool-note="cottage">
-            <p><strong>Cottage:</strong> Swimming pool access is not included in the cottage rate. A <strong>₱250</strong> swimming pool entrance fee per chargeable guest will be automatically added for adults and children ages 6–12 based on the total chargeable guest count.</p>
+            <p class="book-facility-pool-note__full"><strong>Cottage:</strong> Swimming pool access is not included in the cottage rate. A <strong>₱250</strong> swimming pool entrance fee per chargeable guest will be automatically added for adults and children ages 6–12 based on the total chargeable guest count.</p>
+            <p class="book-facility-pool-note__short"><strong>Cottage:</strong> Pool not included. ₱250 per guest (ages 6–12).</p>
           </aside>
         </div>
       </div>
@@ -892,7 +895,7 @@
   <script src="../js/book-availability-modal.js?v=20261020-loginhide1"></script>
   <script src="../js/home-reserve.js?v=20260718-ok"></script>
   <script src="../js/weather-widget.js?v=20260911-weather3"></script>
-  <script src="../js/book-flow.js?v=20261101-cancel1"></script>
+  <script src="../js/book-flow.js?v=20261108-mobilefac2"></script>
   <script>
     (function () {
       function bindSocial() {
