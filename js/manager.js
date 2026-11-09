@@ -4758,6 +4758,12 @@
       renderManagerGuestReviews();
     });
     window.addEventListener("elenest-feedback-updated", function () {
+      var EV = window.ElenestModelEvaluation;
+      if (EV && typeof EV.prefetch === "function") {
+        try {
+          EV.prefetch();
+        } catch (eEvPrefetch) {}
+      }
       invalidateFullReviewsCache();
       loadFullReviewRecordsForHomeKpis(true).then(function () {
         renderDashboard();

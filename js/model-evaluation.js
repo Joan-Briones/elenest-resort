@@ -861,11 +861,33 @@
     return metrics;
   }
 
-  function fillLabelsAsync(tfidf, W, rows, done) {
-    var byId = {};
+  function attachFinalModel(tfidf, W, gen) {
+    finalModel = {
+      _gen: gen,
+      byId: (finalModel && finalModel._gen === gen && finalModel.byId) || {},
+      predict: function (text) {
+        return CLASSES[predictSoftmax(W, tfidf.transform(text))];
+      }
+    };
+    return finalModel;
+  }
+
+  function fillLabelsAsync(tfidf, W, rows, gen, done) {
+    if (gen != null && gen !== sentimentGen) {
+      if (done) done();
+      return;
+    }
+    if (!finalModel || finalModel._gen !== gen) {
+      attachFinalModel(tfidf, W, gen);
+    }
+    var byId = finalModel.byId;
     var i = 0;
     var list = rows || [];
     function step() {
+      if (gen != null && gen !== sentimentGen) {
+        if (done) done();
+        return;
+      }
       var t0 = Date.now();
       while (i < list.length && Date.now() - t0 < 24) {
         var row = list[i++];
@@ -874,12 +896,10 @@
       }
       if (i < list.length) setTimeout(step, 0);
       else {
-        finalModel = {
-          byId: byId,
-          predict: function (text) {
-            return CLASSES[predictSoftmax(W, tfidf.transform(text))];
-          }
-        };
+        if (gen != null && gen !== sentimentGen) {
+          if (done) done();
+          return;
+        }
         if (done) done();
       }
     }
@@ -890,11 +910,14 @@
   var sentimentTrainStop = null;
 
   function evaluateSentiment() {
+    trainingEnabled = true;
     var job = prepareSentimentJob();
     if (!job.ready) return job.metrics;
     if (job.cached) return job.cached;
     var scored = scoreSentiment(job.trainRows, job.testRows, job.epochs);
     finalModel = trainFinalModel(job.stored.length ? job.stored : job.trainRows.concat(job.testRows), job.epochs);
+    if (finalModel) finalModel._gen = sentimentGen;
+    notifySentimentModelReady();
     return applyScored(job, scored);
   }
 
@@ -944,8 +967,13 @@
           metrics.nTest = job.testRows.length;
           metrics.vocabSize = tfidf.vocab.length;
           var applied = applyScored(job, { metrics: metrics });
+          attachFinalModel(tfidf, W, gen);
+          notifySentimentModelReady();
           resolve(applied);
-          fillLabelsAsync(tfidf, W, job.stored, notifySentimentModelReady);
+          fillLabelsAsync(tfidf, W, job.stored, gen, function () {
+            if (gen !== sentimentGen) return;
+            notifySentimentModelReady();
+          });
         });
       }, 0);
     });
@@ -1700,18 +1728,29 @@
     }, 2000);
   }
 
+  function invalidateSentimentEvaluation() {
+    recomputeAndRender._sig = "";
+    sentimentCache = null;
+    sentimentCacheKey = "";
+    finalModel = null;
+    lastResult = null;
+    try {
+      sessionStorage.removeItem(EVAL_STORE);
+    } catch (eStore) {}
+  }
+
   function bindLiveUpdates() {
     if (listenersBound) return;
     listenersBound = true;
+    trainingEnabled = true;
     window.addEventListener("elenest-feedback-updated", function () {
-      recomputeAndRender._sig = "";
-      sentimentCache = null;
-      sentimentCacheKey = "";
-      finalModel = null;
-      lastResult = null;
-      try {
-        sessionStorage.removeItem(EVAL_STORE);
-      } catch (eStore) {}
+      trainingEnabled = true;
+      if (typeof sentimentTrainStop === "function") {
+        sentimentTrainStop();
+        sentimentTrainStop = null;
+      }
+      sentimentGen += 1;
+      invalidateSentimentEvaluation();
       if (renderTimer) {
         clearTimeout(renderTimer);
         renderTimer = null;
@@ -1729,11 +1768,14 @@
     });
     window.addEventListener("storage", function (e) {
       if (!e || e.key !== "elenest_feedback") return;
-      recomputeAndRender._sig = "";
-      sentimentCache = null;
-      sentimentCacheKey = "";
-      finalModel = null;
-      scheduleRender();
+      trainingEnabled = true;
+      sentimentGen += 1;
+      invalidateSentimentEvaluation();
+      if (renderTimer) {
+        clearTimeout(renderTimer);
+        renderTimer = null;
+      }
+      recomputeAndRender();
     });
   }
 

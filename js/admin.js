@@ -7846,7 +7846,7 @@
       if (predictiveScriptPromise) return predictiveScriptPromise;
       predictiveScriptPromise = new Promise(function (resolve, reject) {
         var s = document.createElement("script");
-        s.src = "../js/predictive-analytics.js?v=20261102-livetime";
+        s.src = "../js/predictive-analytics.js?v=20261109-openai1";
         s.async = true;
         s.onload = function () {
           resolve(window.ElenestPredictiveAnalytics || null);
@@ -8288,6 +8288,12 @@
       renderReportsGuestReviews();
     });
     window.addEventListener("elenest-feedback-updated", function () {
+      var EV = window.ElenestModelEvaluation;
+      if (EV && typeof EV.prefetch === "function") {
+        try {
+          EV.prefetch();
+        } catch (eEvPrefetch) {}
+      }
       loadHomeReviewKpis(true).then(function () {
         renderDashboard();
         paintSentimentSection();
