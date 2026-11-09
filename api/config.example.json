@@ -7,5 +7,7 @@
   "smtp_username": "YOUR_GMAIL@gmail.com",
   "smtp_password": "YOUR_GMAIL_APP_PASSWORD",
   "smtp_from_name": "Elenest Resort",
-  "smtp_from_email": "YOUR_GMAIL@gmail.com"
+  "smtp_from_email": "YOUR_GMAIL@gmail.com",
+  "openai_api_key": "YOUR_OPENAI_API_KEY",
+  "openai_model": "gpt-4o-mini"
 }

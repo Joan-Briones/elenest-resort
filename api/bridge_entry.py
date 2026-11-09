@@ -269,11 +269,18 @@ def handle_send_contact_reply(body: dict) -> tuple[int, dict]:
     }
 
 
+def handle_prescriptive_openai(body: dict) -> tuple[int, dict]:
+    from lib.openai_prescriptive import rewrite_recommendations
+
+    return rewrite_recommendations(load_config(), body)
+
+
 HANDLERS = {
     "send_otp": handle_send_otp,
     "verify_otp": handle_verify_otp,
     "submit_contact_message": handle_submit_contact_message,
     "send_contact_reply": handle_send_contact_reply,
+    "prescriptive_openai": handle_prescriptive_openai,
 }
 
 

@@ -83,6 +83,14 @@ def send_contact_reply():
     return dispatch("send_contact_reply")
 
 
+@app.route("/api/prescriptive-openai.php", methods=["POST", "OPTIONS"])
+@app.route("/api/prescriptive-openai", methods=["POST", "OPTIONS"])
+@app.route("/prescriptive-openai.php", methods=["POST", "OPTIONS"])
+@app.route("/prescriptive-openai", methods=["POST", "OPTIONS"])
+def prescriptive_openai():
+    return dispatch("prescriptive_openai")
+
+
 @app.get("/api/health")
 @app.get("/health")
 def health():

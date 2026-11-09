@@ -40,6 +40,8 @@ function elenest_apply_env_config(array $config): array
         'smtp_password' => 'SMTP_PASSWORD',
         'smtp_from_name' => 'SMTP_FROM_NAME',
         'smtp_from_email' => 'SMTP_FROM_EMAIL',
+        'openai_api_key' => 'OPENAI_API_KEY',
+        'openai_model' => 'OPENAI_MODEL',
     ];
     $onRender = elenest_env_value('RENDER') === 'true';
 

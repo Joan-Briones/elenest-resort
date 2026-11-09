@@ -20,4 +20,8 @@ return [
     'smtp_password' => 'YOUR_GMAIL_APP_PASSWORD',
     'smtp_from_name' => 'Elenest Resort',
     'smtp_from_email' => 'YOUR_GMAIL@gmail.com',
+
+    // OpenAI → API keys. Used only on the server for prescriptive recommendations.
+    'openai_api_key' => 'YOUR_OPENAI_API_KEY',
+    'openai_model' => 'gpt-4o-mini',
 ];
