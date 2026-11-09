@@ -9,6 +9,44 @@
     return window.ElenestNotifications || null;
   }
 
+  function hasSwal() {
+    return typeof Swal !== "undefined" && typeof Swal.fire === "function";
+  }
+
+  function confirmNotifAction(options) {
+    options = options || {};
+    var text = options.text || "Are you sure?";
+    if (!hasSwal()) return Promise.resolve(window.confirm(text));
+    return Swal.fire({
+      icon: options.icon || "question",
+      title: options.title || "Please confirm",
+      text: text,
+      showCancelButton: true,
+      focusCancel: true,
+      confirmButtonText: options.confirmText || "OK",
+      cancelButtonText: options.cancelText || "Cancel",
+      confirmButtonColor: options.confirmColor || "#c46b82",
+      cancelButtonColor: "#6b7280",
+      reverseButtons: true
+    }).then(function (result) {
+      return !!(result && result.isConfirmed);
+    });
+  }
+
+  function infoNotif(title, text) {
+    if (!hasSwal()) {
+      window.alert(text || title);
+      return;
+    }
+    Swal.fire({
+      icon: "info",
+      title: title,
+      text: text || "",
+      confirmButtonText: "OK",
+      confirmButtonColor: "#c46b82"
+    });
+  }
+
   function listInbox() {
     var N = api();
     if (!N || !activeEmail) return [];
@@ -208,26 +246,53 @@
       markAll.addEventListener("click", function (e) {
         e.stopPropagation();
         var N = api();
-        if (N && activeEmail) {
+        if (!N || !activeEmail) return;
+        var list = listInbox();
+        if (!list.length) {
+          infoNotif("No notifications", "There are no notifications to mark as read.");
+          return;
+        }
+        if (!unreadCount()) {
+          infoNotif("Already read", "Every notification is already marked as read.");
+          return;
+        }
+        confirmNotifAction({
+          title: "Mark all as read?",
+          text: "Every notification will be marked as read.",
+          confirmText: "Mark all read"
+        }).then(function (ok) {
+          if (!ok) return;
           N.markAllAsRead(activeEmail);
           renderPanelList();
           updateBadge();
-        }
+        });
       });
     }
     var clearAll = panel.querySelector(".customer-notif-panel__clear-all");
     if (clearAll) {
       clearAll.addEventListener("click", function (e) {
         e.stopPropagation();
-        if (!confirm("Clear all notifications?")) return;
         var N = api();
-        if (N && activeEmail) {
+        if (!N || !activeEmail) return;
+        var list = listInbox();
+        if (!list.length) {
+          infoNotif("No notifications", "There are no notifications to clear.");
+          return;
+        }
+        confirmNotifAction({
+          icon: "warning",
+          title: "Clear all notifications?",
+          text: "This removes every notification and cannot be undone.",
+          confirmText: "Clear all",
+          confirmColor: "#b91c1c"
+        }).then(function (ok) {
+          if (!ok) return;
           listInbox().forEach(function (n) {
             if (n && n.id) N.clearForUser(activeEmail, n.id);
           });
           renderPanelList();
           updateBadge();
-        }
+        });
       });
     }
   }
@@ -381,6 +446,7 @@
     var panel = getPanel();
     var bell = document.querySelector(".staff-notif-bell");
     if (!panel || !bell) return;
+    if (e.target.closest && e.target.closest(".swal2-container")) return;
     if (
       panel.contains(e.target) ||
       bell.contains(e.target) ||
@@ -393,6 +459,7 @@
 
   document.addEventListener("keydown", function (e) {
     if (e.key !== "Escape") return;
+    if (document.querySelector(".swal2-container")) return;
     var detail = getDetailOverlay();
     if (detail && !detail.hidden) {
       closeDetail();
