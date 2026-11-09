@@ -27212,6 +27212,71 @@ html[data-theme="dark"] .reviews-page .reviews-card__comment {
   -webkit-text-fill-color: #f7f2f5 !important;
 }
 
+html[data-theme="dark"] .guest-review-modal {
+  background: #221e28;
+  background-image: none;
+  border-color: rgba(196, 107, 130, 0.32);
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.45);
+}
+
+html[data-theme="dark"] body.subpage .guest-review-modal__eyebrow {
+  color: #f3b7c8;
+}
+
+html[data-theme="dark"] body.subpage .guest-review-modal__title,
+html[data-theme="dark"] body.subpage .guest-review-modal__lede,
+html[data-theme="dark"] body.subpage .guest-review-modal__form label {
+  color: #f7f2f5;
+}
+
+html[data-theme="dark"] body.subpage .guest-review-modal .req-mark {
+  color: #f3b7c8;
+}
+
+html[data-theme="dark"] .guest-review-modal__close {
+  background: #2c2633;
+  color: #f7f2f5;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: none;
+}
+
+html[data-theme="dark"] .guest-review-modal .feedback-star {
+  background: #1b1722;
+  color: #f3b7c8;
+  border-color: rgba(196, 107, 130, 0.45);
+}
+
+html[data-theme="dark"] .guest-review-modal .feedback-star:hover,
+html[data-theme="dark"] .guest-review-modal .feedback-star.is-active {
+  background: #c46b82;
+  color: #ffffff;
+  border-color: #c46b82;
+}
+
+html[data-theme="dark"] body.subpage .guest-review-comment__count {
+  color: #f3b7c8;
+}
+
+html[data-theme="dark"] body.subpage .guest-review-comment__count.is-ready {
+  color: #c6ef9a;
+}
+
+html[data-theme="dark"] body.subpage .guest-review-comment__error {
+  color: #ffb4c0;
+}
+
+html[data-theme="dark"] body.subpage .guest-review-modal .guest-review-comment__note {
+  color: #d4c6ce;
+}
+
+html[data-theme="dark"] .guest-review-modal__dismiss {
+  color: #d4c6ce;
+}
+
+html[data-theme="dark"] .guest-review-modal__dismiss:hover {
+  color: #ffffff;
+}
+
 html[data-theme="dark"] .facilities-tab,
 html[data-theme="dark"] .avail-facility-tab {
   background: #2a2430;
