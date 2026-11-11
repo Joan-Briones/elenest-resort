@@ -236,7 +236,7 @@
     the: 1, and: 1, for: 1, was: 1, were: 1, with: 1, our: 1, you: 1,
     this: 1, that: 1, are: 1, from: 1, had: 1, have: 1, they: 1, their: 1
   };
-
+// Text Cleanup an TF - IDF
   function tokenize(text) {
     return String(text || "")
       .toLowerCase()
@@ -382,7 +382,7 @@
     return W;
   }
 
-  function runEpoch(W, X, yIndex, nClass, lr, l2) {
+  function runEpoch(W, X, yIndex, nClass, lr, l2) { // Softmax Logistic Regression
     var n = X.length;
     var k = X[0].length;
     var grad = [];
@@ -1145,7 +1145,7 @@
       });
     return pastBookingRowsPromise;
   }
-
+// Data Processing 
   function addBookingToBuckets(buckets, checkIn, status, totalEstimate, amountDown) {
     var st = String(status || "").toLowerCase();
     if (st === "cancelled" || st === "canceled" || st === "rejected") return;
@@ -1382,7 +1382,7 @@
       });
       return row;
     }
-    var beta = fitLinearRegression(
+    var beta = fitLinearRegression( // test matrix
       trainPts.map(designRow),
       trainPts.map(function (p) {
         return Number(p.bookings) || 0;

@@ -13,15 +13,15 @@
   var UNIT_NIGHTS_PER_MONTH = 24 * 30;
   var WEATHER_LAT = 13.9650558;
   var WEATHER_LON = 121.1073418;
-  var WEATHER_CACHE_KEY = "elenest_pa_weather_cache_v1";
+  var WEATHER_CACHE_KEY = "elenest_pa_weather_cache_v1"; // Open-Meteo API
   var WEATHER_CACHE_MS = 30 * 60 * 1000;
-  var PINK = "#c46b82";
-  var GREEN = "#3f6d1c";
-  var INK = "#3d3340";
+  var PINK = "#D982A5";
+  var GREEN = "#315D46";
+  var INK = "#333A35";
   var MUTED = "#6b6570";
-  var GREEN_SOFT = "rgba(63, 109, 28, 0.12)";
-  var PINK_SOFT = "rgba(196, 107, 130, 0.12)";
-  var GRID = "rgba(61, 51, 64, 0.08)";
+  var GREEN_SOFT = "rgba(49, 93, 70, 0.12)";
+  var PINK_SOFT = "rgba(217, 130, 165, 0.12)";
+  var GRID = "rgba(51, 58, 53, 0.08)";
 
   var state = {
     horizon: 6,
@@ -252,7 +252,7 @@
       }
     } catch (e) {}
 
-    var url =
+    var url = // Open-Meteo API
       "https://api.open-meteo.com/v1/forecast?latitude=" +
       WEATHER_LAT +
       "&longitude=" +
@@ -560,7 +560,8 @@
     }
     return points;
   }
-
+  
+// Data Processing - Booking grouped into months 
   function aggregateHistory(bookings, facilityType, feedbackByMonth) {
     var buckets = {};
     (bookings || []).forEach(function (booking) {
@@ -644,8 +645,8 @@
     }
     return points;
   }
-
-  /* —— OLS —— */
+// End of Data Processing
+  // Forecasting 
   function featureRow(h, tIndex) {
     var angle = (2 * Math.PI * h.month) / 12;
     return [
@@ -661,7 +662,7 @@
       h.positive_feedback_count
     ];
   }
-
+// end of forecasting 
   function featuresFor(opts) {
     var angle = (2 * Math.PI * opts.month) / 12;
     return [
@@ -723,7 +724,7 @@
       return row[n];
     });
   }
-
+// Linear Regression (OLS)
   function ols(x, y) {
     var n = x.length;
     if (!n) return [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -1041,7 +1042,7 @@
     var feedbackSignal = opts.feedbackSignal;
     var runId = uuid();
     var generatedAt = new Date();
-
+// Forecast - Three Models 
     var yBookings = history.map(function (h) { return h.bookings; });
     var yGuests = history.map(function (h) { return h.guests; });
     var yRevenue = history.map(function (h) { return h.revenue; });

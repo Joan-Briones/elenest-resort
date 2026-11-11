@@ -476,8 +476,8 @@
       updatedAt: current.time || new Date().toISOString()
     };
   }
-
-  function forecastUrl() {
+// Open-Meteo API
+  function forecastUrl() { 
     return (
       "https://api.open-meteo.com/v1/forecast?latitude=" +
       LAT +

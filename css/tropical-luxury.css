@@ -1,0 +1,670 @@
+/* ==========================================================================
+   Elenest Resort — Modern Tropical Luxury UI
+   Forest green sidebar · blush pink primaries · sage accents · warm cream
+   Loaded after style.css. Does not alter app behavior — visual layer only.
+   ========================================================================== */
+
+:root {
+  --pink: #D982A5;
+  --pink-soft: #F8DDE8;
+  --pink-dark: #C56B8F;
+  --forest: #315D46;
+  --sage: #A8C9A5;
+  --cream: #FFFDFB;
+  --ink: #333A35;
+  --staff-sidebar-w: 252px;
+  --radius-card: 16px;
+  --radius-control: 12px;
+  --shadow-soft: 0 6px 18px rgba(49, 93, 70, 0.06), 0 1px 3px rgba(51, 58, 53, 0.04);
+  --shadow-card: 0 8px 24px rgba(49, 93, 70, 0.07);
+}
+
+html,
+body {
+  background: var(--cream);
+  color: var(--ink);
+}
+
+/* —— Guest / public header stays blush pink —— */
+body:not(.admin-app):not([data-staff-portal]) header {
+  background: var(--pink) !important;
+}
+
+/* —— Shared cards —— */
+.subpage .card,
+.admin-kpi-card,
+.admin-payment-kpi-card,
+.manager-chart-card,
+.admin-report-chart-card,
+.admin-booking-review-card,
+.review-card,
+.facility-card,
+.auth-card,
+.login-reserve-card,
+.appointments-strip,
+.pa-panel,
+.book-flow,
+.book-flow__panel,
+.book-flow-block {
+  background: #fff;
+  border: 1px solid rgba(168, 201, 165, 0.42);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-soft);
+}
+
+.subpage .card:hover,
+.admin-kpi-card:hover,
+.admin-payment-kpi-card:hover,
+.manager-chart-card:hover,
+.admin-report-chart-card:hover {
+  border-color: rgba(217, 130, 165, 0.35);
+}
+
+/* —— Buttons —— */
+.primary-btn,
+.subpage .btn:not(.btn--outline):not(.btn--facebook):not(.btn--google):not(.btn--danger):not(.btn--success),
+.admin-save-btn,
+.book-flow-btn-main {
+  background: var(--pink) !important;
+  color: #fff !important;
+  border: 1px solid transparent !important;
+  border-radius: var(--radius-control) !important;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(217, 130, 165, 0.28);
+}
+
+.primary-btn:hover,
+.subpage .btn:not(.btn--outline):not(.btn--facebook):not(.btn--google):not(.btn--danger):not(.btn--success):hover,
+.admin-save-btn:hover,
+.book-flow-btn-main:hover:not(:disabled) {
+  background: var(--pink-dark) !important;
+}
+
+.subpage .btn--outline,
+.subpage .btn--success.btn--outline {
+  background: #fff !important;
+  border: 1.5px solid var(--sage) !important;
+  color: var(--forest) !important;
+  border-radius: var(--radius-control) !important;
+}
+
+.subpage .btn--outline:hover,
+.subpage .btn--success.btn--outline:hover {
+  background: #EEF5EE !important;
+  border-color: var(--forest) !important;
+  color: var(--forest) !important;
+}
+
+.subpage .btn--success:not(.btn--outline) {
+  background: var(--forest) !important;
+  color: #fff !important;
+  border-radius: var(--radius-control) !important;
+}
+
+/* —— Forms —— */
+.subpage input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="hidden"]):not([type="range"]),
+.subpage textarea,
+.subpage select {
+  border-radius: var(--radius-control);
+  border-color: rgba(168, 201, 165, 0.55);
+  background: #fff;
+  color: var(--ink);
+}
+
+.subpage input:focus,
+.subpage textarea:focus,
+.subpage select:focus {
+  border-color: var(--pink) !important;
+  box-shadow: 0 0 0 3px rgba(217, 130, 165, 0.18) !important;
+  outline: none;
+}
+
+/* —— Booking status chips (highly distinguishable) —— */
+.subpage .booking-status,
+.booking-status,
+.admin-arrival-status-pill {
+  border-radius: 999px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.subpage .booking-status--pending,
+.booking-status--pending,
+.booking-status--pending-payment {
+  background: #FFF4E8 !important;
+  color: #B45309 !important;
+  border: 1px solid #F5C58B !important;
+}
+
+.subpage .booking-status--confirmed,
+.booking-status--confirmed {
+  background: #EAF5EE !important;
+  color: var(--forest) !important;
+  border: 1px solid var(--sage) !important;
+}
+
+.subpage .booking-status--cancelled,
+.booking-status--cancelled {
+  background: #FDECEC !important;
+  color: #B42318 !important;
+  border: 1px solid #F5C2C0 !important;
+}
+
+.booking-status--completed,
+.booking-status--checked-in,
+.admin-arrival-status-pill.is-checked-in {
+  background: var(--pink-soft) !important;
+  color: #8A4A68 !important;
+  border: 1px solid rgba(217, 130, 165, 0.45) !important;
+}
+
+.booking-status--checked-out,
+.admin-arrival-status-pill.is-checked-out {
+  background: #EEF2F0 !important;
+  color: #4A5A52 !important;
+  border: 1px solid #C5D0CB !important;
+}
+
+/* —— KPI hierarchy —— */
+.subpage .kpi h4,
+.admin-kpi-card h4,
+.admin-payment-kpi-card h4 {
+  color: var(--pink) !important;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.subpage .kpi p,
+.admin-kpi-card p,
+.admin-payment-kpi-card p {
+  color: rgba(51, 58, 53, 0.72);
+  font-weight: 500;
+}
+
+.subpage .section-title,
+.appointments-strip__title,
+.manager-chart-card__title,
+.admin-report-card-title,
+.pa-title {
+  color: var(--forest) !important;
+  font-weight: 700;
+}
+
+/* —— Tables —— */
+.subpage table,
+.data-table,
+.admin-pay-table,
+.appointments-table {
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: var(--dt-radius, 12px);
+  overflow: hidden;
+}
+
+.subpage table thead th,
+.data-table thead th,
+.admin-pay-table thead th {
+  background: #F3F7F2;
+  color: var(--forest);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  font-size: var(--dt-th-size, 0.68rem);
+  border-bottom: 1px solid rgba(168, 201, 165, 0.5);
+}
+
+.subpage table tbody tr:nth-child(even),
+.data-table tbody tr:nth-child(even) {
+  background: #FFFDFB;
+}
+
+.subpage table tbody tr:hover,
+.data-table tbody tr:hover {
+  background: var(--pink-soft);
+}
+
+/* —— Modals —— */
+.subpage .modal__dialog,
+.subpage .avail-modal__dialog,
+.subpage .facility-detail-modal__dialog,
+.subpage .appointments-modal__dialog,
+.swal2-popup {
+  border-radius: 18px !important;
+  border: 1px solid rgba(168, 201, 165, 0.4);
+  box-shadow: 0 24px 48px rgba(49, 93, 70, 0.14) !important;
+}
+
+.swal2-confirm {
+  background: var(--pink) !important;
+  border-radius: 10px !important;
+}
+
+.swal2-cancel {
+  border-radius: 10px !important;
+}
+
+/* —— Staff boot loading —— */
+.staff-boot-loading__card {
+  border: 1px solid rgba(168, 201, 165, 0.45);
+  border-radius: 20px;
+  box-shadow: var(--shadow-card);
+}
+
+.staff-boot-loading__kicker,
+.staff-boot-loading__title {
+  color: var(--forest);
+}
+
+.staff-boot-loading__bar > span,
+.staff-boot-loading__ring {
+  border-color: var(--pink);
+}
+
+/* ==========================================================================
+   STAFF PORTALS — Forest green sidebar (desktop) / green top bar (mobile)
+   Preserves existing #menulist / header-nav.js / dropdown IDs
+   ========================================================================== */
+
+body.admin-app,
+body[data-staff-portal] {
+  background: var(--cream);
+}
+
+body.admin-app .staff-boot-loading,
+body[data-staff-portal] .staff-boot-loading {
+  left: 0 !important;
+  width: 100% !important;
+  padding-left: 0 !important;
+}
+
+body.admin-app > header,
+body[data-staff-portal] > header {
+  background: var(--forest) !important;
+  color: #fff;
+  box-shadow: none !important;
+  border: 0 !important;
+}
+
+/* Desktop sidebar */
+@media (min-width: 901px) {
+  body.admin-app,
+  body[data-staff-portal] {
+    padding-left: var(--staff-sidebar-w);
+  }
+
+  body.admin-app > header,
+  body[data-staff-portal] > header {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: auto !important;
+    bottom: 0 !important;
+    width: var(--staff-sidebar-w) !important;
+    min-height: 100dvh !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    z-index: 1200;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 0 !important;
+    display: flex;
+    flex-direction: column;
+  }
+
+  body.admin-app > header .content.flex_space,
+  body[data-staff-portal] > header .content.flex_space {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+    gap: 1.25rem !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-height: 100%;
+    padding: 1.35rem 1rem 1.5rem !important;
+    margin: 0 !important;
+  }
+
+  body.admin-app > header .logo,
+  body[data-staff-portal] > header .logo {
+    width: 100%;
+    max-width: none !important;
+    justify-content: center;
+    padding: 0.35rem 0.25rem 0.85rem;
+    border-bottom: 1px solid rgba(168, 201, 165, 0.28);
+  }
+
+  body.admin-app > header .site-logo,
+  body[data-staff-portal] > header .site-logo,
+  body.admin-app > header .logo img,
+  body[data-staff-portal] > header .logo img {
+    max-height: 52px !important;
+    width: auto;
+    filter: brightness(1.08);
+  }
+
+  body.admin-app > header .navlinks,
+  body[data-staff-portal] > header .navlinks {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    gap: 0.85rem !important;
+    flex: 1 1 auto;
+  }
+
+  body.admin-app > header .nav-menu-toggle,
+  body[data-staff-portal] > header .nav-menu-toggle,
+  body.admin-app header button.nav-menu-toggle,
+  body[data-staff-portal] header button.nav-menu-toggle {
+    display: none !important;
+  }
+
+  body.admin-app > header #menulist,
+  body.admin-app > header .navlinks > ul.site-nav-list,
+  body[data-staff-portal] > header #menulist,
+  body[data-staff-portal] > header .navlinks > ul.site-nav-list,
+  body.admin-app > header #menulist:not(.is-open),
+  body.admin-app > header #menulist.is-open,
+  body[data-staff-portal] > header #menulist:not(.is-open),
+  body[data-staff-portal] > header #menulist.is-open {
+    position: static !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0.35rem !important;
+    width: 100% !important;
+    max-height: none !important;
+    height: auto !important;
+    overflow: visible !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    border: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    pointer-events: auto !important;
+    color: #fff !important;
+  }
+
+  body.admin-app > header #menulist > li,
+  body[data-staff-portal] > header #menulist > li {
+    width: 100%;
+    display: block;
+  }
+
+  body.admin-app > header #menulist > li > a,
+  body.admin-app > header #menulist .admin-nav-dropdown-toggle,
+  body[data-staff-portal] > header #menulist > li > a,
+  body[data-staff-portal] > header #menulist .admin-nav-dropdown-toggle {
+    display: flex !important;
+    align-items: center;
+    width: 100% !important;
+    padding: 0.72rem 0.9rem !important;
+    border-radius: 12px !important;
+    color: rgba(255, 255, 255, 0.92) !important;
+    background: transparent !important;
+    border: 0 !important;
+    font-weight: 600 !important;
+    font-size: 0.92rem !important;
+    letter-spacing: 0.01em;
+    text-align: left !important;
+    line-height: 1.3 !important;
+    min-height: 44px;
+    box-shadow: none !important;
+  }
+
+  body.admin-app > header #menulist > li > a:hover,
+  body.admin-app > header #menulist .admin-nav-dropdown-toggle:hover,
+  body[data-staff-portal] > header #menulist > li > a:hover,
+  body[data-staff-portal] > header #menulist .admin-nav-dropdown-toggle:hover {
+    background: rgba(168, 201, 165, 0.22) !important;
+    color: #fff !important;
+  }
+
+  body.admin-app > header #menulist > li > a.active,
+  body.admin-app > header #menulist a[href^="#section-"].active,
+  body.admin-app > header #adminSettingsToggle.active,
+  body[data-staff-portal] > header #menulist > li > a.active,
+  body[data-staff-portal] > header #staffSettingsToggle.active,
+  body.admin-app > header .admin-nav-dropdown-toggle.active,
+  body[data-staff-portal] > header .admin-nav-dropdown-toggle.active {
+    background: var(--pink) !important;
+    color: #fff !important;
+    box-shadow: 0 6px 14px rgba(217, 130, 165, 0.35) !important;
+  }
+
+  /* Nested management/analytics menus expand inline */
+  body.admin-app > header .admin-nav-dropdown,
+  body[data-staff-portal] > header .admin-nav-dropdown {
+    position: relative;
+    width: 100%;
+  }
+
+  body.admin-app > header .admin-nav-dropdown-menu,
+  body[data-staff-portal] > header .admin-nav-dropdown-menu {
+    position: static !important;
+    display: none;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0.25rem 0 0.35rem !important;
+    padding: 0.25rem !important;
+    background: rgba(0, 0, 0, 0.16) !important;
+    border: 1px solid rgba(168, 201, 165, 0.22) !important;
+    border-radius: 12px !important;
+    box-shadow: none !important;
+    transform: none !important;
+    inset: auto !important;
+  }
+
+  body.admin-app > header .admin-nav-dropdown.is-open .admin-nav-dropdown-menu,
+  body[data-staff-portal] > header .admin-nav-dropdown.is-open .admin-nav-dropdown-menu {
+    display: flex !important;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  body.admin-app > header .admin-nav-dropdown-item,
+  body[data-staff-portal] > header .admin-nav-dropdown-item {
+    color: rgba(255, 255, 255, 0.88) !important;
+    border-radius: 10px !important;
+    padding: 0.62rem 0.8rem !important;
+    background: transparent !important;
+    white-space: normal !important;
+  }
+
+  body.admin-app > header .admin-nav-dropdown-item:hover,
+  body.admin-app > header .admin-nav-dropdown-item.active,
+  body[data-staff-portal] > header .admin-nav-dropdown-item:hover,
+  body[data-staff-portal] > header .admin-nav-dropdown-item.active {
+    background: rgba(217, 130, 165, 0.28) !important;
+    color: #fff !important;
+  }
+
+  /* Settings dropdown under sidebar */
+  body.admin-app > header .admin-settings-menu,
+  body[data-staff-portal] > header .admin-settings-menu {
+    position: static !important;
+    width: 100% !important;
+    margin-top: 0.35rem;
+    background: rgba(0, 0, 0, 0.18) !important;
+    border: 1px solid rgba(168, 201, 165, 0.22) !important;
+    border-radius: 12px !important;
+    box-shadow: none !important;
+  }
+
+  body.admin-app > header .admin-settings-item,
+  body[data-staff-portal] > header .admin-settings-item {
+    color: #fff !important;
+  }
+
+  body.admin-app > header .admin-settings-item:hover,
+  body[data-staff-portal] > header .admin-settings-item:hover {
+    background: rgba(217, 130, 165, 0.25) !important;
+  }
+
+  body.admin-app > header .staff-header-user,
+  body[data-staff-portal] > header .staff-header-user {
+    width: 100%;
+    margin: auto 0 0 !important;
+    padding-top: 0.85rem;
+    border-top: 1px solid rgba(168, 201, 165, 0.28);
+    justify-content: stretch;
+  }
+
+  body.admin-app > header .staff-header-user__inner,
+  body[data-staff-portal] > header .staff-header-user__inner {
+    width: 100% !important;
+    max-width: none !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(168, 201, 165, 0.3) !important;
+    color: #fff !important;
+    border-radius: 14px !important;
+  }
+
+  body.admin-app > header .staff-header-user__name,
+  body.admin-app > header .staff-header-user__role,
+  body[data-staff-portal] > header .staff-header-user__name,
+  body[data-staff-portal] > header .staff-header-user__role {
+    color: #fff !important;
+  }
+
+  body.admin-app > header .staff-notif-bell,
+  body[data-staff-portal] > header .staff-notif-bell {
+    background: rgba(255, 255, 255, 0.12) !important;
+    border-color: rgba(168, 201, 165, 0.35) !important;
+    color: #fff !important;
+  }
+
+  body.admin-app > main.container,
+  body[data-staff-portal] > main.container,
+  body.admin-app > main,
+  body[data-staff-portal] > main {
+    width: 100% !important;
+    max-width: 1480px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-top: 1.35rem;
+    padding-bottom: 2.5rem;
+  }
+}
+
+/* Mobile / tablet staff: forest top bar + drawer */
+@media (max-width: 900px) {
+  body.admin-app > header,
+  body[data-staff-portal] > header {
+    position: sticky !important;
+    top: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    background: var(--forest) !important;
+  }
+
+  body.admin-app > header #menulist,
+  body.admin-app > header .navlinks > ul.site-nav-list,
+  body[data-staff-portal] > header #menulist,
+  body[data-staff-portal] > header .navlinks > ul.site-nav-list {
+    background: #2A513C !important;
+    border: 1px solid rgba(168, 201, 165, 0.28) !important;
+    border-radius: 14px !important;
+    box-shadow: 0 16px 36px rgba(49, 93, 70, 0.28) !important;
+  }
+
+  body.admin-app > header #menulist a,
+  body.admin-app > header .admin-nav-dropdown-toggle,
+  body[data-staff-portal] > header #menulist a,
+  body[data-staff-portal] > header .admin-nav-dropdown-toggle {
+    color: #fff !important;
+  }
+
+  body.admin-app > header #menulist a.active,
+  body[data-staff-portal] > header #menulist a.active {
+    background: var(--pink) !important;
+    color: #fff !important;
+  }
+
+  body.admin-app .nav-menu-toggle,
+  body[data-staff-portal] .nav-menu-toggle {
+    border-color: rgba(255, 255, 255, 0.35) !important;
+  }
+
+  body.admin-app .nav-menu-toggle__bar,
+  body[data-staff-portal] .nav-menu-toggle__bar {
+    background: #fff !important;
+  }
+}
+
+/* —— Analytics / PA polish —— */
+#section-predictive .pa-panel {
+  border-radius: var(--radius-card);
+  border: 1px solid rgba(168, 201, 165, 0.4);
+  box-shadow: var(--shadow-soft);
+}
+
+#section-predictive .pa-title {
+  color: var(--pink) !important;
+}
+
+#section-predictive .pa-live-badge {
+  background: rgba(49, 93, 70, 0.12);
+  color: var(--forest);
+  border-color: rgba(49, 93, 70, 0.35);
+}
+
+/* —— Auth / guest pages —— */
+body.subpage:not(.admin-app):not([data-staff-portal]) .auth-card,
+body.subpage:not(.admin-app):not([data-staff-portal]) .login-reserve-card {
+  border: 1px solid rgba(217, 130, 165, 0.25);
+  box-shadow: 0 12px 32px rgba(217, 130, 165, 0.12);
+}
+
+body.subpage:not(.admin-app):not([data-staff-portal]) .section-title {
+  color: var(--forest) !important;
+}
+
+/* —— Reduce nested-box noise on staff dashboards —— */
+body.admin-app .appointments-strip,
+body[data-staff-portal] .appointments-strip {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+body.admin-app .appointments-strip__title,
+body[data-staff-portal] .appointments-strip__title {
+  color: var(--forest);
+  font-size: clamp(1.35rem, 2vw, 1.7rem);
+}
+
+/* Selected calendar / facility accents */
+.book-flow-cal-day--selected,
+.book-facility-card--selected,
+.avail-facility-card.is-selected {
+  border-color: var(--pink) !important;
+  box-shadow: 0 0 0 2px rgba(217, 130, 165, 0.25);
+}
+
+.book-flow__step.is-active .book-flow-stepper__marker,
+.book-flow__step.is-done .book-flow-stepper__marker {
+  background: var(--pink) !important;
+}
+
+.book-flow__step.is-done .book-flow-stepper__connector {
+  background: var(--sage) !important;
+}
+
+/* Accessibility focus */
+a:focus-visible,
+button:focus-visible,
+.btn:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--pink);
+  outline-offset: 2px;
+}

@@ -379,7 +379,7 @@
       }
     }, 1200);
   }
-
+// Booking setupRealtimeAvailability
   function setupRealtimeAvailability(force) {
     var sb = getClient();
     if (!sb) return;
@@ -2677,7 +2677,7 @@
       return 0;
     });
   }
-
+//  Data Collection and Storage
   function loadAllBookings(force) {
     if (loadAllBookingsPromise) return loadAllBookingsPromise;
     if (!force && lastLoadAllBookingsAt && Date.now() - lastLoadAllBookingsAt < 12000) {

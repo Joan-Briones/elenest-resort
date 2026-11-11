@@ -483,7 +483,7 @@
     }
     return loadRecArchiveFromSupabase(sb);
   }
-
+//  Data Collection and Storage
   function loadAll(isReload) {
     var sb = getClient();
     if (!sb) {

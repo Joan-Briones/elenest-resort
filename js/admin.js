@@ -247,7 +247,7 @@
       focusCancel: true,
       confirmButtonText: options.confirmText || "OK",
       cancelButtonText: options.cancelText || "Cancel",
-      confirmButtonColor: options.confirmColor || "#c46b82",
+      confirmButtonColor: options.confirmColor || "#D982A5",
       cancelButtonColor: "#6b7280",
       reverseButtons: true
     }).then(function (result) {
@@ -267,7 +267,7 @@
       title: options.title || "",
       text: text,
       confirmButtonText: options.confirmText || "OK",
-      confirmButtonColor: options.confirmColor || "#c46b82"
+      confirmButtonColor: options.confirmColor || "#D982A5"
     });
   }
 
@@ -289,7 +289,7 @@
       focusCancel: true,
       confirmButtonText: options.confirmText || "Continue",
       cancelButtonText: options.cancelText || "Cancel",
-      confirmButtonColor: options.confirmColor || "#c46b82",
+      confirmButtonColor: options.confirmColor || "#D982A5",
       cancelButtonColor: "#6b7280",
       reverseButtons: true
     }).then(function (result) {
@@ -4406,7 +4406,7 @@
       }
     });
   }
-
+//Centralized Dashboard
   function renderDashboard() {
     var board = document.getElementById("adminBookingsBoard");
     var bookings = listBookings();
@@ -4519,7 +4519,7 @@
       renderSentimentFeedbackList();
     });
   }
-
+// Reporting Management
   function renderReports() {
     function paint(pastItems) {
       // Live bookings only for merge base — never listAll() (may include huge historical sets).
@@ -4703,16 +4703,16 @@
     "11px Poppins, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif";
   var CHART_BG = "#ffffff";
   var CHART_PLOT_BG = "rgba(248, 246, 249, 0.72)";
-  var CHART_GRID = "rgba(61, 51, 64, 0.07)";
-  var CHART_AXIS = "rgba(61, 51, 64, 0.16)";
+  var CHART_GRID = "rgba(51, 58, 53, 0.07)";
+  var CHART_AXIS = "rgba(51, 58, 53, 0.16)";
   var CHART_TEXT = "#2f2933";
   var CHART_MUTED = "#6b6570";
-  var CHART_PINK = "#c46b82";
-  var CHART_PINK_DEEP = "#a84f68";
-  var CHART_GREEN = "#7fc142";
-  var CHART_GREEN_DEEP = "#5f9e2e";
-  var CHART_PINK_SOFT = "rgba(196, 107, 130, 0.1)";
-  var CHART_GREEN_SOFT = "rgba(127, 193, 66, 0.12)";
+  var CHART_PINK = "#D982A5";
+  var CHART_PINK_DEEP = "#C56B8F";
+  var CHART_GREEN = "#315D46";
+  var CHART_GREEN_DEEP = "#254836";
+  var CHART_PINK_SOFT = "rgba(217, 130, 165, 0.1)";
+  var CHART_GREEN_SOFT = "rgba(168, 201, 165, 0.12)";
   var adminTrendChartMeta = null;
   var adminRevenueChartMeta = null;
 
@@ -5173,8 +5173,8 @@
         key: "Confirmed",
         label: "Confirmed",
         value: counts.Confirmed,
-        color: "#7fc142",
-        colorDeep: "#5f9e2e"
+        color: "#315D46",
+        colorDeep: "#254836"
       },
       {
         key: "Pending",
@@ -5187,8 +5187,8 @@
         key: "Cancelled",
         label: "Cancelled",
         value: counts.Cancelled,
-        color: "#c46b82",
-        colorDeep: "#a84f68"
+        color: "#D982A5",
+        colorDeep: "#C56B8F"
       },
       {
         key: "Completed",
@@ -5237,8 +5237,8 @@
     /* Soft radial halo */
     ctx.save();
     var halo = ctx.createRadialGradient(cx, cy, midR * 0.35, cx, cy, outerR + 10);
-    halo.addColorStop(0, "rgba(127, 193, 66, 0.08)");
-    halo.addColorStop(0.55, "rgba(196, 107, 130, 0.05)");
+    halo.addColorStop(0, "rgba(168, 201, 165, 0.08)");
+    halo.addColorStop(0.55, "rgba(217, 130, 165, 0.05)");
     halo.addColorStop(1, "rgba(255, 255, 255, 0)");
     ctx.beginPath();
     ctx.arc(cx, cy, outerR + 10, 0, Math.PI * 2);
@@ -5250,7 +5250,7 @@
     ctx.save();
     ctx.beginPath();
     ctx.arc(cx, cy, midR, 0, Math.PI * 2);
-    ctx.strokeStyle = "rgba(61, 51, 64, 0.07)";
+    ctx.strokeStyle = "rgba(51, 58, 53, 0.07)";
     ctx.lineWidth = ringW;
     ctx.lineCap = "butt";
     ctx.stroke();
@@ -5304,7 +5304,7 @@
     ctx.fill();
     ctx.beginPath();
     ctx.arc(cx, cy, innerR, 0, Math.PI * 2);
-    ctx.strokeStyle = "rgba(61, 51, 64, 0.07)";
+    ctx.strokeStyle = "rgba(51, 58, 53, 0.07)";
     ctx.lineWidth = 1;
     ctx.stroke();
 
@@ -5405,7 +5405,7 @@
       var deep = idx % 2 === 0 ? CHART_GREEN_DEEP : CHART_PINK_DEEP;
 
       /* Track behind bar */
-      ctx.fillStyle = "rgba(61, 51, 64, 0.045)";
+      ctx.fillStyle = "rgba(51, 58, 53, 0.045)";
       fillRoundBar(ctx, padL, y, chartW, barH, 7);
 
       if (drawW > 0) {
@@ -5563,8 +5563,8 @@
       if (dimmed) ctx.globalAlpha = 0.38;
 
       if (bh > 0) {
-        var topC = isPeak || isHover ? "#d47a90" : CHART_PINK;
-        var botC = isPeak || isHover ? CHART_PINK_DEEP : "#d9a0b0";
+        var topC = isPeak || isHover ? "#D982A5" : CHART_PINK;
+        var botC = isPeak || isHover ? CHART_PINK_DEEP : "#F8DDE8";
         ctx.fillStyle = makeVerticalBarGradient(ctx, x, y, barW, Math.max(bh, 3), topC, botC);
         fillRoundTopBar(ctx, x, y, barW, Math.max(bh, 3), Math.min(8, barW / 2));
 
@@ -5574,7 +5574,7 @@
           ctx.stroke();
         }
       } else {
-        ctx.fillStyle = "rgba(196, 107, 130, 0.28)";
+        ctx.fillStyle = "rgba(217, 130, 165, 0.28)";
         fillRoundTopBar(ctx, x, baselineY - 3, barW, 3, 2);
       }
       ctx.restore();
@@ -6302,10 +6302,10 @@
     ctx.fillStyle = "#ffffff";
     ctx.fillRect(0, 0, w, h);
 
-    var cPos = overlay ? "#7fc142" : "#5f9e2e";
+    var cPos = overlay ? "#315D46" : "#254836";
     var cNeu = overlay ? "#8b8490" : "#7b7480";
-    var cNeg = "#c46b82";
-    var textInk = "#3d3340";
+    var cNeg = "#D982A5";
+    var textInk = "#333A35";
     var textMute = "#8a8490";
     var fontLegend = "600 11px Poppins, 'Segoe UI', sans-serif";
     var fontAxis = "600 11px Poppins, 'Segoe UI', sans-serif";
@@ -6380,7 +6380,7 @@
     }
 
     // Soft plot background
-    ctx.fillStyle = "rgba(61, 51, 64, 0.02)";
+    ctx.fillStyle = "rgba(51, 58, 53, 0.02)";
     ctx.fillRect(x0, y0, chartW, chartH);
 
     drawProChartGrid(ctx, x0, y0, chartW, chartH, 4);
@@ -6439,14 +6439,14 @@
 
     // Smooth stacked areas (neg → neu → pos)
     var negGrad = ctx.createLinearGradient(0, y0, 0, yBase);
-    negGrad.addColorStop(0, "rgba(196, 107, 130, 0.28)");
-    negGrad.addColorStop(1, "rgba(196, 107, 130, 0.06)");
+    negGrad.addColorStop(0, "rgba(217, 130, 165, 0.28)");
+    negGrad.addColorStop(1, "rgba(217, 130, 165, 0.06)");
     var neuGrad = ctx.createLinearGradient(0, y0, 0, yBase);
     neuGrad.addColorStop(0, "rgba(123, 116, 128, 0.24)");
     neuGrad.addColorStop(1, "rgba(123, 116, 128, 0.05)");
     var posGrad = ctx.createLinearGradient(0, y0, 0, yBase);
-    posGrad.addColorStop(0, "rgba(127, 193, 66, 0.32)");
-    posGrad.addColorStop(1, "rgba(127, 193, 66, 0.06)");
+    posGrad.addColorStop(0, "rgba(168, 201, 165, 0.32)");
+    posGrad.addColorStop(1, "rgba(168, 201, 165, 0.06)");
 
     if (hasAny && pts.length >= 2) {
       var clampY = overlay
@@ -6483,7 +6483,7 @@
         var r = active ? 5.2 : 3.6;
         if (active) {
           ctx.save();
-          ctx.strokeStyle = "rgba(61, 51, 64, 0.12)";
+          ctx.strokeStyle = "rgba(51, 58, 53, 0.12)";
           ctx.lineWidth = 1;
           ctx.setLineDash([4, 4]);
           ctx.beginPath();

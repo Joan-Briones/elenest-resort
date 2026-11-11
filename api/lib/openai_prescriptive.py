@@ -89,7 +89,7 @@ def _compact_draft(raw: Any) -> list[dict[str, Any]]:
         )
     return out
 
-
+// Utilization of Prescriptive Analytics in Customer Feedback
 def rewrite_recommendations(config: dict[str, Any], body: dict[str, Any]) -> tuple[int, dict]:
     key = resolve_openai_key(config)
     if not key or key.startswith("YOUR_"):
@@ -126,7 +126,7 @@ def rewrite_recommendations(config: dict[str, Any], body: dict[str, Any]) -> tup
 
     try:
         response = requests.post(
-            "https://api.openai.com/v1/chat/completions",
+            "https://api.openai.com/v1/chat/completions", // OpenAI API endpoint for chat completions
             headers={
                 "Authorization": "Bearer " + key,
                 "Content-Type": "application/json",

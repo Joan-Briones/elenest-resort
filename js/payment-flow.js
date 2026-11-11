@@ -28,7 +28,7 @@
     if (s === "no_show" || s === "noshow") return "no_show";
     return "not_arrived";
   }
-
+//  Real-Time Monitoring of Guests
   function bookingCheckInIso(booking) {
     return String((booking && booking.checkIn) || "").slice(0, 10);
   }
@@ -706,7 +706,7 @@
       paymentType: type
     };
   }
-
+// Sales and Payment
   function buildVerificationApprovePatch(booking, adminEmail) {
     var type = normalizePaymentType(booking && booking.paymentType);
     var verifiedAt = new Date().toISOString();

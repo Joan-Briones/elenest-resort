@@ -23,7 +23,7 @@
       focusCancel: true,
       confirmButtonText: options.confirmText || "OK",
       cancelButtonText: options.cancelText || "Cancel",
-      confirmButtonColor: options.confirmColor || "#c46b82",
+      confirmButtonColor: options.confirmColor || "#D982A5",
       cancelButtonColor: "#6b7280",
       reverseButtons: true
     }).then(function (result) {
@@ -41,7 +41,7 @@
       title: title,
       text: text || "",
       confirmButtonText: "OK",
-      confirmButtonColor: "#c46b82"
+      confirmButtonColor: "#D982A5"
     });
   }
 

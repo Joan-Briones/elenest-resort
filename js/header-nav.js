@@ -1,6 +1,10 @@
 (function () {
-  // Admin has many long nav labels — collapse earlier so links stay usable.
-  var MOBILE_BP = document.body && document.body.classList.contains("admin-app") ? 1500 : 1100;
+  // Staff portals use a forest-green sidebar from 901px up; collapse only on phones/tablets.
+  var isStaffPortal = !!(document.body && (
+    document.body.classList.contains("admin-app") ||
+    document.body.hasAttribute("data-staff-portal")
+  ));
+  var MOBILE_BP = isStaffPortal ? 900 : 1100;
   var menulist = document.getElementById("menulist");
   var toggle = document.getElementById("navMenuToggle");
   if (!menulist) return;

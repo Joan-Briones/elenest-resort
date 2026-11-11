@@ -139,7 +139,7 @@
       title: options.title || "",
       text: text,
       confirmButtonText: options.confirmText || "OK",
-      confirmButtonColor: options.confirmColor || "#c46b82"
+      confirmButtonColor: options.confirmColor || "#D982A5"
     });
   }
 
@@ -157,7 +157,7 @@
       focusCancel: true,
       confirmButtonText: options.confirmText || "OK",
       cancelButtonText: options.cancelText || "Cancel",
-      confirmButtonColor: options.confirmColor || "#c46b82",
+      confirmButtonColor: options.confirmColor || "#D982A5",
       cancelButtonColor: "#6b7280",
       reverseButtons: true
     }).then(function (result) {
@@ -183,7 +183,7 @@
       focusCancel: true,
       confirmButtonText: options.confirmText || "Submit request",
       cancelButtonText: "Cancel",
-      confirmButtonColor: "#c46b82",
+      confirmButtonColor: "#D982A5",
       cancelButtonColor: "#6b7280",
       reverseButtons: true,
       preConfirm: function (value) {

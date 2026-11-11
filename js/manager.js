@@ -2837,14 +2837,14 @@
   /* —— Manager pro charts (aligned with Admin Report visuals) —— */
   var MGR_CHART_BG = "#ffffff";
   var MGR_CHART_PLOT = "rgba(248, 246, 249, 0.72)";
-  var MGR_CHART_GRID = "rgba(61, 51, 64, 0.07)";
-  var MGR_CHART_AXIS = "rgba(61, 51, 64, 0.16)";
+  var MGR_CHART_GRID = "rgba(51, 58, 53, 0.07)";
+  var MGR_CHART_AXIS = "rgba(51, 58, 53, 0.16)";
   var MGR_CHART_TEXT = "#2f2933";
   var MGR_CHART_MUTED = "#6b6570";
-  var MGR_CHART_PINK = "#c46b82";
-  var MGR_CHART_PINK_DEEP = "#a84f68";
-  var MGR_CHART_GREEN = "#7fc142";
-  var MGR_CHART_GREEN_DEEP = "#5f9e2e";
+  var MGR_CHART_PINK = "#D982A5";
+  var MGR_CHART_PINK_DEEP = "#C56B8F";
+  var MGR_CHART_GREEN = "#315D46";
+  var MGR_CHART_GREEN_DEEP = "#254836";
   var managerTrendMetaById = {};
   var managerRevenueMetaById = {};
   var managerChartsResizeBound = false;
@@ -3118,7 +3118,7 @@
       ctx.lineTo(bookingPts[bookingPts.length - 1].x, baselineY);
       ctx.lineTo(bookingPts[0].x, baselineY);
       ctx.closePath();
-      ctx.fillStyle = "rgba(127, 193, 66, 0.12)";
+      ctx.fillStyle = "rgba(168, 201, 165, 0.12)";
       ctx.fill();
       ctx.beginPath();
       buildMgrSmoothPath(ctx, bookingPts);
@@ -3210,9 +3210,9 @@
       else counts.Pending += 1;
     });
     var slices = [
-      { key: "Confirmed", label: "Confirmed", value: counts.Confirmed, color: "#7fc142", colorDeep: "#5f9e2e" },
+      { key: "Confirmed", label: "Confirmed", value: counts.Confirmed, color: "#315D46", colorDeep: "#254836" },
       { key: "Pending", label: "Pending", value: counts.Pending, color: "#e0b03a", colorDeep: "#c4921a" },
-      { key: "Cancelled", label: "Cancelled", value: counts.Cancelled, color: "#c46b82", colorDeep: "#a84f68" },
+      { key: "Cancelled", label: "Cancelled", value: counts.Cancelled, color: "#D982A5", colorDeep: "#C56B8F" },
       { key: "Completed", label: "Completed", value: counts.Completed, color: "#6b7c93", colorDeep: "#4f5f73" }
     ].filter(function (s) {
       return s.value > 0;
@@ -3234,9 +3234,9 @@
       var c = itemsOrCounts || {};
       pack = {
         slices: [
-          { key: "Confirmed", label: "Approved", value: Number(c.approved) || 0, color: "#7fc142", colorDeep: "#5f9e2e" },
+          { key: "Confirmed", label: "Approved", value: Number(c.approved) || 0, color: "#315D46", colorDeep: "#254836" },
           { key: "Pending", label: "Pending", value: Number(c.pending) || 0, color: "#e0b03a", colorDeep: "#c4921a" },
-          { key: "Cancelled", label: "Cancelled", value: Number(c.cancelled) || 0, color: "#c46b82", colorDeep: "#a84f68" }
+          { key: "Cancelled", label: "Cancelled", value: Number(c.cancelled) || 0, color: "#D982A5", colorDeep: "#C56B8F" }
         ].filter(function (s) {
           return s.value > 0;
         }),
@@ -3283,8 +3283,8 @@
 
     ctx.save();
     var halo = ctx.createRadialGradient(cx, cy, midR * 0.35, cx, cy, outerR + 10);
-    halo.addColorStop(0, "rgba(127, 193, 66, 0.08)");
-    halo.addColorStop(0.55, "rgba(196, 107, 130, 0.05)");
+    halo.addColorStop(0, "rgba(168, 201, 165, 0.08)");
+    halo.addColorStop(0.55, "rgba(217, 130, 165, 0.05)");
     halo.addColorStop(1, "rgba(255, 255, 255, 0)");
     ctx.beginPath();
     ctx.arc(cx, cy, outerR + 10, 0, Math.PI * 2);
@@ -3295,7 +3295,7 @@
     ctx.save();
     ctx.beginPath();
     ctx.arc(cx, cy, midR, 0, Math.PI * 2);
-    ctx.strokeStyle = "rgba(61, 51, 64, 0.07)";
+    ctx.strokeStyle = "rgba(51, 58, 53, 0.07)";
     ctx.lineWidth = ringW;
     ctx.stroke();
     ctx.restore();
@@ -3342,7 +3342,7 @@
     ctx.fill();
     ctx.beginPath();
     ctx.arc(cx, cy, innerR, 0, Math.PI * 2);
-    ctx.strokeStyle = "rgba(61, 51, 64, 0.07)";
+    ctx.strokeStyle = "rgba(51, 58, 53, 0.07)";
     ctx.lineWidth = 1;
     ctx.stroke();
 
@@ -3472,12 +3472,12 @@
       if (dimmed) ctx.globalAlpha = 0.35;
       if (bh > 0) {
         var grad = ctx.createLinearGradient(x, y, x, y + Math.max(bh, 3));
-        grad.addColorStop(0, isHover ? "#93d45a" : MGR_CHART_GREEN);
+        grad.addColorStop(0, isHover ? "#A8C9A5" : MGR_CHART_GREEN);
         grad.addColorStop(1, MGR_CHART_GREEN_DEEP);
         ctx.fillStyle = grad;
         fillMgrRoundTopBar(ctx, x, y, barW, Math.max(bh, 3), Math.min(7, barW / 2));
       } else {
-        ctx.fillStyle = "rgba(127, 193, 66, 0.25)";
+        ctx.fillStyle = "rgba(168, 201, 165, 0.25)";
         fillMgrRoundTopBar(ctx, x, baselineY - 3, barW, 3, 2);
       }
       ctx.restore();
@@ -3706,7 +3706,7 @@
       var drawW = Math.max(r.value > 0 ? 6 : 0, bw);
       var top = idx % 2 === 0 ? MGR_CHART_GREEN : MGR_CHART_PINK;
       var deep = idx % 2 === 0 ? MGR_CHART_GREEN_DEEP : MGR_CHART_PINK_DEEP;
-      ctx.fillStyle = "rgba(61, 51, 64, 0.045)";
+      ctx.fillStyle = "rgba(51, 58, 53, 0.045)";
       fillMgrRoundBar(ctx, padL, y, chartW, barH, 7);
       if (drawW > 0) {
         var grad = ctx.createLinearGradient(padL, y, padL + drawW, y);
@@ -3792,12 +3792,12 @@
       if (dimmed) ctx.globalAlpha = 0.38;
       if (bh > 0) {
         var grad = ctx.createLinearGradient(x, y, x, y + Math.max(bh, 3));
-        grad.addColorStop(0, isPeak || isHover ? "#d47a90" : MGR_CHART_PINK);
-        grad.addColorStop(1, isPeak || isHover ? MGR_CHART_PINK_DEEP : "#d9a0b0");
+        grad.addColorStop(0, isPeak || isHover ? "#D982A5" : MGR_CHART_PINK);
+        grad.addColorStop(1, isPeak || isHover ? MGR_CHART_PINK_DEEP : "#F8DDE8");
         ctx.fillStyle = grad;
         fillMgrRoundTopBar(ctx, x, y, barW, Math.max(bh, 3), Math.min(8, barW / 2));
       } else {
-        ctx.fillStyle = "rgba(196, 107, 130, 0.28)";
+        ctx.fillStyle = "rgba(217, 130, 165, 0.28)";
         fillMgrRoundTopBar(ctx, x, baselineY - 3, barW, 3, 2);
       }
       ctx.restore();
@@ -3999,7 +3999,7 @@
       niceMax = step * 4;
     }
 
-    ctx.fillStyle = "rgba(61, 51, 64, 0.02)";
+    ctx.fillStyle = "rgba(51, 58, 53, 0.02)";
     ctx.fillRect(x0, y0, chartW, chartH);
     drawMgrGrid(ctx, x0, y0, chartW, chartH, 4);
     drawMgrBaseline(ctx, x0, y0, chartW, chartH);
@@ -4016,9 +4016,9 @@
     ctx.restore();
 
     var n = Math.max(1, working.length);
-    var cPos = "#5f9e2e";
+    var cPos = "#254836";
     var cNeu = "#7b7480";
-    var cNeg = "#c46b82";
+    var cNeg = "#D982A5";
     var pts = working.map(function (b, i) {
       var x = n === 1 ? x0 + chartW / 2 : x0 + (i * chartW) / (n - 1);
       return {
@@ -4050,14 +4050,14 @@
 
     if (hasAny && pts.length >= 2) {
       var negGrad = ctx.createLinearGradient(0, y0, 0, yBase);
-      negGrad.addColorStop(0, "rgba(196, 107, 130, 0.28)");
-      negGrad.addColorStop(1, "rgba(196, 107, 130, 0.06)");
+      negGrad.addColorStop(0, "rgba(217, 130, 165, 0.28)");
+      negGrad.addColorStop(1, "rgba(217, 130, 165, 0.06)");
       var neuGrad = ctx.createLinearGradient(0, y0, 0, yBase);
       neuGrad.addColorStop(0, "rgba(123, 116, 128, 0.24)");
       neuGrad.addColorStop(1, "rgba(123, 116, 128, 0.05)");
       var posGrad = ctx.createLinearGradient(0, y0, 0, yBase);
-      posGrad.addColorStop(0, "rgba(127, 193, 66, 0.32)");
-      posGrad.addColorStop(1, "rgba(127, 193, 66, 0.06)");
+      posGrad.addColorStop(0, "rgba(168, 201, 165, 0.32)");
+      posGrad.addColorStop(1, "rgba(168, 201, 165, 0.06)");
       fillMgrSmoothBand(ctx, basePts, negPts, negGrad);
       fillMgrSmoothBand(ctx, negPts, neuPts, neuGrad);
       fillMgrSmoothBand(ctx, neuPts, posPts, posGrad);
