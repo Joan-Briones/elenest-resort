@@ -9,13 +9,13 @@
   <script src="../js/theme.js?v=20261020-theme1"></script>
   <script src="../js/ui-motion.js?v=20261014-motion1" defer></script>
   <link rel="stylesheet" href="../css/predictive-analytics.css?v=20261020-theme1">
-  <link rel="stylesheet" href="../css/tropical-luxury.css?v=20261111-tropical1">
+  <link rel="stylesheet" href="../css/tropical-luxury.css?v=20261112-tropical3">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body class="subpage admin-app elenest-role-gated" data-required-role="admin">
+<body class="subpage admin-app staff-app elenest-role-gated" data-required-role="admin">
   <div id="staffBootLoading" class="staff-boot-loading staff-boot-loading--active" aria-busy="true" aria-live="polite" aria-label="Loading Admin Portal">
     <div class="staff-boot-loading__card" role="status">
       <div class="staff-boot-loading__spinner" aria-hidden="true">
@@ -28,14 +28,15 @@
       <div class="staff-boot-loading__bar" aria-hidden="true"><span></span></div>
     </div>
   </div>
-  <header>
-    <div class="content flex_space">
-      <div class="logo">
+  <header class="staff-sidebar">
+    <div class="content flex_space staff-sidebar__inner">
+      <div class="logo staff-sidebar__brand">
         <a href="index.html" class="site-logo-link" aria-label="Elenest Resort home">
           <img class="site-logo" src="../Images/elenest_logo_pink.png" alt="Elenest Event Center">
         </a>
+        <p class="staff-sidebar__portal">Admin Portal</p>
       </div>
-      <div class="navlinks">
+      <div class="navlinks staff-sidebar__nav">
         <ul id="menulist" class="site-nav-list">
           <li><a href="#section-dashboard">Dashboard</a></li>
           <li class="admin-nav-dropdown" id="adminNavManagement">

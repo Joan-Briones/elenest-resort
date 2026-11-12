@@ -9,8 +9,11 @@
     try { if ("scrollRestoration" in history) history.scrollRestoration = "manual"; } catch (e) {}
   </script>
   <link rel="icon" type="image/png" href="../Images/icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css?v=20261108-privacy1">
-  <link rel="stylesheet" href="../css/tropical-luxury.css?v=20261111-tropical1">
+  <link rel="stylesheet" href="../css/tropical-luxury.css?v=20261112-tropical3">
   <script src="../js/theme.js?v=20261020-theme1"></script>
   <script src="../js/ui-motion.js?v=20261014-motion1" defer></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.css" integrity="sha512-UTNP5BXLIptsaj5WdKFrkFov94lDx+eBvbKyoe1YAfjeRPC+gT5kyZ10kOHCfNZqEui1sxmqvodNUx3KbuYI/A==" crossorigin="anonymous"
@@ -20,7 +23,7 @@
   <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
 </head>
 
-<body>
+<body class="home-page">
 
 
   <header>
@@ -61,7 +64,7 @@
     <div class="content">
       <div class="owl-carousel owl-theme">
         <div class="item">
-          <img src="../Images/ELENEST BG 1.png" alt="">
+          <img src="../Images/ELENEST BG 1.png" alt="Lush grounds and pool at Elenest Resort">
           <div class="text">
             <p class="hero-kicker">Mataasnakahoy, Batangas</p>
             <h1 class="hero-title">
@@ -70,20 +73,23 @@
               <span class="hero-title__suffix">Resort</span>
             </h1>
             <p class="hero-tagline">Where happiness checks in and stress checks out.</p>
+            <a href="#reserve" class="primary-btn hero-cta">Reserve your stay</a>
           </div>
         </div>
         <div class="item">
-          <img src="../Images/ELENEST-BG 2.png" alt="">
+          <img src="../Images/ELENEST-BG 2.png" alt="Tropical cottages and greenery at Elenest Resort">
           <div class="text">
             <h1 class="hero-title hero-title--single">Escape to Serenity</h1>
             <p class="hero-tagline">Unwind, recharge, and enjoy a peaceful stay surrounded by nature.</p>
+            <a href="rooms.html" class="primary-btn hero-cta">Explore facilities</a>
           </div>
         </div>
         <div class="item">
-          <img src="../Images/ELENEST RESORT-BG 3.png" alt="">
+          <img src="../Images/ELENEST RESORT-BG 3.png" alt="Relaxing outdoor spaces at Elenest Resort">
           <div class="text">
             <h1 class="hero-title hero-title--single">Your Perfect Getaway</h1>
             <p class="hero-tagline">Experience comfort, luxury, and tranquility all in one place.</p>
+            <a href="contact.html" class="primary-btn hero-cta">Plan an event</a>
           </div>
         </div>
       </div>
@@ -135,6 +141,7 @@
   <section class="book" id="reserve">
     <div class="container flex_space">
       <div class="text">
+        <p class="book-kicker">Availability</p>
         <h1> <span>Reserve </span> Your Stay </h1>
       </div>
       <div class="form">
@@ -153,14 +160,73 @@
 
 
 
+  <section class="home-amenities" aria-label="Resort highlights">
+    <div class="container home-amenities__grid">
+      <article class="home-amenity">
+        <span class="home-amenity__icon" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none"><path d="M4 18c6-1 10 4 14 4s8-5 14-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M6 22c5 .6 8-3 12-3s8 3.4 14 2.6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M16 8c.4 3 2 6 6 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="16" cy="7" r="1.4" fill="currentColor"/></svg>
+        </span>
+        <h3>Poolside calm</h3>
+        <p>Lush decks and cool water for slow tropical mornings.</p>
+      </article>
+      <article class="home-amenity">
+        <span class="home-amenity__icon" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none"><path d="M6 24V14l10-6 10 6v10H6Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M13 24v-7h6v7" stroke="currentColor" stroke-width="1.6"/></svg>
+        </span>
+        <h3>Cottages &amp; halls</h3>
+        <p>Intimate stays and celebration spaces in one resort.</p>
+      </article>
+      <article class="home-amenity">
+        <span class="home-amenity__icon" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none"><path d="M16 26s-9-6.2-9-13a9 9 0 1 1 18 0c0 6.8-9 13-9 13Z" stroke="currentColor" stroke-width="1.6"/><circle cx="16" cy="13" r="2.2" fill="currentColor"/></svg>
+        </span>
+        <h3>Mataasnakahoy</h3>
+        <p>A nature-inspired escape in Batangas, close to Taal.</p>
+      </article>
+      <article class="home-amenity">
+        <span class="home-amenity__icon" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none"><path d="M8 22c2-6 6-10 8-14 2 4 6 8 8 14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M10 22h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M16 8v14" stroke="currentColor" stroke-width="1.6"/></svg>
+        </span>
+        <h3>Warm hospitality</h3>
+        <p>Thoughtful service that lets you rest, celebrate, and belong.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="home-signature" aria-label="Resort atmosphere">
+    <div class="container home-signature__intro">
+      <p class="section-kicker">The grounds</p>
+      <h2>Pool, cottages, and quiet outdoor rooms</h2>
+      <p>A nature-inspired stay in Mataasnakahoy — cool water, linen shade, and greenery at every turn.</p>
+    </div>
+    <div class="container home-signature__grid">
+      <figure class="home-signature__feat">
+        <img src="../Images/gallery-2.png" alt="Swimming pool framed by tropical greenery">
+        <figcaption>
+          <span>Poolside</span>
+          <strong>Slow tropical mornings</strong>
+        </figcaption>
+      </figure>
+      <figure>
+        <img src="../Images/gallery-5.png" alt="Cottages among lush resort greenery">
+        <figcaption>Cottages</figcaption>
+      </figure>
+      <figure>
+        <img src="../Images/gallery-1.png" alt="Resort lounge and indoor gathering space">
+        <figcaption>Lounge</figcaption>
+      </figure>
+    </div>
+  </section>
+
   <section class="about top" id="about">
     <div class="container flex">
       <div class="left">
         <div class="heading">
+          <p class="section-kicker">Welcome</p>
           <h1>WELCOME</h1>
           <h2>Elenest Resort</h2>
         </div>
-        <p>Leave behind the pressures of daily life and step into a destination where comfort and nature come together. 
+        <p>Leave behind the pressures of daily life and step into a destination where comfort and nature come together.
           At Elenest Resort, we provide a calm atmosphere, modern facilities, and genuine hospitality to make every stay relaxing and unforgettable.
            Whether you're visiting for rest, quality time with loved ones, or a special occasion, Elenest is the perfect place to be.</p>
         <a href="about.html" class="primary-btn">ABOUT US</a>
@@ -183,6 +249,21 @@
     </div>
   </section>
 
+
+  <section class="rooms" id="rooms">
+    <div class="container top">
+      <div class="heading">
+        <p class="rooms-heading-kicker">Stay with us</p>
+        <h1>STAY</h1>
+        <h2>Rooms, cottages &amp; halls</h2>
+        <p>Poolside cottages, restful rooms, and celebration halls — each space framed by greenery and resort calm.</p>
+        <p class="rooms-heading-explore"><a href="rooms.html" class="rooms-explore-link">Explore all facilities</a></p>
+      </div>
+    </div>
+    <div class="content mtop container">
+      <div class="owl-carousel owl-carousel1 owl-theme" id="homeFacilitiesCarousel" aria-label="Rooms, cottages, and halls"></div>
+    </div>
+  </section>
 
   <section class="gallery" id="pages">
     <div class="container top">
@@ -311,17 +392,17 @@
   <section class="Customer top home-review-kpis" aria-label="Guest review highlights">
     <div class="container home-review-kpis__grid">
       <div class="home-review-kpis__item">
-        <h1 id="homeKpiAvgRating">â¦</h1>
+        <h1 id="homeKpiAvgRating">&hellip;</h1>
         <hr>
         <span>Average rating</span>
       </div>
       <div class="home-review-kpis__item">
-        <h1 id="homeKpiRecommendRate">â¦</h1>
+        <h1 id="homeKpiRecommendRate">&hellip;</h1>
         <hr>
         <span>Would recommend</span>
       </div>
       <div class="home-review-kpis__item">
-        <h1 id="homeKpiCount">â¦</h1>
+        <h1 id="homeKpiCount">&hellip;</h1>
         <hr>
         <span>Total reviews</span>
       </div>
@@ -352,9 +433,22 @@
   </section>
 
 
-  <div class="legal">
-    <p class="container">Copyright (c) 2026 Copyright Holder All Rights Reserved.</p>
-  </div>
+  <footer class="legal home-footer">
+    <div class="container home-footer__inner">
+      <div class="home-footer__brand">
+        <p class="home-footer__kicker">Mataasnakahoy, Batangas</p>
+        <p class="home-footer__name">Elenest Resort</p>
+        <p>Where happiness checks in and stress checks out.</p>
+      </div>
+      <nav class="home-footer__links" aria-label="Footer">
+        <a href="rooms.html">Facilities</a>
+        <a href="activities.html">Activities</a>
+        <a href="contact.html">Contact</a>
+        <a href="policies.html">Policies</a>
+      </nav>
+      <p class="home-footer__copy">Copyright (c) 2026 Copyright Holder All Rights Reserved.</p>
+    </div>
+  </footer>
 
 
 

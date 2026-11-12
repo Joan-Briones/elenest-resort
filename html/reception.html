@@ -6,12 +6,15 @@
   <title>Receptionist Dashboard | Elenest Resort</title>
   <link rel="icon" type="image/png" href="../Images/icon.png">
   <link rel="stylesheet" href="../css/style.css?v=20261108-mobilefac3">
-  <link rel="stylesheet" href="../css/tropical-luxury.css?v=20261111-tropical1">
+  <link rel="stylesheet" href="../css/tropical-luxury.css?v=20261112-tropical3">
   <script src="../js/theme.js?v=20261020-theme1"></script>
   <script src="../js/ui-motion.js?v=20261014-motion1" defer></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body class="subpage elenest-role-gated" data-staff-portal="reception" data-required-role="receptionist">
+<body class="subpage staff-app elenest-role-gated" data-staff-portal="reception" data-required-role="receptionist">
   <div id="staffBootLoading" class="staff-boot-loading staff-boot-loading--active" aria-busy="true" aria-live="polite" aria-label="Loading Reception Desk">
     <div class="staff-boot-loading__card" role="status">
       <div class="staff-boot-loading__spinner" aria-hidden="true">
@@ -24,14 +27,15 @@
       <div class="staff-boot-loading__bar" aria-hidden="true"><span></span></div>
     </div>
   </div>
-  <header>
-    <div class="content flex_space">
-      <div class="logo">
+  <header class="staff-sidebar">
+    <div class="content flex_space staff-sidebar__inner">
+      <div class="logo staff-sidebar__brand">
         <a href="index.html" class="site-logo-link" aria-label="Elenest Resort home">
           <img class="site-logo" src="../Images/elenest_logo_pink.png" alt="Elenest Event Center">
         </a>
+        <p class="staff-sidebar__portal">Reception Desk</p>
       </div>
-      <div class="navlinks">
+      <div class="navlinks staff-sidebar__nav">
         <ul id="menulist" class="site-nav-list">
           <li><a href="#section-walkin">Walk-in</a></li>
           <li><a href="#section-checkin">Check-in</a></li>
@@ -67,6 +71,7 @@
       </div>
     </div>
   </header>
+  <script src="../js/header-nav.js?v=20261111-sidebar1"></script>
 
   <main class="container">
     <section class="section admin-section" id="section-walkin">
@@ -435,6 +440,5 @@
   <script src="../js/staff-boot-loading.js?v=20261008-boot2"></script>
   <script src="../js/reception.js?v=20261106-recorddelete1"></script>
   <script src="../js/mobile-tables.js?v=20261107-btnstack1"></script>
-  <script src="../js/header-nav.js?v=20261111-sidebar1"></script>
 </body>
 </html>

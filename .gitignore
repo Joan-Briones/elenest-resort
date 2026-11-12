@@ -1,6 +1,7 @@
 # Local secrets / machine paths
 api/config.local.php
 api/config.local.json
+api/lib/config.local.json
 api/python.path
 
 # Python cache

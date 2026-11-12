@@ -12,11 +12,14 @@
   --sage: #A8C9A5;
   --cream: #FFFDFB;
   --ink: #333A35;
+  --serif: "Playfair Display", "Cormorant Garamond", Georgia, serif;
+  --sans: "Poppins", "Segoe UI", system-ui, sans-serif;
   --staff-sidebar-w: 252px;
   --radius-card: 16px;
   --radius-control: 12px;
   --shadow-soft: 0 6px 18px rgba(49, 93, 70, 0.06), 0 1px 3px rgba(51, 58, 53, 0.04);
   --shadow-card: 0 8px 24px rgba(49, 93, 70, 0.07);
+  --palm-tile: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160' fill='none'%3E%3Cpath d='M80 132c6-28 28-50 52-58-22 10-38 32-42 58 10-24 34-40 58-44-26 12-44 36-46 62 8-18 26-32 48-36' stroke='%23315D46' stroke-opacity='0.07' stroke-width='1.4'/%3E%3Cpath d='M80 132c-6-28-28-50-52-58 22 10 38 32 42 58-10-24-34-40-58-44 26 12 44 36 46 62-8-18-26-32-48-36' stroke='%23315D46' stroke-opacity='0.07' stroke-width='1.4'/%3E%3C/svg%3E");
 }
 
 html,
@@ -25,8 +28,14 @@ body {
   color: var(--ink);
 }
 
+body.home-page {
+  background-color: var(--cream);
+  background-image: var(--palm-tile);
+  background-size: 220px 220px;
+}
+
 /* —— Guest / public header stays blush pink —— */
-body:not(.admin-app):not([data-staff-portal]) header {
+body:not(.staff-app) header {
   background: var(--pink) !important;
 }
 
@@ -119,7 +128,7 @@ body:not(.admin-app):not([data-staff-portal]) header {
   outline: none;
 }
 
-/* —— Booking status chips (highly distinguishable) —— */
+/* —— Booking status chips —— */
 .subpage .booking-status,
 .booking-status,
 .admin-arrival-status-pill {
@@ -261,39 +270,612 @@ body:not(.admin-app):not([data-staff-portal]) header {
 }
 
 /* ==========================================================================
-   STAFF PORTALS — Forest green sidebar (desktop) / green top bar (mobile)
-   Preserves existing #menulist / header-nav.js / dropdown IDs
+   HOME — Modern Tropical Luxury
    ========================================================================== */
 
-body.admin-app,
-body[data-staff-portal] {
+body.home-page h1,
+body.home-page h2,
+body.home-page .heading h2,
+body.home-page .home .hero-title,
+body.home-page .home .hero-title__brand,
+body.home-page .home .hero-title--single,
+body.home-page .book h1,
+body.home-page .about .heading h2,
+body.home-page .home-signature__intro h2,
+body.home-page .home-footer__name {
+  font-family: var(--serif) !important;
+  letter-spacing: -0.02em;
+}
+
+body.home-page,
+body.home-page p,
+body.home-page button,
+body.home-page input,
+body.home-page a,
+body.home-page .hero-kicker,
+body.home-page .hero-tagline,
+body.home-page .hero-title__suffix {
+  font-family: var(--sans);
+}
+
+body.home-page .home {
+  position: relative;
+}
+
+body.home-page .home .owl-carousel .item::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(105deg, rgba(49, 93, 70, 0.58) 0%, rgba(49, 93, 70, 0.18) 42%, rgba(0, 0, 0, 0.18) 100%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.12) 0%, transparent 28%, rgba(0, 0, 0, 0.28) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+body.home-page .home .text {
+  z-index: 2;
+  border-left: 3px solid var(--sage);
+  padding: 1.5rem 0 1.5rem 1.6rem;
+  max-width: min(560px, 88vw);
+}
+
+body.home-page .home .hero-kicker {
+  color: var(--pink-soft);
+  letter-spacing: 0.32em;
+}
+
+body.home-page .home .hero-title__accent {
+  background: linear-gradient(90deg, var(--pink), var(--sage));
+  width: min(88px, 26vw);
+  height: 2px;
+}
+
+body.home-page .home .hero-cta {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 0.35rem;
+  padding: 0.85rem 1.55rem;
+  border-radius: 999px !important;
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+body.home-page .home .owl-carousel .owl-nav button.owl-prev,
+body.home-page .home .owl-carousel .owl-nav button.owl-next {
+  background: rgba(49, 93, 70, 0.55) !important;
+  width: 46px;
+  height: 46px;
+  border: 1px solid rgba(168, 201, 165, 0.45);
+}
+
+body.home-page .home .owl-carousel .owl-nav button.owl-prev:hover,
+body.home-page .home .owl-carousel .owl-nav button.owl-next:hover {
+  background: var(--pink) !important;
+  border-color: transparent;
+}
+
+/* Reserve bar — floating cream card over forest */
+body.home-page .book {
+  position: relative;
+  z-index: 5;
+  margin-top: -3.25rem;
+  padding: 0 0 0.5rem;
+  background: transparent;
+  color: var(--ink);
+}
+
+body.home-page .book .container.flex_space {
+  align-items: center;
+  gap: 1.25rem;
+  max-width: 1080px;
+  padding: 1.15rem 1.35rem;
+  background: #fff;
+  border: 1px solid rgba(168, 201, 165, 0.45);
+  border-radius: 22px;
+  box-shadow: 0 18px 40px rgba(49, 93, 70, 0.12);
+}
+
+body.home-page .book-kicker {
+  margin-bottom: 0.15rem;
+}
+
+body.home-page .book h1 {
+  color: var(--forest);
+  font-size: clamp(1.45rem, 3vw, 1.9rem);
+  font-weight: 600;
+}
+
+body.home-page .book h1 span {
+  color: var(--pink);
+  font-style: italic;
+}
+
+body.home-page .book-reserve-form .book-date-trigger {
+  border: 1px solid rgba(168, 201, 165, 0.55);
+  border-radius: 14px;
   background: var(--cream);
 }
 
-body.admin-app .staff-boot-loading,
-body[data-staff-portal] .staff-boot-loading {
+body.home-page .book-reserve-form .book-reserve-submit {
+  border-radius: 14px;
+  background: var(--pink);
+  letter-spacing: 0.04em;
+}
+
+/* Amenities */
+body.home-page .home-amenities {
+  padding: 2.75rem 0 0.5rem;
+}
+
+body.home-page .home-amenities__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+body.home-page .home-amenity {
+  padding: 1.2rem 1.15rem 1.25rem;
+  background: #fff;
+  border: 1px solid rgba(168, 201, 165, 0.4);
+  border-radius: 18px;
+  box-shadow: var(--shadow-soft);
+}
+
+body.home-page .home-amenity:hover {
+  border-color: rgba(217, 130, 165, 0.38);
+}
+
+body.home-page .home-amenity__icon {
+  display: inline-flex;
+  width: 2.5rem;
+  height: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.7rem;
+  color: var(--forest);
+  background: rgba(168, 201, 165, 0.28);
+  border-radius: 12px;
+}
+
+body.home-page .home-amenity__icon svg {
+  width: 1.35rem;
+  height: 1.35rem;
+}
+
+body.home-page .home-amenity h3 {
+  margin: 0 0 0.35rem;
+  font-family: var(--serif);
+  font-size: 1.12rem;
+  font-weight: 600;
+  color: var(--forest);
+}
+
+body.home-page .home-amenity p {
+  margin: 0;
+  font-size: 0.86rem;
+  line-height: 1.55;
+  color: rgba(51, 58, 53, 0.72);
+}
+
+body.home-page .section-kicker,
+body.home-page .book-kicker,
+body.home-page .rooms-heading-kicker {
+  margin: 0 0 0.4rem;
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--pink);
+}
+
+body.home-page .home-signature {
+  padding: 2.75rem 0 0.5rem;
+}
+
+body.home-page .home-signature__intro {
+  max-width: 640px;
+  margin-bottom: 1.4rem;
+}
+
+body.home-page .home-signature__intro h2 {
+  margin: 0 0 0.55rem;
+  font-family: var(--serif);
+  font-size: clamp(1.7rem, 3.2vw, 2.35rem);
+  font-weight: 600;
+  color: var(--forest);
+  letter-spacing: -0.02em;
+}
+
+body.home-page .home-signature__intro p {
+  margin: 0;
+  color: rgba(51, 58, 53, 0.72);
+  line-height: 1.7;
+}
+
+body.home-page .home-signature__grid {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 0.85rem;
+  min-height: 420px;
+}
+
+body.home-page .home-signature__grid figure {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  border-radius: 22px;
+  box-shadow: var(--shadow-card);
+}
+
+body.home-page .home-signature__feat {
+  grid-row: 1 / span 2;
+}
+
+body.home-page .home-signature__grid img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  min-height: 180px;
+}
+
+body.home-page .home-signature__grid figcaption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 1.1rem 1.2rem;
+  background: linear-gradient(180deg, transparent, rgba(49, 93, 70, 0.78));
+  color: #fff;
+}
+
+body.home-page .home-signature__grid figcaption span {
+  display: block;
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--pink-soft);
+}
+
+body.home-page .home-signature__grid figcaption strong,
+body.home-page .home-signature__grid figure:not(.home-signature__feat) figcaption {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+/* About */
+body.home-page .about {
+  overflow: hidden;
+}
+
+body.home-page .about .heading h1 {
+  color: var(--sage);
+  opacity: 0.45;
+  font-family: var(--serif);
+}
+
+body.home-page .about .heading h2 {
+  color: var(--forest);
+}
+
+body.home-page .about p {
+  color: rgba(51, 58, 53, 0.82);
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+body.home-page .about__media {
+  position: relative;
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: 0 20px 44px rgba(49, 93, 70, 0.14);
+}
+
+body.home-page .about__media::after {
+  content: "";
+  position: absolute;
+  inset: auto -12% -18% auto;
+  width: 46%;
+  height: 46%;
+  background: var(--palm-tile);
+  background-size: 120px;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+body.home-page .about__media img {
+  display: block;
+  width: 100%;
+  border-radius: 28px;
+}
+
+body.home-page .about .primary-btn {
+  border-radius: 999px !important;
+  letter-spacing: 0.12em;
+}
+
+/* Quote */
+body.home-page .counter--quote {
+  background:
+    linear-gradient(180deg, rgba(49, 93, 70, 0.94), rgba(49, 93, 70, 0.96)),
+    var(--palm-tile);
+  background-size: auto, 180px;
+  border-radius: 0;
+}
+
+body.home-page .counter-quote > i.fa-quote-right {
+  background: rgba(168, 201, 165, 0.28);
+  color: var(--pink-soft);
+}
+
+body.home-page .counter-quote blockquote p {
+  font-family: var(--serif);
+  font-style: italic;
+}
+
+body.home-page .counter-quote cite {
+  color: var(--sage);
+  letter-spacing: 0.08em;
+}
+
+/* Facilities cards */
+body.home-page .rooms {
+  padding: 2.5rem 0 1rem;
+}
+
+body.home-page .rooms .heading h2 {
+  color: var(--forest);
+}
+
+body.home-page .rooms .items .image img {
+  height: 188px;
+}
+
+body.home-page .rooms .items {
+  border: 1px solid rgba(168, 201, 165, 0.4);
+  box-shadow: var(--shadow-soft);
+  border-radius: 18px;
+  overflow: hidden;
+  background: #fff;
+}
+
+body.home-page .rooms .items .text h2 {
+  font-family: var(--serif);
+  color: var(--forest);
+}
+
+/* Gallery */
+body.home-page .gallery .heading__lockup h2,
+body.home-page .services .heading__lockup h2,
+body.home-page .news .heading__lockup h2 {
+  font-family: var(--serif) !important;
+  color: var(--forest);
+}
+
+body.home-page .gallery .items {
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+}
+
+body.home-page .gallery .img img {
+  border-radius: 18px;
+}
+
+body.home-page .gallery .overlay h3 {
+  font-family: var(--serif);
+}
+
+/* Policies */
+body.home-page .policy-card {
+  border-radius: 18px;
+  border: 1px solid rgba(168, 201, 165, 0.4);
+  box-shadow: var(--shadow-soft);
+}
+
+body.home-page .policy-card__icon-wrap {
+  background: var(--pink-soft);
+  color: var(--pink-dark);
+  border-radius: 12px;
+}
+
+body.home-page .services__media img {
+  border-radius: 24px;
+  box-shadow: 0 16px 36px rgba(49, 93, 70, 0.12);
+}
+
+/* Review KPIs */
+body.home-page .Customer.home-review-kpis {
+  background:
+    linear-gradient(180deg, rgba(49, 93, 70, 0.72), rgba(49, 93, 70, 0.82)),
+    var(--palm-tile);
+  background-size: auto, 180px;
+}
+
+body.home-page .home-review-kpis__item h1 {
+  font-family: var(--serif);
+}
+
+body.home-page .home-review-kpis__item hr {
+  background: var(--pink);
+}
+
+/* Activities */
+body.home-page .news .items,
+body.home-page .news .box {
+  border-radius: 16px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid rgba(168, 201, 165, 0.35);
+  box-shadow: var(--shadow-soft);
+}
+
+body.home-page .news .items .text h2,
+body.home-page .news .stext h2 {
+  font-family: var(--serif);
+  color: var(--forest);
+}
+
+body.home-page .home-footer {
+  margin-top: 2.75rem;
+  padding: 2.4rem 0 1.7rem;
+  background:
+    linear-gradient(180deg, rgba(49, 93, 70, 0.97), #2a513c),
+    var(--palm-tile);
+  background-size: auto, 180px;
+  color: rgba(255, 255, 255, 0.86);
+  text-align: left;
+  border-top: 0;
+}
+
+body.home-page .home-footer__inner {
+  display: grid;
+  grid-template-columns: 1.4fr auto;
+  gap: 1.1rem 2rem;
+  align-items: end;
+}
+
+body.home-page .home-footer__kicker {
+  margin: 0 0 0.35rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--sage);
+}
+
+body.home-page .home-footer__name {
+  margin: 0 0 0.35rem;
+  font-size: 1.55rem;
+  color: #fff;
+}
+
+body.home-page .home-footer p {
+  margin: 0;
+  font-size: 0.85rem;
+  text-align: left;
+  color: rgba(255, 255, 255, 0.86);
+}
+
+body.home-page .home-footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 1.15rem;
+  justify-content: flex-end;
+}
+
+body.home-page .home-footer__links a {
+  color: #fff;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+body.home-page .home-footer__links a:hover {
+  color: var(--pink-soft);
+}
+
+body.home-page .home-footer__copy {
+  grid-column: 1 / -1;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(168, 201, 165, 0.28);
+  font-size: 0.78rem !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+@media (max-width: 900px) {
+  body.home-page .home-amenities__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  body.home-page .home-signature__grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+    min-height: 0;
+  }
+
+  body.home-page .home-signature__feat {
+    grid-column: 1 / -1;
+    grid-row: auto;
+    min-height: 240px;
+  }
+
+  body.home-page .book {
+    margin-top: -1.5rem;
+    padding: 0 0.75rem 0.5rem;
+  }
+
+  body.home-page .book .container.flex_space {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  body.home-page .home-footer__inner,
+  body.home-page .home-footer__links {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 560px) {
+  body.home-page .home-amenities__grid,
+  body.home-page .home-signature__grid {
+    grid-template-columns: 1fr;
+  }
+
+  body.home-page .home-footer__inner {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================================================
+   STAFF PORTALS — identical forest sidebar (Admin / Manager / Reception)
+   Preserves existing #menulist / header-nav.js / dropdown IDs
+   ========================================================================== */
+
+body.staff-app,
+body.staff-app {
+  background: var(--cream);
+}
+
+body.staff-app .staff-boot-loading,
+body.staff-app .staff-boot-loading {
   left: 0 !important;
   width: 100% !important;
   padding-left: 0 !important;
 }
 
-body.admin-app > header,
-body[data-staff-portal] > header {
+body.staff-app > header,
+body.staff-app > header {
   background: var(--forest) !important;
   color: #fff;
   box-shadow: none !important;
   border: 0 !important;
 }
 
-/* Desktop sidebar */
+body.staff-app > header .staff-sidebar__portal {
+  margin: 0.2rem 0 0;
+  font-family: var(--sans);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--sage);
+}
+
 @media (min-width: 901px) {
-  body.admin-app,
-  body[data-staff-portal] {
+  body.staff-app,
+  body.staff-app {
     padding-left: var(--staff-sidebar-w);
   }
 
-  body.admin-app > header,
-  body[data-staff-portal] > header {
+  body.staff-app > header,
+  body.staff-app > header {
     position: fixed !important;
     top: 0 !important;
     left: 0 !important;
@@ -309,68 +891,101 @@ body[data-staff-portal] > header {
     padding: 0 !important;
     display: flex;
     flex-direction: column;
+    background-image: var(--palm-tile);
+    background-size: 180px;
   }
 
-  body.admin-app > header .content.flex_space,
-  body[data-staff-portal] > header .content.flex_space {
+  body.staff-app > header .content.flex_space,
+  body.staff-app > header .content.flex_space {
     flex-direction: column !important;
     align-items: stretch !important;
     justify-content: flex-start !important;
-    gap: 1.25rem !important;
+    gap: 1.1rem !important;
     width: 100% !important;
     max-width: none !important;
     min-height: 100%;
-    padding: 1.35rem 1rem 1.5rem !important;
+    padding: 1.15rem 0.9rem 1.15rem !important;
     margin: 0 !important;
   }
 
-  body.admin-app > header .logo,
-  body[data-staff-portal] > header .logo {
-    width: 100%;
+  body.staff-app > header .logo,
+  body.staff-app > header .logo,
+  body.staff-app > header .staff-sidebar__brand {
+    display: flex !important;
+    flex-direction: column;
+    width: 100% !important;
     max-width: none !important;
     justify-content: center;
-    padding: 0.35rem 0.25rem 0.85rem;
+    align-items: center;
+    flex: 0 0 auto;
+    padding: 0.2rem 0.15rem 0.95rem;
+    margin: 0;
     border-bottom: 1px solid rgba(168, 201, 165, 0.28);
+    text-align: center;
+    gap: 0.4rem;
   }
 
-  body.admin-app > header .site-logo,
-  body[data-staff-portal] > header .site-logo,
-  body.admin-app > header .logo img,
-  body[data-staff-portal] > header .logo img {
+  body.staff-app > header .staff-sidebar__portal {
+    margin: 0;
+    font-family: var(--sans);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--sage);
+  }
+
+  body.staff-app > header .site-logo-link,
+  body.staff-app > header .site-logo-link {
+    justify-content: center;
+    width: 100%;
+  }
+
+  body.staff-app > header .site-logo,
+  body.staff-app > header .site-logo,
+  body.staff-app > header .logo img,
+  body.staff-app > header .logo img {
+    height: 52px !important;
     max-height: 52px !important;
     width: auto;
+    max-width: 100%;
+    object-position: center center;
+    transform-origin: center center;
     filter: brightness(1.08);
+    margin: 0 auto;
   }
 
-  body.admin-app > header .navlinks,
-  body[data-staff-portal] > header .navlinks {
+  body.staff-app > header .navlinks,
+  body.staff-app > header .navlinks {
     flex-direction: column !important;
     align-items: stretch !important;
+    justify-content: flex-start !important;
     width: 100% !important;
-    gap: 0.85rem !important;
+    gap: 0.75rem !important;
     flex: 1 1 auto;
+    min-height: 0;
   }
 
-  body.admin-app > header .nav-menu-toggle,
-  body[data-staff-portal] > header .nav-menu-toggle,
-  body.admin-app header button.nav-menu-toggle,
-  body[data-staff-portal] header button.nav-menu-toggle {
+  body.staff-app > header .nav-menu-toggle,
+  body.staff-app > header .nav-menu-toggle,
+  body.staff-app header button.nav-menu-toggle,
+  body.staff-app header button.nav-menu-toggle {
     display: none !important;
   }
 
-  body.admin-app > header #menulist,
-  body.admin-app > header .navlinks > ul.site-nav-list,
-  body[data-staff-portal] > header #menulist,
-  body[data-staff-portal] > header .navlinks > ul.site-nav-list,
-  body.admin-app > header #menulist:not(.is-open),
-  body.admin-app > header #menulist.is-open,
-  body[data-staff-portal] > header #menulist:not(.is-open),
-  body[data-staff-portal] > header #menulist.is-open {
+  body.staff-app > header #menulist,
+  body.staff-app > header .navlinks > ul.site-nav-list,
+  body.staff-app > header #menulist,
+  body.staff-app > header .navlinks > ul.site-nav-list,
+  body.staff-app > header #menulist:not(.is-open),
+  body.staff-app > header #menulist.is-open,
+  body.staff-app > header #menulist:not(.is-open),
+  body.staff-app > header #menulist.is-open {
     position: static !important;
     display: flex !important;
     flex-direction: column !important;
     align-items: stretch !important;
-    gap: 0.35rem !important;
+    gap: 0.28rem !important;
     width: 100% !important;
     max-height: none !important;
     height: auto !important;
@@ -388,68 +1003,96 @@ body[data-staff-portal] > header {
     color: #fff !important;
   }
 
-  body.admin-app > header #menulist > li,
-  body[data-staff-portal] > header #menulist > li {
+  body.staff-app > header #menulist > li,
+  body.staff-app > header #menulist > li,
+  body.staff-app > header #menulist > li.admin-auth-nav,
+  body.staff-app > header #menulist > li.admin-auth-nav,
+  body.staff-app > header #menulist > li.admin-nav-dropdown,
+  body.staff-app > header #menulist > li.admin-nav-dropdown {
     width: 100%;
-    display: block;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    flex-shrink: 0;
+    margin: 0;
+    padding: 0;
+    text-align: left;
   }
 
-  body.admin-app > header #menulist > li > a,
-  body.admin-app > header #menulist .admin-nav-dropdown-toggle,
-  body[data-staff-portal] > header #menulist > li > a,
-  body[data-staff-portal] > header #menulist .admin-nav-dropdown-toggle {
+  body.staff-app > header #menulist > li > a,
+  body.staff-app > header #menulist .admin-nav-dropdown-toggle,
+  body.staff-app > header #adminSettingsToggle,
+  body.staff-app > header #menulist > li > a,
+  body.staff-app > header #menulist .admin-nav-dropdown-toggle,
+  body.staff-app > header #staffSettingsToggle {
     display: flex !important;
-    align-items: center;
+    align-items: center !important;
+    justify-content: flex-start !important;
     width: 100% !important;
-    padding: 0.72rem 0.9rem !important;
+    max-width: none !important;
+    box-sizing: border-box !important;
+    padding: 0.7rem 0.9rem !important;
+    margin: 0 !important;
+    min-height: 44px !important;
+    height: auto !important;
     border-radius: 12px !important;
-    color: rgba(255, 255, 255, 0.92) !important;
+    color: rgba(255, 255, 255, 0.94) !important;
+    -webkit-text-fill-color: rgba(255, 255, 255, 0.94) !important;
     background: transparent !important;
     border: 0 !important;
+    font-family: var(--sans) !important;
     font-weight: 600 !important;
-    font-size: 0.92rem !important;
-    letter-spacing: 0.01em;
+    font-size: 0.78rem !important;
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase !important;
     text-align: left !important;
-    line-height: 1.3 !important;
-    min-height: 44px;
+    line-height: 1.25 !important;
+    white-space: normal !important;
+    box-shadow: none !important;
+    cursor: pointer;
+  }
+
+  body.staff-app > header #menulist > li > a:hover,
+  body.staff-app > header #menulist .admin-nav-dropdown-toggle:hover,
+  body.staff-app > header #adminSettingsToggle:hover,
+  body.staff-app > header #menulist > li > a:hover,
+  body.staff-app > header #menulist .admin-nav-dropdown-toggle:hover,
+  body.staff-app > header #staffSettingsToggle:hover {
+    background: rgba(168, 201, 165, 0.22) !important;
+    color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
     box-shadow: none !important;
   }
 
-  body.admin-app > header #menulist > li > a:hover,
-  body.admin-app > header #menulist .admin-nav-dropdown-toggle:hover,
-  body[data-staff-portal] > header #menulist > li > a:hover,
-  body[data-staff-portal] > header #menulist .admin-nav-dropdown-toggle:hover {
-    background: rgba(168, 201, 165, 0.22) !important;
-    color: #fff !important;
-  }
-
-  body.admin-app > header #menulist > li > a.active,
-  body.admin-app > header #menulist a[href^="#section-"].active,
-  body.admin-app > header #adminSettingsToggle.active,
-  body[data-staff-portal] > header #menulist > li > a.active,
-  body[data-staff-portal] > header #staffSettingsToggle.active,
-  body.admin-app > header .admin-nav-dropdown-toggle.active,
-  body[data-staff-portal] > header .admin-nav-dropdown-toggle.active {
+  body.staff-app > header #menulist > li > a.active,
+  body.staff-app > header #menulist a[href^="#section-"].active,
+  body.staff-app > header #adminSettingsToggle.active,
+  body.staff-app > header .admin-nav-dropdown-toggle.active,
+  body.staff-app > header .admin-nav-dropdown.is-open > .admin-nav-dropdown-toggle,
+  body.staff-app > header #menulist > li > a.active,
+  body.staff-app > header #staffSettingsToggle.active,
+  body.staff-app > header .admin-nav-dropdown-toggle.active,
+  body.staff-app > header .admin-nav-dropdown.is-open > .admin-nav-dropdown-toggle {
     background: var(--pink) !important;
     color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
     box-shadow: 0 6px 14px rgba(217, 130, 165, 0.35) !important;
   }
 
-  /* Nested management/analytics menus expand inline */
-  body.admin-app > header .admin-nav-dropdown,
-  body[data-staff-portal] > header .admin-nav-dropdown {
+  body.staff-app > header .admin-nav-dropdown,
+  body.staff-app > header .admin-nav-dropdown {
     position: relative;
     width: 100%;
   }
 
-  body.admin-app > header .admin-nav-dropdown-menu,
-  body[data-staff-portal] > header .admin-nav-dropdown-menu {
+  body.staff-app > header .admin-nav-dropdown-menu,
+  body.staff-app > header .admin-nav-dropdown-menu {
     position: static !important;
     display: none;
     width: 100% !important;
     max-width: none !important;
-    margin: 0.25rem 0 0.35rem !important;
-    padding: 0.25rem !important;
+    margin: 0.2rem 0 0.2rem !important;
+    padding: 0.22rem !important;
     background: rgba(0, 0, 0, 0.16) !important;
     border: 1px solid rgba(168, 201, 165, 0.22) !important;
     border-radius: 12px !important;
@@ -458,89 +1101,136 @@ body[data-staff-portal] > header {
     inset: auto !important;
   }
 
-  body.admin-app > header .admin-nav-dropdown.is-open .admin-nav-dropdown-menu,
-  body[data-staff-portal] > header .admin-nav-dropdown.is-open .admin-nav-dropdown-menu {
+  body.staff-app > header .admin-nav-dropdown.is-open .admin-nav-dropdown-menu,
+  body.staff-app > header .admin-nav-dropdown.is-open .admin-nav-dropdown-menu {
     display: flex !important;
     flex-direction: column;
-    gap: 0.15rem;
+    gap: 0.12rem;
   }
 
-  body.admin-app > header .admin-nav-dropdown-item,
-  body[data-staff-portal] > header .admin-nav-dropdown-item {
+  body.staff-app > header .admin-nav-dropdown-item,
+  body.staff-app > header .admin-nav-dropdown-item {
+    display: flex !important;
+    align-items: center;
+    justify-content: flex-start !important;
+    width: 100% !important;
+    min-height: 40px;
     color: rgba(255, 255, 255, 0.88) !important;
+    -webkit-text-fill-color: rgba(255, 255, 255, 0.88) !important;
     border-radius: 10px !important;
-    padding: 0.62rem 0.8rem !important;
+    padding: 0.55rem 0.75rem 0.55rem 0.9rem !important;
     background: transparent !important;
     white-space: normal !important;
+    font-size: 0.78rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.02em !important;
+    text-transform: none !important;
+    text-align: left !important;
   }
 
-  body.admin-app > header .admin-nav-dropdown-item:hover,
-  body.admin-app > header .admin-nav-dropdown-item.active,
-  body[data-staff-portal] > header .admin-nav-dropdown-item:hover,
-  body[data-staff-portal] > header .admin-nav-dropdown-item.active {
+  body.staff-app > header .admin-nav-dropdown-item:hover,
+  body.staff-app > header .admin-nav-dropdown-item.active,
+  body.staff-app > header .admin-nav-dropdown-item:hover,
+  body.staff-app > header .admin-nav-dropdown-item.active {
     background: rgba(217, 130, 165, 0.28) !important;
     color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
   }
 
-  /* Settings dropdown under sidebar */
-  body.admin-app > header .admin-settings-menu,
-  body[data-staff-portal] > header .admin-settings-menu {
+  body.staff-app > header .admin-settings-menu,
+  body.staff-app > header .admin-settings-menu {
     position: static !important;
     width: 100% !important;
-    margin-top: 0.35rem;
+    margin-top: 0.28rem;
     background: rgba(0, 0, 0, 0.18) !important;
     border: 1px solid rgba(168, 201, 165, 0.22) !important;
     border-radius: 12px !important;
     box-shadow: none !important;
   }
 
-  body.admin-app > header .admin-settings-item,
-  body[data-staff-portal] > header .admin-settings-item {
+  body.staff-app > header .admin-settings-item,
+  body.staff-app > header .admin-settings-item {
     color: #fff !important;
+    text-align: left;
+    padding: 0.62rem 0.8rem;
+    border-radius: 10px;
+    font-size: 0.8rem;
   }
 
-  body.admin-app > header .admin-settings-item:hover,
-  body[data-staff-portal] > header .admin-settings-item:hover {
+  body.staff-app > header .admin-settings-item:hover,
+  body.staff-app > header .admin-settings-item:hover {
     background: rgba(217, 130, 165, 0.25) !important;
   }
 
-  body.admin-app > header .staff-header-user,
-  body[data-staff-portal] > header .staff-header-user {
+  body.staff-app > header .staff-header-user,
+  body.staff-app > header .staff-header-user {
+    display: flex !important;
+    align-items: center;
     width: 100%;
     margin: auto 0 0 !important;
     padding-top: 0.85rem;
     border-top: 1px solid rgba(168, 201, 165, 0.28);
     justify-content: stretch;
+    gap: 0.5rem;
+    flex: 0 0 auto;
   }
 
-  body.admin-app > header .staff-header-user__inner,
-  body[data-staff-portal] > header .staff-header-user__inner {
+  body.staff-app > header .staff-header-user[hidden],
+  body.staff-app > header .staff-header-user[hidden] {
+    display: none !important;
+  }
+
+  body.staff-app > header .staff-header-user__inner,
+  body.staff-app > header .staff-header-user__inner {
+    display: flex !important;
+    align-items: center;
     width: 100% !important;
     max-width: none !important;
+    min-height: 48px;
+    padding: 0.35rem 0.7rem 0.35rem 0.35rem !important;
     background: rgba(255, 255, 255, 0.1) !important;
     border: 1px solid rgba(168, 201, 165, 0.3) !important;
     color: #fff !important;
     border-radius: 14px !important;
+    box-shadow: none !important;
   }
 
-  body.admin-app > header .staff-header-user__name,
-  body.admin-app > header .staff-header-user__role,
-  body[data-staff-portal] > header .staff-header-user__name,
-  body[data-staff-portal] > header .staff-header-user__role {
+  body.staff-app > header .staff-header-user__icon,
+  body.staff-app > header .staff-header-user__icon {
+    width: 2.05rem;
+    height: 2.05rem;
+    background: var(--pink);
+  }
+
+  body.staff-app > header .staff-header-user__name,
+  body.staff-app > header .staff-header-user__name {
     color: #fff !important;
+    font-size: 0.82rem !important;
+    font-weight: 700 !important;
   }
 
-  body.admin-app > header .staff-notif-bell,
-  body[data-staff-portal] > header .staff-notif-bell {
+  body.staff-app > header .staff-header-user__role,
+  body.staff-app > header .staff-header-user__role {
+    color: var(--pink-soft) !important;
+    font-size: 0.62rem !important;
+    letter-spacing: 0.1em;
+  }
+
+  body.staff-app > header .staff-notif-bell,
+  body.staff-app > header .staff-notif-bell {
+    width: 40px !important;
+    height: 40px !important;
+    flex: 0 0 40px;
     background: rgba(255, 255, 255, 0.12) !important;
     border-color: rgba(168, 201, 165, 0.35) !important;
     color: #fff !important;
+    box-shadow: none !important;
   }
 
-  body.admin-app > main.container,
-  body[data-staff-portal] > main.container,
-  body.admin-app > main,
-  body[data-staff-portal] > main {
+  body.staff-app > main.container,
+  body.staff-app > main.container,
+  body.staff-app > main,
+  body.staff-app > main {
     width: 100% !important;
     max-width: 1480px !important;
     margin-left: auto !important;
@@ -550,10 +1240,9 @@ body[data-staff-portal] > header {
   }
 }
 
-/* Mobile / tablet staff: forest top bar + drawer */
 @media (max-width: 900px) {
-  body.admin-app > header,
-  body[data-staff-portal] > header {
+  body.staff-app > header,
+  body.staff-app > header {
     position: sticky !important;
     top: 0 !important;
     width: 100% !important;
@@ -563,36 +1252,44 @@ body[data-staff-portal] > header {
     background: var(--forest) !important;
   }
 
-  body.admin-app > header #menulist,
-  body.admin-app > header .navlinks > ul.site-nav-list,
-  body[data-staff-portal] > header #menulist,
-  body[data-staff-portal] > header .navlinks > ul.site-nav-list {
+  body.staff-app > header #menulist,
+  body.staff-app > header .navlinks > ul.site-nav-list,
+  body.staff-app > header #menulist,
+  body.staff-app > header .navlinks > ul.site-nav-list {
     background: #2A513C !important;
     border: 1px solid rgba(168, 201, 165, 0.28) !important;
     border-radius: 14px !important;
     box-shadow: 0 16px 36px rgba(49, 93, 70, 0.28) !important;
   }
 
-  body.admin-app > header #menulist a,
-  body.admin-app > header .admin-nav-dropdown-toggle,
-  body[data-staff-portal] > header #menulist a,
-  body[data-staff-portal] > header .admin-nav-dropdown-toggle {
+  body.staff-app > header #menulist a,
+  body.staff-app > header .admin-nav-dropdown-toggle,
+  body.staff-app > header #adminSettingsToggle,
+  body.staff-app > header #menulist a,
+  body.staff-app > header .admin-nav-dropdown-toggle,
+  body.staff-app > header #staffSettingsToggle {
     color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
+    justify-content: flex-start !important;
+    text-align: left !important;
   }
 
-  body.admin-app > header #menulist a.active,
-  body[data-staff-portal] > header #menulist a.active {
+  body.staff-app > header #menulist a.active,
+  body.staff-app > header .admin-nav-dropdown-toggle.active,
+  body.staff-app > header #menulist a.active,
+  body.staff-app > header .admin-nav-dropdown-toggle.active {
     background: var(--pink) !important;
     color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
   }
 
-  body.admin-app .nav-menu-toggle,
-  body[data-staff-portal] .nav-menu-toggle {
+  body.staff-app .nav-menu-toggle,
+  body.staff-app .nav-menu-toggle {
     border-color: rgba(255, 255, 255, 0.35) !important;
   }
 
-  body.admin-app .nav-menu-toggle__bar,
-  body[data-staff-portal] .nav-menu-toggle__bar {
+  body.staff-app .nav-menu-toggle__bar,
+  body.staff-app .nav-menu-toggle__bar {
     background: #fff !important;
   }
 }
@@ -615,19 +1312,24 @@ body[data-staff-portal] > header {
 }
 
 /* —— Auth / guest pages —— */
-body.subpage:not(.admin-app):not([data-staff-portal]) .auth-card,
-body.subpage:not(.admin-app):not([data-staff-portal]) .login-reserve-card {
+body.subpage:not(.staff-app) .auth-card,
+body.subpage:not(.staff-app) .login-reserve-card {
   border: 1px solid rgba(217, 130, 165, 0.25);
   box-shadow: 0 12px 32px rgba(217, 130, 165, 0.12);
 }
 
-body.subpage:not(.admin-app):not([data-staff-portal]) .section-title {
+body.subpage:not(.staff-app) .section-title {
   color: var(--forest) !important;
 }
 
+body.staff-app .appointments-strip__title,
+body.staff-app .section-title {
+  font-family: var(--serif);
+}
+
 /* —— Reduce nested-box noise on staff dashboards —— */
-body.admin-app .appointments-strip,
-body[data-staff-portal] .appointments-strip {
+body.staff-app .appointments-strip,
+body.staff-app .appointments-strip {
   background: transparent;
   border: 0;
   box-shadow: none;
@@ -635,13 +1337,12 @@ body[data-staff-portal] .appointments-strip {
   padding-right: 0;
 }
 
-body.admin-app .appointments-strip__title,
-body[data-staff-portal] .appointments-strip__title {
+body.staff-app .appointments-strip__title,
+body.staff-app .appointments-strip__title {
   color: var(--forest);
   font-size: clamp(1.35rem, 2vw, 1.7rem);
 }
 
-/* Selected calendar / facility accents */
 .book-flow-cal-day--selected,
 .book-facility-card--selected,
 .avail-facility-card.is-selected {
@@ -658,7 +1359,6 @@ body[data-staff-portal] .appointments-strip__title {
   background: var(--sage) !important;
 }
 
-/* Accessibility focus */
 a:focus-visible,
 button:focus-visible,
 .btn:focus-visible,
