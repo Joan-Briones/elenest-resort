@@ -325,39 +325,26 @@
     return resolved || "Guest";
   }
 
-  var MIN_REVIEW_WORDS = 50;
-
   function countCommentWords(text) {
     var value = String(text || "").trim();
     if (!value) return 0;
     return value.split(/\s+/).length;
   }
 
-  function reviewWordMessage(count) {
-    var n = Number(count) || 0;
-    var noun = n === 1 ? "word" : "words";
-    return "Please write at least 50 words. Your comment currently has " + n + " " + noun + ".";
-  }
-
-  function updateReviewWordCount(showError) {
+  function updateReviewWordCount() {
     var commentEl = document.getElementById("guestReviewComment");
     var countEl = document.getElementById("guestReviewWordCount");
     var errorEl = document.getElementById("guestReviewWordError");
     var submitBtn = document.getElementById("guestReviewSubmit");
     var count = countCommentWords(commentEl ? commentEl.value : "");
-    var ready = count >= MIN_REVIEW_WORDS;
+    var ready = count >= 1;
     if (countEl) {
       countEl.textContent = count === 1 ? "1 word" : count + " words";
       countEl.classList.toggle("is-ready", ready);
     }
     if (errorEl) {
-      if (!ready && showError) {
-        errorEl.hidden = false;
-        errorEl.textContent = reviewWordMessage(count);
-      } else {
-        errorEl.hidden = true;
-        errorEl.textContent = "";
-      }
+      errorEl.hidden = true;
+      errorEl.textContent = "";
     }
     if (submitBtn) submitBtn.disabled = !ready;
     return count;
@@ -419,7 +406,7 @@
     }
     form.setAttribute("data-selected-stars", "0");
     clearReviewMsg();
-    updateReviewWordCount(true);
+    updateReviewWordCount();
     overlay.removeAttribute("hidden");
     document.body.classList.add("guest-review-open");
     var closeBtn = document.getElementById("guestReviewModalClose");
@@ -516,11 +503,11 @@
 
     if (commentEl) {
       commentEl.addEventListener("input", function () {
-        updateReviewWordCount(true);
+        updateReviewWordCount();
         clearReviewMsg();
       });
     }
-    updateReviewWordCount(true);
+    updateReviewWordCount();
 
     form.addEventListener("submit", function (e) {
       e.preventDefault();
@@ -542,10 +529,9 @@
         setReviewMsg(false, "A valid guest email is required for this review.");
         return;
       }
-      var wordCount = countCommentWords(comment);
-      if (wordCount < MIN_REVIEW_WORDS) {
-        updateReviewWordCount(true);
-        setReviewMsg(false, reviewWordMessage(wordCount));
+      if (!comment) {
+        updateReviewWordCount();
+        setReviewMsg(false, "Please enter a comment.");
         if (commentEl) commentEl.focus();
         return;
       }

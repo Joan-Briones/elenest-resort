@@ -3566,10 +3566,12 @@
       var viewReceiptBtn = document.createElement("button");
       viewReceiptBtn.type = "button";
       viewReceiptBtn.className = "booking-card__receipt-btn";
-      viewReceiptBtn.textContent = "View / download receipt";
+      var canDownload = canDownloadGuestReceipt(b);
+      viewReceiptBtn.textContent = canDownload ? "View / download receipt" : "View receipt";
       viewReceiptBtn.setAttribute(
         "aria-label",
-        "View and download receipt for " + (b.fullName || "this reservation")
+        (canDownload ? "View and download receipt for " : "View receipt for ") +
+          (b.fullName || "this reservation")
       );
       viewReceiptBtn.addEventListener("click", function (e) {
         e.preventDefault();
@@ -4679,6 +4681,16 @@
     );
   }
 
+  /** JPG download is allowed only after admin has verified/approved payment. */
+  function canDownloadGuestReceipt(booking) {
+    if (!booking || !booking.id) return false;
+    var PF = window.ElenestPaymentFlow;
+    if (PF && typeof PF.isPaymentApproved === "function") {
+      return !!PF.isPaymentApproved(booking);
+    }
+    return !!(booking.paymentVerifiedAt || booking.payment_verified_at);
+  }
+
   function escapeReceiptHtml(value) {
     return String(value == null ? "" : value)
       .replace(/&/g, "&amp;")
@@ -5008,6 +5020,10 @@
     if (!overlay || !body) return;
     guestReceiptBooking = booking;
     fillProfessionalReceiptHost(body, booking);
+    var downloadBtn = document.getElementById("guestReceiptDownloadBtn");
+    if (downloadBtn) {
+      downloadBtn.hidden = !canDownloadGuestReceipt(booking);
+    }
     overlay.removeAttribute("hidden");
     overlay.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden";
@@ -5291,6 +5307,7 @@
 
   function downloadGuestReceiptFile(booking) {
     if (!booking || !booking.id) return;
+    if (!canDownloadGuestReceipt(booking)) return;
     var stamp = receiptDownloadStamp(booking);
     var filename = "Elenest-Receipt-" + stamp + ".jpg";
     renderGuestReceiptCanvas(booking)
@@ -5497,10 +5514,13 @@
     fillReceiptHost(document.getElementById("paymentSuccessReceipt"), booking);
     var downloadBtn = document.getElementById("bookFlowReceiptDownloadBtn");
     if (downloadBtn) {
-      downloadBtn.hidden = false;
-      downloadBtn.onclick = function () {
-        downloadGuestReceiptFile(booking);
-      };
+      var allowDownload = canDownloadGuestReceipt(booking);
+      downloadBtn.hidden = !allowDownload;
+      downloadBtn.onclick = allowDownload
+        ? function () {
+            downloadGuestReceiptFile(booking);
+          }
+        : null;
     }
   }
 
@@ -5573,7 +5593,12 @@
       }
     }
     if (downloadBtn) {
-      downloadBtn.hidden = !(booking && booking.id && kind !== "cancelled");
+      downloadBtn.hidden = !(
+        booking &&
+        booking.id &&
+        kind !== "cancelled" &&
+        canDownloadGuestReceipt(booking)
+      );
     }
     overlay.removeAttribute("hidden");
     overlay.setAttribute("aria-hidden", "false");

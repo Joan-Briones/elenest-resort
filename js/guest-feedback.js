@@ -1102,18 +1102,6 @@
     add: add
   };
 
-  function countFeedbackWords(text) {
-    var value = String(text || "").trim();
-    if (!value) return 0;
-    return value.split(/\s+/).length;
-  }
-
-  function feedbackWordMessage(count) {
-    var n = Number(count) || 0;
-    var noun = n === 1 ? "word" : "words";
-    return "Please write at least 50 words. Your comment currently has " + n + " " + noun + ".";
-  }
-
   function add(entry) {
     var id = (entry && entry.id) || rid();
     var bookingId = String((entry && entry.bookingId) || "").trim();
@@ -1131,9 +1119,8 @@
       )
     );
     row.booking_id = bookingId;
-    var commentWords = countFeedbackWords(row.comment);
-    if (commentWords < 50) {
-      return Promise.reject(new Error(feedbackWordMessage(commentWords)));
+    if (!String(row.comment || "").trim()) {
+      return Promise.reject(new Error("Please enter a comment."));
     }
 
     var Photos = window.ElenestFeedbackPhotos;
