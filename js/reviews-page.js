@@ -30,70 +30,6 @@
     return "★★★★★".slice(0, s) + "☆☆☆☆☆".slice(0, 5 - s);
   }
 
-  function classifySentiment(f) {
-    var EV = window.ElenestModelEvaluation;
-    if (EV && typeof EV.classify === "function") {
-      try {
-        var cl = EV.classify(f);
-        if (cl === "pos" || cl === "neg" || cl === "neu") return cl;
-      } catch (eCl) {}
-    }
-    var raw = String((f && (f.sentiment || f.sentimentLabel)) || "")
-      .trim()
-      .toLowerCase();
-    if (/^(pos|positive)\b/.test(raw) || raw === "pos") return "pos";
-    if (/^(neg|negative|needs)\b/.test(raw) || raw === "neg") return "neg";
-    if (/^(neu|neutral)\b/.test(raw) || raw === "neu") return "neu";
-    var s = Number(f && f.stars) || 0;
-    if (s >= 4) return "pos";
-    if (s === 3) return "neu";
-    if (s > 0 && s <= 2) return "neg";
-    return "";
-  }
-
-  function sentimentPercents(list) {
-    var positive = 0;
-    var neutral = 0;
-    var negative = 0;
-    (list || []).forEach(function (f) {
-      var c = classifySentiment(f);
-      if (c === "pos") positive += 1;
-      else if (c === "neu") neutral += 1;
-      else if (c === "neg") negative += 1;
-    });
-    var total = positive + neutral + negative;
-    if (!total) {
-      return { positive: 0, neutral: 0, negative: 0, total: 0 };
-    }
-    var parts = [
-      { key: "positive", count: positive },
-      { key: "neutral", count: neutral },
-      { key: "negative", count: negative }
-    ];
-    parts.forEach(function (p) {
-      var exact = (p.count / total) * 100;
-      p.floor = Math.floor(exact);
-      p.frac = exact - p.floor;
-    });
-    var used = parts.reduce(function (sum, p) {
-      return sum + p.floor;
-    }, 0);
-    var remain = 100 - used;
-    parts
-      .slice()
-      .sort(function (a, b) {
-        return b.frac - a.frac;
-      })
-      .forEach(function (p, idx) {
-        if (idx < remain) p.floor += 1;
-      });
-    var out = { positive: 0, neutral: 0, negative: 0, total: total };
-    parts.forEach(function (p) {
-      out[p.key] = p.floor;
-    });
-    return out;
-  }
-
   function getFeedbackList() {
     var api = window.ElenestGuestFeedback;
     var list = [];
@@ -154,24 +90,6 @@
     );
   }
 
-  function applySentimentBars(sentiment) {
-    var pos = Number(sentiment.positive) || 0;
-    var neu = Number(sentiment.neutral) || 0;
-    var neg = Number(sentiment.negative) || 0;
-    var barPos = document.getElementById("reviewsSentimentBarPos");
-    var barNeu = document.getElementById("reviewsSentimentBarNeu");
-    var barNeg = document.getElementById("reviewsSentimentBarNeg");
-    var pctPos = document.getElementById("reviewsSentimentPctPos");
-    var pctNeu = document.getElementById("reviewsSentimentPctNeu");
-    var pctNeg = document.getElementById("reviewsSentimentPctNeg");
-    if (barPos) barPos.style.width = pos + "%";
-    if (barNeu) barNeu.style.width = neu + "%";
-    if (barNeg) barNeg.style.width = neg + "%";
-    if (pctPos) pctPos.textContent = pos + "%";
-    if (pctNeu) pctNeu.textContent = neu + "%";
-    if (pctNeg) pctNeg.textContent = neg + "%";
-  }
-
   function render() {
     withPreservedScroll(function () {
       var realFeedback = getFeedbackList();
@@ -205,11 +123,6 @@
           }
         }
       }
-
-      var sentiment = hasReal
-        ? sentimentPercents(realFeedback)
-        : { positive: 0, neutral: 0, negative: 0, total: 0 };
-      applySentimentBars(sentiment);
     });
   }
 
