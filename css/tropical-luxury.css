@@ -652,7 +652,8 @@ body.home-page .rooms .items .text h2 {
 /* Gallery */
 body.home-page .gallery .heading__lockup h2,
 body.home-page .services .heading__lockup h2,
-body.home-page .news .heading__lockup h2 {
+body.home-page .news .heading__lockup h2,
+body.home-page .home-reviews .heading__lockup h2 {
   font-family: var(--serif) !important;
   color: var(--forest);
 }
@@ -689,20 +690,30 @@ body.home-page .services__media img {
   box-shadow: 0 16px 36px rgba(49, 93, 70, 0.12);
 }
 
-/* Review KPIs */
-body.home-page .Customer.home-review-kpis {
-  background:
-    linear-gradient(180deg, rgba(49, 93, 70, 0.72), rgba(49, 93, 70, 0.82)),
-    var(--palm-tile);
-  background-size: auto, 180px;
+/* Guest reviews */
+body.home-page .home-reviews {
+  padding-bottom: 1.5rem;
 }
 
-body.home-page .home-review-kpis__item h1 {
+body.home-page .home-reviews__score,
+body.home-page .home-review-card__name,
+body.home-page .home-review-card__mark {
   font-family: var(--serif);
 }
 
-body.home-page .home-review-kpis__item hr {
-  background: var(--pink);
+body.home-page .home-review-card {
+  border-radius: 18px;
+  border: 1px solid rgba(168, 201, 165, 0.4);
+  box-shadow: var(--shadow-soft);
+  background: #fff;
+}
+
+body.home-page .home-reviews__more {
+  color: var(--pink-dark);
+}
+
+body.home-page .home-reviews__more:hover {
+  color: var(--forest);
 }
 
 /* Activities */
@@ -790,6 +801,10 @@ body.home-page .home-footer__copy {
 }
 
 @media (max-width: 900px) {
+  body.home-page .home-reviews__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   body.home-page .home-amenities__grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -823,6 +838,7 @@ body.home-page .home-footer__copy {
 }
 
 @media (max-width: 560px) {
+  body.home-page .home-reviews__grid,
   body.home-page .home-amenities__grid,
   body.home-page .home-signature__grid {
     grid-template-columns: 1fr;

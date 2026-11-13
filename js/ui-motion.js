@@ -8,7 +8,7 @@
     ".kpi h4",
     ".admin-kpi-card h4",
     ".admin-payment-kpi-card h4",
-    ".home-review-kpis__item h1"
+    ".home-reviews__score"
   ].join(",");
 
   function parseNumber(text) {

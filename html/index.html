@@ -12,10 +12,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/style.css?v=20261108-privacy1">
-  <link rel="stylesheet" href="../css/tropical-luxury.css?v=20261112-tropical3">
+  <link rel="stylesheet" href="../css/style.css?v=20261113-reviews3">
+  <link rel="stylesheet" href="../css/tropical-luxury.css?v=20261113-reviews2">
   <script src="../js/theme.js?v=20261020-theme1"></script>
-  <script src="../js/ui-motion.js?v=20261014-motion1" defer></script>
+  <script src="../js/ui-motion.js?v=20261113-reviews1" defer></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.css" integrity="sha512-UTNP5BXLIptsaj5WdKFrkFov94lDx+eBvbKyoe1YAfjeRPC+gT5kyZ10kOHCfNZqEui1sxmqvodNUx3KbuYI/A==" crossorigin="anonymous"
     referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" integrity="sha512-sMXtMNL1zRzolHYKEujM2AqCLUR9F2C4/05cdbxjjLSRvMQIciEPCQZo++nk7go3BtSuK9kfa/s+a4f4i5pLkw=="
@@ -389,22 +389,24 @@
 
 
 
-  <section class="Customer top home-review-kpis" aria-label="Guest review highlights">
-    <div class="container home-review-kpis__grid">
-      <div class="home-review-kpis__item">
-        <h1 id="homeKpiAvgRating">&hellip;</h1>
-        <hr>
-        <span>Average rating</span>
+  <section class="home-reviews top" id="homeReviews" aria-labelledby="homeReviewsTitle">
+    <div class="container">
+      <div class="heading">
+        <div class="heading__lockup">
+          <h1>REVIEWS</h1>
+          <h2 id="homeReviewsTitle">What guests say</h2>
+        </div>
+        <p>Stories from guests who stayed at Elenest Resort. <a class="home-reviews__more" href="reviews.html">Read all reviews</a></p>
       </div>
-      <div class="home-review-kpis__item">
-        <h1 id="homeKpiRecommendRate">&hellip;</h1>
-        <hr>
-        <span>Would recommend</span>
+      <div class="home-reviews__summary" id="homeReviewsSummary" hidden>
+        <p class="home-reviews__score" id="homeReviewsScore">&mdash;</p>
+        <div class="home-reviews__meta">
+          <p class="home-reviews__stars" id="homeReviewsStars" aria-hidden="true"></p>
+          <p class="home-reviews__count" id="homeReviewsCount">Guest reviews</p>
+        </div>
       </div>
-      <div class="home-review-kpis__item">
-        <h1 id="homeKpiCount">&hellip;</h1>
-        <hr>
-        <span>Total reviews</span>
+      <div class="home-reviews__grid" id="homeReviewsGrid" aria-live="polite">
+        <p class="home-reviews__empty">Loading guest reviews&hellip;</p>
       </div>
     </div>
   </section>
@@ -551,7 +553,7 @@
   <script src="../js/role-login.js?v=20261020-keepfac1"></script>
   <script src="../js/guest-feedback.js?v=20261101-testdata1"></script>
   <script src="../js/home-content.js?v=20260925-policy1"></script>
-  <script src="../js/home-reviews.js?v=20261107-includetest"></script>
+  <script src="../js/home-reviews.js?v=20261113-reviews3"></script>
 </body>
 
 </html>
