@@ -2233,9 +2233,13 @@
           }
           try {
             if (window.ElenestNotifications && typeof window.ElenestNotifications.notifyPaymentApproved === "function") {
-              paymentApprovalRecipients(item, b).forEach(function (em) {
-                window.ElenestNotifications.notifyPaymentApproved(em, b);
-              });
+              var liveEntry = findBookingEntry(b.id);
+              var approvedBooking = liveEntry && liveEntry.booking ? liveEntry.booking : b;
+              if (approvedBooking.paymentVerifiedAt || approvedBooking.payment_verified_at) {
+                paymentApprovalRecipients(item, approvedBooking).forEach(function (em) {
+                  window.ElenestNotifications.notifyPaymentApproved(em, approvedBooking);
+                });
+              }
             }
           } catch (notifyErr) {}
           return sendBookingVerifiedEmail(item, b, isFull).then(function (data) {

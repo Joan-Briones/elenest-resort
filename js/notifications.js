@@ -492,9 +492,16 @@
       loadInboxFromSupabase(key);
     }
     var hidden = dismissedIdSet(key);
+    var seenApproved = {};
     return rawListForUser(key)
       .filter(function (n) {
-        return n && !hiddenFromInbox(n, hidden);
+        if (!n || hiddenFromInbox(n, hidden) || isClientProofNotice(n)) return false;
+        var dedup = String(n.dedupKey || "");
+        if (dedup.indexOf("payment_approved:") === 0) {
+          if (seenApproved[dedup]) return false;
+          seenApproved[dedup] = true;
+        }
+        return true;
       })
       .slice()
       .sort(function (a, b) {
@@ -693,25 +700,52 @@
     return sent;
   }
 
+  function paymentVerifiedAt(booking) {
+    return String((booking && (booking.paymentVerifiedAt || booking.payment_verified_at)) || "").trim();
+  }
+
+  function isCustomerProofPatch(patch) {
+    if (!patch) return false;
+    if (patch.paymentVerifiedAt || patch.payment_verified_at) return false;
+    if (patch.receiptIssuedAt || patch.receipt_issued_at) return false;
+    var stage = String(patch.verificationStage || patch.verification_stage || "").toLowerCase();
+    var wf = String(patch.workflow || "").toLowerCase();
+    if (stage === "awaiting_admin" || wf === "pending_payment") return true;
+    return !!(patch.paymentSubmittedAt && (patch.paymentProof || patch.hasPaymentProof));
+  }
+
+  function isClientProofNotice(n) {
+    if (!n || (n.meta && n.meta.audience === "staff")) return false;
+    var key = String(n.dedupKey || "");
+    if (key.indexOf("payment_pending:") === 0) return true;
+    return String(n.title || "").trim().toLowerCase() === "payment submitted";
+  }
+
   function notifyPaymentApproved(email, booking) {
-    var id = booking && booking.id ? booking.id : "";
+    var verifiedAt = paymentVerifiedAt(booking);
+    if (!email || !booking || !verifiedAt) return null;
+    if (booking.paymentRejectedAt || booking.payment_rejected_at) return null;
+    var id = booking.id ? booking.id : "";
     var PF = window.ElenestPaymentFlow;
-    var isFull = PF && PF.normalizePaymentType(booking && booking.paymentType) === "full";
+    var isFull = PF && PF.normalizePaymentType(booking.paymentType) === "full";
     var isFuture = PF && typeof PF.isFutureBooking === "function" && PF.isFutureBooking(booking);
     var downMsg = isFuture
       ? "Your down payment has been verified. Payment: Approved · Booking: Confirmed · Arrival: Not Arrived until your stay date."
       : "Your down payment has been verified. Payment: Approved · Booking: Confirmed · Arrival: Not Arrived. A 3-hour hold timer has started for same-day arrival monitoring.";
-    addForUser(email, {
+    var receiptNote = " Your booking receipt is ready in Appointments.";
+    var added = addForUser(email, {
       type: TYPES.PAYMENT_APPROVED,
       title: isFull ? "Full Payment Approved" : "Down Payment Approved",
-      message: isFull
+      message: (isFull
         ? "Your full payment has been verified. Payment: Approved · Booking: Confirmed · Arrival: Not Arrived until check-in."
-        : downMsg,
+        : downMsg) + receiptNote,
       bookingId: id,
       dedupKey: "payment_approved:" + id,
-      link: "book.html"
+      link: "book.html",
+      createdAt: verifiedAt
     });
     if (isFull) notifyBookingConfirmed(email, booking);
+    return added;
   }
 
   function notifyPaymentRejected(email, booking, reason) {
@@ -905,43 +939,13 @@
         }
       }
 
-      var st = String(b.status || "").toLowerCase();
-      if (st === "pending payment verification" && b.paymentSubmittedAt) {
-        addForUser(key, {
-          type: TYPES.BOOKING_UPDATED,
-          title: "Payment Submitted",
-          message: "We received your proof of payment. Your booking is pending owner verification.",
-          bookingId: b.id,
-          dedupKey: "payment_pending:" + b.id,
-          link: "book.html",
-          createdAt: b.paymentSubmittedAt
-        });
-      }
-
-      var pay = String(b.paymentStatus || "").toLowerCase();
-      var paymentApproved =
-        !b.paymentRejectedAt &&
-        !!(
-          b.paymentVerifiedAt ||
-          b.payment_verified_at ||
-          pay.indexOf("fully paid") !== -1 ||
-          pay.indexOf("down payment received") !== -1 ||
-          pay.indexOf("payment approved") !== -1
-        );
-      if (paymentApproved) {
-        var PF = window.ElenestPaymentFlow;
-        var isFull = PF && PF.normalizePaymentType && PF.normalizePaymentType(b.paymentType) === "full";
-        addForUser(key, {
-          type: TYPES.PAYMENT_APPROVED,
-          title: isFull ? "Full Payment Approved" : "Payment Approved",
-          message: isFull
-            ? "Your full payment has been approved. Your booking is confirmed. Arrival stays Not Arrived until check-in."
-            : "Your payment has been approved. Your booking is confirmed. Arrival stays Not Arrived until check-in.",
-          bookingId: b.id,
-          dedupKey: "payment_approved:" + b.id,
-          link: "book.html",
-          createdAt: b.paymentVerifiedAt || b.payment_verified_at || new Date().toISOString()
-        });
+      if (paymentVerifiedAt(b) && !b.paymentRejectedAt && !b.payment_rejected_at) {
+        var PFApproved = window.ElenestPaymentFlow;
+        var stillPending =
+          PFApproved &&
+          ((PFApproved.isAwaitingProofResubmit && PFApproved.isAwaitingProofResubmit(b)) ||
+            (PFApproved.isAwaitingPaymentVerification && PFApproved.isAwaitingPaymentVerification(b)));
+        if (!stillPending) notifyPaymentApproved(key, b);
       }
     });
   }
@@ -1042,6 +1046,13 @@
       if (Object.prototype.hasOwnProperty.call(patch, p)) merged[p] = patch[p];
     }
 
+    var approvedNow = !!(
+      paymentVerifiedAt(patch) &&
+      !paymentVerifiedAt(prev)
+    );
+    if (approvedNow) notifyPaymentApproved(email, merged);
+    if (isCustomerProofPatch(patch)) return;
+
     if (patch.status !== undefined) {
       var newSt = normBookingStatus(patch.status);
       var oldSt = normBookingStatus(prev.status);
@@ -1064,6 +1075,8 @@
       notifyBookingUpdated(email, merged, "You have checked out. We hope you enjoyed your stay!");
       return;
     }
+
+    if (approvedNow) return;
 
     var fields = ["checkIn", "checkOut", "roomType", "cottageQty", "eventHall", "checkInTime", "checkOutTime", "paymentStatus"];
     var changed = false;

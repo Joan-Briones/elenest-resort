@@ -6660,7 +6660,6 @@
         if (proofInput) proofInput.focus();
         return;
       }
-      var user = window.ElenestAuth.getCurrentUser();
       var BL = window.ElenestButtonLoading;
       if (BL) BL.set(submitPaymentBtn, true);
       readPaymentProofAsDataUrl().then(function (proofDataUrl) {
@@ -6729,20 +6728,6 @@
             if (patch[pk] === null) delete savedRow[pk];
             else savedRow[pk] = patch[pk];
           }
-          if (window.ElenestNotifications) {
-            window.ElenestNotifications.addForUser(user.email, {
-              type: window.ElenestNotifications.TYPES.BOOKING_UPDATED,
-              title: "Payment Submitted",
-              message:
-                "Your payment proof has been submitted. Please wait while the admin verifies your payment. Your booking receipt will be available once the payment is approved.",
-              bookingId: savedRow.id || "",
-              dedupKey: "payment_pending:" + (savedRow.id || ""),
-              link: "book.html"
-            });
-            if (window.ElenestCustomerNotifications) {
-              window.ElenestCustomerNotifications.refresh(user.email);
-            }
-          }
           wizardState.pendingRecord = null;
           wizardState.payableBooking = savedRow;
           wizardState.reviewBookingId = savedRow.id || wizardState.reviewBookingId;
@@ -6752,7 +6737,6 @@
           clearBookingDraft();
           hideBookingReceipt();
           goStep(4);
-          openPaymentSuccessModal(savedRow);
           if (BL) BL.set(submitPaymentBtn, false);
         });
       }).catch(function () {
