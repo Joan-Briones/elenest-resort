@@ -76,6 +76,7 @@
     ) {
       return "Rejected";
     }
+    if (isAwaitingProofResubmit(booking)) return "Rejected";
     if (isAwaitingBookingReview(booking)) return "Not available yet";
     if (isAwaitingCustomerPayment(booking)) {
       return isPaymentWindowExpired(booking) ? "Expired" : "Awaiting payment";
@@ -263,6 +264,39 @@
     };
   }
 
+  /** Admin rejected the uploaded proof. The booking stays reserved so the guest can upload again. */
+  function isAwaitingProofResubmit(booking) {
+    if (!booking) return false;
+    if (booking.paymentVerifiedAt || booking.payment_verified_at) return false;
+    if (booking.receiptIssuedAt || booking.receipt_issued_at) return false;
+    var wf = String(booking.workflow || "").trim().toLowerCase();
+    var stage = String(booking.verificationStage || booking.verification_stage || "")
+      .trim()
+      .toLowerCase();
+    return wf === "awaiting_resubmit" || stage === "proof_rejected";
+  }
+
+  function canCustomerSubmitPaymentProof(booking) {
+    if (!booking || isPaymentApproved(booking)) return false;
+    if (isAwaitingProofResubmit(booking)) return true;
+    return isAwaitingCustomerPayment(booking) && !isPaymentWindowExpired(booking);
+  }
+
+  /** Customer-facing payment line while a proof is in review. */
+  function customerPaymentStatusLabel(booking) {
+    if (isAwaitingProofResubmit(booking)) return "Rejected";
+    if (isAwaitingPaymentVerification(booking)) return "Proof Submitted";
+    return paymentDisplayLabel(booking);
+  }
+
+  /** Customer-facing booking line. Pending proof uses the review status from the booking details card. */
+  function customerBookingStatusLabel(booking) {
+    if (!booking) return "";
+    if (isAwaitingProofResubmit(booking)) return "Rejected";
+    if (isAwaitingPaymentVerification(booking)) return "Pending Approval";
+    return bookingDisplayStatus(booking);
+  }
+
   function isAwaitingBookingReview(booking) {
     if (!booking) return false;
     if (hasSubmittedReceipt(booking)) return false;
@@ -351,14 +385,17 @@
       wf === "awaiting_booking_review" ||
       wf === "awaiting_payment" ||
       wf === "pending_payment" ||
+      wf === "awaiting_resubmit" ||
       stage === "awaiting_booking_review" ||
       stage === "awaiting_payment" ||
-      stage === "awaiting_admin"
+      stage === "awaiting_admin" ||
+      stage === "proof_rejected"
     );
   }
 
   function isAwaitingPaymentVerification(booking) {
     if (!booking) return false;
+    if (isAwaitingProofResubmit(booking)) return false;
     if (booking.paymentVerifiedAt || booking.paymentRejectedAt) return false;
     if (!hasSubmittedReceipt(booking)) return false;
     var st = normalizeBookingStatus(booking.status);
@@ -443,6 +480,7 @@
       wf === "awaiting_booking_review" ||
       wf === "awaiting_payment" ||
       wf === "pending_payment" ||
+      wf === "awaiting_resubmit" ||
       wf === "pending_verification" ||
       wf === "pending" ||
       st === "pending" ||
@@ -452,7 +490,8 @@
       st === "pending payment verification" ||
       stage === "awaiting_booking_review" ||
       stage === "awaiting_payment" ||
-      stage === "awaiting_admin"
+      stage === "awaiting_admin" ||
+      stage === "proof_rejected"
     ) {
       return false;
     }
@@ -699,11 +738,19 @@
       status: STATUS.FOR_VERIFICATION,
       paymentStatus: STATUS.FOR_VERIFICATION,
       paymentSubmittedAt: at,
-      // Proof upload is not payment approval and must not clear or start a hold.
+      // Proof upload is not payment approval and must not issue a booking receipt.
       verificationStage: "awaiting_admin",
       slotLocked: true,
       workflow: "pending_payment",
-      paymentType: type
+      paymentType: type,
+      paymentProofRejectedAt: null,
+      paymentProofRejectedBy: null,
+      paymentRejectionReason: null,
+      paymentRejectedAt: null,
+      paymentRejectedBy: null,
+      receiptIssuedAt: null,
+      paymentVerifiedAt: null,
+      paymentVerifiedBy: null
     };
   }
 // Sales and Payment
@@ -736,7 +783,11 @@
         // Payment approval must NEVER mark Arrived.
         arrivalStatus: "not_arrived",
         verificationStage: "approved",
-        workflow: "confirmed"
+        workflow: "confirmed",
+        receiptIssuedAt: verifiedAt,
+        paymentProofRejectedAt: null,
+        paymentProofRejectedBy: null,
+        paymentRejectionReason: null
       };
     }
 
@@ -758,7 +809,11 @@
         verificationExpiresAt: null,
         arrivalStatus: "not_arrived",
         verificationStage: "approved",
-        workflow: "confirmed"
+        workflow: "confirmed",
+        receiptIssuedAt: verifiedAt,
+        paymentProofRejectedAt: null,
+        paymentProofRejectedBy: null,
+        paymentRejectionReason: null
       };
     }
 
@@ -777,7 +832,11 @@
       verificationExpiresAt: null,
       arrivalStatus: "not_arrived",
       verificationStage: "approved",
-      workflow: "approved"
+      workflow: "approved",
+      receiptIssuedAt: verifiedAt,
+      paymentProofRejectedAt: null,
+      paymentProofRejectedBy: null,
+      paymentRejectionReason: null
     };
   }
 
@@ -811,19 +870,22 @@
   }
 
   function buildVerificationRejectPatch(booking, adminEmail, reason) {
+    // Reject the proof only. Keep the reserved dates so the guest can upload a new proof.
     return {
-      status: STATUS.REJECTED,
-      paymentRejectedAt: new Date().toISOString(),
-      paymentRejectedBy: adminEmail || "",
+      status: STATUS.FOR_VERIFICATION,
+      paymentStatus: "Resubmit proof of payment",
+      paymentProofRejectedAt: new Date().toISOString(),
+      paymentProofRejectedBy: adminEmail || "",
       paymentRejectionReason: reason || "",
-      paymentStatus: STATUS.REJECTED,
       paymentVerifiedAt: null,
       paymentVerifiedBy: null,
-      slotLocked: false,
-      holdExpiresAt: null,
+      paymentRejectedAt: null,
+      paymentRejectedBy: null,
+      receiptIssuedAt: null,
+      slotLocked: true,
       verificationExpiresAt: null,
-      verificationStage: "rejected",
-      workflow: "rejected"
+      verificationStage: "proof_rejected",
+      workflow: "awaiting_resubmit"
     };
   }
 
@@ -1112,6 +1174,17 @@
 
   function customerStatusNote(booking) {
     if (!booking) return null;
+    if (isAwaitingProofResubmit(booking)) {
+      var retryReason = String(booking.paymentRejectionReason || "").trim();
+      return {
+        label: "Payment",
+        value: retryReason
+          ? "Your proof of payment was not approved (" +
+            retryReason +
+            "). Upload a new proof. Your booking receipt is created only after the admin approves the payment."
+          : "Your proof of payment was not approved. Upload a new proof. Your booking receipt is created only after the admin approves the payment."
+      };
+    }
     var declinedReason = String(booking.paymentRejectionReason || "").trim();
     if (
       declinedReason &&
@@ -1165,7 +1238,8 @@
     if (waiting === STATUS.FOR_VERIFICATION || (waiting === STATUS.PENDING && hasSubmittedReceipt(booking))) {
       return {
         label: "Payment",
-        value: "Proof received. Waiting for admin to verify it. Not marked paid yet."
+        value:
+          "Your payment proof has been submitted. Please wait while the admin verifies your payment. Your booking receipt will be available once the payment is approved."
       };
     }
     return null;
@@ -1191,7 +1265,8 @@
     if (isAwaitingCustomerPayment(booking)) {
       return isPaymentWindowExpired(booking) ? "Payment window expired" : "Awaiting payment";
     }
-    if (st === STATUS.FOR_VERIFICATION) return "Pending payment verification";
+    if (isAwaitingProofResubmit(booking)) return "Rejected";
+    if (st === STATUS.FOR_VERIFICATION || isAwaitingPaymentVerification(booking)) return "Pending Approval";
     if (st === STATUS.AWAITING_PAYMENT) return "Awaiting payment";
     if (st === STATUS.PENDING) return "Pending";
     if (st === STATUS.CONFIRMED) return "Confirmed";
@@ -1334,6 +1409,10 @@
     canMarkGuestArrived: canMarkGuestArrived,
     isFinalPaymentStatus: isFinalPaymentStatus,
     isAwaitingPaymentVerification: isAwaitingPaymentVerification,
+    isAwaitingProofResubmit: isAwaitingProofResubmit,
+    canCustomerSubmitPaymentProof: canCustomerSubmitPaymentProof,
+    customerPaymentStatusLabel: customerPaymentStatusLabel,
+    customerBookingStatusLabel: customerBookingStatusLabel,
     isEligibleForCheckInQueue: isEligibleForCheckInQueue,
     isReadyForReceptionCheckIn: isReadyForReceptionCheckIn,
     isReadyForReceptionCheckOut: isReadyForReceptionCheckOut,

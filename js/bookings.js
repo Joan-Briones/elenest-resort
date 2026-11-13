@@ -509,6 +509,7 @@
     ) {
       return 40;
     }
+    if (s === "awaiting_resubmit" || s === "proof_rejected") return 18;
     if (s === "pending_payment" || s === "pending_verification" || s === "awaiting_admin") return 12;
     if (s === "awaiting_payment") return 8;
     if (s === "pending") return 5;
@@ -526,6 +527,7 @@
     var s = String(st || "")
       .trim()
       .toLowerCase();
+    if (s.indexOf("resubmit") !== -1) return 15;
     if (s.indexOf("fully paid") !== -1) return 80;
     if (s.indexOf("down payment received") !== -1) return 70;
     if (s.indexOf("checked in") !== -1 || s.indexOf("checked out") !== -1) return 65;
@@ -557,9 +559,34 @@
     return booking;
   }
 
+  function proofResubmitReplacesRejection(prev, next) {
+    if (!prev || !next) return false;
+    var submitted = new Date(next.paymentSubmittedAt || 0).getTime();
+    var rejected = new Date(prev.paymentProofRejectedAt || prev.payment_proof_rejected_at || 0).getTime();
+    if (!submitted || !rejected || submitted <= rejected) return false;
+    var wf = String(next.workflow || "").toLowerCase();
+    var stage = String(next.verificationStage || next.verification_stage || "").toLowerCase();
+    return wf === "pending_payment" || stage === "awaiting_admin";
+  }
+
   function mergeBookingPreferringLater(prev, next) {
     if (!prev) return next;
     if (!next) return prev;
+    if (proofResubmitReplacesRejection(prev, next)) {
+      var fresh = Object.assign({}, prev, next);
+      delete fresh.paymentProofRejectedAt;
+      delete fresh.paymentProofRejectedBy;
+      delete fresh.paymentRejectionReason;
+      delete fresh.paymentRejectedAt;
+      delete fresh.paymentRejectedBy;
+      delete fresh.receiptIssuedAt;
+      fresh.status = next.status || "For Verification";
+      fresh.workflow = next.workflow || "pending_payment";
+      fresh.verificationStage = next.verificationStage || "awaiting_admin";
+      fresh.paymentStatus = next.paymentStatus || "For Verification";
+      fresh.paymentSubmittedAt = next.paymentSubmittedAt;
+      return fresh;
+    }
     var out = Object.assign({}, prev, next);
     out.status = pickLaterStatus(prev.status, next.status);
     out.workflow = pickLaterWorkflow(prev.workflow, next.workflow);
@@ -820,6 +847,18 @@
 
   function rememberVerifiedBooking(booking, email) {
     if (!booking) return;
+    var stageNow = String(booking.verificationStage || "").toLowerCase();
+    var wfNow = String(booking.workflow || "").toLowerCase();
+    if (
+      (stageNow === "proof_rejected" ||
+        wfNow === "awaiting_resubmit" ||
+        stageNow === "awaiting_admin" ||
+        wfNow === "pending_payment") &&
+      !booking.paymentVerifiedAt &&
+      !booking.paymentRejectedAt
+    ) {
+      return;
+    }
     if (
       !bookingHasPaymentDecision(booking) &&
       !booking.paymentRejectedAt &&
@@ -898,6 +937,12 @@
     ).getTime();
     var decisionMs = new Date(rec.paymentVerifiedAt || rec.checkedInAt || rec.paymentRejectedAt || 0).getTime();
     if (createdMs && decisionMs && decisionMs + 1000 < createdMs) return booking;
+    if (
+      String(rec.verificationStage || "").toLowerCase() === "proof_rejected" ||
+      String(rec.workflow || "").toLowerCase() === "awaiting_resubmit"
+    ) {
+      return booking;
+    }
     if (rec.paymentRejectedAt) {
       booking.paymentRejectedAt = rec.paymentRejectedAt;
       booking.status = "Rejected";
@@ -1263,6 +1308,7 @@
       wf === "awaiting_booking_review" ||
       wf === "awaiting_payment" ||
       wf === "pending_payment" ||
+      wf === "awaiting_resubmit" ||
       wf === "pending_verification" ||
       wf === "pending" ||
       st === "pending" ||
@@ -1272,7 +1318,8 @@
       st === "pending payment verification" ||
       stage === "awaiting_booking_review" ||
       stage === "awaiting_payment" ||
-      stage === "awaiting_admin"
+      stage === "awaiting_admin" ||
+      stage === "proof_rejected"
     ) {
       return false;
     }
@@ -2284,6 +2331,27 @@
       payment_type: booking.paymentType || row.payment_type || payload.paymentType
     });
     booking.status = pickLaterStatus(pickLaterStatus(columnStatus, payloadStatus), mapped) || "Pending";
+    var submittedMs = new Date(payload.paymentSubmittedAt || booking.paymentSubmittedAt || 0).getTime();
+    var proofRejectedMs = new Date(
+      payload.paymentProofRejectedAt || booking.paymentProofRejectedAt || 0
+    ).getTime();
+    var payloadWf = String(payload.workflow || "").toLowerCase();
+    var payloadStage = String(payload.verificationStage || "").toLowerCase();
+    if (
+      submittedMs &&
+      (!proofRejectedMs || submittedMs > proofRejectedMs) &&
+      (payloadWf === "pending_payment" || payloadStage === "awaiting_admin")
+    ) {
+      booking.workflow = payload.workflow || "pending_payment";
+      booking.verificationStage = payload.verificationStage || "awaiting_admin";
+      booking.status = payload.status || "For Verification";
+      booking.paymentStatus = payload.paymentStatus || "For Verification";
+      booking.paymentSubmittedAt = payload.paymentSubmittedAt || booking.paymentSubmittedAt;
+      delete booking.paymentProofRejectedAt;
+      delete booking.paymentProofRejectedBy;
+      delete booking.paymentRejectionReason;
+      delete booking.receiptIssuedAt;
+    }
     var arrivalNow = String(booking.arrivalStatus || "").toLowerCase();
     if (
       String(booking.paymentType || "").toLowerCase() !== "full" &&
@@ -3956,6 +4024,61 @@
     return listLiveCache();
   }
 
+  function syncOpenProofState(booking, email) {
+    if (!booking) return;
+    var wf = String(booking.workflow || "").toLowerCase();
+    var stage = String(booking.verificationStage || "").toLowerCase();
+    if (
+      wf !== "awaiting_resubmit" &&
+      wf !== "pending_payment" &&
+      stage !== "proof_rejected" &&
+      stage !== "awaiting_admin"
+    ) {
+      return;
+    }
+    var members = listGroupMembers(getBookingGroupId(booking));
+    var copyKeys = [
+      "status",
+      "paymentStatus",
+      "workflow",
+      "verificationStage",
+      "slotLocked",
+      "paymentSubmittedAt",
+      "paymentProofUrl",
+      "hasPaymentProof",
+      "paymentType",
+      "amountPaid",
+      "balanceDue"
+    ];
+    var clearKeys = [
+      "paymentProofRejectedAt",
+      "paymentProofRejectedBy",
+      "paymentRejectionReason",
+      "paymentRejectedAt",
+      "paymentRejectedBy",
+      "receiptIssuedAt",
+      "paymentVerifiedAt",
+      "paymentVerifiedBy"
+    ];
+    var toSave = [];
+    members.forEach(function (member) {
+      if (!member || member === booking || String(member.id) === String(booking.id)) return;
+      copyKeys.forEach(function (key) {
+        if (booking[key] != null && booking[key] !== "") member[key] = booking[key];
+      });
+      clearKeys.forEach(function (key) {
+        if (booking[key]) member[key] = booking[key];
+        else delete member[key];
+      });
+      toSave.push(member);
+    });
+    var em = normalizeEmail(email || booking.email);
+    if (!em || typeof persistRow !== "function") return;
+    toSave.forEach(function (member) {
+      persistRow(em, member, { skipProofUpload: true, skipAvailabilityRefresh: true });
+    });
+  }
+
   function updateFields(accountEmail, id, patch) {
     if (!id || !patch || typeof patch !== "object") return Promise.resolve(false);
     var resolved = resolvePrimaryEntry(id);
@@ -3992,13 +4115,20 @@
         }
       }
       list[i] = b;
+      syncOpenProofState(b, key);
+      var proofReviewOnly =
+        String(b.verificationStage || "").toLowerCase() === "proof_rejected" ||
+        String(b.workflow || "").toLowerCase() === "awaiting_resubmit" ||
+        String(b.verificationStage || "").toLowerCase() === "awaiting_admin" ||
+        String(b.workflow || "").toLowerCase() === "pending_payment";
       if (
-        patch.paymentVerifiedAt ||
-        patch.paymentRejectedAt ||
-        patch.arrivalStatus ||
-        Object.prototype.hasOwnProperty.call(patch, "holdExpiresAt") ||
-        patch.checkedInAt ||
-        bookingHasPaymentDecision(b)
+        !proofReviewOnly &&
+        (patch.paymentVerifiedAt ||
+          patch.paymentRejectedAt ||
+          patch.arrivalStatus ||
+          Object.prototype.hasOwnProperty.call(patch, "holdExpiresAt") ||
+          patch.checkedInAt ||
+          bookingHasPaymentDecision(b))
       ) {
         rememberVerifiedBooking(b, key);
         broadcastPaymentVerified(b, key);

@@ -2269,7 +2269,7 @@
       swalPrompt({
         icon: "warning",
         title: "Reject payment?",
-        text: "Optional reason for rejection (shown internally):",
+        text: "Optional reason shown to the guest:",
         confirmText: "Continue",
         defaultValue: ""
       }).then(function (reason) {
@@ -2277,7 +2277,7 @@
         return swalConfirm({
           icon: "warning",
           title: "Confirm rejection",
-          text: "Reject this payment? Status will be REJECTED (final) and the room will be released.",
+          text: "Reject this proof of payment? The guest can upload a new proof. The booking stays reserved, and no booking receipt is issued.",
           confirmText: "Reject payment",
           confirmColor: "#dc2626"
         }).then(function (ok) {
@@ -2313,7 +2313,7 @@
             swalAlert({
               icon: "success",
               title: "Payment rejected",
-              text: "Booking was rejected and the room was released."
+              text: "Proof rejected. The guest can resubmit their proof of payment. No booking receipt was issued."
             });
             renderPaymentVerificationList();
             renderPaymentVerificationHistory();

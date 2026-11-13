@@ -9891,6 +9891,164 @@ input[type="submit"].is-loading {
   color: #4b5563;
 }
 
+.payment-success-modal--details {
+  max-width: 520px;
+  text-align: left;
+  background: #1c1824;
+  border: 1px solid rgba(217, 130, 165, 0.35);
+  color: #f7f2f5;
+}
+
+.proof-status-card {
+  margin: 0 0 16px;
+  padding: 18px 18px 16px;
+  border-radius: 16px;
+  background: #1c1824;
+  border: 1px solid rgba(217, 130, 165, 0.38);
+  color: #f7f2f5;
+}
+
+.payment-success-modal--details .proof-status-card {
+  margin: 0 0 18px;
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+
+.proof-status-card__title {
+  margin: 0 0 14px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  text-align: center;
+  color: #f7f2f5;
+}
+
+.proof-status-card__list {
+  margin: 0;
+}
+
+.proof-status-card__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 11px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.proof-status-card__row:first-child {
+  border-top: 0;
+}
+
+.proof-status-card__row dt,
+.proof-status-card__row dd {
+  margin: 0;
+}
+
+.proof-status-card__row dt {
+  color: rgba(247, 242, 245, 0.72);
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+
+.proof-status-card__row dd {
+  text-align: right;
+}
+
+.proof-status-card__status {
+  color: #f7f2f5;
+  font-weight: 700;
+}
+
+.proof-status-card__status--approved {
+  color: #b7e4c7;
+}
+
+.proof-status-card__status--rejected {
+  color: #f3b4c4;
+}
+
+.proof-status-card__link {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  color: #e7a3bf;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.proof-status-card__link:hover,
+.proof-status-card__link:focus-visible {
+  color: #f3c5d6;
+}
+
+.proof-status-card__muted {
+  color: rgba(247, 242, 245, 0.45);
+  font-weight: 600;
+}
+
+.proof-status-card__note {
+  margin: 12px 0 0;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(247, 242, 245, 0.78);
+  font-size: 0.92rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.customer-proof-overlay[hidden] {
+  display: none;
+}
+
+.customer-proof-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10020;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(12, 10, 16, 0.72);
+}
+
+.customer-proof-modal {
+  width: min(560px, 100%);
+  max-height: min(86vh, 760px);
+  overflow: auto;
+  padding: 18px;
+  border-radius: 16px;
+  background: #1c1824;
+  border: 1px solid rgba(217, 130, 165, 0.35);
+  color: #f7f2f5;
+  text-align: center;
+}
+
+.customer-proof-modal__title {
+  margin: 0 0 12px;
+}
+
+.customer-proof-modal__img {
+  display: block;
+  width: 100%;
+  max-height: 62vh;
+  object-fit: contain;
+  border-radius: 12px;
+  background: #0f0d14;
+}
+
+.customer-proof-modal__empty {
+  margin: 0 0 14px;
+}
+
+.customer-proof-modal .btn {
+  margin-top: 14px;
+}
+
 .payment-success-btn {
   width: 100%;
   max-width: 280px;

@@ -2721,6 +2721,10 @@
   function statusDisplayLabel(st, booking) {
     var b = booking || null;
     var PF = window.ElenestPaymentFlow;
+    if (PF && typeof PF.customerBookingStatusLabel === "function" && b) {
+      var custom = PF.customerBookingStatusLabel(b);
+      if (custom === "Pending Approval" || custom === "Rejected") return custom;
+    }
     if (PF && typeof PF.bookingDisplayStatus === "function" && b) {
       var display = PF.bookingDisplayStatus(b);
       if (PF.isFutureBooking && PF.isFutureBooking(b) && display === "Confirmed") {
@@ -2738,6 +2742,9 @@
 
   function paymentLabel(b) {
     var PF = window.ElenestPaymentFlow;
+    if (PF && typeof PF.customerPaymentStatusLabel === "function") {
+      return PF.customerPaymentStatusLabel(b);
+    }
     if (PF && typeof PF.paymentDisplayLabel === "function") {
       return PF.paymentDisplayLabel(b);
     }
@@ -3452,49 +3459,15 @@
       label: arrivalLabel
     });
     addBookingDetailRow(dl, "Payment method", b.paymentMethod || "—");
-    if (b.paymentProof || b.paymentProofUrl || b.hasPaymentProof || b.paymentSubmittedAt) {
-      var dt = document.createElement("dt");
-      dt.textContent = "Proof of payment";
-      var dd = document.createElement("dd");
-      dl.appendChild(dt);
-      dl.appendChild(dd);
-      var PP = window.ElenestPaymentProofs;
-      function renderProofImage(src) {
-        dd.textContent = "";
-        if (!src) {
-          dd.textContent = "Uploaded";
-          return;
-        }
-        var img = document.createElement("img");
-        img.className = "payment-proof-preview__thumb";
-        img.alt = "Payment proof";
-        img.src = src;
-        img.addEventListener("error", function () {
-          if (PP && PP.resolveProofSrc) {
-            PP.resolveProofSrc(b).then(function (fresh) {
-              if (fresh && fresh !== img.src) img.src = fresh;
-              else if (!fresh) dd.textContent = "Uploaded";
-            });
-          }
-        });
-        dd.appendChild(img);
-      }
-      var syncSrc =
-        PP && PP.getProofSrc ? PP.getProofSrc(b) : b.paymentProofUrl || b.paymentProof || "";
-      if (syncSrc) {
-        renderProofImage(syncSrc);
-      } else {
-        dd.textContent = "Loading…";
-        if (PP && PP.resolveProofSrc) {
-          PP.resolveProofSrc(b).then(renderProofImage);
-        } else {
-          renderProofImage("");
-        }
-      }
-    }
     var PF = window.ElenestPaymentFlow;
+    var showProofCard = !!(
+      PF &&
+      ((PF.hasSubmittedReceipt && PF.hasSubmittedReceipt(b)) ||
+        (PF.isAwaitingProofResubmit && PF.isAwaitingProofResubmit(b)) ||
+        (PF.isPaymentApproved && PF.isPaymentApproved(b) && bookingHasCustomerReceipt(b)))
+    );
     var statusNote =
-      PF && typeof PF.customerStatusNote === "function" ? PF.customerStatusNote(b) : null;
+      !showProofCard && PF && typeof PF.customerStatusNote === "function" ? PF.customerStatusNote(b) : null;
     if (statusNote && statusNote.label && statusNote.value) {
       var noteRow = document.createElement("div");
       noteRow.className = "booking-card__row booking-card__note-row";
@@ -3528,6 +3501,7 @@
     if (holdRow) article.appendChild(holdRow);
     if (sub.textContent) article.appendChild(sub);
     article.appendChild(details);
+    if (showProofCard) article.appendChild(buildProofStatusCard(b));
 
     var PFPay = window.ElenestPaymentFlow;
     if (PFPay && PFPay.isAwaitingBookingReview && PFPay.isAwaitingBookingReview(b)) {
@@ -3544,6 +3518,21 @@
       });
       confirmActions.appendChild(confirmViewBtn);
       article.appendChild(confirmActions);
+    }
+    if (PFPay && PFPay.isAwaitingProofResubmit && PFPay.isAwaitingProofResubmit(b)) {
+      var retryActions = document.createElement("div");
+      retryActions.className = "booking-card__receipt-actions";
+      var retryBtn = document.createElement("button");
+      retryBtn.type = "button";
+      retryBtn.className = "booking-card__receipt-btn";
+      retryBtn.textContent = "Resubmit proof of payment";
+      retryBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        openPaymentForBooking(b);
+      });
+      retryActions.appendChild(retryBtn);
+      article.appendChild(retryActions);
     }
     if (PFPay && PFPay.isAwaitingCustomerPayment && PFPay.isAwaitingCustomerPayment(b) && !PFPay.isPaymentWindowExpired(b)) {
       var payActions = document.createElement("div");
@@ -4231,7 +4220,9 @@
       if (!b || !b.id || String(b.id).indexOf("__") !== -1) return;
       if (b.linkedFacilityBooking || b.parentBookingId) return;
       var rank = 0;
-      if (PF && PF.hasSubmittedReceipt && PF.hasSubmittedReceipt(b) && PF.isPaymentApproved && !PF.isPaymentApproved(b)) {
+      if (PF && PF.isAwaitingProofResubmit && PF.isAwaitingProofResubmit(b)) {
+        rank = 5;
+      } else if (PF && PF.hasSubmittedReceipt && PF.hasSubmittedReceipt(b) && PF.isPaymentApproved && !PF.isPaymentApproved(b)) {
         rank = 2;
       } else if (PF && PF.isAwaitingBookingReview && PF.isAwaitingBookingReview(b)) {
         rank = 3;
@@ -4265,6 +4256,13 @@
       return;
     }
     didResumeOpenBooking = true;
+    if (window.ElenestPaymentFlow && window.ElenestPaymentFlow.isAwaitingProofResubmit && window.ElenestPaymentFlow.isAwaitingProofResubmit(open)) {
+      wizardState.reviewBookingId = open.id;
+      wizardState.payableBooking = open;
+      wizardState.paymentProofSubmitted = false;
+      openPaymentForBooking(open);
+      return;
+    }
     if (window.ElenestPaymentFlow && window.ElenestPaymentFlow.hasSubmittedReceipt && window.ElenestPaymentFlow.hasSubmittedReceipt(open) && !window.ElenestPaymentFlow.isPaymentApproved(open)) {
       wizardState.reviewBookingId = open.id;
       wizardState.payableBooking = open;
@@ -4444,13 +4442,17 @@
       isMarkedPaymentExpired(booking) ||
       !!(awaitingPay && PF.isPaymentWindowExpired && PF.isPaymentWindowExpired(booking));
     var proof = !!(booking && PF && PF.hasSubmittedReceipt && PF.hasSubmittedReceipt(booking));
+    var resubmitProof = !!(booking && PF && PF.isAwaitingProofResubmit && PF.isAwaitingProofResubmit(booking));
     if (statusEl) {
       statusEl.className = "book-confirm-status";
       if (expired) {
         statusEl.textContent = "Payment window ended";
         statusEl.classList.add("is-expired");
+      } else if (resubmitProof) {
+        statusEl.textContent = "Rejected";
+        statusEl.classList.add("is-expired");
       } else if (proof) {
-        statusEl.textContent = "Receipt submitted";
+        statusEl.textContent = "Pending Approval";
         statusEl.classList.add("is-ready");
       } else if (awaitingPay) {
         statusEl.textContent = "Confirmed — pay within 3 hours";
@@ -4466,9 +4468,12 @@
       } else if (expired) {
         lead.textContent =
           "The 3-hour payment window ended before a receipt was uploaded. This booking is expired and the reserved facility has been released.";
+      } else if (resubmitProof) {
+        lead.textContent =
+          "Your proof of payment was not approved. Submit a new proof of payment. Your booking receipt will be available once the payment is approved.";
       } else if (proof) {
         lead.textContent =
-          "Proof of payment submitted successfully. An admin will verify it in Reservation Management. This booking is not marked paid yet.";
+          "Your payment proof has been submitted. Please wait while the admin verifies your payment. Your booking receipt will be available once the payment is approved.";
       } else if (awaitingPay) {
         lead.textContent =
           "Your booking is confirmed. Pay the amount due and upload your receipt before the timer reaches zero.";
@@ -4481,10 +4486,14 @@
     var cancelConfirmBtn = document.getElementById("cancelBookingFromConfirmBtn");
     if (cancelConfirmBtn) cancelConfirmBtn.hidden = !customerCanCancelBooking(booking);
     if (payBtn) {
-      var canPay = awaitingPay && !expired;
+      var canPay = (awaitingPay && !expired) || resubmitProof;
       payBtn.disabled = !canPay;
-      payBtn.hidden = !!proof;
-      payBtn.textContent = canPay ? "Continue to payment" : "Waiting for admin confirmation";
+      payBtn.hidden = !!proof && !resubmitProof;
+      payBtn.textContent = resubmitProof
+        ? "Resubmit proof of payment"
+        : canPay
+          ? "Continue to payment"
+          : "Waiting for admin confirmation";
     }
   }
 
@@ -4495,6 +4504,217 @@
     });
     var submitted = document.getElementById("paymentSubmittedState");
     if (submitted) submitted.hidden = visible;
+    if (!visible) {
+      var retryStatus = document.getElementById("paymentResubmitStatus");
+      if (retryStatus) retryStatus.hidden = true;
+    }
+  }
+
+  function customerCanOpenPaymentForm(booking) {
+    var PF = window.ElenestPaymentFlow;
+    if (!booking || !PF) return false;
+    if (typeof PF.canCustomerSubmitPaymentProof === "function") {
+      return PF.canCustomerSubmitPaymentProof(booking);
+    }
+    return !!(PF.isAwaitingCustomerPayment && PF.isAwaitingCustomerPayment(booking) && !PF.isPaymentWindowExpired(booking));
+  }
+
+  function proofStatusLabel(booking) {
+    var PF = window.ElenestPaymentFlow;
+    if (PF && typeof PF.customerBookingStatusLabel === "function") {
+      var label = PF.customerBookingStatusLabel(booking);
+      if (label === "Pending Approval" || label === "Rejected") return label;
+    }
+    if (canDownloadGuestReceipt(booking)) return "Approved";
+    if (PF && PF.isAwaitingProofResubmit && PF.isAwaitingProofResubmit(booking)) return "Rejected";
+    return "Pending Approval";
+  }
+
+  function proofStatusNote(booking) {
+    var PF = window.ElenestPaymentFlow;
+    if (PF && PF.isAwaitingProofResubmit && PF.isAwaitingProofResubmit(booking)) {
+      var reason = String((booking && booking.paymentRejectionReason) || "").trim();
+      var base =
+        "Your proof of payment was not approved. You can submit a new proof of payment. Your booking receipt will be available once the payment is approved.";
+      return reason ? base + " Reason: " + reason : base;
+    }
+    if (canDownloadGuestReceipt(booking)) {
+      return "Your payment has been approved. Your official booking receipt is ready.";
+    }
+    return "Your payment proof has been submitted. Please wait while the admin verifies your payment. Your booking receipt will be available once the payment is approved.";
+  }
+
+  function ensureCustomerProofOverlay() {
+    var overlay = document.getElementById("customerProofOverlay");
+    if (overlay) return overlay;
+    overlay = document.createElement("div");
+    overlay.id = "customerProofOverlay";
+    overlay.className = "customer-proof-overlay";
+    overlay.hidden = true;
+    overlay.setAttribute("aria-hidden", "true");
+    overlay.innerHTML =
+      '<div class="customer-proof-modal" role="dialog" aria-modal="true" aria-labelledby="customerProofTitle">' +
+      '<h3 id="customerProofTitle" class="customer-proof-modal__title">Proof of payment</h3>' +
+      '<img id="customerProofImg" class="customer-proof-modal__img" alt="Uploaded proof of payment">' +
+      '<p id="customerProofEmpty" class="customer-proof-modal__empty" hidden>The uploaded proof could not be loaded on this device.</p>' +
+      '<button type="button" class="btn btn--outline" id="customerProofCloseBtn">Close</button>' +
+      "</div>";
+    document.body.appendChild(overlay);
+    function closeProof() {
+      overlay.hidden = true;
+      overlay.setAttribute("aria-hidden", "true");
+      var img = document.getElementById("customerProofImg");
+      if (img) img.removeAttribute("src");
+    }
+    overlay.addEventListener("click", function (e) {
+      if (e.target === overlay) closeProof();
+    });
+    var closeBtn = document.getElementById("customerProofCloseBtn");
+    if (closeBtn) closeBtn.addEventListener("click", closeProof);
+    return overlay;
+  }
+
+  function openCustomerProofViewer(booking) {
+    var overlay = ensureCustomerProofOverlay();
+    var img = document.getElementById("customerProofImg");
+    var empty = document.getElementById("customerProofEmpty");
+    if (!overlay || !img) return;
+    overlay.hidden = false;
+    overlay.setAttribute("aria-hidden", "false");
+    img.hidden = true;
+    if (empty) {
+      empty.hidden = true;
+      empty.textContent = "Loading proof of payment…";
+      empty.hidden = false;
+    }
+    var PP = window.ElenestPaymentProofs;
+    function showSrc(src) {
+      if (!src) {
+        img.hidden = true;
+        if (empty) {
+          empty.hidden = false;
+          empty.textContent = "The uploaded proof could not be loaded on this device.";
+        }
+        return;
+      }
+      img.onload = function () {
+        img.hidden = false;
+        if (empty) empty.hidden = true;
+      };
+      img.onerror = function () {
+        img.hidden = true;
+        if (empty) {
+          empty.hidden = false;
+          empty.textContent = "The uploaded proof could not be loaded on this device.";
+        }
+      };
+      img.src = src;
+    }
+    var syncSrc = PP && PP.getProofSrc ? PP.getProofSrc(booking) : (booking && (booking.paymentProofUrl || booking.paymentProof)) || "";
+    if (syncSrc) {
+      showSrc(syncSrc);
+      return;
+    }
+    if (PP && PP.resolveProofSrc) {
+      PP.resolveProofSrc(booking).then(showSrc);
+      return;
+    }
+    showSrc("");
+  }
+
+  function buildProofStatusCard(booking) {
+    var card = document.createElement("section");
+    card.className = "proof-status-card";
+    var title = document.createElement("h3");
+    title.className = "proof-status-card__title";
+    title.textContent = "Booking details";
+    var list = document.createElement("dl");
+    list.className = "proof-status-card__list";
+
+    function addRow(label, valueNode) {
+      var row = document.createElement("div");
+      row.className = "proof-status-card__row";
+      var dt = document.createElement("dt");
+      dt.textContent = label;
+      var dd = document.createElement("dd");
+      if (typeof valueNode === "string") dd.textContent = valueNode;
+      else dd.appendChild(valueNode);
+      row.appendChild(dt);
+      row.appendChild(dd);
+      list.appendChild(row);
+    }
+
+    var status = document.createElement("span");
+    status.className = "proof-status-card__status";
+    var statusText = proofStatusLabel(booking);
+    status.textContent = statusText;
+    if (statusText === "Rejected") status.classList.add("proof-status-card__status--rejected");
+    else if (statusText === "Approved") status.classList.add("proof-status-card__status--approved");
+    addRow("Status", status);
+
+    var PF = window.ElenestPaymentFlow;
+    var hasProof = !!(
+      booking &&
+      (booking.paymentProof ||
+        booking.paymentProofUrl ||
+        booking.hasPaymentProof ||
+        booking.paymentSubmittedAt ||
+        (PF && PF.hasSubmittedReceipt && PF.hasSubmittedReceipt(booking)))
+    );
+    if (hasProof) {
+      var viewProof = document.createElement("button");
+      viewProof.type = "button";
+      viewProof.className = "proof-status-card__link";
+      viewProof.textContent = "View proof";
+      viewProof.addEventListener("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        openCustomerProofViewer(booking);
+      });
+      addRow("Proof of Payment", viewProof);
+    } else {
+      var noProof = document.createElement("span");
+      noProof.className = "proof-status-card__muted";
+      noProof.textContent = "Not uploaded";
+      addRow("Proof of Payment", noProof);
+    }
+
+    if (canDownloadGuestReceipt(booking)) {
+      var viewReceipt = document.createElement("button");
+      viewReceipt.type = "button";
+      viewReceipt.className = "proof-status-card__link";
+      viewReceipt.textContent = "View receipt";
+      viewReceipt.addEventListener("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        openGuestReceiptModal(booking);
+      });
+      addRow("Receipt", viewReceipt);
+    } else {
+      var noReceipt = document.createElement("span");
+      noReceipt.className = "proof-status-card__muted";
+      noReceipt.textContent = "No receipt yet";
+      addRow("Receipt", noReceipt);
+    }
+
+    var note = document.createElement("p");
+    note.className = "proof-status-card__note";
+    note.textContent = proofStatusNote(booking);
+    card.appendChild(title);
+    card.appendChild(list);
+    card.appendChild(note);
+    return card;
+  }
+
+  function mountProofStatusCard(host, booking) {
+    if (!host) return;
+    host.textContent = "";
+    if (!booking) {
+      host.hidden = true;
+      return;
+    }
+    host.hidden = false;
+    host.appendChild(buildProofStatusCard(booking));
   }
 
   function renderPaymentSubmittedState() {
@@ -4502,11 +4722,9 @@
     var booking = wizardState.payableBooking || (typeof getCompletedBookingForReceipt === "function" ? getCompletedBookingForReceipt() : null);
     var lead = document.getElementById("paymentStepLead");
     var submittedLead = document.getElementById("paymentSubmittedLead");
-    if (lead) lead.textContent = "Proof of payment submitted successfully.";
-    if (submittedLead) {
-      submittedLead.textContent =
-        "Your proof of payment was submitted successfully. An admin will verify it before this booking is marked paid. Your booking receipt appears in Appointments only after the payment is approved.";
-    }
+    if (lead) lead.hidden = true;
+    if (submittedLead) submittedLead.hidden = true;
+    mountProofStatusCard(document.getElementById("paymentSubmittedDetails"), booking);
     if (typeof setPaymentStepError === "function") setPaymentStepError("");
     hideBookingReceipt();
   }
@@ -4524,8 +4742,15 @@
       else stepperHost.textContent = "";
     }
     paintPaymentDeadlineAlert(document.getElementById("paymentDeadlineAlert"), payable);
+    var resubmit = !!(payable && PF && PF.isAwaitingProofResubmit && PF.isAwaitingProofResubmit(payable));
+    var submitBtn = document.getElementById("submitPaymentBtn");
+    if (submitBtn) submitBtn.textContent = resubmit ? "Resubmit proof of payment" : "Submit proof of payment";
+    mountProofStatusCard(document.getElementById("paymentResubmitStatus"), resubmit ? payable : null);
     if (lead) {
-      if (!payable || !PF || !PF.isAwaitingCustomerPayment(payable)) {
+      lead.hidden = resubmit;
+      if (resubmit) {
+        lead.textContent = "";
+      } else if (!payable || !PF || !PF.isAwaitingCustomerPayment(payable)) {
         lead.textContent = "Online payment opens after an admin confirms your booking details.";
       } else if (PF.isPaymentWindowExpired && PF.isPaymentWindowExpired(payable)) {
         lead.textContent =
@@ -4668,10 +4893,13 @@
     if (!booking || !booking.id) return false;
     if (booking.paymentRejectedAt || booking.payment_rejected_at) return false;
     var PF = window.ElenestPaymentFlow;
+    if (PF && PF.isAwaitingProofResubmit && PF.isAwaitingProofResubmit(booking)) return false;
+    if (PF && PF.isAwaitingPaymentVerification && PF.isAwaitingPaymentVerification(booking)) return false;
+    if (!(booking.receiptIssuedAt || booking.paymentVerifiedAt || booking.payment_verified_at)) return false;
     if (PF && typeof PF.isPaymentApproved === "function") {
       return !!PF.isPaymentApproved(booking);
     }
-    return !!(booking.paymentVerifiedAt || booking.payment_verified_at);
+    return true;
   }
 
   function setGuestReceiptDownloadVisible(booking) {
@@ -4705,10 +4933,9 @@
         ? window.ElenestAuth.getCurrentUser()
         : null;
     var amount = bookingReceiptAmount(booking);
-    var issued =
-      booking && (booking.paymentSubmittedAt || booking.submittedAt || booking.createdAt)
-        ? fmtSubmittedShort(booking.paymentSubmittedAt || booking.submittedAt || booking.createdAt)
-        : fmtSubmittedShort(new Date().toISOString());
+    var issuedAt =
+      booking && (booking.receiptIssuedAt || booking.paymentVerifiedAt || booking.payment_verified_at);
+    var issued = issuedAt ? fmtSubmittedShort(issuedAt) : "—";
     return {
       receiptId: bookingReceiptId(booking) || "—",
       bookingRef: booking && booking.id ? String(booking.id) : "—",
@@ -5532,44 +5759,17 @@
     var iconEl = overlay.querySelector(".payment-success-icon");
     var titleEl = document.getElementById("paymentSuccessTitle");
     var leadEl = overlay.querySelector(".payment-success-lead");
-    var PF = window.ElenestPaymentFlow;
-    var pay = PF && typeof PF.getPaymentPresentation === "function"
-      ? PF.getPaymentPresentation(booking)
-      : { kind: "success" };
-    var kind = "success";
-    var title = "Proof of payment submitted";
-    var lead =
-      "Your proof of payment was submitted successfully. An admin will verify it before this booking is marked paid. Your booking receipt appears in Appointments only after the payment is approved.";
-    if (pay.kind === "cancelled") {
-      kind = "cancelled";
-      title = "Payment unsuccessful";
-      lead = "This payment was rejected or the reservation was cancelled.";
-    } else if (pay.kind === "success" && booking && booking.paymentVerifiedAt) {
-      kind = "success";
-      title = "Payment confirmed";
-      lead = "Your payment was verified. Your booking status has been updated.";
+    var modal = overlay.querySelector(".payment-success-modal");
+    if (iconEl) iconEl.hidden = true;
+    if (titleEl) titleEl.hidden = true;
+    if (leadEl) leadEl.hidden = true;
+    if (modal) {
+      modal.classList.add("payment-success-modal--details");
+      modal.removeAttribute("aria-labelledby");
+      modal.setAttribute("aria-label", "Booking details");
     }
-    if (iconEl) {
-      iconEl.className = "payment-success-icon payment-success-icon--" + kind;
-      iconEl.innerHTML =
-        kind === "cancelled"
-          ? '<svg class="status-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>'
-          : '<svg class="status-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
-    }
-    if (titleEl) titleEl.textContent = title;
-    if (leadEl) {
-      var queueRoleNow = booking ? String(booking.queueRole || "").toLowerCase() : "";
-      var queueNoteNow = booking && booking.queueMessage ? String(booking.queueMessage) : "";
-      if (
-        queueNoteNow &&
-        (queueRoleNow === "queued" || queueRoleNow === "unavailable" || queueRoleNow === "next")
-      ) {
-        leadEl.textContent = lead + " " + queueNoteNow;
-      } else {
-        leadEl.textContent = lead;
-      }
-    }
-    setGuestReceiptDownloadVisible(kind === "cancelled" ? null : booking);
+    mountProofStatusCard(document.getElementById("paymentSuccessDetails"), booking);
+    setGuestReceiptDownloadVisible(canDownloadGuestReceipt(booking) ? booking : null);
     overlay.removeAttribute("hidden");
     overlay.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden";
@@ -6050,9 +6250,11 @@
 
   function openPaymentForBooking(booking) {
     var PF = window.ElenestPaymentFlow;
-    if (!booking || !PF || typeof PF.isAwaitingCustomerPayment !== "function") return;
-    if (!PF.isAwaitingCustomerPayment(booking)) return;
-    if (PF.isPaymentWindowExpired(booking)) {
+    if (!booking || !PF) return;
+    var resubmit = PF.isAwaitingProofResubmit && PF.isAwaitingProofResubmit(booking);
+    if (!resubmit && typeof PF.isAwaitingCustomerPayment !== "function") return;
+    if (!resubmit && !PF.isAwaitingCustomerPayment(booking)) return;
+    if (!resubmit && PF.isPaymentWindowExpired(booking)) {
       alert("The 3-hour payment window has ended.");
       if (window.ElenestBookings && window.ElenestBookings.processAutoNoShows) {
         window.ElenestBookings.processAutoNoShows();
@@ -6419,11 +6621,12 @@
       setPaymentStepError("");
       var payable = wizardState.payableBooking;
       var PFGate = window.ElenestPaymentFlow;
-      if (!payable || !payable.id || !PFGate || !PFGate.isAwaitingCustomerPayment(payable)) {
+      var resubmitting = !!(PFGate && PFGate.isAwaitingProofResubmit && PFGate.isAwaitingProofResubmit(payable));
+      if (!payable || !payable.id || !PFGate || (!resubmitting && !PFGate.isAwaitingCustomerPayment(payable))) {
         setPaymentStepError("Online payment opens after an admin confirms your booking details.");
         return;
       }
-      if (PFGate.isPaymentWindowExpired(payable)) {
+      if (!resubmitting && PFGate.isPaymentWindowExpired(payable)) {
         setPaymentStepError("The 3-hour payment window has ended. This booking will be released.");
         if (window.ElenestBookings && window.ElenestBookings.processAutoNoShows) {
           window.ElenestBookings.processAutoNoShows();
@@ -6475,8 +6678,9 @@
         var PF = window.ElenestPaymentFlow;
         var dueNow = PF && PF.amountDueNow ? PF.amountDueNow(paymentType, p) : paymentType === "full" ? p.subtotal : p.down;
         var submittedAt = new Date().toISOString();
+        var stillResubmitting = !!(PF && PF.isAwaitingProofResubmit && PF.isAwaitingProofResubmit(payable));
         var deadlineAt = payable.paymentDeadlineAt || payable.payment_deadline_at;
-        if (deadlineAt && new Date(submittedAt).getTime() > new Date(deadlineAt).getTime()) {
+        if (!stillResubmitting && deadlineAt && new Date(submittedAt).getTime() > new Date(deadlineAt).getTime()) {
           if (BL) BL.set(submitPaymentBtn, false);
           setPaymentStepError("The 3-hour payment window has ended.");
           if (window.ElenestBookings && window.ElenestBookings.processAutoNoShows) {
@@ -6496,8 +6700,6 @@
         for (var sk in submitPatch) {
           if (Object.prototype.hasOwnProperty.call(submitPatch, sk)) patch[sk] = submitPatch[sk];
         }
-        delete patch.paymentVerifiedAt;
-        delete patch.paymentVerifiedBy;
         delete patch.holdExpiresAt;
         delete patch.arrivalStatus;
         patch.amountDown = p.down;
@@ -6523,14 +6725,16 @@
             if (Object.prototype.hasOwnProperty.call(payable, rk)) savedRow[rk] = payable[rk];
           }
           for (var pk in patch) {
-            if (Object.prototype.hasOwnProperty.call(patch, pk)) savedRow[pk] = patch[pk];
+            if (!Object.prototype.hasOwnProperty.call(patch, pk)) continue;
+            if (patch[pk] === null) delete savedRow[pk];
+            else savedRow[pk] = patch[pk];
           }
           if (window.ElenestNotifications) {
             window.ElenestNotifications.addForUser(user.email, {
               type: window.ElenestNotifications.TYPES.BOOKING_UPDATED,
               title: "Payment Submitted",
               message:
-                "We received your proof of payment. It is waiting for admin verification and is not marked paid yet. Booking confirmation appears after the payment is verified.",
+                "Your payment proof has been submitted. Please wait while the admin verifies your payment. Your booking receipt will be available once the payment is approved.",
               bookingId: savedRow.id || "",
               dedupKey: "payment_pending:" + (savedRow.id || ""),
               link: "book.html"

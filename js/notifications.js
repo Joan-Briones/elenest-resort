@@ -716,14 +716,15 @@
 
   function notifyPaymentRejected(email, booking, reason) {
     var id = booking && booking.id ? booking.id : "";
-    var msg = "Your payment was REJECTED. This decision is final unless you submit a new booking with a new receipt.";
+    var msg =
+      "Your proof of payment was not approved. Open your booking and submit a new proof. Your booking receipt is created only after an admin approves the payment.";
     if (reason) msg += " Reason: " + reason;
     addForUser(email, {
       type: TYPES.PAYMENT_REJECTED,
       title: "Payment Rejected",
       message: msg,
       bookingId: id,
-      dedupKey: "payment_rejected:" + id,
+      dedupKey: "payment_rejected:" + id + ":" + new Date().toISOString(),
       link: "book.html"
     });
   }
