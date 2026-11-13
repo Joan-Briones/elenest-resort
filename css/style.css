@@ -9898,7 +9898,8 @@ input[type="submit"].is-loading {
 
 #bookFlowReceiptDownloadBtn[hidden],
 #paymentSuccessDownloadBtn[hidden],
-#guestReceiptDownloadBtn[hidden] {
+#guestReceiptDownloadBtn[hidden],
+#guestReceiptPrintBtn[hidden] {
   display: none !important;
 }
 

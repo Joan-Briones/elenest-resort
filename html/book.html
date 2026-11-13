@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/style.css?v=20261113-receiptdl2">
+  <link rel="stylesheet" href="../css/style.css?v=20261113-receiptapprove1">
   <link rel="stylesheet" href="../css/tropical-luxury.css?v=20261112-tropical3">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
   <script src="../js/theme.js?v=20261020-theme1"></script>
@@ -400,10 +400,8 @@
                 <button type="button" class="btn book-flow-btn-main" id="submitPaymentBtn">Submit proof of payment</button>
               </div>
               <div id="paymentSubmittedState" hidden>
-                <p class="book-flow__panel-lead" id="paymentSubmittedLead" role="status">Proof of payment submitted successfully. An admin will verify it in Reservation Management. This booking is not marked paid yet.</p>
-                <div id="bookFlowReceipt" class="book-flow-receipt" hidden></div>
+                <p class="book-flow__panel-lead" id="paymentSubmittedLead" role="status">Proof of payment submitted successfully. An admin will verify it before this booking is marked paid. Your booking receipt appears in Appointments only after the payment is approved.</p>
                 <div class="book-flow-step4-cta">
-                  <button type="button" class="btn book-flow-btn-main" id="bookFlowReceiptDownloadBtn" hidden>Download JPG receipt</button>
                   <button type="button" class="btn btn--outline" id="scrollToAppointmentsBtn">Go to appointments</button>
                 </div>
                 <div class="book-flow-actions">
@@ -768,10 +766,8 @@
         <svg class="status-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
       </div>
       <h2 class="payment-success-title" id="paymentSuccessTitle">Proof of payment submitted</h2>
-      <p class="payment-success-lead">Your proof of payment was submitted successfully. An admin will verify it in Reservation Management. This booking is not marked paid yet.</p>
-      <div id="paymentSuccessReceipt" class="book-flow-receipt book-flow-receipt--modal" hidden></div>
+      <p class="payment-success-lead">Your proof of payment was submitted successfully. An admin will verify it before this booking is marked paid. Your booking receipt appears in Appointments only after the payment is approved.</p>
       <div class="payment-success-actions">
-        <button type="button" class="btn payment-success-btn" id="paymentSuccessDownloadBtn" hidden>Download JPG receipt</button>
         <button type="button" class="btn payment-success-btn payment-success-btn--secondary" id="paymentSuccessOk">Continue</button>
       </div>
     </div>
@@ -861,7 +857,7 @@
         <h3 id="guestReceiptTitle" class="guest-receipt-modal__title">Booking receipt</h3>
         <div class="guest-receipt-modal__actions">
           <button type="button" id="guestReceiptDownloadBtn" class="btn btn--small" hidden>Download JPG</button>
-          <button type="button" id="guestReceiptPrintBtn" class="btn btn--small btn--outline">Print / PDF</button>
+          <button type="button" id="guestReceiptPrintBtn" class="btn btn--small btn--outline" hidden>Print / PDF</button>
           <button type="button" id="guestReceiptCloseBtn" class="btn btn--small btn--outline">Close</button>
         </div>
       </div>
@@ -899,7 +895,7 @@
   <script src="../js/book-availability-modal.js?v=20261020-loginhide1"></script>
   <script src="../js/home-reserve.js?v=20260718-ok"></script>
   <script src="../js/weather-widget.js?v=20260911-weather3"></script>
-  <script src="../js/book-flow.js?v=20261113-receiptdl2"></script>
+  <script src="../js/book-flow.js?v=20261113-receiptapprove1"></script>
   <script>
     (function () {
       function bindSocial() {

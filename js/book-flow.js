@@ -4505,10 +4505,10 @@
     if (lead) lead.textContent = "Proof of payment submitted successfully.";
     if (submittedLead) {
       submittedLead.textContent =
-        "Your proof of payment was submitted successfully. An admin will verify it in Reservation Management. This booking is not marked paid yet.";
+        "Your proof of payment was submitted successfully. An admin will verify it before this booking is marked paid. Your booking receipt appears in Appointments only after the payment is approved.";
     }
     if (typeof setPaymentStepError === "function") setPaymentStepError("");
-    if (booking && typeof renderCompletedBookingReceipt === "function") renderCompletedBookingReceipt(booking);
+    hideBookingReceipt();
   }
 
   function renderPaymentPanel() {
@@ -4658,57 +4658,25 @@
     return null;
   }
 
+  /** The official booking receipt exists only after an admin approves payment. */
   function bookingHasCustomerReceipt(booking) {
-    if (!booking || !booking.id) return false;
-    var PF = window.ElenestPaymentFlow;
-    if (PF && typeof PF.hasSubmittedReceipt === "function" && PF.hasSubmittedReceipt(booking)) {
-      return true;
-    }
-    if (booking.paymentVerifiedAt || booking.paymentSubmittedAt || booking.checkedInAt) return true;
-    if (String(booking.arrivalStatus || "").toLowerCase() === "arrived") return true;
-    if (PF && typeof PF.isPaymentApproved === "function" && PF.isPaymentApproved(booking)) {
-      return true;
-    }
-    var st = String((booking && booking.status) || "").toLowerCase();
-    return (
-      st.indexOf("confirm") >= 0 ||
-      st.indexOf("reserv") >= 0 ||
-      st.indexOf("arriv") >= 0 ||
-      st.indexOf("check") >= 0 ||
-      st.indexOf("verif") >= 0 ||
-      st.indexOf("paid") >= 0 ||
-      st.indexOf("hold") >= 0
-    );
+    return canDownloadGuestReceipt(booking);
   }
 
-  /** JPG download is allowed only after admin has verified/approved payment. */
+  /** View, print, and download are allowed only after an admin approves payment. */
   function canDownloadGuestReceipt(booking) {
     if (!booking || !booking.id) return false;
     if (booking.paymentRejectedAt || booking.payment_rejected_at) return false;
     var PF = window.ElenestPaymentFlow;
-    if (PF && typeof PF.isAwaitingPaymentVerification === "function" && PF.isAwaitingPaymentVerification(booking)) {
-      return false;
+    if (PF && typeof PF.isPaymentApproved === "function") {
+      return !!PF.isPaymentApproved(booking);
     }
-    var st = String(booking.status || "").trim().toLowerCase();
-    if (
-      st === "for verification" ||
-      st === "pending payment verification" ||
-      st === "pending" ||
-      st === "awaiting payment" ||
-      st === "awaiting_payment"
-    ) {
-      return false;
-    }
-    if (booking.paymentVerifiedAt || booking.payment_verified_at) return true;
-    if (PF && typeof PF.hasVerifiedCalendarPayment === "function") {
-      return !!PF.hasVerifiedCalendarPayment(booking);
-    }
-    return false;
+    return !!(booking.paymentVerifiedAt || booking.payment_verified_at);
   }
 
   function setGuestReceiptDownloadVisible(booking) {
     var allow = canDownloadGuestReceipt(booking);
-    ["bookFlowReceiptDownloadBtn", "paymentSuccessDownloadBtn", "guestReceiptDownloadBtn"].forEach(function (id) {
+    ["bookFlowReceiptDownloadBtn", "paymentSuccessDownloadBtn", "guestReceiptDownloadBtn", "guestReceiptPrintBtn"].forEach(function (id) {
       var el = document.getElementById(id);
       if (el) el.hidden = !allow;
     });
@@ -5037,7 +5005,7 @@
   }
 
   function openGuestReceiptModal(booking) {
-    if (!booking || !booking.id) return;
+    if (!booking || !booking.id || !canDownloadGuestReceipt(booking)) return;
     var overlay = document.getElementById("guestReceiptOverlay");
     var body = document.getElementById("guestReceiptBody");
     if (!overlay || !body) return;
@@ -5370,7 +5338,7 @@
   }
 
   function printGuestReceipt(booking) {
-    if (!booking || !booking.id) return;
+    if (!booking || !booking.id || !canDownloadGuestReceipt(booking)) return;
     var html = buildReceiptPrintHtml(booking);
     var w = window.open("", "_blank");
     if (!w) {
@@ -5523,10 +5491,9 @@
   }
 
   function renderCompletedBookingReceipt(booking) {
-    if (!booking || !booking.id) {
+    if (!booking || !booking.id || !canDownloadGuestReceipt(booking)) {
       hideBookingReceipt();
-      var hideDl = document.getElementById("bookFlowReceiptDownloadBtn");
-      if (hideDl) hideDl.hidden = true;
+      setGuestReceiptDownloadVisible(null);
       return;
     }
     rememberCompletedBooking(booking);
@@ -5572,7 +5539,7 @@
     var kind = "success";
     var title = "Proof of payment submitted";
     var lead =
-      "Your proof of payment was submitted successfully. An admin will verify it in Reservation Management. This booking is not marked paid yet.";
+      "Your proof of payment was submitted successfully. An admin will verify it before this booking is marked paid. Your booking receipt appears in Appointments only after the payment is approved.";
     if (pay.kind === "cancelled") {
       kind = "cancelled";
       title = "Payment unsuccessful";
@@ -6579,7 +6546,7 @@
           wizardState.selectedPaymentMethodId = null;
           wizardState.downPaymentAgreed = false;
           clearBookingDraft();
-          renderCompletedBookingReceipt(savedRow);
+          hideBookingReceipt();
           goStep(4);
           openPaymentSuccessModal(savedRow);
           if (BL) BL.set(submitPaymentBtn, false);
