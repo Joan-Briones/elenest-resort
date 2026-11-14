@@ -47,6 +47,11 @@
     var storyHost = document.getElementById("aboutStoryGrid");
     if (storyHost) {
       storyHost.innerHTML = (data.storyCards || [])
+        .filter(function (card) {
+          var title = String((card && card.title) || "").trim().toLowerCase();
+          var id = String((card && card.id) || "").trim().toLowerCase();
+          return title !== "our story" && id !== "story";
+        })
         .map(function (card) {
           return (
             '<article class="card"><h3>' +

@@ -35,7 +35,6 @@
     heroLead:
       "Elenest Resort is a nature-inspired destination in Mataasnakahoy, Batangas where comfort, warm service, and memorable moments come together for every guest.",
     storyCards: [
-      { id: "story", title: "Our Story", body: "Elenest started as a quiet family retreat and grew into a full-service resort that welcomes guests from nearby cities and provinces. We built the property with a focus on fresh air, open spaces, and peaceful surroundings." },
       { id: "mission", title: "Our Mission", body: "To deliver heartfelt hospitality and dependable service, while creating a calm environment where guests can recharge, celebrate milestones, and feel at home." },
       { id: "vision", title: "Our Vision", body: "To become one of Batangas' most trusted and loved resort destinations known for quality accommodations, thoughtful amenities, and genuine Filipino care." }
     ],
@@ -943,6 +942,13 @@
     Object.keys(data).forEach(function (key) {
       if (data[key] !== undefined && data[key] !== null) base[key] = data[key];
     });
+    if (Array.isArray(base.storyCards)) {
+      base.storyCards = base.storyCards.filter(function (card) {
+        var title = String((card && card.title) || "").trim().toLowerCase();
+        var id = String((card && card.id) || "").trim().toLowerCase();
+        return title !== "our story" && id !== "story";
+      });
+    }
     if (!base.homeStats || typeof base.homeStats !== "object") {
       base.homeStats = JSON.parse(JSON.stringify(DEFAULT_ABOUT.homeStats));
     } else {
@@ -996,6 +1002,9 @@
         if (row.name || row.title) about.heroTitle = row.name || row.title;
         if (row.tagline || row.body) about.heroLead = row.tagline || row.body;
       } else if (kind === "story") {
+        var storyTitle = String(row.title || "").trim().toLowerCase();
+        var storyId = String(row.id || "").trim().toLowerCase();
+        if (storyTitle === "our story" || storyId === "story") return;
         story.push({ id: row.id, title: row.title || "", body: row.body || "" });
       } else if (kind === "credential") {
         cred.push({
