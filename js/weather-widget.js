@@ -330,9 +330,10 @@
         '<button type="button" class="weather-widget weather-widget--tap weather-widget--loading' +
         extra +
         '" data-weather-open aria-label="Open live weather forecast for Mataasnakahoy">' +
+        '<span class="weather-widget__layout">' +
         liveBadge("Live weather") +
         '<p class="weather-widget__status">Loading Mataasnakahoy weather…</p>' +
-        '<span class="weather-widget__hint">Tap for forecast</span></button>'
+        '<span class="weather-widget__hint">Tap for forecast</span></span></button>'
       );
     }
     if ((state.error || !state.current) && !state.loading) {
@@ -340,9 +341,10 @@
         '<button type="button" class="weather-widget weather-widget--tap weather-widget--error' +
         extra +
         '" data-weather-open aria-label="Open live weather forecast for Mataasnakahoy">' +
+        '<span class="weather-widget__layout">' +
         liveBadge("Live weather") +
         '<p class="weather-widget__status">Weather unavailable</p>' +
-        '<span class="weather-widget__hint">Tap to retry</span></button>'
+        '<span class="weather-widget__hint">Tap to retry</span></span></button>'
       );
     }
     if (!state.current) {
@@ -350,9 +352,10 @@
         '<button type="button" class="weather-widget weather-widget--tap weather-widget--loading' +
         extra +
         '" data-weather-open aria-label="Open live weather forecast for Mataasnakahoy">' +
+        '<span class="weather-widget__layout">' +
         liveBadge("Live weather") +
         '<p class="weather-widget__status">Loading Mataasnakahoy weather…</p>' +
-        '<span class="weather-widget__hint">Tap for forecast</span></button>'
+        '<span class="weather-widget__hint">Tap for forecast</span></span></button>'
       );
     }
     var cur = state.current;
@@ -382,6 +385,7 @@
       weatherTone(cur.code) +
       extra +
       '" data-weather-open aria-label="Open live weather forecast for Mataasnakahoy, Batangas">' +
+      '<span class="weather-widget__layout">' +
       '<div class="weather-widget__now">' +
       weatherIcon(cur.code) +
       '<div class="weather-widget__now-text">' +
@@ -399,7 +403,7 @@
       '<div class="weather-widget__days">' +
       daysHtml +
       "</div>" +
-      '<span class="weather-widget__hint">Open forecast</span></button>'
+      '<span class="weather-widget__hint">Open forecast</span></span></button>'
     );
   }
 
