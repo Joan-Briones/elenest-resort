@@ -15744,6 +15744,9 @@ html[data-theme="dark"] .admin-app .admin-model-eval-toggle.is-active {
 }
 
 .admin-app #section-sentiment .split-2 > .admin-sentiment-metric-card:first-child {
+  align-self: start;
+  height: auto;
+  min-height: 0;
   padding: 10px 12px 8px;
 }
 
@@ -15752,7 +15755,7 @@ html[data-theme="dark"] .admin-app .admin-model-eval-toggle.is-active {
 }
 
 .admin-app #section-sentiment .admin-sentiment-rows {
-  flex: 1 1 auto;
+  flex: 0 0 auto;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
