@@ -6,19 +6,28 @@
   <title>Contact Us | Elenest Resort</title>
   <link rel="icon" type="image/png" href="../Images/icon.png">
   <link rel="stylesheet" href="../css/style.css?v=20261108-privacy1">
-  <link rel="stylesheet" href="../css/tropical-luxury.css?v=20261112-tropical3">
+  <link rel="stylesheet" href="../css/tropical-luxury.css?v=20261114-sidebar2">
   <script src="../js/theme.js?v=20261020-theme1"></script>
 </head>
-<body class="subpage">
-  <header>
+<body class="subpage side-nav">
+    <header class="home-side">
+    <div class="home-side__frond" aria-hidden="true">
+      <svg viewBox="0 0 140 78" focusable="false">
+        <path d="M70 70c2-24 22-42 48-50-20 8-34 26-38 50 8-18 26-32 46-36" fill="none" stroke="currentColor" stroke-width="1.15"/>
+        <path d="M70 70c-2-24-22-42-48-50 20 8 34 26 38 50-8-18-26-32-46-36" fill="none" stroke="currentColor" stroke-width="1.15"/>
+        <path d="M70 70c1-16 8-30 18-40M70 70c-1-16-8-30-18-40" fill="none" stroke="currentColor" stroke-width="0.9"/>
+      </svg>
+    </div>
     <div class="content flex_space">
       <div class="logo">
         <a href="index.html" class="site-logo-link" aria-label="Elenest Resort home">
           <img class="site-logo" src="../Images/elenest_logo_pink.png" alt="Elenest Event Center">
         </a>
+        <p class="home-side__place">Batangas</p>
       </div>
       <div class="navlinks">
-        <ul id="menulist" class="site-nav-list">
+        <p class="home-side__eyebrow" id="homeSideLabel">Explore</p>
+        <ul id="menulist" class="site-nav-list" aria-labelledby="homeSideLabel">
           <li><a href="index.html">Home</a></li>
           <li><a href="about.html">About Us</a></li>
           <li><a href="reviews.html">Reviews</a></li>
@@ -26,7 +35,7 @@
           <li><a href="policies.html">Policies</a></li>
           <li><a href="faq.html">FAQ</a></li>
           <li><a href="activities.html">Activities</a></li>
-          <li><a class="active" href="contact.html">Contact Us</a></li>
+          <li><a class="active" href="contact.html" aria-current="page">Contact Us</a></li>
           <li><a href="data-privacy.html">Data Privacy</a></li>
           <li class="role-login-nav" id="roleLoginNav">
             <a href="login.html" class="role-login-trigger staff-access-btn" id="roleLoginTrigger" aria-label="Sign In">Sign In</a>
@@ -184,7 +193,7 @@
       });
     })();
   </script>
-  <script src="../js/header-nav.js?v=20261111-sidebar1"></script>
+  <script src="../js/header-nav.js?v=20261114-sidebar2"></script>
   <script src="../js/role-login.js"></script>
 </body>
 </html>

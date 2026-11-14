@@ -5,7 +5,11 @@
     document.body.classList.contains("admin-app") ||
     document.body.hasAttribute("data-staff-portal")
   ));
-  var isHomeSide = !!(document.body && document.body.classList.contains("home-page"));
+  var isHomeSide = !!(document.body && (
+    document.body.classList.contains("side-nav") ||
+    document.body.classList.contains("home-page") ||
+    document.querySelector("header.home-side")
+  ));
   var MOBILE_BP = isStaffPortal ? 900 : (isHomeSide ? -1 : 1100);
   var menulist = document.getElementById("menulist");
   var toggle = document.getElementById("navMenuToggle");
