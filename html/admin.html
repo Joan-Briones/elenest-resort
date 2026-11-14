@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Dashboard | Elenest Resort</title>
   <link rel="icon" type="image/png" href="../Images/icon.png">
-  <link rel="stylesheet" href="../css/style.css?v=20261114-sentiment-compact">
+  <link rel="stylesheet" href="../css/style.css?v=20261114-viewall1">
   <script src="../js/theme.js?v=20261020-theme1"></script>
   <script src="../js/ui-motion.js?v=20261014-motion1" defer></script>
   <link rel="stylesheet" href="../css/predictive-analytics.css?v=20261020-theme1">
@@ -774,8 +774,17 @@
           </article>
           <article class="card admin-sentiment-metric-card">
             <h3 class="admin-sentiment-h3">Recent guest comments</h3>
-            <div class="sentiment-feedback-list"></div>
-            <div id="sentimentCommentsPager" class="admin-pagination" hidden></div>
+            <div class="sentiment-feedback-list" id="sentimentFeedbackList"></div>
+            <button
+              type="button"
+              class="btn btn--outline btn--small sentiment-view-all-btn"
+              id="sentimentViewAllComments"
+              hidden
+              aria-expanded="false"
+              aria-controls="sentimentFeedbackList"
+            >
+              View All Comments
+            </button>
           </article>
         </div>
       </div>
@@ -1471,7 +1480,7 @@
   <!-- predictive-analytics.js is lazy-loaded when that section opens -->
   <script src="../js/model-evaluation.js?v=20261107-allcomments1"></script>
   <script src="../js/staff-boot-loading.js?v=20261008-boot2"></script>
-  <script src="../js/admin.js?v=20261114-sentiment-compact"></script>
+  <script src="../js/admin.js?v=20261114-viewall1"></script>
   <script src="../js/mobile-tables.js?v=20261107-btnstack1"></script>
 </body>
 </html>

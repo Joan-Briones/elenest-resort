@@ -181,8 +181,9 @@
   }
 
   var ADMIN_PAGE_SIZE = 5;
-  var SENTIMENT_COMMENTS_PAGE_SIZE = 2;
+  var SENTIMENT_COMMENTS_PREVIEW_SIZE = 2;
   var SENTIMENT_DETAILS_PAGE_SIZE = 5;
+  var sentimentCommentsShowAll = false;
   var adminListPages = {
     bookingReview: 1,
     paymentVerification: 1,
@@ -4463,9 +4464,35 @@
     renderUpcomingBookingsSection();
   }
 
+  function bindSentimentViewAllComments() {
+    var btn = document.getElementById("sentimentViewAllComments");
+    if (!btn || btn.dataset.bound === "1") return;
+    btn.dataset.bound = "1";
+    btn.addEventListener("click", function () {
+      sentimentCommentsShowAll = !sentimentCommentsShowAll;
+      renderSentimentFeedbackList();
+    });
+  }
+
+  function syncSentimentViewAllButton(listLength, showAll) {
+    var btn = document.getElementById("sentimentViewAllComments");
+    if (!btn) return;
+    var hasMore = listLength > SENTIMENT_COMMENTS_PREVIEW_SIZE;
+    if (!hasMore) {
+      btn.hidden = true;
+      btn.setAttribute("aria-expanded", "false");
+      btn.textContent = "View All Comments";
+      return;
+    }
+    btn.hidden = false;
+    btn.setAttribute("aria-expanded", showAll ? "true" : "false");
+    btn.textContent = showAll ? "Show fewer comments" : "View All Comments";
+  }
+
   function renderSentimentFeedbackList() {
     var host = document.querySelector("#section-sentiment .sentiment-feedback-list");
     if (!host) return;
+    bindSentimentViewAllComments();
     var list = getSentimentFeedback();
     var weekLabel = formatWeekRangeLabel(getCurrentWeekStartDate());
     var weekNote = document.getElementById("sentimentCurrentWeekNote");
@@ -4476,23 +4503,20 @@
         " weekly recommendation still uses this week).";
     }
     host.textContent = "";
-    var pager = document.getElementById("sentimentCommentsPager");
     if (!list.length) {
-      adminListPages.sentimentComments = 1;
-      if (pager) renderPaginationControls(pager, null);
+      sentimentCommentsShowAll = false;
+      syncSentimentViewAllButton(0, false);
       var empty = document.createElement("p");
       empty.className = "sentiment-current-week-empty";
       empty.textContent = "No guest comments yet. Live, past, and test reviews will appear here.";
       host.appendChild(empty);
       return;
     }
-    var pageState = paginateItems(
-      list,
-      adminListPages.sentimentComments,
-      SENTIMENT_COMMENTS_PAGE_SIZE
-    );
-    adminListPages.sentimentComments = pageState.page;
-    pageState.items.forEach(function (f, i) {
+    var showAll =
+      sentimentCommentsShowAll && list.length > SENTIMENT_COMMENTS_PREVIEW_SIZE;
+    sentimentCommentsShowAll = showAll;
+    var visible = showAll ? list : list.slice(0, SENTIMENT_COMMENTS_PREVIEW_SIZE);
+    visible.forEach(function (f, i) {
       var card = document.createElement("article");
       card.className = "review-card";
       var img = document.createElement("img");
@@ -4502,14 +4526,12 @@
       img.alt = guestName;
       var nameLine = document.createElement("p");
       nameLine.className = "review-name";
-      nameLine.style.margin = "0 0 2px";
-      nameLine.style.fontWeight = "600";
-      nameLine.style.fontSize = "0.95rem";
       nameLine.textContent = guestName;
       var stars = document.createElement("p");
       stars.className = "stars";
       stars.textContent = starsText(f.stars);
       var txt = document.createElement("p");
+      txt.className = "review-quote";
       txt.textContent = '"' + String(f.comment || "No comment provided.") + '"';
       card.appendChild(img);
       card.appendChild(nameLine);
@@ -4517,11 +4539,7 @@
       card.appendChild(txt);
       host.appendChild(card);
     });
-    if (pager) pager.removeAttribute("hidden");
-    renderPaginationControls(pager, pageState, function (page) {
-      adminListPages.sentimentComments = page;
-      renderSentimentFeedbackList();
-    });
+    syncSentimentViewAllButton(list.length, showAll);
   }
 // Reporting Management
   function renderReports() {
