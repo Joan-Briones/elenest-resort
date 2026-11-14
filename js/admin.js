@@ -5781,14 +5781,8 @@
     initSentimentPeriodFilters();
     var EV = window.ElenestModelEvaluation;
     if (EV && typeof EV.prefetch === "function") EV.prefetch();
-    if (
-      window.ElenestGuestFeedback &&
-      typeof window.ElenestGuestFeedback.mountRecentReviewNames === "function"
-    ) {
-      window.ElenestGuestFeedback.mountRecentReviewNames(
-        document.getElementById("adminReportGuestReviewsCard")
-      );
-    }
+    var reviewNames = document.querySelector("#adminReportGuestReviewsCard .admin-report-review-names");
+    if (reviewNames && reviewNames.parentNode) reviewNames.parentNode.removeChild(reviewNames);
   }
 
   function formatTrendPeso(n) {
@@ -8356,14 +8350,6 @@
     window.addEventListener("elenest-review-names-updated", function () {
       var sentiment = document.getElementById("section-sentiment");
       if (sentiment && !sentiment.hidden) renderSentimentFeedbackList();
-      if (
-        window.ElenestGuestFeedback &&
-        typeof window.ElenestGuestFeedback.mountRecentReviewNames === "function"
-      ) {
-        window.ElenestGuestFeedback.mountRecentReviewNames(
-          document.getElementById("adminReportGuestReviewsCard")
-        );
-      }
     });
 
     // Dropdown open/close
