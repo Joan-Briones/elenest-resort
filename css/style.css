@@ -12280,7 +12280,7 @@ button.btn--disabled {
   box-shadow: 0 2px 6px rgba(220, 38, 38, 0.35);
 }
 
-/* Dropdown inbox — position is set from the bell so it never pins to the screen edge. */
+/* Small notification popup — position is set from the bell. */
 .customer-notif-panel,
 .staff-notif-panel {
   position: fixed;
@@ -12289,9 +12289,9 @@ button.btn--disabled {
   right: auto;
   bottom: auto;
   z-index: 2900;
-  width: min(360px, calc(100vw - 24px));
-  max-width: calc(100vw - 24px);
-  max-height: min(420px, calc(100dvh - 24px));
+  width: min(300px, calc(100vw - 24px));
+  max-width: min(300px, calc(100vw - 24px));
+  max-height: min(300px, calc(100dvh - 24px));
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
@@ -12347,7 +12347,7 @@ button.btn--disabled {
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  padding: 12px 10px 8px 14px;
+  padding: 10px 8px 6px 12px;
   background: linear-gradient(180deg, rgba(248, 221, 232, 0.85) 0%, #fffdfb 100%);
 }
 
@@ -12386,7 +12386,7 @@ button.btn--disabled {
 .customer-notif-panel__title {
   margin: 0;
   font-family: "Playfair Display", Georgia, serif;
-  font-size: 1.05rem;
+  font-size: 0.98rem;
   font-weight: 650;
   letter-spacing: 0.01em;
   color: #315D46;
@@ -12417,7 +12417,7 @@ button.btn--disabled {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 0 10px 10px;
+  padding: 0 8px 8px;
   background: #fffdfb;
   border-bottom: 1px solid rgba(168, 201, 165, 0.4);
 }
@@ -12469,9 +12469,9 @@ button.btn--disabled {
   min-height: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
   margin: 0;
-  padding: 10px;
+  padding: 8px;
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -12485,10 +12485,10 @@ button.btn--disabled {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  gap: 10px;
+  gap: 8px;
   width: 100%;
   margin: 0;
-  padding: 11px 12px;
+  padding: 8px 10px;
   border: 1px solid rgba(168, 201, 165, 0.55);
   border-radius: 12px;
   background: #fff;
@@ -12542,7 +12542,7 @@ button.btn--disabled {
 
 .customer-notif-item__title {
   display: block;
-  font-size: 0.88rem;
+  font-size: 0.82rem;
   font-weight: 650;
   line-height: 1.35;
   color: #1f2b16;
@@ -12552,9 +12552,9 @@ button.btn--disabled {
 .customer-notif-item__msg {
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 1;
   overflow: hidden;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   line-height: 1.45;
   color: #4b5563;
   overflow-wrap: anywhere;
@@ -24254,14 +24254,14 @@ textarea {
   width: min(360px, 100%);
 }
 
-/* Notification dropdown stays anchored to the bell (coordinates come from JS). */
+/* Small notification popup stays near the bell (coordinates come from JS). */
 .customer-notif-panel,
 .staff-notif-panel {
   position: fixed;
   z-index: 2900;
-  width: min(360px, calc(100vw - 24px));
-  max-width: calc(100vw - 24px);
-  max-height: min(420px, calc(100dvh - 24px));
+  width: min(300px, calc(100vw - 24px));
+  max-width: min(300px, calc(100vw - 24px));
+  max-height: min(300px, calc(100dvh - 24px));
   overflow: hidden;
   box-sizing: border-box;
 }
@@ -24479,9 +24479,9 @@ textarea {
 
   .customer-notif-panel,
   .staff-notif-panel {
-    width: min(360px, calc(100vw - 16px));
+    width: min(300px, calc(100vw - 16px));
     max-width: calc(100vw - 16px);
-    max-height: min(420px, calc(100dvh - 16px));
+    max-height: min(300px, calc(100dvh - 16px));
   }
 }
 

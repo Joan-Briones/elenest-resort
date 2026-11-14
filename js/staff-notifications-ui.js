@@ -120,23 +120,18 @@
       sidebarRect.width <= 420 &&
       sidebarRect.height >= vh * 0.72
     );
-    var width = docked
-      ? Math.max(200, Math.round(sidebarRect.width - 16))
-      : Math.min(360, vw - margin * 2);
-    width = Math.min(width, vw - margin * 2);
+    var width = Math.min(300, vw - margin * 2);
     panel.style.width = width + "px";
     panel.style.right = "auto";
     panel.style.bottom = "auto";
 
     var spaceBelow = vh - rect.bottom - gap - margin;
     var spaceAbove = rect.top - gap - margin;
-    var openBelow = spaceBelow >= 190 || spaceBelow >= spaceAbove;
+    var openBelow = docked ? false : rect.top < vh * 0.55;
+    if (!openBelow && spaceAbove < 150 && spaceBelow > spaceAbove) openBelow = true;
+    if (openBelow && spaceBelow < 150 && spaceAbove > spaceBelow) openBelow = false;
     var room = openBelow ? spaceBelow : spaceAbove;
-    if (room < 160 && Math.max(spaceBelow, spaceAbove) > room) {
-      openBelow = spaceBelow >= spaceAbove;
-      room = openBelow ? spaceBelow : spaceAbove;
-    }
-    var available = Math.min(420, Math.max(140, room));
+    var available = Math.min(300, Math.max(150, room));
     panel.style.maxHeight = available + "px";
 
     var list = panel.querySelector(".customer-notif-panel__list");
@@ -154,8 +149,8 @@
     if (top < margin) top = margin;
     if (top + panelH > vh - margin) top = Math.max(margin, vh - margin - panelH);
 
-    var left = docked ? sidebarRect.left + 8 : rect.left;
-    if (!docked && left + width > vw - margin) left = rect.right - width;
+    var left = docked ? sidebarRect.right + 10 : rect.left;
+    if (left + width > vw - margin) left = docked ? sidebarRect.right - width : rect.right - width;
     if (left < margin) left = margin;
     if (left + width > vw - margin) left = Math.max(margin, vw - margin - width);
 
