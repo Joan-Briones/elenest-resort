@@ -14870,7 +14870,81 @@ header #bookNavUser button.book-nav-appointments:not(.book-nav-icon-btn).is-acti
 
 /* Formal reporting presentation (admin dashboards) */
 .admin-app .admin-reports-strip {
+  position: relative;
   margin-bottom: 4px;
+}
+
+.admin-app .admin-reports-strip .appointments-strip__head {
+  padding-left: 52px;
+  padding-right: 52px;
+}
+
+.admin-app .admin-model-eval-toggle {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 10px;
+  border: 1px solid rgba(49, 93, 70, 0.28);
+  background: #fff;
+  color: #315d46;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(31, 43, 22, 0.08);
+}
+
+.admin-app .admin-model-eval-toggle svg {
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
+}
+
+.admin-app .admin-model-eval-toggle__icon--show {
+  display: none;
+}
+
+.admin-app .admin-model-eval-toggle.is-active .admin-model-eval-toggle__icon--hide {
+  display: none;
+}
+
+.admin-app .admin-model-eval-toggle.is-active .admin-model-eval-toggle__icon--show {
+  display: block;
+}
+
+.admin-app .admin-model-eval-toggle:hover,
+.admin-app .admin-model-eval-toggle:focus-visible {
+  outline: none;
+  border-color: #315d46;
+  background: #f3f9eb;
+}
+
+.admin-app .admin-model-eval-toggle.is-active {
+  border-color: #c56b8f;
+  background: #fdf2f6;
+  color: #9d4d6c;
+}
+
+html[data-theme="dark"] .admin-app .admin-model-eval-toggle {
+  background: #2a2430;
+  color: #f3d5e2;
+  border-color: rgba(217, 130, 165, 0.45);
+  box-shadow: none;
+}
+
+html[data-theme="dark"] .admin-app .admin-model-eval-toggle:hover,
+html[data-theme="dark"] .admin-app .admin-model-eval-toggle:focus-visible {
+  background: #342833;
+  border-color: #d982a5;
+}
+
+html[data-theme="dark"] .admin-app .admin-model-eval-toggle.is-active {
+  background: #3a2430;
+  color: #f3d5e2;
+  border-color: #d982a5;
 }
 
 .admin-app .admin-reports-lede {
@@ -14900,8 +14974,7 @@ header #bookNavUser button.book-nav-appointments:not(.book-nav-icon-btn).is-acti
   height: 100%;
 }
 
-/* Keep the host in the DOM so guest-review classification still runs. */
-.admin-app #section-reports #adminModelEvaluation {
+.admin-app #section-reports.is-model-eval-hidden #adminModelEvaluation {
   display: none !important;
 }
 

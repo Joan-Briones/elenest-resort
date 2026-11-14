@@ -4584,9 +4584,53 @@
     }
   }
 
+  var MODEL_EVAL_HIDDEN_KEY = "elenest_admin_model_eval_hidden";
+
+  function modelEvalIsHidden() {
+    var section = document.getElementById("section-reports");
+    return !!(section && section.classList.contains("is-model-eval-hidden"));
+  }
+
+  function setModelEvalHidden(hidden) {
+    var section = document.getElementById("section-reports");
+    var panel = document.getElementById("adminModelEvaluation");
+    var btn = document.getElementById("adminModelEvalToggle");
+    if (section) section.classList.toggle("is-model-eval-hidden", !!hidden);
+    if (panel) panel.hidden = !!hidden;
+    if (btn) {
+      btn.classList.toggle("is-active", !!hidden);
+      btn.setAttribute("aria-pressed", hidden ? "true" : "false");
+      btn.setAttribute("aria-expanded", hidden ? "false" : "true");
+      var label = hidden ? "Show model evaluation" : "Hide model evaluation";
+      btn.setAttribute("aria-label", label);
+      btn.title = label;
+    }
+    try {
+      localStorage.setItem(MODEL_EVAL_HIDDEN_KEY, hidden ? "1" : "0");
+    } catch (eStore) {}
+  }
+
+  function initAdminModelEvalToggle() {
+    var btn = document.getElementById("adminModelEvalToggle");
+    if (!btn) return;
+    var hidden = false;
+    try {
+      hidden = localStorage.getItem(MODEL_EVAL_HIDDEN_KEY) === "1";
+    } catch (eRead) {}
+    setModelEvalHidden(hidden);
+    if (btn.getAttribute("data-bound") === "1") return;
+    btn.setAttribute("data-bound", "1");
+    btn.addEventListener("click", function () {
+      var nextHidden = !modelEvalIsHidden();
+      setModelEvalHidden(nextHidden);
+      if (typeof renderReportsGuestReviews === "function") renderReportsGuestReviews();
+    });
+  }
+
   function renderAnalytics() {
     var section = document.getElementById("section-reports");
     if (!section || section.hidden) return;
+    initAdminModelEvalToggle();
     var EV = window.ElenestModelEvaluation;
     if (EV && typeof EV.render === "function") EV.render();
   }
@@ -5713,13 +5757,15 @@
     setWidth("adminReportBarNeu", tallies.pctNeu + "%");
 
     var sub = document.getElementById("adminReportReviewsSub");
+    var reportsSection = document.getElementById("section-reports");
+    var evalHidden = !!(reportsSection && reportsSection.classList.contains("is-model-eval-hidden"));
     if (sub) {
       sub.textContent = total
         ? "Live guest reviews classified by Model Evaluation — " +
           total.toLocaleString() +
           " review" +
           (total === 1 ? "" : "s") +
-          "."
+          (evalHidden ? "." : ". Same Positive / Negative / Neutral model as the metrics below.")
         : "Live from Model Evaluation. Charts stay empty until guests submit reviews.";
     }
 
@@ -8106,6 +8152,7 @@
     bindKpiCard("adminKpiCardTotalReviews", goToSentiments);
 
     initAdminReservationModal();
+    initAdminModelEvalToggle();
 
     // Calendar controls (dashboard only)
     var prevBtn = document.getElementById("adminCalPrev");
