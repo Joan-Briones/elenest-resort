@@ -1978,3 +1978,35 @@ body.side-nav.subpage .map-wrap iframe {
   width: 100%;
   max-width: 100%;
 }
+
+body.side-nav > header.home-side .theme-toggle {
+  align-self: center;
+  flex: 0 0 auto;
+  margin: 0.45rem auto 0.1rem;
+}
+
+body.side-nav > header.home-side #menulist a.role-login-trigger.staff-access-btn.active,
+body.side-nav > header.home-side #menulist a.role-login-trigger.staff-access-btn[aria-current="page"] {
+  background: var(--pink) !important;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+  box-shadow: 0 8px 16px rgba(217, 130, 165, 0.28) !important;
+}
+
+body.side-nav #loginReserveForm.login-reserve-form,
+body.side-nav .auth-card,
+body.side-nav .login-reserve-card,
+body.side-nav .auth-form-single,
+body.side-nav .auth-oauth {
+  min-width: 0;
+  max-width: 100%;
+}
+
+@media (max-width: 720px) {
+  body.side-nav #loginReserveForm .book-date-trigger,
+  body.side-nav #loginReserveForm .book-reserve-submit {
+    flex: 1 1 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+}
