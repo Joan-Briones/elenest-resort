@@ -14900,6 +14900,11 @@ header #bookNavUser button.book-nav-appointments:not(.book-nav-icon-btn).is-acti
   height: 100%;
 }
 
+/* Keep the host in the DOM so guest-review classification still runs. */
+.admin-app #section-reports #adminModelEvaluation {
+  display: none !important;
+}
+
 .admin-app .admin-report-card-title {
   margin: 0 0 4px;
   font-size: 1.08rem;

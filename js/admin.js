@@ -5719,7 +5719,7 @@
           total.toLocaleString() +
           " review" +
           (total === 1 ? "" : "s") +
-          ". Same Positive / Negative / Neutral model as the metrics below."
+          "."
         : "Live from Model Evaluation. Charts stay empty until guests submit reviews.";
     }
 
