@@ -87,6 +87,102 @@
     }
   }
 
+  function fmtRelative(iso) {
+    if (!iso) return "";
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) return "";
+    var sec = Math.round((Date.now() - d.getTime()) / 1000);
+    if (sec < 45) return "Just now";
+    var min = Math.round(sec / 60);
+    if (min < 60) return min + "m ago";
+    var hr = Math.round(min / 60);
+    if (hr < 24) return hr + "h ago";
+    var day = Math.round(hr / 24);
+    if (day < 7) return day + "d ago";
+    return d.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+  }
+
+  function placePanel(bell) {
+    var panel = getPanel();
+    if (!panel || panel.hidden) return;
+    if (!bell) bell = document.querySelector(".staff-notif-bell");
+    if (!bell) return;
+    var gap = 8;
+    var margin = 12;
+    var vw = document.documentElement.clientWidth || window.innerWidth;
+    var vh = window.innerHeight;
+    var rect = bell.getBoundingClientRect();
+    var sidebar = bell.closest ? bell.closest("header.staff-sidebar") : null;
+    var sidebarRect = sidebar ? sidebar.getBoundingClientRect() : null;
+    var docked = !!(
+      sidebarRect &&
+      sidebarRect.width > 0 &&
+      sidebarRect.width <= 420 &&
+      sidebarRect.height >= vh * 0.72
+    );
+    var width = docked
+      ? Math.max(200, Math.round(sidebarRect.width - 16))
+      : Math.min(360, vw - margin * 2);
+    width = Math.min(width, vw - margin * 2);
+    panel.style.width = width + "px";
+    panel.style.right = "auto";
+    panel.style.bottom = "auto";
+
+    var spaceBelow = vh - rect.bottom - gap - margin;
+    var spaceAbove = rect.top - gap - margin;
+    var openBelow = spaceBelow >= 190 || spaceBelow >= spaceAbove;
+    var room = openBelow ? spaceBelow : spaceAbove;
+    if (room < 160 && Math.max(spaceBelow, spaceAbove) > room) {
+      openBelow = spaceBelow >= spaceAbove;
+      room = openBelow ? spaceBelow : spaceAbove;
+    }
+    var available = Math.min(420, Math.max(140, room));
+    panel.style.maxHeight = available + "px";
+
+    var list = panel.querySelector(".customer-notif-panel__list");
+    var chrome = 0;
+    var accent = panel.querySelector(".customer-notif-panel__accent");
+    var head = panel.querySelector(".customer-notif-panel__head");
+    var bar = panel.querySelector(".customer-notif-panel__toolbar");
+    if (accent) chrome += accent.offsetHeight;
+    if (head) chrome += head.offsetHeight;
+    if (bar) chrome += bar.offsetHeight;
+    if (list) list.style.maxHeight = Math.max(96, available - chrome) + "px";
+
+    var panelH = panel.offsetHeight;
+    var top = openBelow ? rect.bottom + gap : rect.top - gap - panelH;
+    if (top < margin) top = margin;
+    if (top + panelH > vh - margin) top = Math.max(margin, vh - margin - panelH);
+
+    var left = docked ? sidebarRect.left + 8 : rect.left;
+    if (!docked && left + width > vw - margin) left = rect.right - width;
+    if (left < margin) left = margin;
+    if (left + width > vw - margin) left = Math.max(margin, vw - margin - width);
+
+    panel.style.top = Math.round(top) + "px";
+    panel.style.left = Math.round(left) + "px";
+    panel.classList.toggle("is-below", !!openBelow);
+    panel.classList.toggle("is-above", !openBelow);
+  }
+
+  function updatePanelCount(list) {
+    var panel = getPanel();
+    if (!panel) return;
+    var countEl = panel.querySelector(".customer-notif-panel__count");
+    if (!countEl) return;
+    var unread = 0;
+    (list || []).forEach(function (n) {
+      if (n && !n.read) unread += 1;
+    });
+    if (unread > 0) {
+      countEl.hidden = false;
+      countEl.textContent = (unread > 99 ? "99+" : String(unread)) + " new";
+    } else {
+      countEl.hidden = true;
+      countEl.textContent = "";
+    }
+  }
+
   function updateBadge(bell) {
     if (!bell) bell = document.querySelector(".staff-notif-bell");
     if (!bell) return;
@@ -154,41 +250,67 @@
     if (!host) return;
     host.textContent = "";
     var list = listInbox();
+    updatePanelCount(list);
     if (!list.length) {
       var empty = document.createElement("p");
       empty.className = "customer-notif-empty";
       empty.textContent = "No notifications yet.";
       host.appendChild(empty);
+      if (panelOpen) placePanel();
       return;
     }
     list.forEach(function (n) {
       if (!n) return;
       var item = document.createElement("button");
       item.type = "button";
-      item.className = "customer-notif-item" + (n.read ? "" : " customer-notif-item--unread");
-      var type = document.createElement("span");
-      type.className = "customer-notif-item__type";
-      type.textContent = typeLabel(n);
+      item.setAttribute("role", "listitem");
+      item.className =
+        "customer-notif-item " + (n.read ? "customer-notif-item--read" : "customer-notif-item--unread");
+      var fullWhen = fmtWhen(n.createdAt);
+      if (fullWhen) item.title = fullWhen;
+
+      var status = document.createElement("span");
+      status.className = "customer-notif-item__status";
+      status.setAttribute("aria-hidden", "true");
+
+      var body = document.createElement("span");
+      body.className = "customer-notif-item__body";
+
       var title = document.createElement("strong");
       title.className = "customer-notif-item__title";
       title.textContent = n.title || "Notification";
+
+      var raw = n.message || "";
       var msg = document.createElement("span");
       msg.className = "customer-notif-item__msg";
-      msg.textContent =
-        (n.message || "").length > 90 ? (n.message || "").slice(0, 90) + "…" : n.message || "";
-      var time = document.createElement("span");
+      msg.textContent = raw.length > 140 ? raw.slice(0, 140) + "…" : raw;
+
+      var foot = document.createElement("span");
+      foot.className = "customer-notif-item__foot";
+      var type = document.createElement("span");
+      type.className = "customer-notif-item__type";
+      type.textContent = typeLabel(n);
+      type.title = type.textContent;
+      var time = document.createElement("time");
       time.className = "customer-notif-item__time";
-      time.textContent = fmtWhen(n.createdAt);
-      item.appendChild(type);
-      item.appendChild(title);
-      item.appendChild(msg);
-      item.appendChild(time);
+      time.dateTime = n.createdAt || "";
+      time.textContent = fmtRelative(n.createdAt) || fullWhen;
+      if (fullWhen) time.title = fullWhen;
+      foot.appendChild(type);
+      foot.appendChild(time);
+
+      body.appendChild(title);
+      if (raw) body.appendChild(msg);
+      body.appendChild(foot);
+      item.appendChild(status);
+      item.appendChild(body);
       item.addEventListener("click", function (e) {
         e.stopPropagation();
         openDetail(n.id);
       });
       host.appendChild(item);
     });
+    if (panelOpen) placePanel();
   }
 
   function openPanel(bell) {
@@ -199,6 +321,7 @@
     bell.setAttribute("aria-expanded", "true");
     panelOpen = true;
     renderPanelList();
+    placePanel(bell);
   }
 
   function closePanel() {
@@ -222,13 +345,17 @@
     panel.setAttribute("role", "dialog");
     panel.setAttribute("aria-label", "Notifications");
     panel.innerHTML =
+      '<div class="customer-notif-panel__accent" aria-hidden="true"></div>' +
       '<div class="customer-notif-panel__head">' +
+      '<div class="customer-notif-panel__heading">' +
       '<h3 class="customer-notif-panel__title">Notifications</h3>' +
-      '<div class="customer-notif-panel__actions">' +
-      '<button type="button" class="customer-notif-panel__mark-all">Mark all read</button>' +
-      '<button type="button" class="customer-notif-panel__clear-all">Clear all</button>' +
+      '<span class="customer-notif-panel__count" hidden></span>' +
       "</div>" +
       '<button type="button" class="customer-notif-panel__close" aria-label="Close notifications" title="Close">\u00d7</button>' +
+      "</div>" +
+      '<div class="customer-notif-panel__toolbar customer-notif-panel__actions">' +
+      '<button type="button" class="customer-notif-panel__mark-all">Mark all read</button>' +
+      '<button type="button" class="customer-notif-panel__clear-all">Clear all</button>' +
       "</div>" +
       '<div class="customer-notif-panel__list" role="list"></div>';
     document.body.appendChild(panel);
@@ -393,7 +520,8 @@
     bell.className = "customer-notif-bell staff-notif-bell";
     bell.setAttribute("aria-label", "Notifications");
     bell.setAttribute("aria-expanded", "false");
-    bell.setAttribute("aria-haspopup", "true");
+    bell.setAttribute("aria-haspopup", "dialog");
+    bell.setAttribute("aria-controls", "staffNotifPanel");
     bell.innerHTML = bellSvg();
     var badge = document.createElement("span");
     badge.className = "customer-notif-badge";
@@ -440,6 +568,21 @@
     if (!document.getElementById("staffHeaderRoleItem")) return;
     mount(u);
   }
+
+  window.addEventListener("resize", function () {
+    if (panelOpen) placePanel(document.querySelector(".staff-notif-bell"));
+  });
+
+  document.addEventListener(
+    "scroll",
+    function (e) {
+      if (!panelOpen) return;
+      var panel = getPanel();
+      if (panel && e.target && e.target.nodeType === 1 && panel.contains(e.target)) return;
+      placePanel(document.querySelector(".staff-notif-bell"));
+    },
+    true
+  );
 
   document.addEventListener("click", function (e) {
     if (!panelOpen) return;
