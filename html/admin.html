@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Dashboard | Elenest Resort</title>
   <link rel="icon" type="image/png" href="../Images/icon.png">
-  <link rel="stylesheet" href="../css/style.css?v=20261114-evaltoggle1">
+  <link rel="stylesheet" href="../css/style.css?v=20261114-sentiment-compact">
   <script src="../js/theme.js?v=20261020-theme1"></script>
   <script src="../js/ui-motion.js?v=20261014-motion1" defer></script>
   <link rel="stylesheet" href="../css/predictive-analytics.css?v=20261020-theme1">
@@ -687,6 +687,22 @@
     </section>
 // Sentiment Analysis
     <section class="section admin-section" id="section-sentiment" hidden>
+      <aside
+        class="admin-sentiment-recommendations"
+        id="sentimentRecommendationsPanel"
+        aria-live="polite"
+      >
+        <div class="admin-sentiment-rec-inner">
+          <div class="admin-sentiment-rec-heading">
+            <span class="admin-sentiment-rec-badge">Weekly insights</span>
+            <h3 class="admin-sentiment-rec-title" id="sentimentRecHeadline">Weekly recommendation</h3>
+            <p id="sentimentRecExampleNote" class="admin-sentiment-rec-example-note" hidden></p>
+            <p class="admin-sentiment-rec-summary" id="sentimentRecSummary"></p>
+          </div>
+          <ul class="admin-sentiment-rec-list" id="sentimentRecList"></ul>
+          <p class="admin-sentiment-rec-footnote" id="sentimentRecFootnote"></p>
+        </div>
+      </aside>
       <div class="card admin-sentiment-hero">
         <div class="admin-sentiment-header-row">
           <div>
@@ -762,23 +778,6 @@
             <div id="sentimentCommentsPager" class="admin-pagination" hidden></div>
           </article>
         </div>
-
-        <aside
-          class="admin-sentiment-recommendations"
-          id="sentimentRecommendationsPanel"
-          aria-live="polite"
-        >
-          <div class="admin-sentiment-rec-inner">
-            <div class="admin-sentiment-rec-heading">
-              <span class="admin-sentiment-rec-badge">Weekly insights</span>
-              <h3 class="admin-sentiment-rec-title" id="sentimentRecHeadline">Weekly recommendation</h3>
-              <p id="sentimentRecExampleNote" class="admin-sentiment-rec-example-note" hidden></p>
-              <p class="admin-sentiment-rec-summary" id="sentimentRecSummary"></p>
-            </div>
-            <ul class="admin-sentiment-rec-list" id="sentimentRecList"></ul>
-            <p class="admin-sentiment-rec-footnote" id="sentimentRecFootnote"></p>
-          </div>
-        </aside>
       </div>
     </section>
 // Predictive 
@@ -1472,7 +1471,7 @@
   <!-- predictive-analytics.js is lazy-loaded when that section opens -->
   <script src="../js/model-evaluation.js?v=20261107-allcomments1"></script>
   <script src="../js/staff-boot-loading.js?v=20261008-boot2"></script>
-  <script src="../js/admin.js?v=20261114-norecent1"></script>
+  <script src="../js/admin.js?v=20261114-sentiment-compact"></script>
   <script src="../js/mobile-tables.js?v=20261107-btnstack1"></script>
 </body>
 </html>

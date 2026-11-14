@@ -4502,7 +4502,7 @@
       img.alt = guestName;
       var nameLine = document.createElement("p");
       nameLine.className = "review-name";
-      nameLine.style.margin = "0 0 6px";
+      nameLine.style.margin = "0 0 2px";
       nameLine.style.fontWeight = "600";
       nameLine.style.fontSize = "0.95rem";
       nameLine.textContent = guestName;
