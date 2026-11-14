@@ -183,7 +183,6 @@
   var ADMIN_PAGE_SIZE = 5;
   var SENTIMENT_COMMENTS_PREVIEW_SIZE = 2;
   var SENTIMENT_DETAILS_PAGE_SIZE = 5;
-  var sentimentCommentsShowAll = false;
   var adminListPages = {
     bookingReview: 1,
     paymentVerification: 1,
@@ -4464,35 +4463,16 @@
     renderUpcomingBookingsSection();
   }
 
-  function bindSentimentViewAllComments() {
-    var btn = document.getElementById("sentimentViewAllComments");
-    if (!btn || btn.dataset.bound === "1") return;
-    btn.dataset.bound = "1";
-    btn.addEventListener("click", function () {
-      sentimentCommentsShowAll = !sentimentCommentsShowAll;
-      renderSentimentFeedbackList();
-    });
-  }
-
-  function syncSentimentViewAllButton(listLength, showAll) {
+  function syncSentimentViewAllButton(listLength) {
     var btn = document.getElementById("sentimentViewAllComments");
     if (!btn) return;
-    var hasMore = listLength > SENTIMENT_COMMENTS_PREVIEW_SIZE;
-    if (!hasMore) {
-      btn.hidden = true;
-      btn.setAttribute("aria-expanded", "false");
-      btn.textContent = "View All Comments";
-      return;
-    }
-    btn.hidden = false;
-    btn.setAttribute("aria-expanded", showAll ? "true" : "false");
-    btn.textContent = showAll ? "Show fewer comments" : "View All Comments";
+    btn.hidden = listLength <= SENTIMENT_COMMENTS_PREVIEW_SIZE;
+    btn.textContent = "View All Comments";
   }
 
   function renderSentimentFeedbackList() {
     var host = document.querySelector("#section-sentiment .sentiment-feedback-list");
     if (!host) return;
-    bindSentimentViewAllComments();
     var list = getSentimentFeedback();
     var weekLabel = formatWeekRangeLabel(getCurrentWeekStartDate());
     var weekNote = document.getElementById("sentimentCurrentWeekNote");
@@ -4504,19 +4484,14 @@
     }
     host.textContent = "";
     if (!list.length) {
-      sentimentCommentsShowAll = false;
-      syncSentimentViewAllButton(0, false);
+      syncSentimentViewAllButton(0);
       var empty = document.createElement("p");
       empty.className = "sentiment-current-week-empty";
       empty.textContent = "No guest comments yet. Live, past, and test reviews will appear here.";
       host.appendChild(empty);
       return;
     }
-    var showAll =
-      sentimentCommentsShowAll && list.length > SENTIMENT_COMMENTS_PREVIEW_SIZE;
-    sentimentCommentsShowAll = showAll;
-    var visible = showAll ? list : list.slice(0, SENTIMENT_COMMENTS_PREVIEW_SIZE);
-    visible.forEach(function (f, i) {
+    list.slice(0, SENTIMENT_COMMENTS_PREVIEW_SIZE).forEach(function (f, i) {
       var card = document.createElement("article");
       card.className = "review-card";
       var img = document.createElement("img");
@@ -4539,7 +4514,7 @@
       card.appendChild(txt);
       host.appendChild(card);
     });
-    syncSentimentViewAllButton(list.length, showAll);
+    syncSentimentViewAllButton(list.length);
   }
 // Reporting Management
   function renderReports() {
@@ -7540,17 +7515,24 @@
     }
 
     function openSentiment(type) {
-      var key = type === "positive" || type === "neutral" || type === "negative" ? type : "positive";
+      var showAll = type === "all";
+      var key = showAll
+        ? "all"
+        : type === "positive" || type === "neutral" || type === "negative"
+          ? type
+          : "positive";
       var src = getDetailsFeedbackSource();
       var source = src.list;
       var exampleMode = src.exampleMode;
 
-      var rows = source.filter(function (f) {
-        var s = Number(f.stars || 0);
-        if (key === "positive") return s >= 4;
-        if (key === "neutral") return s === 3;
-        return s > 0 && s <= 2;
-      });
+      var rows = showAll
+        ? source.slice()
+        : source.filter(function (f) {
+            var s = Number(f.stars || 0);
+            if (key === "positive") return s >= 4;
+            if (key === "neutral") return s === 3;
+            return s > 0 && s <= 2;
+          });
 
       if (exampleBanner) {
         exampleBanner.setAttribute("hidden", "");
@@ -7560,15 +7542,19 @@
       listEl.textContent = "";
       if (adminListPages.sentimentDetailsKey !== key) {
         adminListPages.sentimentDetailsKey = key;
-        adminListPages.sentimentDetails = 1;
+        if (showAll) adminListPages.sentimentComments = 1;
+        else adminListPages.sentimentDetails = 1;
       }
 
       if (!rows.length) {
-        adminListPages.sentimentDetails = 1;
+        if (showAll) adminListPages.sentimentComments = 1;
+        else adminListPages.sentimentDetails = 1;
         if (pager) renderPaginationControls(pager, null);
         var empty = document.createElement("li");
         empty.className = "sentiment-detail-empty";
-        if (exampleMode) {
+        if (showAll) {
+          empty.textContent = "No guest comments yet.";
+        } else if (exampleMode) {
           empty.textContent = "No guest feedback matched this category.";
         } else if (!getFeedback().length) {
           empty.textContent = "No guest feedback has been recorded.";
@@ -7582,10 +7568,11 @@
       } else {
         var pageState = paginateItems(
           rows,
-          adminListPages.sentimentDetails,
+          showAll ? adminListPages.sentimentComments : adminListPages.sentimentDetails,
           SENTIMENT_DETAILS_PAGE_SIZE
         );
-        adminListPages.sentimentDetails = pageState.page;
+        if (showAll) adminListPages.sentimentComments = pageState.page;
+        else adminListPages.sentimentDetails = pageState.page;
         pageState.items.forEach(function (f) {
           var li = document.createElement("li");
           li.className = "sentiment-detail-row";
@@ -7613,13 +7600,15 @@
           listEl.appendChild(li);
         });
         renderPaginationControls(pager, pageState, function (page) {
-          adminListPages.sentimentDetails = page;
-          openSentiment(key);
+          if (showAll) adminListPages.sentimentComments = page;
+          else adminListPages.sentimentDetails = page;
+          openSentiment(showAll ? "all" : key);
         });
       }
 
       var title;
-      if (key === "positive") title = "Positive — guest comments (4–5 stars)";
+      if (showAll) title = "All guest comments";
+      else if (key === "positive") title = "Positive — guest comments (4–5 stars)";
       else if (key === "neutral") title = "Neutral — guest comments (3 stars)";
       else title = "Negative — guest comments (1–2 stars)";
       titleEl.textContent = title;
@@ -7653,6 +7642,14 @@
           var type = btn.getAttribute("data-sentiment") || "";
           openSentiment(type.toLowerCase());
         });
+      });
+    }
+
+    var viewAllBtn = document.getElementById("sentimentViewAllComments");
+    if (viewAllBtn && viewAllBtn.dataset.bound !== "1") {
+      viewAllBtn.dataset.bound = "1";
+      viewAllBtn.addEventListener("click", function () {
+        openSentiment("all");
       });
     }
   }
