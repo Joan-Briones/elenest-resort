@@ -1,10 +1,12 @@
 (function () {
   // Staff portals use a forest-green sidebar from 901px up; collapse only on phones/tablets.
+  // The homepage keeps a permanent side header, so it never collapses into a top drawer.
   var isStaffPortal = !!(document.body && (
     document.body.classList.contains("admin-app") ||
     document.body.hasAttribute("data-staff-portal")
   ));
-  var MOBILE_BP = isStaffPortal ? 900 : 1100;
+  var isHomeSide = !!(document.body && document.body.classList.contains("home-page"));
+  var MOBILE_BP = isStaffPortal ? 900 : (isHomeSide ? -1 : 1100);
   var menulist = document.getElementById("menulist");
   var toggle = document.getElementById("navMenuToggle");
   if (!menulist) return;
