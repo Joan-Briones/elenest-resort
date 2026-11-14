@@ -181,7 +181,7 @@
   }
 
   var ADMIN_PAGE_SIZE = 5;
-  var SENTIMENT_COMMENTS_PREVIEW_SIZE = 2;
+  var SENTIMENT_COMMENTS_PREVIEW_SIZE = 1;
   var SENTIMENT_DETAILS_PAGE_SIZE = 5;
   var adminListPages = {
     bookingReview: 1,
