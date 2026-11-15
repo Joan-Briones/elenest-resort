@@ -9996,18 +9996,18 @@ input[type="submit"].is-loading {
 .payment-success-modal--details {
   max-width: 520px;
   text-align: left;
-  background: #1c1824;
-  border: 1px solid rgba(217, 130, 165, 0.35);
-  color: #f7f2f5;
+  background: #fffdfb;
+  border: 1px solid rgba(217, 130, 165, 0.38);
+  color: #333a35;
 }
 
 .proof-status-card {
   margin: 0 0 16px;
   padding: 18px 18px 16px;
   border-radius: 16px;
-  background: #1c1824;
+  background: #fffdfb;
   border: 1px solid rgba(217, 130, 165, 0.38);
-  color: #f7f2f5;
+  color: #333a35;
 }
 
 .payment-success-modal--details .proof-status-card {
@@ -10015,6 +10015,7 @@ input[type="submit"].is-loading {
   background: transparent;
   border: 0;
   padding: 0;
+  color: #333a35;
 }
 
 .subpage .card .proof-status-card__title,
@@ -10024,8 +10025,8 @@ input[type="submit"].is-loading {
   font-size: 1.05rem;
   font-weight: 700;
   text-align: center;
-  color: #f7f2f5 !important;
-  -webkit-text-fill-color: #f7f2f5;
+  color: #315d46 !important;
+  -webkit-text-fill-color: #315d46 !important;
 }
 
 .proof-status-card__list {
@@ -10038,7 +10039,7 @@ input[type="submit"].is-loading {
   justify-content: space-between;
   gap: 16px;
   padding: 11px 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid rgba(49, 93, 70, 0.16);
 }
 
 .proof-status-card__row:first-child {
@@ -10051,26 +10052,31 @@ input[type="submit"].is-loading {
 }
 
 .proof-status-card__row dt {
-  color: rgba(247, 242, 245, 0.72);
+  color: #315d46 !important;
+  -webkit-text-fill-color: #315d46 !important;
   font-weight: 600;
   font-size: 0.92rem;
 }
 
 .proof-status-card__row dd {
   text-align: right;
+  color: #333a35;
 }
 
 .proof-status-card__status {
-  color: #f7f2f5;
+  color: #315d46 !important;
+  -webkit-text-fill-color: #315d46 !important;
   font-weight: 700;
 }
 
 .proof-status-card__status--approved {
-  color: #b7e4c7;
+  color: #1f6b45 !important;
+  -webkit-text-fill-color: #1f6b45 !important;
 }
 
 .proof-status-card__status--rejected {
-  color: #f3b4c4;
+  color: #9b3050 !important;
+  -webkit-text-fill-color: #9b3050 !important;
 }
 
 .proof-status-card__link {
@@ -10078,7 +10084,8 @@ input[type="submit"].is-loading {
   border: 0;
   background: transparent;
   padding: 0;
-  color: #e7a3bf;
+  color: #9a4068 !important;
+  -webkit-text-fill-color: #9a4068 !important;
   font: inherit;
   font-weight: 700;
   cursor: pointer;
@@ -10088,11 +10095,13 @@ input[type="submit"].is-loading {
 
 .proof-status-card__link:hover,
 .proof-status-card__link:focus-visible {
-  color: #f3c5d6;
+  color: #7a3052 !important;
+  -webkit-text-fill-color: #7a3052 !important;
 }
 
 .proof-status-card__muted {
-  color: rgba(247, 242, 245, 0.45);
+  color: #5c675f !important;
+  -webkit-text-fill-color: #5c675f !important;
   font-weight: 600;
 }
 
@@ -10101,9 +10110,9 @@ input[type="submit"].is-loading {
 .proof-status-card__note {
   margin: 12px 0 0;
   padding-top: 12px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  color: #f4e8ee !important;
-  -webkit-text-fill-color: #f4e8ee;
+  border-top: 1px solid rgba(49, 93, 70, 0.16);
+  color: #333a35 !important;
+  -webkit-text-fill-color: #333a35 !important;
   font-size: 0.95rem;
   font-weight: 500;
   line-height: 1.55;
@@ -28316,6 +28325,19 @@ html[data-theme="dark"] .admin-payment-empty {
   background-image: none !important;
   color: #f7f2f5 !important;
   border-color: rgba(217, 130, 165, 0.32) !important;
+}
+
+html[data-theme="dark"] .payment-success-modal.payment-success-modal--details,
+html[data-theme="dark"] .proof-status-card {
+  background: #fffdfb !important;
+  background-image: none !important;
+  color: #333a35 !important;
+  border-color: rgba(217, 130, 165, 0.38) !important;
+}
+
+html[data-theme="dark"] .payment-success-modal--details .proof-status-card {
+  background: transparent !important;
+  border-color: transparent !important;
 }
 
 html[data-theme="dark"] .facility-detail-modal__title,
