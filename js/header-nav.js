@@ -1,6 +1,6 @@
 (function () {
-  // Staff portals use a forest-green sidebar from 901px up; collapse only on phones/tablets.
-  // The homepage keeps a permanent side header, so it never collapses into a top drawer.
+  // Staff portals and the guest sidebar stay open from 901px up.
+  // Narrow screens collapse that rail into the hamburger.
   var isStaffPortal = !!(document.body && (
     document.body.classList.contains("admin-app") ||
     document.body.hasAttribute("data-staff-portal")
@@ -10,7 +10,7 @@
     document.body.classList.contains("home-page") ||
     document.querySelector("header.home-side")
   ));
-  var MOBILE_BP = isStaffPortal ? 900 : (isHomeSide ? -1 : 1100);
+  var MOBILE_BP = (isStaffPortal || isHomeSide) ? 900 : 1100;
   var menulist = document.getElementById("menulist");
   var toggle = document.getElementById("navMenuToggle");
   if (!menulist) return;
@@ -22,7 +22,16 @@
   function setToggleState(open) {
     if (!toggle) return;
     toggle.setAttribute("aria-expanded", open ? "true" : "false");
+    toggle.setAttribute("aria-label", open ? "Close navigation menu" : "Open navigation menu");
     toggle.classList.toggle("is-active", open);
+  }
+
+  function syncHomeChrome() {
+    if (!isHomeSide || !document.body) return;
+    var open = isMobileNav() && menulist.classList.contains("is-open");
+    document.body.classList.toggle("home-nav-open", open);
+    if (isMobileNav() && !open) menulist.setAttribute("aria-hidden", "true");
+    else menulist.removeAttribute("aria-hidden");
   }
 
   function placeMenu() {
@@ -45,6 +54,7 @@
       var toggle = dropdown.querySelector(".admin-nav-dropdown-toggle");
       if (toggle) toggle.setAttribute("aria-expanded", "false");
     });
+    syncHomeChrome();
   }
 
   function menuCap() {
@@ -69,6 +79,7 @@
     menulist.style.maxHeight = menuCap() + "px";
     placeMenu();
     fitOpenMenu();
+    syncHomeChrome();
   }
 
   function syncViewport() {
@@ -76,6 +87,7 @@
       menulist.classList.remove("is-open");
       menulist.style.maxHeight = "";
       setToggleState(false);
+      syncHomeChrome();
       return;
     }
     if (menulist.classList.contains("is-open")) {
@@ -83,6 +95,7 @@
     } else {
       menulist.style.maxHeight = "0px";
     }
+    syncHomeChrome();
   }
 
   function menutoggle() {
@@ -135,6 +148,21 @@
     } else {
       setTimeout(fitOpenMenu, 0);
     }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (!isHomeSide || !isMobileNav()) return;
+    if (e.key !== "Escape" || !menulist.classList.contains("is-open")) return;
+    closeMenu();
+    if (toggle && typeof toggle.focus === "function") toggle.focus();
+  });
+
+  document.addEventListener("click", function (e) {
+    if (!isHomeSide || !isMobileNav() || !menulist.classList.contains("is-open")) return;
+    var target = e.target;
+    if (!target || !target.closest) return;
+    if (target.closest("#menulist") || target.closest("#navMenuToggle")) return;
+    closeMenu();
   });
 
   window.addEventListener("resize", syncViewport);
