@@ -10017,12 +10017,15 @@ input[type="submit"].is-loading {
   padding: 0;
 }
 
+.subpage .card .proof-status-card__title,
+.payment-success-modal .proof-status-card__title,
 .proof-status-card__title {
   margin: 0 0 14px;
   font-size: 1.05rem;
   font-weight: 700;
   text-align: center;
-  color: #f7f2f5;
+  color: #f7f2f5 !important;
+  -webkit-text-fill-color: #f7f2f5;
 }
 
 .proof-status-card__list {
@@ -10093,13 +10096,17 @@ input[type="submit"].is-loading {
   font-weight: 600;
 }
 
+.subpage .card .proof-status-card__note,
+.payment-success-modal .proof-status-card__note,
 .proof-status-card__note {
   margin: 12px 0 0;
   padding-top: 12px;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
-  color: rgba(247, 242, 245, 0.78);
-  font-size: 0.92rem;
-  line-height: 1.5;
+  color: #f4e8ee !important;
+  -webkit-text-fill-color: #f4e8ee;
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.55;
   text-align: center;
 }
 
