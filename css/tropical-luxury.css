@@ -331,17 +331,6 @@ body.home-page .home .hero-title__accent {
   height: 2px;
 }
 
-body.home-page .home .hero-cta {
-  display: inline-flex;
-  align-items: center;
-  margin-top: 0.35rem;
-  padding: 0.85rem 1.55rem;
-  border-radius: 999px !important;
-  font-size: 0.78rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-
 body.home-page .home .owl-carousel .owl-nav button.owl-prev,
 body.home-page .home .owl-carousel .owl-nav button.owl-next {
   background: rgba(49, 93, 70, 0.55) !important;
@@ -1913,12 +1902,6 @@ body.home-page .home .hero-title--single {
     line-height: 1.45;
     margin: 0.7rem 0 0.85rem;
     max-width: 28ch;
-  }
-
-  body.home-page .home .hero-cta {
-    padding: 0.65rem 0.95rem;
-    font-size: 0.64rem;
-    letter-spacing: 0.08em;
   }
 
   body.home-page .home .owl-carousel .owl-nav button.owl-prev,
