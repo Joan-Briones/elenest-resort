@@ -852,6 +852,7 @@ body.home-page .home-footer__copy {
   body.home-page .book {
     margin-top: -1.5rem;
     padding: 0 0.75rem 0.5rem;
+    z-index: 8;
   }
 
   body.home-page .book .container.flex_space {
@@ -1915,10 +1916,12 @@ body.home-page .home .hero-title--single {
   body.home-page .home .owl-carousel .owl-nav button.owl-prev,
   body.home-page .home .owl-carousel .owl-nav button.owl-next {
     top: auto;
-    bottom: 0.55rem;
+    /* Sit fully on the photo, above the reserve card that overlaps the hero. */
+    bottom: calc(1.5rem + 14px);
     transform: none;
     width: 34px;
     height: 34px;
+    z-index: 2;
   }
 
   body.home-page .home .owl-carousel .owl-nav button.owl-prev {
