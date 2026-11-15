@@ -4068,7 +4068,9 @@ html[data-theme="dark"] body.subpage .proof-status-card p {
 .book-flow__panel[data-step="4"] > #paymentStepActions {
   position: relative !important;
   z-index: 5 !important;
+  margin-top: 36px !important;
   margin-bottom: 0 !important;
+  padding-top: 8px !important;
 }
 
 .book-flow__panel[data-step="4"] > .booking-details-slot:not([hidden]) {
