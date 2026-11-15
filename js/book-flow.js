@@ -5148,38 +5148,40 @@
       "<!DOCTYPE html><html><head><meta charset='utf-8'><title>" +
       rid +
       " · Elenest Resort</title><style>" +
-      "@page{margin:16mm}" +
-      "body{margin:0;padding:24px;background:#ece8e4;color:#24191a;font-family:'Segoe UI',Calibri,Arial,sans-serif;}" +
-      ".sheet{max-width:720px;margin:0 auto;background:#fff;border:1px solid #d9cfd0;padding:34px 36px 28px;box-shadow:0 10px 30px rgba(36,25,26,.08);}" +
-      ".letterhead{display:flex;align-items:center;gap:16px;padding-bottom:18px;border-bottom:3px solid #b85c68;}" +
-      ".logo{width:64px;height:64px;object-fit:contain;}" +
-      ".brand{font-family:Georgia,'Times New Roman',serif;font-size:28px;margin:0;letter-spacing:.02em;}" +
-      ".doc{margin:4px 0 0;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#b85c68;}" +
-      ".sub{margin:4px 0 0;font-size:12px;color:#6b5f60;}" +
-      ".meta{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0 20px;padding:14px 16px;background:#faf7f6;border:1px solid #eadfe0;}" +
-      ".meta span{display:block;font-size:11px;color:#7a6c6d;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;}" +
-      ".meta strong{font-size:13px;word-break:break-all;}" +
-      ".grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:16px;}" +
-      ".sec{border:1px solid #eadfe0;padding:14px 16px;}" +
-      ".sec h4{margin:0 0 10px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#b85c68;}" +
-      ".row{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid #f1eaeb;font-size:13px;}" +
+      "@page{margin:12mm}" +
+      "html,body{margin:0;padding:0;}" +
+      "body{padding:24px;background:#f4efe9;color:#333A35;font-family:Poppins,'Segoe UI',Calibri,Arial,sans-serif;}" +
+      ".sheet{max-width:760px;margin:0 auto;background:#fff;border:1px solid rgba(168,201,165,.5);border-radius:14px;padding:0 0 18px;overflow:hidden;box-shadow:0 10px 28px rgba(49,93,70,.08);}" +
+      ".letterhead{display:flex;align-items:center;gap:16px;padding:18px 20px;background:linear-gradient(135deg,#e59ab8 0%,#D982A5 54%,#C56B8F 100%);color:#fff;}" +
+      ".logo-wrap{flex:0 0 176px;width:176px;height:56px;display:flex;align-items:center;justify-content:center;padding:6px 10px;background:#315D46;border-radius:10px;box-sizing:border-box;}" +
+      ".logo{width:100%;height:100%;object-fit:contain;object-position:center;display:block;}" +
+      ".brand{font-family:Georgia,'Times New Roman',serif;font-size:22px;font-weight:700;margin:0;color:#fff;line-height:1.2;}" +
+      ".doc{margin:5px 0 0;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#fff;}" +
+      ".sub{margin:4px 0 0;font-size:13px;color:rgba(255,255,255,.92);}" +
+      ".meta{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 16px;margin:18px 18px 16px;padding:14px 16px;background:#faf7f6;border:1px solid #eadfe0;border-radius:12px;box-sizing:border-box;}" +
+      ".meta span{display:block;font-size:11px;color:#5c6b62;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px;font-weight:700;}" +
+      ".meta strong{font-size:14px;word-break:break-word;line-height:1.4;color:#333A35;}" +
+      ".grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:0 18px 16px;}" +
+      ".sec{border:1px solid rgba(168,201,165,.5);border-radius:12px;padding:14px 16px 8px;box-sizing:border-box;}" +
+      ".sec h4{margin:0 0 8px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#315D46;}" +
+      ".row{display:grid;grid-template-columns:120px minmax(0,1fr);gap:10px 14px;align-items:start;padding:8px 0;border-bottom:1px solid #f1eaeb;font-size:14px;line-height:1.45;}" +
       ".row:last-child{border-bottom:none;}" +
-      ".row span{color:#6b5f60;}" +
-      ".row strong{text-align:right;font-weight:600;}" +
-      ".full{margin-bottom:16px;}" +
-      ".total{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 18px;background:linear-gradient(90deg,#fff7f8,#f8eef0);border:1px solid #e4c8cc;}" +
-      ".total span{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#7a6c6d;}" +
-      ".total strong{font-size:26px;color:#8f3d4a;}" +
-      ".foot{margin-top:22px;padding-top:14px;border-top:1px solid #eadfe0;}" +
-      ".thanks{margin:0 0 6px;font-family:Georgia,'Times New Roman',serif;font-size:15px;}" +
-      ".note{margin:0;font-size:12px;color:#6b5f60;line-height:1.5;}" +
-      "@media print{body{background:#fff;padding:0}.sheet{box-shadow:none;border:none;max-width:none}}" +
+      ".row span{color:#5c6b62;font-weight:500;}" +
+      ".row strong{text-align:right;font-weight:600;color:#333A35;overflow-wrap:break-word;word-break:normal;}" +
+      ".full{margin:0 18px 16px;}" +
+      ".total{display:flex;justify-content:space-between;align-items:center;gap:16px;margin:0 18px;padding:14px 16px;background:#F8DDE8;border:1px solid rgba(217,130,165,.4);border-radius:12px;}" +
+      ".total span{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#5c6b62;font-weight:700;}" +
+      ".total strong{font-size:24px;color:#8E3D55;}" +
+      ".foot{margin:16px 18px 0;padding:16px 18px;background:#315D46;border-radius:12px;text-align:center;color:#fff;}" +
+      ".thanks{margin:0 0 6px;font-family:Georgia,'Times New Roman',serif;font-size:15px;font-weight:600;color:#fff;}" +
+      ".note{margin:0 auto;max-width:40rem;font-size:13px;color:rgba(255,255,255,.92);line-height:1.5;}" +
+      "@media print{body{background:#fff;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}.sheet{box-shadow:none;max-width:none}}" +
       "@media(max-width:640px){.grid,.meta{grid-template-columns:1fr}.letterhead{align-items:flex-start}}" +
       "</style></head><body><div class='sheet'>" +
       "<div class='letterhead'>" +
-      "<img class='logo' src='" +
+      "<div class='logo-wrap'><img class='logo' src='" +
       escapeReceiptHtml(guestReceiptLogoUrl()) +
-      "' alt='Elenest Resort'>" +
+      "' alt='Elenest Resort'></div>" +
       "<div><p class='brand'>Elenest Resort</p><p class='doc'>Official Booking Receipt</p>" +
       "<p class='sub'>Reservation &amp; payment confirmation</p></div></div>" +
       "<div class='meta'>" +
@@ -5294,203 +5296,208 @@
   function renderGuestReceiptCanvas(booking) {
     return loadReceiptLogoImage().then(function (logoImg) {
       var g = getReceiptFieldGroups(booking);
-      var width = 900;
-      var pad = 42;
-      var contentW = width - pad * 2;
+      var width = 940;
+      var pagePad = 28;
+      var sheetX = pagePad;
+      var sheetW = width - pagePad * 2;
+      var inset = 26;
+      var contentX = sheetX + inset;
+      var contentW = sheetW - inset * 2;
+      var headerH = 118;
       var canvas = document.createElement("canvas");
       var ctx = canvas.getContext("2d");
-      var y = pad;
-      var rose = "#b85c68";
-      var ink = "#24191a";
-      var muted = "#6b5f60";
+      var ink = "#333A35";
+      var muted = "#5c6b62";
+      var forest = "#315D46";
       var line = "#eadfe0";
       var soft = "#faf7f6";
+      ctx.textBaseline = "alphabetic";
 
-      // Measure height first with a dry-run style pass using a temp canvas context sizing.
-      function measureRows(rows, rowW) {
+      var fontSans = "Poppins, Segoe UI, Arial, sans-serif";
+      var colGap = 16;
+      var colW = (contentW - colGap) / 2;
+
+      function rowBlockHeight(rows, sw) {
+        var labelW = Math.floor((sw - 32) * 0.4);
+        var valueW = Math.floor((sw - 32) * 0.52);
         var h = 0;
-        rows.forEach(function (row) {
-          ctx.font = "600 15px Segoe UI, Arial, sans-serif";
-          var labelH = wrapCanvasText(ctx, row.label, Math.floor(rowW * 0.42)).length * 18;
-          var valueH = wrapCanvasText(ctx, row.value, Math.floor(rowW * 0.5)).length * 18;
-          h += Math.max(labelH, valueH) + 14;
+        rows.forEach(function (row, idx) {
+          ctx.font = "500 15px " + fontSans;
+          var labelH = wrapCanvasText(ctx, row.label, labelW).length * 20;
+          ctx.font = "600 16px " + fontSans;
+          var valueH = wrapCanvasText(ctx, row.value, valueW).length * 20;
+          h += Math.max(labelH, valueH, 20) + 8;
+          if (idx < rows.length - 1) h += 6;
         });
         return h;
       }
 
-      ctx.font = "15px Segoe UI, Arial, sans-serif";
-      var colGap = 18;
-      var colW = (contentW - colGap) / 2;
-      var guestH = 34 + measureRows(g.guest, colW - 28);
-      var stayH = 34 + measureRows(g.stay, colW - 28);
-      var gridH = Math.max(guestH, stayH) + 28;
-      var payH = 34 + measureRows(g.payment, contentW - 28) + 28;
-      var height =
-        pad +
-        78 +
-        18 +
-        86 +
-        20 +
-        gridH +
-        16 +
-        payH +
-        16 +
-        72 +
-        18 +
-        70 +
-        pad;
+      var metas = [
+        { label: "RECEIPT NO.", value: g.receiptId },
+        { label: "BOOKING REF.", value: g.bookingRef },
+        { label: "DATE ISSUED", value: g.issued }
+      ];
+      var metaColW = contentW / 3;
+      ctx.font = "700 15px " + fontSans;
+      var metaValueLines = 1;
+      metas.forEach(function (m) {
+        metaValueLines = Math.max(
+          metaValueLines,
+          wrapCanvasText(ctx, m.value, metaColW - 32).length
+        );
+      });
+      var metaH = 36 + metaValueLines * 20 + 18;
+      var gridH = 48 + Math.max(rowBlockHeight(g.guest, colW), rowBlockHeight(g.stay, colW)) + 14;
+      var payH = 48 + rowBlockHeight(g.payment, contentW) + 14;
+      var totalH = 72;
+      ctx.font = "400 15px " + fontSans;
+      var noteLines = wrapCanvasText(
+        ctx,
+        "This document is your official backup copy. Please present it at the resort if requested.",
+        contentW - 80
+      );
+      var footerH = 36 + 26 + noteLines.length * 20 + 16;
+      var gap = 16;
+      var sheetH = headerH + 20 + metaH + gap + gridH + gap + payH + gap + totalH + gap + footerH + 22;
+      var sheetY = pagePad;
 
       canvas.width = width;
-      canvas.height = Math.ceil(height);
+      canvas.height = Math.ceil(pagePad * 2 + sheetH);
 
-      // Background
-      ctx.fillStyle = "#ece8e4";
+      ctx.fillStyle = "#f4efe9";
       ctx.fillRect(0, 0, width, canvas.height);
+
+      ctx.save();
+      roundRect(ctx, sheetX, sheetY, sheetW, sheetH, 14);
+      ctx.clip();
       ctx.fillStyle = "#ffffff";
-      roundRect(ctx, 18, 18, width - 36, canvas.height - 36, 10);
+      ctx.fillRect(sheetX, sheetY, sheetW, sheetH);
+
+      var headGrad = ctx.createLinearGradient(sheetX, sheetY, sheetX + sheetW, sheetY);
+      headGrad.addColorStop(0, "#e59ab8");
+      headGrad.addColorStop(0.54, "#D982A5");
+      headGrad.addColorStop(1, "#C56B8F");
+      ctx.fillStyle = headGrad;
+      ctx.fillRect(sheetX, sheetY, sheetW, headerH);
+
+      var logoW = 188;
+      var logoH = 60;
+      var logoX = contentX;
+      var logoY = sheetY + (headerH - logoH) / 2;
+      ctx.fillStyle = forest;
+      roundRect(ctx, logoX, logoY, logoW, logoH, 10);
       ctx.fill();
-      ctx.strokeStyle = "#d9cfd0";
-      ctx.lineWidth = 1;
-      ctx.stroke();
-
-      var x = pad;
-      y = pad + 8;
-
-      // Letterhead
       if (logoImg) {
-        ctx.drawImage(logoImg, x, y, 64, 64);
-      } else {
-        ctx.fillStyle = "#f8e1e7";
-        roundRect(ctx, x, y, 64, 64, 12);
-        ctx.fill();
+        ctx.drawImage(logoImg, logoX + 8, logoY + 6, logoW - 16, logoH - 12);
       }
-      ctx.fillStyle = ink;
+
+      var textX = logoX + logoW + 18;
+      ctx.fillStyle = "#ffffff";
       ctx.font = "700 30px Georgia, Times New Roman, serif";
-      ctx.fillText("Elenest Resort", x + 80, y + 28);
-      ctx.fillStyle = rose;
-      ctx.font = "700 12px Segoe UI, Arial, sans-serif";
-      ctx.fillText("OFFICIAL BOOKING RECEIPT", x + 80, y + 48);
-      ctx.fillStyle = muted;
-      ctx.font = "12px Segoe UI, Arial, sans-serif";
-      ctx.fillText("Reservation & payment confirmation", x + 80, y + 66);
+      ctx.fillText("Elenest Resort", textX, sheetY + 46);
+      ctx.font = "700 13px " + fontSans;
+      ctx.fillText("OFFICIAL BOOKING RECEIPT", textX, sheetY + 70);
+      ctx.font = "400 15px " + fontSans;
+      ctx.fillStyle = "rgba(255,255,255,0.92)";
+      ctx.fillText("Reservation & payment confirmation", textX, sheetY + 94);
 
-      y += 86;
-      ctx.strokeStyle = rose;
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-      ctx.moveTo(x, y);
-      ctx.lineTo(x + contentW, y);
-      ctx.stroke();
-      y += 18;
-
-      // Meta strip
+      var y = sheetY + headerH + 20;
       ctx.fillStyle = soft;
-      roundRect(ctx, x, y, contentW, 74, 8);
+      roundRect(ctx, contentX, y, contentW, metaH, 12);
       ctx.fill();
       ctx.strokeStyle = line;
       ctx.lineWidth = 1;
       ctx.stroke();
-      var metas = [
-        { label: "Receipt No.", value: g.receiptId },
-        { label: "Booking Ref.", value: g.bookingRef },
-        { label: "Date issued", value: g.issued }
-      ];
-      var metaW = contentW / 3;
       metas.forEach(function (m, i) {
-        var mx = x + 14 + i * metaW;
+        var mx = contentX + 16 + i * metaColW;
         ctx.fillStyle = muted;
-        ctx.font = "600 11px Segoe UI, Arial, sans-serif";
-        ctx.fillText(m.label.toUpperCase(), mx, y + 24);
+        ctx.font = "700 12px " + fontSans;
+        ctx.textAlign = "left";
+        ctx.fillText(m.label, mx, y + 26);
         ctx.fillStyle = ink;
-        ctx.font = "700 14px Segoe UI, Arial, sans-serif";
-        drawWrappedCanvasText(ctx, m.value, mx, y + 46, metaW - 28, 16);
+        ctx.font = "700 15px " + fontSans;
+        drawWrappedCanvasText(ctx, m.value, mx, y + 50, metaColW - 32, 20);
       });
-      y += 94;
+      y += metaH + gap;
 
       function drawSection(sx, sy, sw, sh, title, rows) {
         ctx.fillStyle = "#ffffff";
-        roundRect(ctx, sx, sy, sw, sh, 8);
+        roundRect(ctx, sx, sy, sw, sh, 12);
         ctx.fill();
-        ctx.strokeStyle = line;
+        ctx.strokeStyle = "rgba(168,201,165,0.7)";
         ctx.lineWidth = 1;
         ctx.stroke();
-        ctx.fillStyle = rose;
-        ctx.font = "700 11px Segoe UI, Arial, sans-serif";
-        ctx.fillText(title.toUpperCase(), sx + 14, sy + 24);
-        var ry = sy + 40;
-        rows.forEach(function (row) {
+        ctx.fillStyle = forest;
+        ctx.font = "700 12px " + fontSans;
+        ctx.textAlign = "left";
+        ctx.fillText(String(title || "").toUpperCase(), sx + 16, sy + 28);
+        var ry = sy + 52;
+        var labelW = Math.floor((sw - 32) * 0.4);
+        var valueW = Math.floor((sw - 32) * 0.52);
+        rows.forEach(function (row, idx) {
           ctx.fillStyle = muted;
-          ctx.font = "12px Segoe UI, Arial, sans-serif";
-          var lh = drawWrappedCanvasText(ctx, row.label, sx + 14, ry, Math.floor(sw * 0.4), 16);
-          ctx.fillStyle = ink;
-          ctx.font = "600 13px Segoe UI, Arial, sans-serif";
-          ctx.textAlign = "right";
-          var vh = drawWrappedCanvasText(
-            ctx,
-            row.value,
-            sx + sw - 14,
-            ry,
-            Math.floor(sw * 0.48),
-            16
-          );
+          ctx.font = "500 15px " + fontSans;
           ctx.textAlign = "left";
-          ry += Math.max(lh, vh) + 10;
-          ctx.strokeStyle = "#f1eaeb";
-          ctx.beginPath();
-          ctx.moveTo(sx + 14, ry - 6);
-          ctx.lineTo(sx + sw - 14, ry - 6);
-          ctx.stroke();
+          var lh = drawWrappedCanvasText(ctx, row.label, sx + 16, ry, labelW, 20);
+          ctx.fillStyle = ink;
+          ctx.font = "600 16px " + fontSans;
+          ctx.textAlign = "right";
+          var vh = drawWrappedCanvasText(ctx, row.value, sx + sw - 16, ry, valueW, 20);
+          ctx.textAlign = "left";
+          ry += Math.max(lh, vh, 20) + 8;
+          if (idx < rows.length - 1) {
+            ctx.strokeStyle = "#f1eaeb";
+            ctx.beginPath();
+            ctx.moveTo(sx + 16, ry - 6);
+            ctx.lineTo(sx + sw - 16, ry - 6);
+            ctx.stroke();
+            ry += 6;
+          }
         });
       }
 
-      var sectionH = Math.max(guestH, stayH) + 8;
-      drawSection(x, y, colW, sectionH, "Billed to", g.guest);
-      drawSection(x + colW + colGap, y, colW, sectionH, "Reservation", g.stay);
-      y += sectionH + 16;
+      drawSection(contentX, y, colW, gridH, "Billed to", g.guest);
+      drawSection(contentX + colW + colGap, y, colW, gridH, "Reservation", g.stay);
+      y += gridH + gap;
+      drawSection(contentX, y, contentW, payH, "Payment details", g.payment);
+      y += payH + gap;
 
-      var paySectionH = payH;
-      drawSection(x, y, contentW, paySectionH, "Payment details", g.payment);
-      y += paySectionH + 16;
-
-      // Total bar
-      var grad = ctx.createLinearGradient(x, y, x + contentW, y);
-      grad.addColorStop(0, "#fff7f8");
-      grad.addColorStop(1, "#f8eef0");
-      ctx.fillStyle = grad;
-      roundRect(ctx, x, y, contentW, 64, 8);
+      ctx.fillStyle = "#F8DDE8";
+      roundRect(ctx, contentX, y, contentW, totalH, 12);
       ctx.fill();
-      ctx.strokeStyle = "#e4c8cc";
+      ctx.strokeStyle = "rgba(217,130,165,0.45)";
+      ctx.lineWidth = 1;
       ctx.stroke();
       ctx.fillStyle = muted;
-      ctx.font = "600 12px Segoe UI, Arial, sans-serif";
-      ctx.fillText(String(g.amountNote || "").toUpperCase(), x + 18, y + 38);
-      ctx.fillStyle = "#8f3d4a";
-      ctx.font = "700 28px Segoe UI, Arial, sans-serif";
-      ctx.textAlign = "right";
-      ctx.fillText(g.amountLabel, x + contentW - 18, y + 42);
+      ctx.font = "700 13px " + fontSans;
       ctx.textAlign = "left";
-      y += 82;
+      ctx.fillText(String(g.amountNote || "").toUpperCase(), contentX + 20, y + 42);
+      ctx.fillStyle = "#8E3D55";
+      ctx.font = "700 30px " + fontSans;
+      ctx.textAlign = "right";
+      ctx.fillText(g.amountLabel, contentX + contentW - 20, y + 44);
+      ctx.textAlign = "left";
+      y += totalH + gap;
 
-      ctx.strokeStyle = line;
-      ctx.beginPath();
-      ctx.moveTo(x, y);
-      ctx.lineTo(x + contentW, y);
+      ctx.fillStyle = forest;
+      roundRect(ctx, contentX, y, contentW, footerH, 12);
+      ctx.fill();
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "600 18px Georgia, Times New Roman, serif";
+      ctx.textAlign = "center";
+      ctx.fillText("Thank you for choosing Elenest Resort.", contentX + contentW / 2, y + 36);
+      ctx.font = "400 15px " + fontSans;
+      ctx.fillStyle = "rgba(255,255,255,0.92)";
+      noteLines.forEach(function (lineText, i) {
+        ctx.fillText(lineText, contentX + contentW / 2, y + 64 + i * 20);
+      });
+      ctx.textAlign = "left";
+
+      ctx.restore();
+      ctx.strokeStyle = "#e4d8d6";
+      ctx.lineWidth = 1;
+      roundRect(ctx, sheetX, sheetY, sheetW, sheetH, 14);
       ctx.stroke();
-      y += 22;
-      ctx.fillStyle = ink;
-      ctx.font = "italic 16px Georgia, Times New Roman, serif";
-      ctx.fillText("Thank you for choosing Elenest Resort.", x, y);
-      y += 24;
-      ctx.fillStyle = muted;
-      ctx.font = "12px Segoe UI, Arial, sans-serif";
-      drawWrappedCanvasText(
-        ctx,
-        "This document is your official backup copy. Please present it at the resort if requested.",
-        x,
-        y,
-        contentW,
-        16
-      );
 
       return canvas;
     });

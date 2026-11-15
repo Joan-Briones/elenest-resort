@@ -4084,3 +4084,31 @@ html[data-theme="dark"] body.subpage .proof-status-card p {
 .book-flow__panel[data-step="4"] > .booking-details-slot[hidden] {
   display: none !important;
 }
+
+/* The receipt letterhead and footer are document regions, not the site chrome. */
+body:not(.staff-app) .guest-receipt-sheet > header.guest-receipt-sheet__letterhead {
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  z-index: 1 !important;
+  min-height: 0 !important;
+  height: auto !important;
+  width: 100% !important;
+  margin: 0 0 18px !important;
+  padding: 18px 20px !important;
+  overflow: hidden !important;
+  box-shadow: none !important;
+  background: linear-gradient(135deg, #e59ab8 0%, #d982a5 54%, #c56b8f 100%) !important;
+  color: #ffffff !important;
+  border: 0 !important;
+}
+
+body.subpage .guest-receipt-sheet > footer.guest-receipt-sheet__footer,
+html[data-theme="dark"] .guest-receipt-sheet > footer.guest-receipt-sheet__footer {
+  background: #315d46 !important;
+  color: #ffffff !important;
+  padding: 16px 18px !important;
+  margin: 16px 18px 0 !important;
+  text-align: center !important;
+  border: 0 !important;
+}
