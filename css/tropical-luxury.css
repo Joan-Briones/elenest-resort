@@ -14,6 +14,30 @@
   --ink: #333A35;
   --serif: "Playfair Display", "Cormorant Garamond", Georgia, serif;
   --sans: "Poppins", "Segoe UI", system-ui, sans-serif;
+  /* One family for every guest content column (Home through Sign In). */
+  --font-family: var(--sans);
+  --type-page: clamp(1.7rem, 2.2vw, 2.125rem);
+  --type-section: clamp(1.35rem, 1.7vw, 1.6rem);
+  --type-panel: 1.35rem;
+  --type-card: 1.125rem;
+  --type-subhead: 1rem;
+  --type-body: 1rem;
+  --type-small: 0.875rem;
+  --type-kicker: 0.75rem;
+  --type-label: 0.8125rem;
+  --type-button: 0.9375rem;
+  --type-input: 1rem;
+  --weight-heading: 600;
+  --weight-body: 400;
+  --weight-label: 600;
+  --lh-heading: 1.25;
+  --lh-body: 1.65;
+  --lh-snug: 1.45;
+  --track-heading: -0.02em;
+  --track-body: 0;
+  --track-kicker: 0.16em;
+  --track-label: 0.04em;
+  --track-button: 0.03em;
   --staff-sidebar-w: 252px;
   --radius-card: 16px;
   --radius-control: 12px;
@@ -3157,4 +3181,328 @@ body.side-nav.guest-lux:has(#loginForm) > main.container > .section {
     padding-left: 0.7rem !important;
     padding-right: 0.7rem !important;
   }
+}
+
+/* ==========================================================================
+   Unified content typography
+   Home, About, Reviews, Facilities, Policies, FAQ, Activities, Contact,
+   Data Privacy, and Sign In. One family, one scale. Sidebar is unchanged.
+   ========================================================================== */
+
+body.home-page,
+body.guest-lux {
+  font-family: var(--font-family);
+}
+
+body.home-page :is(
+    h1, h2, h3, h4, h5, h6,
+    p, a, button, label, input, textarea, select, option,
+    li, blockquote, cite, figcaption, strong, b, em, small,
+    summary, legend, dt, dd, span
+  ):not(header.home-side *):not(.fa):not(.fas):not(.far):not(.fab):not(.fa-solid):not(.fa-regular):not(.fa-brands),
+body.guest-lux :is(
+    h1, h2, h3, h4, h5, h6,
+    p, a, button, label, input, textarea, select, option,
+    li, blockquote, cite, figcaption, strong, b, em, small,
+    summary, legend, dt, dd, span
+  ):not(.fa):not(.fas):not(.far):not(.fab):not(.fa-solid):not(.fa-regular):not(.fa-brands) {
+  font-family: var(--font-family) !important;
+}
+
+body.home-page :is(h1, h2, h3, .heading h2, .home-amenity h3, .policy-card h3, .gallery .overlay h3):not(header.home-side *),
+body.guest-lux :is(h1, h2, h3, h4, .section-title, .card h3, .policy-card h3) {
+  font-style: normal;
+}
+
+body.home-page .book h1,
+body.home-page .book h1 span {
+  font-style: normal !important;
+  font-weight: var(--weight-heading) !important;
+  letter-spacing: var(--track-heading) !important;
+}
+
+/* Page titles */
+body.guest-lux .hero h1 {
+  font-size: var(--type-page) !important;
+  font-weight: var(--weight-heading) !important;
+  letter-spacing: var(--track-heading) !important;
+  line-height: 1.2 !important;
+}
+
+/* Section titles — same step on Home and every section page */
+body.home-page .heading h2,
+body.home-page .about .heading h2,
+body.home-page .gallery .heading__lockup h2,
+body.home-page .services .heading__lockup h2,
+body.home-page .news .heading__lockup h2,
+body.home-page .home-reviews .heading__lockup h2,
+body.home-page .rooms .heading h2,
+body.home-page .home-signature__intro h2,
+body.home-page .book h1,
+body.guest-lux :is(.section-title, .faq-section__title, .activities-section__title) {
+  font-size: var(--type-section) !important;
+  font-weight: var(--weight-heading) !important;
+  letter-spacing: var(--track-heading) !important;
+  line-height: var(--lh-heading) !important;
+  text-transform: none;
+}
+
+/* Watermark words stay large; they use the same family */
+body.home-page .heading h1,
+body.home-page .heading__lockup h1 {
+  font-weight: 500 !important;
+  letter-spacing: -0.03em !important;
+  font-style: normal !important;
+}
+
+body.home-page .home .hero-title__brand,
+body.home-page .home .hero-title--single {
+  font-weight: var(--weight-heading) !important;
+  font-style: normal !important;
+}
+
+/* Panel titles (sign-in, reserve, celebration prompt) */
+body.guest-lux :is(
+    .login-reserve-card__title,
+    .auth-card > h3,
+    .auth-card #loginCardTitle,
+    .activities-cta-card__title,
+    .guest-review-modal__title,
+    .facility-detail-modal__title,
+    .avail-modal__calendar-title
+  ),
+body.home-page .avail-modal__calendar-title {
+  font-size: var(--type-panel) !important;
+  font-weight: var(--weight-heading) !important;
+  letter-spacing: var(--track-heading) !important;
+  line-height: var(--lh-heading) !important;
+  font-style: normal !important;
+}
+
+/* Card titles and other subheadings */
+body.home-page :is(
+    .home-amenity h3,
+    .policy-card h3,
+    .gallery .overlay h3,
+    .rooms .items .text h2,
+    .news .items .text h2,
+    .news .stext h2,
+    .home-review-card__name,
+    .home-footer__name
+  ),
+body.guest-lux :is(
+    .card h3,
+    .policy-card h3,
+    .reviews-card h3,
+    .activities-card__title,
+    .contact-location-title,
+    .facility-card h3,
+    .facility-detail-modal__panel h3,
+    .admin-dash-cal-notes__title,
+    .login-activity-detail__title
+  ) {
+  font-size: var(--type-card) !important;
+  font-weight: var(--weight-heading) !important;
+  letter-spacing: -0.015em !important;
+  line-height: 1.3 !important;
+  text-transform: none;
+}
+
+body.home-page h4:not(header.home-side *),
+body.guest-lux h4,
+body.guest-lux .facility-detail-modal__actions-copy strong {
+  font-size: var(--type-subhead) !important;
+  font-weight: var(--weight-heading) !important;
+  letter-spacing: -0.01em !important;
+  line-height: 1.35 !important;
+  font-style: normal !important;
+}
+
+body.guest-lux .facility-card__amenities h4,
+body.home-page .facility-card__amenities h4 {
+  font-size: var(--type-kicker) !important;
+  font-weight: var(--weight-label) !important;
+  letter-spacing: 0.08em !important;
+  line-height: 1.4 !important;
+  text-transform: uppercase !important;
+}
+
+/* Body copy — content column only, not the sidebar */
+body.home-page :is(.home, .book, .home-amenities, .about, .gallery, .services, .counter, .news, .rooms, .home-reviews, .home-footer) :is(p, li),
+body.guest-lux :is(main, footer, .facility-detail-modal, .guest-review-modal, .avail-modal) :is(p, li) {
+  font-size: var(--type-body) !important;
+  font-weight: var(--weight-body) !important;
+  letter-spacing: var(--track-body) !important;
+  line-height: var(--lh-body) !important;
+}
+
+/* Kickers and eyebrows sit above body so they keep the label step */
+body.home-page :is(
+    p.section-kicker,
+    p.book-kicker,
+    p.rooms-heading-kicker,
+    p.hero-kicker,
+    p.home-footer__kicker,
+    .hero-title__suffix
+  ),
+body.guest-lux :is(
+    p.faq-hero__eyebrow,
+    p.activities-card__type,
+    .activities-card__badge,
+    p.facility-detail-modal__eyebrow,
+    .facility-detail-modal__panel-kicker,
+    p.guest-review-modal__eyebrow
+  ) {
+  font-size: var(--type-kicker) !important;
+  font-weight: var(--weight-label) !important;
+  letter-spacing: var(--track-kicker) !important;
+  line-height: 1.4 !important;
+  text-transform: uppercase !important;
+  font-style: normal !important;
+}
+
+body.home-page :is(p.home-footer__name, p.home-review-card__name) {
+  font-size: var(--type-card) !important;
+  font-weight: var(--weight-heading) !important;
+  letter-spacing: -0.015em !important;
+  line-height: 1.3 !important;
+  font-style: normal !important;
+}
+
+body.home-page .counter-quote blockquote p {
+  font-size: 1.125rem !important;
+  font-weight: 500 !important;
+  font-style: italic !important;
+  line-height: var(--lh-body) !important;
+  letter-spacing: 0 !important;
+}
+
+body.home-page :is(p.home-footer__copy, .counter-quote cite),
+body.guest-lux :is(
+    p.activities-card__date,
+    p.note,
+    .note,
+    p.auth-msg,
+    .auth-msg,
+    p.auth-switch,
+    .auth-switch,
+    p.login-reserve-panel__note,
+    .login-reserve-panel__note,
+    .reviews-pagination__page,
+    p.facility-card__capacity,
+    .facility-card__capacity
+  ),
+body.guest-lux footer p {
+  font-size: var(--type-small) !important;
+  font-weight: var(--weight-body) !important;
+  letter-spacing: 0.01em !important;
+  line-height: var(--lh-snug) !important;
+  font-style: normal !important;
+}
+
+body.home-page :is(strong, b):not(header.home-side *),
+body.guest-lux :is(strong, b, .policy-card__muted) {
+  font-weight: var(--weight-heading) !important;
+  letter-spacing: inherit;
+}
+
+body.guest-lux .auth-switch a,
+body.home-page :is(.rooms-explore-link, .home-reviews__more, .home-footer__links a),
+body.guest-lux main a:not(.btn):not(.primary-btn):not(.staff-access-btn) {
+  font-weight: var(--weight-label);
+  letter-spacing: 0.01em;
+}
+
+/* FAQ questions */
+body.guest-lux .faq-item__question,
+body.guest-lux .faq-item__q-text {
+  font-size: 1.0625rem !important;
+  font-weight: var(--weight-heading) !important;
+  letter-spacing: -0.01em !important;
+  line-height: 1.4 !important;
+  text-transform: none !important;
+}
+
+body.guest-lux .faq-item__answer p {
+  font-size: var(--type-body) !important;
+  font-weight: var(--weight-body) !important;
+  line-height: var(--lh-body) !important;
+}
+
+/* Buttons and tabs */
+body.home-page :is(.primary-btn, .secondary-btn, .book-reserve-submit, .book-date-trigger):not(header.home-side *),
+body.guest-lux :is(
+    main .btn,
+    .primary-btn,
+    .facilities-tab,
+    .login-reserve-tab,
+    .auth-card .btn,
+    .auth-card button,
+    .auth-oauth .btn,
+    .login-reserve-stay-bar__option
+  ) {
+  font-family: var(--font-family) !important;
+  font-size: var(--type-button) !important;
+  font-weight: var(--weight-label) !important;
+  letter-spacing: var(--track-button) !important;
+  line-height: 1.3 !important;
+  font-style: normal !important;
+}
+
+/* Forms */
+body.guest-lux :is(label, legend, .login-reserve-stay-bar__label):not(.login-reserve-stay-bar__option),
+body.home-page :is(label, legend, .login-reserve-stay-bar__label):not(.login-reserve-stay-bar__option):not(header.home-side *) {
+  font-size: var(--type-label) !important;
+  font-weight: var(--weight-label) !important;
+  letter-spacing: var(--track-label) !important;
+  line-height: 1.4 !important;
+  text-transform: none;
+}
+
+body.guest-lux :is(
+    input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="hidden"]):not([type="range"]),
+    textarea,
+    select
+  ),
+body.home-page :is(
+    input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="hidden"]):not([type="range"]),
+    textarea,
+    select
+  ):not(header.home-side *) {
+  font-family: var(--font-family) !important;
+  font-size: var(--type-input) !important;
+  font-weight: var(--weight-body) !important;
+  letter-spacing: 0 !important;
+  line-height: 1.45 !important;
+}
+
+body.guest-lux :is(input, textarea)::placeholder,
+body.home-page :is(input, textarea)::placeholder {
+  font-family: var(--font-family);
+  font-size: inherit;
+  font-weight: var(--weight-body);
+  letter-spacing: 0;
+}
+
+body.guest-lux .pill-list span,
+body.home-page .pill-list span {
+  font-size: var(--type-label) !important;
+  font-weight: var(--weight-label) !important;
+  letter-spacing: 0.02em !important;
+  line-height: 1.4 !important;
+}
+
+body.home-page .home-reviews__score {
+  font-weight: var(--weight-heading) !important;
+  letter-spacing: -0.03em !important;
+  line-height: 1 !important;
+}
+
+body.guest-lux .facility-detail-modal__price,
+body.guest-lux .reviews-card .stars,
+body.home-page .home-review-card__stars,
+body.home-page .home-reviews__stars {
+  font-family: var(--font-family) !important;
+  font-weight: var(--weight-heading) !important;
+  letter-spacing: 0.04em !important;
 }
