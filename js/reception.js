@@ -2664,12 +2664,35 @@
     var currentSectionId = null;
 
     function setActiveSectionNav(targetSectionId) {
+      if (window.ElenestStaffNav && typeof window.ElenestStaffNav.sync === "function") {
+        window.ElenestStaffNav.sync(targetSectionId);
+        return;
+      }
       var targetHref = "#" + String(targetSectionId || "");
       var navLinks = document.querySelectorAll('header .navlinks a[href^="#section-"]');
+      document.querySelectorAll(".admin-nav-dropdown-toggle").forEach(function (toggle) {
+        toggle.classList.remove("active");
+        var dropdown = toggle.closest(".admin-nav-dropdown");
+        if (dropdown) {
+          dropdown.classList.remove("is-open");
+          toggle.setAttribute("aria-expanded", "false");
+        }
+      });
       navLinks.forEach(function (a) {
         var href = a.getAttribute("href") || "";
-        if (href === targetHref) a.classList.add("active");
-        else a.classList.remove("active");
+        var on = href === targetHref;
+        a.classList.toggle("active", on);
+        if (on) a.setAttribute("aria-current", "page");
+        else a.removeAttribute("aria-current");
+        if (!on) return;
+        var parent = a.closest(".admin-nav-dropdown");
+        if (!parent) return;
+        parent.classList.add("is-open");
+        var groupToggle = parent.querySelector(".admin-nav-dropdown-toggle");
+        if (groupToggle) {
+          groupToggle.classList.add("active");
+          groupToggle.setAttribute("aria-expanded", "true");
+        }
       });
     }
 
@@ -2689,6 +2712,15 @@
           var sectionLinks = document.querySelectorAll('header .navlinks a[href^="#section-"]');
           sectionLinks.forEach(function (a) {
             a.classList.remove("active");
+            a.removeAttribute("aria-current");
+          });
+          document.querySelectorAll(".admin-nav-dropdown").forEach(function (dropdown) {
+            dropdown.classList.remove("is-open");
+            var parentToggle = dropdown.querySelector(".admin-nav-dropdown-toggle");
+            if (parentToggle) {
+              parentToggle.classList.remove("active");
+              parentToggle.setAttribute("aria-expanded", "false");
+            }
           });
         } else {
           settingsToggle.classList.remove("active");

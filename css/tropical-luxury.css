@@ -4112,3 +4112,40 @@ html[data-theme="dark"] .guest-receipt-sheet > footer.guest-receipt-sheet__foote
   text-align: center !important;
   border: 0 !important;
 }
+
+/* Staff sidebars share one pink active state.
+   A selected top-level item or parent is solid pink.
+   A selected submenu keeps that parent pink and uses its own pink chip. */
+body.staff-app.subpage > header #menulist > li > a[href^="#section-"].active:not(.admin-nav-dropdown-item),
+body.staff-app.subpage > header #menulist > li > a.active:not(.admin-nav-dropdown-item):not(.primary-btn),
+body.staff-app.subpage > header #menulist #adminSettingsToggle.active,
+body.staff-app.subpage > header #menulist #staffSettingsToggle.active,
+body.staff-app.subpage > header #menulist > li.admin-nav-dropdown > button.admin-nav-dropdown-toggle.active,
+html[data-theme="dark"] body.staff-app.subpage > header #menulist > li > a[href^="#section-"].active:not(.admin-nav-dropdown-item),
+html[data-theme="dark"] body.staff-app.subpage > header #menulist > li > a.active:not(.admin-nav-dropdown-item):not(.primary-btn),
+html[data-theme="dark"] body.staff-app.subpage > header #menulist #adminSettingsToggle.active,
+html[data-theme="dark"] body.staff-app.subpage > header #menulist #staffSettingsToggle.active,
+html[data-theme="dark"] body.staff-app.subpage > header #menulist > li.admin-nav-dropdown > button.admin-nav-dropdown-toggle.active {
+  background: var(--pink, #D982A5) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  box-shadow: 0 6px 14px rgba(217, 130, 165, 0.35) !important;
+}
+
+body.staff-app.subpage > header #menulist > li.admin-nav-dropdown.is-open > button.admin-nav-dropdown-toggle:not(.active),
+html[data-theme="dark"] body.staff-app.subpage > header #menulist > li.admin-nav-dropdown.is-open > button.admin-nav-dropdown-toggle:not(.active) {
+  background: transparent !important;
+  color: rgba(255, 255, 255, 0.94) !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.94) !important;
+  box-shadow: none !important;
+}
+
+body.staff-app.subpage > header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item.active,
+body.staff-app.subpage > header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item[href^="#section-"].active,
+html[data-theme="dark"] body.staff-app.subpage > header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item.active,
+html[data-theme="dark"] body.staff-app.subpage > header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item[href^="#section-"].active {
+  background: #F8DDE8 !important;
+  color: #8E3A5A !important;
+  -webkit-text-fill-color: #8E3A5A !important;
+  box-shadow: inset 3px 0 0 #D982A5 !important;
+}

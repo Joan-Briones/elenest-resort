@@ -1030,26 +1030,38 @@
   var dashCalView = { y: new Date().getFullYear(), m: new Date().getMonth() };
   var selectedIsoDate = null;
 
-  var eventNavSections = {
-    "section-messages": true,
-    "section-content": true,
-    "section-manage": true,
-    "section-calendar": true
-  };
-
   function setActiveNav(targetSectionId) {
+    if (window.ElenestStaffNav && typeof window.ElenestStaffNav.sync === "function") {
+      window.ElenestStaffNav.sync(targetSectionId);
+      return;
+    }
     var targetHref = "#" + String(targetSectionId || "");
     var navLinks = document.querySelectorAll('header .navlinks a[href^="#section-"]');
+    var toggles = document.querySelectorAll(".admin-nav-dropdown-toggle");
+    toggles.forEach(function (toggle) {
+      toggle.classList.remove("active");
+      var dropdown = toggle.closest(".admin-nav-dropdown");
+      if (dropdown) {
+        dropdown.classList.remove("is-open");
+        toggle.setAttribute("aria-expanded", "false");
+      }
+    });
     navLinks.forEach(function (a) {
       var href = a.getAttribute("href") || "";
-      if (href === targetHref) a.classList.add("active");
-      else a.classList.remove("active");
+      var on = href === targetHref;
+      a.classList.toggle("active", on);
+      if (on) a.setAttribute("aria-current", "page");
+      else a.removeAttribute("aria-current");
+      if (!on) return;
+      var parent = a.closest(".admin-nav-dropdown");
+      if (!parent) return;
+      parent.classList.add("is-open");
+      var groupToggle = parent.querySelector(".admin-nav-dropdown-toggle");
+      if (groupToggle) {
+        groupToggle.classList.add("active");
+        groupToggle.setAttribute("aria-expanded", "true");
+      }
     });
-    var eventToggle = document.getElementById("managerNavEventToggle");
-    if (eventToggle) {
-      if (eventNavSections[targetSectionId]) eventToggle.classList.add("active");
-      else eventToggle.classList.remove("active");
-    }
   }
 
   function showSection(sectionId) {
@@ -4666,17 +4678,24 @@
     if (!Auth) return;
 
     var navLinks = document.querySelectorAll('header .navlinks a[href^="#section-"]');
-    var MANAGER_MOBILE_NAV_BP = 1100;
 
     function isManagerMobileNav() {
-      return window.innerWidth <= MANAGER_MOBILE_NAV_BP;
+      if (window.ElenestStaffNav && typeof window.ElenestStaffNav.isMobileNav === "function") {
+        return window.ElenestStaffNav.isMobileNav();
+      }
+      return window.innerWidth <= 900;
     }
 
     function closeManagerNavDropdowns(exceptDropdown) {
+      if (window.ElenestStaffNav && typeof window.ElenestStaffNav.closeInactive === "function") {
+        window.ElenestStaffNav.closeInactive(exceptDropdown);
+        return;
+      }
       document.querySelectorAll(".admin-nav-dropdown.is-open").forEach(function (dropdown) {
         if (exceptDropdown && dropdown === exceptDropdown) return;
-        dropdown.classList.remove("is-open");
         var toggle = dropdown.querySelector(".admin-nav-dropdown-toggle");
+        if (toggle && toggle.classList.contains("active")) return;
+        dropdown.classList.remove("is-open");
         if (toggle) toggle.setAttribute("aria-expanded", "false");
       });
     }
@@ -4692,18 +4711,14 @@
           e.preventDefault();
           e.stopPropagation();
           if (dropdown.classList.contains("is-open")) {
-            closeManagerNavDropdowns();
+            if (toggle.classList.contains("active")) return;
+            dropdown.classList.remove("is-open");
+            toggle.setAttribute("aria-expanded", "false");
             return;
           }
           closeManagerNavDropdowns(dropdown);
           dropdown.classList.add("is-open");
           toggle.setAttribute("aria-expanded", "true");
-        });
-
-        menu.querySelectorAll('a[href^="#section-"]').forEach(function (link) {
-          link.addEventListener("click", function () {
-            closeManagerNavDropdowns();
-          });
         });
       });
 

@@ -49,11 +49,16 @@
     setToggleState(false);
     if (isMobileNav()) menulist.style.maxHeight = "0px";
     else menulist.style.maxHeight = "";
-    menulist.querySelectorAll(".admin-nav-dropdown.is-open").forEach(function (dropdown) {
-      dropdown.classList.remove("is-open");
-      var toggle = dropdown.querySelector(".admin-nav-dropdown-toggle");
-      if (toggle) toggle.setAttribute("aria-expanded", "false");
-    });
+    if (window.ElenestStaffNav && typeof window.ElenestStaffNav.closeInactive === "function") {
+      window.ElenestStaffNav.closeInactive();
+    } else {
+      menulist.querySelectorAll(".admin-nav-dropdown.is-open").forEach(function (dropdown) {
+        var parentToggle = dropdown.querySelector(".admin-nav-dropdown-toggle");
+        if (parentToggle && parentToggle.classList.contains("active")) return;
+        dropdown.classList.remove("is-open");
+        if (parentToggle) parentToggle.setAttribute("aria-expanded", "false");
+      });
+    }
     syncHomeChrome();
   }
 
@@ -128,13 +133,18 @@
       var dropdown = toggle.closest(".admin-nav-dropdown");
       if (!dropdown) return;
       var willOpen = !dropdown.classList.contains("is-open");
-      menulist.querySelectorAll(".admin-nav-dropdown.is-open").forEach(function (item) {
-        if (item !== dropdown) {
-          item.classList.remove("is-open");
+      if (!willOpen && toggle.classList.contains("active")) return;
+      if (window.ElenestStaffNav && typeof window.ElenestStaffNav.closeInactive === "function") {
+        window.ElenestStaffNav.closeInactive(dropdown);
+      } else {
+        menulist.querySelectorAll(".admin-nav-dropdown.is-open").forEach(function (item) {
+          if (item === dropdown) return;
           var otherToggle = item.querySelector(".admin-nav-dropdown-toggle");
+          if (otherToggle && otherToggle.classList.contains("active")) return;
+          item.classList.remove("is-open");
           if (otherToggle) otherToggle.setAttribute("aria-expanded", "false");
-        }
-      });
+        });
+      }
       dropdown.classList.toggle("is-open", willOpen);
       toggle.setAttribute("aria-expanded", willOpen ? "true" : "false");
       if (menulist.classList.contains("is-open")) fitOpenMenu();

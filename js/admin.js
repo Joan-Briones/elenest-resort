@@ -8040,6 +8040,7 @@
         }
       }
       if (currentSectionId === sectionId) {
+        setActiveSectionNav(sectionId);
         if (sectionId === "section-dashboard") openBookingFromHashIfPresent();
         if (sectionId === "section-payments") {
           var sameTab = paymentsTabFromHash(window.location.hash);
@@ -8054,7 +8055,6 @@
 
       // Switching away from Settings should remove its underline state.
       closeMenu();
-      closeAdminNavDropdowns();
       if (settingsToggle) settingsToggle.classList.remove("active");
 
       sectionIds.forEach(function (sid) {
@@ -8064,7 +8064,6 @@
         setHidden(el, sid !== sectionId);
       });
 
-      // Update green underline on the active nav item.
       setActiveSectionNav(sectionId);
 
       if (sectionId === "section-dashboard") {
@@ -8196,27 +8195,24 @@
     // Nav links -> show sections
     var navLinks = document.querySelectorAll('header .navlinks a[href^="#section-"]');
     var navDropdownToggles = document.querySelectorAll(".admin-nav-dropdown-toggle");
-    var sectionNavGroups = {
-      "section-bookings": "adminNavManagement",
-      "section-payments": "adminNavManagement",
-      "section-calendar-access": "adminNavManagement",
-      "section-activity-logs": "adminNavManagement",
-      "section-manager-user": "adminNavManagement",
-      "section-reports": "adminNavAnalytics",
-      "section-sentiment": "adminNavAnalytics",
-      "section-predictive": "adminNavAnalytics"
-    };
-    var ADMIN_MOBILE_NAV_BP = 1500;
 
     function isAdminMobileNav() {
-      return window.innerWidth <= ADMIN_MOBILE_NAV_BP;
+      if (window.ElenestStaffNav && typeof window.ElenestStaffNav.isMobileNav === "function") {
+        return window.ElenestStaffNav.isMobileNav();
+      }
+      return window.innerWidth <= 900;
     }
 
     function closeAdminNavDropdowns(exceptDropdown) {
+      if (window.ElenestStaffNav && typeof window.ElenestStaffNav.closeInactive === "function") {
+        window.ElenestStaffNav.closeInactive(exceptDropdown);
+        return;
+      }
       document.querySelectorAll(".admin-nav-dropdown.is-open").forEach(function (dropdown) {
         if (exceptDropdown && dropdown === exceptDropdown) return;
-        dropdown.classList.remove("is-open");
         var toggle = dropdown.querySelector(".admin-nav-dropdown-toggle");
+        if (toggle && toggle.classList.contains("active")) return;
+        dropdown.classList.remove("is-open");
         if (toggle) toggle.setAttribute("aria-expanded", "false");
       });
     }
@@ -8232,7 +8228,9 @@
           e.preventDefault();
           e.stopPropagation();
           if (dropdown.classList.contains("is-open")) {
-            closeAdminNavDropdowns();
+            if (toggle.classList.contains("active")) return;
+            dropdown.classList.remove("is-open");
+            toggle.setAttribute("aria-expanded", "false");
             return;
           }
           closeAdminNavDropdowns(dropdown);
@@ -8242,11 +8240,6 @@
           toggle.setAttribute("aria-expanded", "true");
         });
 
-        menu.querySelectorAll('a[href^="#section-"]').forEach(function (link) {
-          link.addEventListener("click", function () {
-            closeAdminNavDropdowns();
-          });
-        });
       });
 
       document.addEventListener("click", function (e) {
@@ -8262,24 +8255,35 @@
     }
 
     function setActiveSectionNav(targetSectionId) {
+      if (window.ElenestStaffNav && typeof window.ElenestStaffNav.sync === "function") {
+        window.ElenestStaffNav.sync(targetSectionId);
+        return;
+      }
       var targetHref = "#" + String(targetSectionId || "");
-      navLinks.forEach(function (a) {
-        var href = a.getAttribute("href") || "";
-        if (href === targetHref) a.classList.add("active");
-        else a.classList.remove("active");
-      });
-
       navDropdownToggles.forEach(function (toggle) {
         toggle.classList.remove("active");
-      });
-      var groupId = sectionNavGroups[targetSectionId];
-      if (groupId) {
-        var groupEl = document.getElementById(groupId);
-        if (groupEl) {
-          var groupToggle = groupEl.querySelector(".admin-nav-dropdown-toggle");
-          if (groupToggle) groupToggle.classList.add("active");
+        var dropdown = toggle.closest(".admin-nav-dropdown");
+        if (dropdown) {
+          dropdown.classList.remove("is-open");
+          toggle.setAttribute("aria-expanded", "false");
         }
-      }
+      });
+      navLinks.forEach(function (a) {
+        var href = a.getAttribute("href") || "";
+        var on = href === targetHref;
+        a.classList.toggle("active", on);
+        if (on) a.setAttribute("aria-current", "page");
+        else a.removeAttribute("aria-current");
+        if (!on) return;
+        var parent = a.closest(".admin-nav-dropdown");
+        if (!parent) return;
+        parent.classList.add("is-open");
+        var groupToggle = parent.querySelector(".admin-nav-dropdown-toggle");
+        if (groupToggle) {
+          groupToggle.classList.add("active");
+          groupToggle.setAttribute("aria-expanded", "true");
+        }
+      });
     }
 
     // Ensure underline matches the initial hash right away.
@@ -8404,9 +8408,13 @@
         var sectionLinks = document.querySelectorAll('header .navlinks a[href^="#section-"]');
         sectionLinks.forEach(function (a) {
           a.classList.remove("active");
+          a.removeAttribute("aria-current");
         });
         navDropdownToggles.forEach(function (toggle) {
           toggle.classList.remove("active");
+          var dropdown = toggle.closest(".admin-nav-dropdown");
+          if (dropdown) dropdown.classList.remove("is-open");
+          toggle.setAttribute("aria-expanded", "false");
         });
         closeAdminNavDropdowns();
       });
