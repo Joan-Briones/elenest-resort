@@ -1420,7 +1420,7 @@ textarea:focus-visible {
    ========================================================================== */
 
 body.side-nav {
-  --home-side-w: calc(clamp(6.5rem, 10vw + 4.6rem, 16.75rem) + env(safe-area-inset-left, 0px));
+  --home-side-w: calc(252px + env(safe-area-inset-left, 0px));
   --home-side-ink: #f7f3ee;
   --home-side-forest: #2a4c3a;
   --palm-tile-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160' fill='none'%3E%3Cpath d='M80 132c6-28 28-50 52-58-22 10-38 32-42 58 10-24 34-40 58-44-26 12-44 36-46 62 8-18 26-32 48-36' stroke='%23A8C9A5' stroke-opacity='0.18' stroke-width='1.3'/%3E%3Cpath d='M80 132c-6-28-28-50-52-58 22 10 38 32 42 58-10-24-34-40-58-44 26 12 44 36 46 62-8-18-26-32-48-36' stroke='%23F8DDE8' stroke-opacity='0.2' stroke-width='1.3'/%3E%3C/svg%3E");
@@ -1498,17 +1498,17 @@ body.side-nav > header.home-side .content.flex_space {
   flex-direction: column !important;
   align-items: stretch !important;
   justify-content: flex-start !important;
-  gap: 0.85rem !important;
+  gap: 0.65rem !important;
   width: 100% !important;
   max-width: none !important;
   min-height: 0;
   height: 100%;
   margin: 0 !important;
   padding:
-    max(0.95rem, env(safe-area-inset-top, 0px))
-    0.9rem
-    max(0.8rem, env(safe-area-inset-bottom, 0px))
-    max(0.9rem, env(safe-area-inset-left, 0px)) !important;
+    max(0.8rem, env(safe-area-inset-top, 0px))
+    0.7rem
+    max(0.7rem, env(safe-area-inset-bottom, 0px))
+    max(0.7rem, env(safe-area-inset-left, 0px)) !important;
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -1522,9 +1522,9 @@ body.side-nav > header.home-side .logo {
   width: 100% !important;
   max-width: none !important;
   min-width: 0;
-  gap: 0.35rem;
+  gap: 0.2rem;
   margin: 0;
-  padding: 0.15rem 0.15rem 0.85rem;
+  padding: 0.05rem 0.15rem 0.6rem;
   border-bottom: 1px solid rgba(168, 201, 165, 0.32);
   text-align: center;
 }
@@ -1570,14 +1570,14 @@ body.side-nav > header.home-side .navlinks {
   width: 100% !important;
   min-width: 0;
   min-height: 0;
-  gap: 0.45rem !important;
+  gap: 0.35rem !important;
   position: relative !important;
   overflow: hidden;
 }
 
 body.side-nav > header.home-side .home-side__eyebrow {
   flex: 0 0 auto;
-  margin: 0.15rem 0.15rem 0.1rem;
+  margin: 0.05rem 0.15rem 0;
   font-family: var(--sans);
   font-size: 0.64rem;
   font-weight: 600;
@@ -1603,7 +1603,7 @@ body.side-nav > header.home-side #menulist.site-nav-list.is-open {
   align-items: stretch !important;
   justify-content: flex-start !important;
   flex: 1 1 auto;
-  gap: 0.22rem !important;
+  gap: 0.18rem !important;
   width: 100% !important;
   max-width: none !important;
   height: auto !important;
@@ -1651,9 +1651,9 @@ body.side-nav > header.home-side #menulist.site-nav-list > li > a:not(.staff-acc
   justify-content: flex-start !important;
   width: 100% !important;
   max-width: 100% !important;
-  min-height: 2.55rem !important;
+  min-height: 2.3rem !important;
   margin: 0 !important;
-  padding: 0.5rem 0.7rem !important;
+  padding: 0.38rem 0.6rem !important;
   box-sizing: border-box !important;
   border: 0 !important;
   border-radius: 12px !important;
@@ -1661,15 +1661,16 @@ body.side-nav > header.home-side #menulist.site-nav-list > li > a:not(.staff-acc
   color: rgba(247, 243, 238, 0.92) !important;
   -webkit-text-fill-color: rgba(247, 243, 238, 0.92) !important;
   font-family: var(--sans) !important;
-  font-size: clamp(0.68rem, 0.6rem + 0.2vw, 0.8rem) !important;
+  font-size: 0.74rem !important;
   font-weight: 500 !important;
-  letter-spacing: 0.08em !important;
+  letter-spacing: 0.055em !important;
   line-height: 1.25 !important;
   text-align: left !important;
   text-transform: uppercase !important;
   text-decoration: none !important;
-  white-space: normal !important;
-  overflow-wrap: anywhere;
+  white-space: nowrap !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
   box-shadow: none !important;
   opacity: 1 !important;
 }
@@ -1677,11 +1678,13 @@ body.side-nav > header.home-side #menulist.site-nav-list > li > a:not(.staff-acc
 body.side-nav > header.home-side #menulist.site-nav-list > li > a:not(.staff-access-btn)::before {
   content: "";
   flex: 0 0 auto;
-  width: 0.42rem;
+  width: 0.7rem;
   height: 1px;
-  margin-right: 0.45rem;
-  background: rgba(168, 201, 165, 0.85);
-  transition: width 0.22s var(--ease-out), background 0.22s var(--ease-out);
+  margin-right: 0.4rem;
+  background: rgba(168, 201, 165, 0.9);
+  transform: scaleX(0.55);
+  transform-origin: left center;
+  transition: transform 0.22s var(--ease-out), background 0.22s var(--ease-out);
 }
 
 body.side-nav > header.home-side #menulist.site-nav-list > li > a:not(.staff-access-btn):hover,
@@ -1694,7 +1697,8 @@ body.side-nav > header.home-side #menulist.site-nav-list > li > a:not(.staff-acc
 body.side-nav > header.home-side #menulist.site-nav-list > li > a:not(.staff-access-btn):hover::before,
 body.side-nav > header.home-side #menulist.site-nav-list > li > a:not(.staff-access-btn):focus-visible::before,
 body.side-nav > header.home-side #menulist.site-nav-list > li > a:not(.staff-access-btn).active::before {
-  width: 0.85rem;
+  width: 0.7rem;
+  transform: scaleX(1);
   background: var(--pink-soft);
 }
 
@@ -1714,8 +1718,8 @@ body.side-nav > header.home-side #roleLoginNav:not([hidden]) {
   position: sticky;
   bottom: 0;
   z-index: 2;
-  padding: 0.7rem 0 0.1rem;
-  background: linear-gradient(180deg, rgba(36, 63, 50, 0), #243f32 36%);
+  padding: 0.55rem 0 0.05rem;
+  background: linear-gradient(180deg, rgba(36, 63, 50, 0), #243f32 42%);
 }
 
 body.side-nav > header.home-side #menulist.site-nav-list > li > a.role-login-trigger.staff-access-btn,
@@ -1760,6 +1764,10 @@ body.side-nav > header.home-side a#roleLoginTrigger.staff-access-btn:hover {
 body.side-nav > header.home-side a:focus-visible {
   outline: 2px solid var(--pink-soft);
   outline-offset: 2px;
+}
+
+body.side-nav > header.home-side #menulist a:focus-visible {
+  outline-offset: -3px;
 }
 
 /* Page column sits beside the rail — keep hero and sections inside it */
@@ -1962,10 +1970,12 @@ body.side-nav.subpage {
 
 body.side-nav.subpage main.container {
   width: 100%;
-  max-width: min(1080px, 100%);
+  max-width: 1440px;
   min-width: 0;
-  padding-top: 1.15rem;
-  padding-bottom: 2rem;
+  margin-left: 0;
+  margin-right: auto;
+  padding-top: 0.9rem;
+  padding-bottom: 1.15rem;
   box-sizing: border-box;
 }
 
@@ -1982,10 +1992,16 @@ body.side-nav.subpage .map-wrap iframe {
   max-width: 100%;
 }
 
-body.side-nav > header.home-side .theme-toggle {
-  align-self: center;
-  flex: 0 0 auto;
-  margin: 0.45rem auto 0.1rem;
+@media (min-width: 901px) {
+  body.side-nav > header.home-side .theme-toggle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    align-self: auto;
+    flex: 0 0 auto;
+    margin: 0;
+    z-index: 3;
+  }
 }
 
 body.side-nav > header.home-side #menulist a.role-login-trigger.staff-access-btn.active,
@@ -2134,8 +2150,12 @@ body.side-nav .auth-oauth {
   }
 
   body.side-nav > header.home-side .theme-toggle {
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
     align-self: center !important;
     margin: 0 !important;
+    transform: none !important;
   }
 
   body.side-nav > header.home-side button.nav-menu-toggle,
@@ -2287,9 +2307,9 @@ body.side-nav .auth-oauth {
   body.side-nav > header.home-side #menulist.site-nav-list > li > a.role-login-trigger.staff-access-btn,
   body.side-nav > header.home-side a#roleLoginTrigger.staff-access-btn {
     min-height: 2.75rem !important;
-    margin: 0.15rem 0.15rem 0 !important;
+    margin: 0.35rem 0 0 !important;
     padding: 0.65rem 0.85rem !important;
-    width: calc(100% - 0.3rem) !important;
+    width: 100% !important;
     max-width: none !important;
     border-radius: 999px !important;
     background: var(--pink) !important;
@@ -2335,8 +2355,10 @@ body.guest-lux {
 }
 
 body.guest-lux main.container {
-  max-width: min(1000px, 100%);
-  padding-top: 0.65rem;
+  max-width: 1440px;
+  margin-left: 0;
+  margin-right: auto;
+  padding-top: 0.9rem;
   padding-bottom: 1.15rem;
 }
 
@@ -2373,9 +2395,9 @@ html:not([data-theme="dark"]) body.guest-lux .policy-card h3 {
 }
 
 body.guest-lux .hero {
-  margin: 0 0 0.35rem;
-  padding: 0.8rem 1rem 0.75rem 0.95rem;
-  min-height: 0 !important;
+  margin: 0 0 0.7rem;
+  padding: 0.95rem 1.15rem 0.9rem;
+  min-height: 6.5rem;
   border-radius: 14px;
   border: 0 !important;
   border-left: 3px solid var(--sage) !important;
@@ -2397,8 +2419,8 @@ body.guest-lux .hero::before {
 }
 
 body.guest-lux .hero h1 {
-  margin: 0 0 0.2rem;
-  max-width: 22ch;
+  margin: 0 0 0.25rem;
+  max-width: none;
   font-size: clamp(1.45rem, 2.4vw, 1.9rem);
   line-height: 1.15;
   letter-spacing: -0.02em;
@@ -2420,7 +2442,8 @@ body.guest-lux .faq-hero__eyebrow {
 }
 
 body.guest-lux .section {
-  padding: 0.3rem 0 0.45rem;
+  padding: 0.15rem 0 0.5rem;
+  margin: 0;
 }
 
 body.guest-lux .section-title,
@@ -2442,7 +2465,7 @@ body.guest-lux .activities-section__lead {
 
 body.guest-lux .grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
+  gap: 12px;
   align-items: stretch;
 }
 
@@ -2967,5 +2990,177 @@ html:not([data-theme="dark"]) body.guest-lux footer {
   body.guest-lux .login-reserve-tab {
     flex: 1 1 auto;
     text-align: center;
+  }
+}
+
+/* ==========================================================================
+   Shared guest shell — one sidebar width and one content column
+   About, Reviews, Facilities, Policies, FAQ, Activities, Contact,
+   Data Privacy, and Sign In. Same origin, gutters, and vertical rhythm.
+   ========================================================================== */
+
+body.side-nav.guest-lux > main.container,
+body.side-nav.guest-lux > footer .container {
+  width: 100%;
+  max-width: 1440px;
+  min-width: 0;
+  margin-left: 0;
+  margin-right: auto;
+  box-sizing: border-box;
+}
+
+body.side-nav.guest-lux > main.container {
+  padding: 0.9rem 1.15rem 1.15rem;
+}
+
+body.side-nav.guest-lux > footer .container {
+  padding-inline: 1.15rem;
+}
+
+body.side-nav.guest-lux > main.container > .hero,
+body.side-nav.guest-lux.reviews-page > main.container > .hero,
+body.side-nav.guest-lux.facilities-page > main.container > .hero {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 0 0.7rem;
+  padding: 0.95rem 1.15rem 0.9rem;
+  min-height: 6.5rem;
+  box-sizing: border-box;
+}
+
+body.side-nav.guest-lux > main.container > .hero h1 {
+  max-width: none;
+  margin: 0 0 0.25rem;
+}
+
+body.side-nav.guest-lux > main.container > .hero p {
+  max-width: 70ch;
+  margin: 0;
+}
+
+body.side-nav.guest-lux > main.container > .section,
+body.side-nav.guest-lux.reviews-page > main.container > .section,
+body.side-nav.guest-lux.facilities-page > main.container > .facilities-tabs-section,
+body.side-nav.guest-lux .policies-detail-wrap,
+body.side-nav.guest-lux .faq-section {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0.15rem 0 0.5rem;
+  box-sizing: border-box;
+}
+
+body.side-nav.guest-lux .grid,
+body.side-nav.guest-lux .contact-grid,
+body.side-nav.guest-lux .activities-grid,
+body.side-nav.guest-lux .reviews-grid,
+body.side-nav.guest-lux .policies-pool-grid {
+  width: 100%;
+  max-width: 100%;
+  gap: 12px;
+  margin-top: 0;
+}
+
+body.side-nav.guest-lux .section-title,
+body.side-nav.guest-lux .faq-section__title,
+body.side-nav.guest-lux .activities-section__title {
+  margin: 0 0 0.3rem;
+}
+
+body.side-nav.guest-lux .credentials-lead,
+body.side-nav.guest-lux .faq-section__lead,
+body.side-nav.guest-lux .activities-section__lead,
+body.side-nav.guest-lux .policies-detail-intro .credentials-lead {
+  margin: 0 0 0.55rem;
+  max-width: 72ch;
+}
+
+body.side-nav.guest-lux .card,
+body.side-nav.guest-lux .policy-card,
+body.side-nav.guest-lux .auth-card,
+body.side-nav.guest-lux .login-reserve-card {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body.side-nav.guest-lux #aboutCredGrid .credential-card__media {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  max-height: 420px;
+  margin-bottom: 0.55rem;
+  overflow: hidden;
+}
+
+body.side-nav.guest-lux #aboutCredGrid .credential-img {
+  width: 100%;
+  height: auto;
+  max-height: 420px;
+  object-fit: contain;
+  object-position: top center;
+}
+
+body.side-nav.guest-lux:has(#loginForm) > main.container {
+  gap: 12px;
+  align-items: start;
+}
+
+body.side-nav.guest-lux:has(#loginForm) > main.container > .hero {
+  margin-bottom: 0;
+}
+
+body.side-nav.guest-lux:has(#loginForm) > main.container > .section {
+  padding: 0;
+}
+
+@media (max-width: 1100px) {
+  body.side-nav.guest-lux > main.container,
+  body.side-nav.guest-lux > footer .container {
+    max-width: none;
+  }
+
+  body.side-nav.guest-lux > main.container {
+    padding: 0.8rem 1rem 1rem;
+  }
+
+  body.side-nav.guest-lux > footer .container {
+    padding-inline: 1rem;
+  }
+}
+
+@media (max-width: 900px) {
+  body.side-nav.guest-lux > main.container {
+    padding: 0.7rem 0.85rem 1rem;
+  }
+
+  body.side-nav.guest-lux > footer .container {
+    padding-inline: 0.85rem;
+  }
+
+  body.side-nav.guest-lux > main.container > .hero,
+  body.side-nav.guest-lux.reviews-page > main.container > .hero,
+  body.side-nav.guest-lux.facilities-page > main.container > .hero {
+    min-height: 0;
+    padding: 0.75rem 0.85rem 0.7rem;
+  }
+}
+
+@media (max-width: 720px) {
+  body.side-nav.guest-lux > main.container > .hero h1 {
+    max-width: none;
+  }
+}
+
+@media (max-width: 430px) {
+  body.side-nav.guest-lux > main.container,
+  body.side-nav.guest-lux > footer .container {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0.7rem !important;
+    padding-right: 0.7rem !important;
   }
 }
