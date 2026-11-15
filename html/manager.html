@@ -6,7 +6,7 @@
   <title>Manager Dashboard | Elenest Resort</title>
   <link rel="icon" type="image/png" href="../Images/icon.png">
   <link rel="stylesheet" href="../css/style.css?v=20261114-notifpop1">
-  <link rel="stylesheet" href="../css/tropical-luxury.css?v=20261115-sidebar1">
+  <link rel="stylesheet" href="../css/tropical-luxury.css?v=20261115-staffhdr1">
   <script src="../js/theme.js?v=20261020-theme1"></script>
   <script src="../js/ui-motion.js?v=20261014-motion1" defer></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
@@ -101,7 +101,7 @@
       </div>
       <div class="split-2 manager-chart-row">
         <article class="card manager-chart-card">
-          <div class="manager-chart-card__head">
+          <div class="manager-chart-card__head admin-section-header">
             <h3 class="manager-chart-card__title">Booking status</h3>
             <span class="manager-chart-live" aria-live="polite">Live</span>
           </div>
@@ -118,7 +118,7 @@
           </div>
         </article>
         <article class="card manager-chart-card">
-          <div class="manager-chart-card__head">
+          <div class="manager-chart-card__head admin-section-header">
             <h3 class="manager-chart-card__title">Bookings &amp; revenue</h3>
             <span class="manager-chart-live" aria-live="polite">Live</span>
           </div>
@@ -149,7 +149,7 @@
 
     <section class="section admin-section" id="section-messages" hidden>
       <div class="appointments-strip">
-        <div class="appointments-strip__head">
+        <div class="appointments-strip__head admin-section-header">
           <h2 class="appointments-strip__title">Customer Message</h2>
         </div>
       </div>
@@ -163,7 +163,7 @@
 
     <section class="section admin-section" id="section-content" hidden>
       <div class="appointments-strip">
-        <div class="appointments-strip__head">
+        <div class="appointments-strip__head admin-section-header">
           <h2 class="appointments-strip__title">Website Content</h2>
         </div>
         <p class="appointments-strip__lead">
@@ -183,7 +183,7 @@
       <div class="content-mgmt-panels">
         <div class="content-mgmt-panel" data-content-panel="about" hidden>
           <article class="card content-mgmt-card">
-            <h3 class="content-mgmt-card__title">About page text</h3>
+            <h3 class="content-mgmt-card__title admin-section-header">About page text</h3>
             <p class="content-mgmt-card__lead">Fill in the main headings and short introductions shown on the About Us page.</p>
             <form id="cmAboutHeroForm" class="content-mgmt-form" autocomplete="off">
               <div class="manager-msg-table-wrap">
@@ -217,7 +217,7 @@
             </form>
           </article>
           <article class="card content-mgmt-card">
-            <h3 class="content-mgmt-card__title">Stories &amp; highlights</h3>
+            <h3 class="content-mgmt-card__title admin-section-header">Stories &amp; highlights</h3>
             <p class="content-mgmt-card__lead">Add a story, mission, vision, or award/highlight shown on the About Us page.</p>
             <form id="cmAboutCardForm" class="content-mgmt-form" autocomplete="off">
               <div class="manager-msg-table-wrap">
@@ -261,16 +261,16 @@
                 <p id="cmAboutCardMsg" class="auth-msg" hidden></p>
               </div>
             </form>
-              <h4 class="content-mgmt-card__title">Saved stories</h4>
+              <h4 class="content-mgmt-card__title admin-section-header">Saved stories</h4>
               <div id="cmAboutStoryList"></div>
-              <h4 class="content-mgmt-card__title">Saved awards &amp; highlights</h4>
+              <h4 class="content-mgmt-card__title admin-section-header">Saved awards &amp; highlights</h4>
               <div id="cmAboutCredList"></div>
           </article>
         </div>
 
         <div class="content-mgmt-panel" data-content-panel="faqs" hidden>
           <article class="card content-mgmt-card">
-            <h3 class="content-mgmt-card__title">Frequently Asked Questions (FAQ)</h3>
+            <h3 class="content-mgmt-card__title admin-section-header">Frequently Asked Questions (FAQ)</h3>
             <p class="content-mgmt-card__lead">Add or edit common questions guests ask. These appear on the FAQ page of the website.</p>
             <form id="cmFaqForm" class="content-mgmt-form" autocomplete="off">
               <input type="hidden" id="cmFaqEditId" value="">
@@ -300,14 +300,14 @@
                 <p id="cmFaqMsg" class="auth-msg" hidden></p>
               </div>
             </form>
-            <h3 class="content-mgmt-card__title">Saved FAQs</h3>
+            <h3 class="content-mgmt-card__title admin-section-header">Saved FAQs</h3>
             <div id="cmFaqList"></div>
           </article>
         </div>
 
         <div class="content-mgmt-panel" data-content-panel="activities" hidden>
           <article class="card content-mgmt-card">
-            <h3 class="content-mgmt-card__title">Add Activity</h3>
+            <h3 class="content-mgmt-card__title admin-section-header">Add Activity</h3>
             <p class="content-mgmt-card__lead">Add an activity or promotion guests will see on the Activities page. You can also send them a notice.</p>
             <form id="cmActivityForm" class="content-mgmt-form" autocomplete="off">
               <input type="hidden" id="cmActivityEditId" value="">
@@ -357,11 +357,11 @@
                 <p id="cmActivityMsg" class="auth-msg" hidden></p>
               </div>
             </form>
-            <h3 class="content-mgmt-card__title">Saved activities</h3>
+            <h3 class="content-mgmt-card__title admin-section-header">Saved activities</h3>
             <div id="cmActivitiesList"></div>
           </article>
           <article class="card content-mgmt-card">
-            <h3 class="content-mgmt-card__title">Send a quick offer</h3>
+            <h3 class="content-mgmt-card__title admin-section-header">Send a quick offer</h3>
             <p class="content-mgmt-card__lead">Write a short offer notice. Guests will get a notification automatically when you save it.</p>
             <form id="managerPromotionForm" class="content-mgmt-form" autocomplete="off">
               <input type="hidden" id="managerPromotionEditId" value="">
@@ -387,14 +387,14 @@
                 <p id="managerPromotionMsg" class="auth-msg" hidden></p>
               </div>
             </form>
-            <h3 class="content-mgmt-card__title">Saved offers</h3>
+            <h3 class="content-mgmt-card__title admin-section-header">Saved offers</h3>
             <div id="managerPromotionsList"></div>
           </article>
         </div>
 
         <div class="content-mgmt-panel" data-content-panel="events" hidden>
           <article class="card content-mgmt-card">
-            <h3 class="content-mgmt-card__title">Add Past Event</h3>
+            <h3 class="content-mgmt-card__title admin-section-header">Add Past Event</h3>
             <p class="content-mgmt-card__lead">Add a past celebration or event guests will see on the Events page.</p>
             <form id="cmEventForm" class="content-mgmt-form" autocomplete="off">
               <input type="hidden" id="cmEventEditId" value="">
@@ -438,11 +438,11 @@
                 <p id="cmEventMsg" class="auth-msg" hidden></p>
               </div>
             </form>
-            <h3 class="content-mgmt-card__title">Saved events</h3>
+            <h3 class="content-mgmt-card__title admin-section-header">Saved events</h3>
             <div id="cmEventsList"></div>
           </article>
           <article class="card content-mgmt-card">
-            <h3 class="content-mgmt-card__title">Send a quick event notice</h3>
+            <h3 class="content-mgmt-card__title admin-section-header">Send a quick event notice</h3>
             <p class="content-mgmt-card__lead">Write a short event notice. Guests will get a notification automatically when you save it.</p>
             <form id="managerEventForm" class="content-mgmt-form" autocomplete="off">
               <input type="hidden" id="managerEventEditId" value="">
@@ -470,14 +470,14 @@
                 <p id="managerEventMsg" class="auth-msg" hidden></p>
               </div>
             </form>
-            <h3 class="content-mgmt-card__title">Saved notices</h3>
+            <h3 class="content-mgmt-card__title admin-section-header">Saved notices</h3>
             <div id="managerEventsList"></div>
           </article>
         </div>
 
         <div class="content-mgmt-panel" data-content-panel="facilities" hidden>
           <div class="card content-mgmt-card">
-            <h3 class="content-mgmt-card__title">Add Facility</h3>
+            <h3 class="content-mgmt-card__title admin-section-header">Add Facility</h3>
             <p class="content-mgmt-card__lead">Add or update a Room, Cottage, or Event Hall. Guests will see these on the Facilities page.</p>
         <form id="managerRoomCatalogForm" class="content-mgmt-form" autocomplete="off">
           <div class="manager-msg-table-wrap">
@@ -551,7 +551,7 @@
             <p id="managerRoomCatalogMsg" class="auth-msg" hidden></p>
           </div>
         </form>
-        <h3 class="content-mgmt-card__title">Saved facilities</h3>
+        <h3 class="content-mgmt-card__title admin-section-header">Saved facilities</h3>
         <div id="managerRoomCatalogList" class="admin-users-list" style="margin-top: 14px;"></div>
         <div id="managerRoomCatalogPagination" class="admin-pagination" hidden></div>
       </div>
@@ -559,7 +559,7 @@
 
         <div class="content-mgmt-panel" data-content-panel="policies" hidden>
           <div class="card content-mgmt-card">
-            <h3 class="content-mgmt-card__title">Add Policy</h3>
+            <h3 class="content-mgmt-card__title admin-section-header">Add Policy</h3>
             <p class="content-mgmt-card__lead">Add or update a house rule or pool rule. Guests will see these on the Policies page.</p>
             <form id="managerPolicyForm" class="content-mgmt-form" autocomplete="off">
               <div class="manager-msg-table-wrap">
@@ -594,7 +594,7 @@
                 <p id="managerPolicyMsg" class="auth-msg" hidden></p>
               </div>
             </form>
-            <h3 class="content-mgmt-card__title">Saved policies</h3>
+            <h3 class="content-mgmt-card__title admin-section-header">Saved policies</h3>
             <div id="managerPolicyList" class="admin-users-list" style="margin-top: 14px;"></div>
           </div>
         </div>
@@ -603,12 +603,12 @@
 
     <section class="section admin-section" id="section-manage" hidden>
       <div class="appointments-strip">
-        <div class="appointments-strip__head appointments-strip__head--split">
+        <div class="appointments-strip__head admin-section-header">
           <h2 class="appointments-strip__title">Reservation information</h2>
-          <div class="appointments-strip__tools">
-            <label for="managerManageSearch" class="admin-toolbar__note">Search</label>
-            <input id="managerManageSearch" type="search" placeholder="Name, email, record key, ID" autocomplete="off" style="max-width: 260px;">
-          </div>
+        </div>
+        <div class="appointments-strip__tools">
+          <label for="managerManageSearch" class="admin-toolbar__note">Search</label>
+          <input id="managerManageSearch" type="search" placeholder="Name, email, record key, ID" autocomplete="off" style="max-width: 260px;">
         </div>
       </div>
       <article class="card manager-messages-card">
@@ -620,7 +620,7 @@
 
     <section class="section admin-section" id="section-calendar" hidden>
       <div class="appointments-strip">
-        <div class="appointments-strip__head">
+        <div class="appointments-strip__head admin-section-header">
           <h2 class="appointments-strip__title">Calendar management</h2>
         </div>
         <p class="appointments-strip__lead">
@@ -652,7 +652,7 @@
           </div>
 
           <aside class="admin-dash-cal-notes manager-cal-notes" aria-label="Calendar notes">
-            <h3 class="admin-dash-cal-notes__title">Calendar Notes</h3>
+            <h3 class="admin-dash-cal-notes__title admin-section-header">Calendar Notes</h3>
             <ul class="admin-dash-cal-legend">
               <li>
                 <span class="avail-legend__swatch avail-legend__swatch--available" aria-hidden="true"></span>
@@ -689,7 +689,7 @@
       </div>
 
       <div class="card manager-appt-panel">
-        <div class="manager-appt-panel__head">
+        <div class="manager-appt-panel__head admin-section-header">
           <h3 class="manager-appt-panel__title">Appointment schedules</h3>
         </div>
         <div id="managerAppointmentsList" class="manager-appt-list"></div>
@@ -699,7 +699,7 @@
       </div>
 
       <div class="card admin-payment-feature-card" id="managerCalendarRequestsCard">
-        <div class="admin-status-group-head">
+        <div class="admin-status-group-head admin-section-header">
           <h3 class="admin-pay-table-title">Your calendar requests</h3>
           <div class="admin-pay-table-head-actions">
             <button type="button" class="btn btn--outline btn--small" id="managerCalendarRequestsRefresh">Refresh</button>
@@ -715,15 +715,14 @@
 
     <section class="section admin-section" id="section-analytics" hidden>
       <div class="appointments-strip">
-        <div class="appointments-strip__head appointments-strip__head--split">
-          <div class="manager-report-heading">
-            <h2 class="appointments-strip__title">Analytics &amp; Reports</h2>
-            <p class="manager-report-live" id="managerReportLiveStamp">
-              <span class="manager-report-live__dot" aria-hidden="true"></span>
-              <span id="managerReportLiveStampText">Connecting to live records…</span>
-            </p>
-          </div>
-          <div class="appointments-strip__tools manager-report-tools">
+        <div class="appointments-strip__head admin-section-header">
+          <h2 class="appointments-strip__title">Analytics &amp; Reports</h2>
+        </div>
+        <p class="manager-report-live" id="managerReportLiveStamp">
+          <span class="manager-report-live__dot" aria-hidden="true"></span>
+          <span id="managerReportLiveStampText">Connecting to live records…</span>
+        </p>
+        <div class="appointments-strip__tools manager-report-tools">
             <label class="manager-report-tools__field">
               <span>Period</span>
               <select id="managerReportPreset" aria-label="Report period">
@@ -754,7 +753,6 @@
             <button type="button" class="btn btn--outline admin-refresh-btn" id="managerDownloadReport">
               Download JSON report
             </button>
-          </div>
         </div>
       </div>
       <div class="split-2">
@@ -778,7 +776,7 @@
         </article>
       </div>
       <article class="card manager-report-card">
-        <h3 class="manager-report-card__title">Report summary</h3>
+        <h3 class="manager-report-card__title admin-section-header">Report summary</h3>
         <div id="managerReportSummary" class="manager-report-summary">
           <div class="manager-report-summary__empty">No report data yet.</div>
         </div>
@@ -787,7 +785,7 @@
       <div class="admin-app manager-admin-charts-mirror">
         <div class="admin-reports-grid" id="managerReportsGrid">
           <article class="card admin-report-chart-card">
-            <h3 class="admin-report-card-title">Booking trends</h3>
+            <h3 class="admin-report-card-title admin-section-header">Booking trends</h3>
             <p class="booking-card__sub admin-report-chart-sub">Reservations by month (last 12 months).</p>
             <div class="admin-report-chart-legend" aria-label="Chart legend">
               <span class="admin-report-chart-legend__item">
@@ -807,7 +805,7 @@
           </article>
 
           <article class="card admin-report-chart-card">
-            <h3 class="admin-report-card-title" id="managerReportStatusChartTitle">Booking status</h3>
+            <h3 class="admin-report-card-title admin-section-header" id="managerReportStatusChartTitle">Booking status</h3>
             <p class="booking-card__sub admin-report-chart-sub" id="managerReportStatusSub">
               Share of pending, confirmed, and cancelled bookings.
             </p>
@@ -818,13 +816,13 @@
           </article>
 
           <article class="card admin-report-chart-card">
-            <h3 class="admin-report-card-title">Facility usage</h3>
+            <h3 class="admin-report-card-title admin-section-header">Facility usage</h3>
             <p class="booking-card__sub admin-report-chart-sub">Bookings by facility category from reservation records.</p>
             <canvas id="managerReportFacilityChart" width="640" height="220" class="admin-pro-chart" aria-label="Facility usage bar chart"></canvas>
           </article>
 
           <article class="card admin-report-chart-card">
-            <h3 class="admin-report-card-title">Revenue</h3>
+            <h3 class="admin-report-card-title admin-section-header">Revenue</h3>
             <p class="booking-card__sub admin-report-chart-sub" id="managerReportRevenueSub">Confirmed earnings by month (last 12 months).</p>
             <div class="admin-report-chart-legend" aria-label="Revenue legend">
               <span class="admin-report-chart-legend__item">
@@ -839,7 +837,7 @@
           </article>
 
           <article class="card admin-report-chart-card admin-report-reviews-card" id="managerReportGuestReviewsCard">
-            <div class="admin-report-card-head">
+            <div class="admin-report-card-head admin-section-header">
               <h3 class="admin-report-card-title">Guest Reviews</h3>
               <span class="manager-chart-live" aria-live="polite">Live</span>
             </div>

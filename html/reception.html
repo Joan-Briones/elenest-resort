@@ -6,7 +6,7 @@
   <title>Receptionist Dashboard | Elenest Resort</title>
   <link rel="icon" type="image/png" href="../Images/icon.png">
   <link rel="stylesheet" href="../css/style.css?v=20261114-notifpop1">
-  <link rel="stylesheet" href="../css/tropical-luxury.css?v=20261115-sidebar1">
+  <link rel="stylesheet" href="../css/tropical-luxury.css?v=20261115-staffhdr1">
   <script src="../js/theme.js?v=20261020-theme1"></script>
   <script src="../js/ui-motion.js?v=20261014-motion1" defer></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
@@ -76,7 +76,7 @@
   <main class="container">
     <section class="section admin-section" id="section-walkin">
       <div class="appointments-strip appointments-strip--reception-checkin">
-        <div class="appointments-strip__head">
+        <div class="appointments-strip__head admin-section-header">
           <h2 class="appointments-strip__title">Walk-in booking</h2>
         </div>
       </div>
@@ -149,8 +149,8 @@
         </div>
 
         <div id="receptionWiRoomSummary" class="book-unit-summary" hidden>
-          <div class="appointments-strip__head appointments-strip__head--split" style="margin-bottom: 8px;">
-            <h3 class="section-title" style="margin: 0; font-size: 1rem;">Selected facility</h3>
+          <div class="appointments-strip__head admin-section-header">
+            <h3 class="section-title">Selected facility</h3>
             <button type="button" class="btn btn--outline btn--small" id="receptionWiChangeRoom">
               Change facility
             </button>
@@ -166,7 +166,7 @@
       </div>
 
       <div class="card reception-walkin-guest-card">
-        <h2 class="section-title">Guest details</h2>
+        <h2 class="section-title admin-section-header">Guest details</h2>
         <form
           id="receptionWalkInForm"
           class="form-grid reception-walkin-guest-form"
@@ -240,7 +240,7 @@
 
     <section class="section admin-section" id="section-checkin" hidden>
       <div class="appointments-strip appointments-strip--reception-checkin">
-        <div class="appointments-strip__head">
+        <div class="appointments-strip__head admin-section-header">
           <h2 class="appointments-strip__title">Check-in</h2>
         </div>
       </div>
@@ -259,7 +259,7 @@
 
     <section class="section admin-section" id="section-checkout" hidden>
       <div class="appointments-strip">
-        <div class="appointments-strip__head">
+        <div class="appointments-strip__head admin-section-header">
           <h2 class="appointments-strip__title">Check-out</h2>
         </div>
       </div>
@@ -278,7 +278,7 @@
 
     <section class="section admin-section" id="section-customer-record" hidden>
       <div class="appointments-strip">
-        <div class="appointments-strip__head">
+        <div class="appointments-strip__head admin-section-header">
           <h2 class="appointments-strip__title">Customer record</h2>
         </div>
       </div>
@@ -292,7 +292,7 @@
         <p id="receptionRecordsEmpty" class="section-lead" hidden style="margin-top: 12px;">No matching guests in these lists.</p>
         <div id="receptionRecordsSplit" class="reception-records-split">
           <section class="reception-records-panel reception-records-panel--checkin" aria-labelledby="receptionRecordsCheckinHeading">
-            <div class="reception-records-panel__head">
+            <div class="reception-records-panel__head admin-section-header">
               <h3 id="receptionRecordsCheckinHeading" class="reception-records-split__heading">Check-in</h3>
             </div>
             <p id="receptionRecordsConfirmedEmpty" class="reception-records-split__empty section-lead" hidden>No guests with an approved check-in yet.</p>
@@ -300,7 +300,7 @@
             <div id="receptionRecordsConfirmedPager" class="admin-pagination" hidden></div>
           </section>
           <section class="reception-records-panel reception-records-panel--checkout" aria-labelledby="receptionRecordsCheckoutHeading">
-            <div class="reception-records-panel__head">
+            <div class="reception-records-panel__head admin-section-header">
               <h3 id="receptionRecordsCheckoutHeading" class="reception-records-split__heading">Check-out</h3>
             </div>
             <p id="receptionRecordsCheckoutEmpty" class="reception-records-split__empty section-lead" hidden>No completed check-outs.</p>
