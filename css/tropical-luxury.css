@@ -3521,7 +3521,8 @@ body.guest-lux.is-guest-register #loginSignSection {
 body.guest-lux.is-guest-register:has(#loginForm) main.container,
 body.guest-lux.is-guest-register:has(#loginForm) > main.container {
   grid-template-columns: minmax(0, 1fr);
-  gap: 0.7rem;
+  justify-items: center;
+  gap: 1rem;
 }
 
 body.guest-lux.is-guest-register #guestRegisterSection,
@@ -3532,12 +3533,33 @@ body.guest-lux #guestRegisterSection {
   padding: 0;
 }
 
+/* Pink banner and the form share one centered measure. */
+body.side-nav.guest-lux.is-guest-register:has(#loginForm) > main.container > .hero,
+body.side-nav.guest-lux.is-guest-register:has(#loginForm) > main.container > #guestRegisterSection,
+body.side-nav.guest-lux:has(#regForm):not(:has(#loginForm)) > main.container > .hero,
+body.side-nav.guest-lux:has(#regForm):not(:has(#loginForm)) > main.container > #guestRegisterSection {
+  width: min(1180px, 100%);
+  max-width: 1180px;
+  margin-left: auto;
+  margin-right: auto;
+  justify-self: center;
+  box-sizing: border-box;
+}
+
+body.side-nav.guest-lux.is-guest-register:has(#loginForm) > main.container > .hero {
+  margin-bottom: 0;
+}
+
+body.side-nav.guest-lux:has(#regForm):not(:has(#loginForm)) > main.container > .hero {
+  margin-bottom: 1rem;
+}
+
 body.side-nav.guest-lux .guest-register-card,
 body.guest-lux .guest-register-card {
   width: 100%;
-  max-width: 920px;
+  max-width: none;
   margin: 0;
-  padding: 1.15rem 1.25rem 1.1rem;
+  padding: 1.25rem 1.4rem 1.2rem;
 }
 
 body.guest-lux .guest-register-card > h3 {
@@ -3618,7 +3640,26 @@ html[data-theme="dark"] body.guest-lux .guest-register-card .auth-switch a:focus
   color: var(--pink-soft);
 }
 
+@media (max-width: 900px) {
+  body.side-nav.guest-lux.is-guest-register:has(#loginForm) > main.container > .hero,
+  body.side-nav.guest-lux.is-guest-register:has(#loginForm) > main.container > #guestRegisterSection,
+  body.side-nav.guest-lux:has(#regForm):not(:has(#loginForm)) > main.container > .hero,
+  body.side-nav.guest-lux:has(#regForm):not(:has(#loginForm)) > main.container > #guestRegisterSection {
+    width: 100%;
+    max-width: none;
+  }
+}
+
 @media (max-width: 760px) {
+  body.side-nav.guest-lux.is-guest-register:has(#loginForm) > main.container,
+  body.guest-lux.is-guest-register:has(#loginForm) > main.container {
+    gap: 0.85rem;
+  }
+
+  body.side-nav.guest-lux:has(#regForm):not(:has(#loginForm)) > main.container > .hero {
+    margin-bottom: 0.85rem;
+  }
+
   body.side-nav.guest-lux .guest-register-card,
   body.guest-lux .guest-register-card {
     max-width: none;
