@@ -8,8 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/style.css?v=20261115-bookingdetails1">
-  <link rel="stylesheet" href="../css/tropical-luxury.css?v=20261115-sidebar1">
+  <link rel="stylesheet" href="../css/style.css?v=20261115-bookingdetails2">
+  <link rel="stylesheet" href="../css/tropical-luxury.css?v=20261115-bookingdetails2">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
   <script src="../js/theme.js?v=20261020-theme1"></script>
   <script src="../js/ui-motion.js?v=20261014-motion1" defer></script>
@@ -388,7 +388,6 @@
 
               <div id="paymentSummaryHost" class="payment-summary" aria-live="polite"></div>
               <div id="paymentMethodsHost" class="payment-methods-grid" role="radiogroup" aria-label="Select payment method"></div>
-              <div id="paymentResubmitStatus" hidden></div>
               <div class="payment-proof-section" id="paymentProofSection">
                 <label for="paymentProofFile">Proof of payment <span class="req-mark">*</span></label>
                 <input id="paymentProofFile" type="file" accept="image/*" aria-describedby="paymentProofHint">
@@ -400,7 +399,8 @@
                 <button type="button" class="btn btn--outline" id="backFromPayment">Back</button>
                 <button type="button" class="btn book-flow-btn-main" id="submitPaymentBtn">Submit proof of payment</button>
               </div>
-              <div id="paymentSubmittedState" hidden>
+              <div id="paymentResubmitStatus" class="booking-details-slot" hidden></div>
+              <div id="paymentSubmittedState" class="booking-details-slot" hidden>
                 <div id="paymentSubmittedDetails"></div>
                 <p class="book-flow__panel-lead" id="paymentSubmittedLead" hidden>Your payment proof has been submitted. Please wait while the admin verifies your payment. Your booking receipt will be available once the payment is approved.</p>
                 <div class="book-flow-step4-cta">

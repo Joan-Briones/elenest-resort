@@ -10002,20 +10002,43 @@ input[type="submit"].is-loading {
 }
 
 .proof-status-card {
-  margin: 0 0 16px;
-  padding: 18px 18px 16px;
-  border-radius: 16px;
-  background: #fffdfb;
-  border: 1px solid rgba(217, 130, 165, 0.38);
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  padding: 22px 22px 18px;
+  border-radius: 18px;
+  background: #ffffff;
+  background-image: none;
+  border: 1px solid rgba(168, 201, 165, 0.72);
+  box-shadow: 0 10px 24px rgba(49, 93, 70, 0.06);
   color: #333a35;
+  text-align: left;
+  overflow: hidden;
+}
+
+.proof-status-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #D982A5 0%, #D982A5 46%, #315D46 100%);
+  pointer-events: none;
 }
 
 .payment-success-modal--details .proof-status-card {
   margin: 0 0 18px;
-  background: transparent;
+  background: #ffffff;
+  background-image: none;
   border: 0;
-  padding: 0;
+  box-shadow: none;
+  padding: 8px 0 0;
   color: #333a35;
+}
+
+.payment-success-modal--details .proof-status-card::before {
+  display: none;
 }
 
 .subpage .card .proof-status-card__title,
@@ -10239,6 +10262,47 @@ input[type="submit"].is-loading {
 
 .book-flow__panel[data-step="4"] .book-flow-actions {
   justify-content: center;
+}
+
+/* Keep Back / Submit above the Booking details card, with a clear gap. */
+.book-flow__panel[data-step="4"] > #paymentStepActions {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  margin: 8px 0 0;
+  padding: 2px 0 0;
+  background: transparent;
+}
+
+.book-flow__panel[data-step="4"] > #paymentStepActions .btn {
+  position: relative;
+  z-index: 6;
+  margin-top: 0;
+}
+
+.book-flow__panel[data-step="4"] > .booking-details-slot[hidden] {
+  display: none !important;
+}
+
+.book-flow__panel[data-step="4"] > .booking-details-slot:not([hidden]) {
+  display: block;
+  position: relative;
+  z-index: 1;
+  clear: both;
+  width: 100%;
+  max-width: 100%;
+  margin: 28px 0 0;
+  padding: 0;
+  text-align: left;
+}
+
+.book-flow__panel[data-step="4"] .booking-details-slot .proof-status-card {
+  margin: 0;
 }
 
 .book-flow-receipt[hidden] {
@@ -28329,15 +28393,17 @@ html[data-theme="dark"] .admin-payment-empty {
 
 html[data-theme="dark"] .payment-success-modal.payment-success-modal--details,
 html[data-theme="dark"] .proof-status-card {
-  background: #fffdfb !important;
+  background: #ffffff !important;
   background-image: none !important;
   color: #333a35 !important;
-  border-color: rgba(217, 130, 165, 0.38) !important;
+  -webkit-text-fill-color: #333a35 !important;
+  border-color: rgba(168, 201, 165, 0.72) !important;
 }
 
 html[data-theme="dark"] .payment-success-modal--details .proof-status-card {
-  background: transparent !important;
+  background: #ffffff !important;
   border-color: transparent !important;
+  box-shadow: none !important;
 }
 
 html[data-theme="dark"] .facility-detail-modal__title,

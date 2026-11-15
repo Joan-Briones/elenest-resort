@@ -3966,3 +3966,119 @@ html[data-theme="dark"] body.guest-lux .guest-register-card .auth-switch a:focus
   content: none !important;
   display: none !important;
 }
+
+/* Booking details card — white surface, dark type, pink and forest accents.
+   Loaded last so it stays readable in light and dark theme. */
+.proof-status-card,
+html[data-theme="dark"] .proof-status-card,
+html[data-theme="dark"] .book-flow__panel .proof-status-card,
+html[data-theme="dark"] .subpage .booking-card .proof-status-card,
+.payment-success-modal--details .proof-status-card,
+html[data-theme="dark"] .payment-success-modal--details .proof-status-card,
+html[data-theme="dark"] .payment-success-modal.payment-success-modal--details {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  color: #333A35 !important;
+  -webkit-text-fill-color: #333A35 !important;
+}
+
+.proof-status-card,
+html[data-theme="dark"] .proof-status-card,
+html[data-theme="dark"] .book-flow__panel .proof-status-card,
+.subpage .booking-card .proof-status-card {
+  border: 1px solid rgba(168, 201, 165, 0.75) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 10px 24px rgba(49, 93, 70, 0.07) !important;
+}
+
+.payment-success-modal--details .proof-status-card,
+html[data-theme="dark"] .payment-success-modal--details .proof-status-card {
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.proof-status-card__title,
+.subpage .card .proof-status-card__title,
+.payment-success-modal .proof-status-card__title,
+html[data-theme="dark"] .proof-status-card__title,
+html[data-theme="dark"] body.subpage .proof-status-card h3,
+html[data-theme="dark"] .subpage .card .proof-status-card__title {
+  color: #315D46 !important;
+  -webkit-text-fill-color: #315D46 !important;
+}
+
+.proof-status-card__row dt,
+html[data-theme="dark"] .proof-status-card__row dt,
+html[data-theme="dark"] body.subpage .proof-status-card dt {
+  color: #315D46 !important;
+  -webkit-text-fill-color: #315D46 !important;
+}
+
+.proof-status-card__row dd,
+.proof-status-card__status,
+html[data-theme="dark"] .proof-status-card__row dd,
+html[data-theme="dark"] .proof-status-card__status,
+html[data-theme="dark"] body.subpage .proof-status-card dd {
+  color: #333A35 !important;
+  -webkit-text-fill-color: #333A35 !important;
+}
+
+.proof-status-card__status--approved,
+html[data-theme="dark"] .proof-status-card__status--approved {
+  color: #315D46 !important;
+  -webkit-text-fill-color: #315D46 !important;
+}
+
+.proof-status-card__status--rejected,
+html[data-theme="dark"] .proof-status-card__status--rejected {
+  color: #9b3050 !important;
+  -webkit-text-fill-color: #9b3050 !important;
+}
+
+.proof-status-card__link,
+html[data-theme="dark"] .proof-status-card__link {
+  color: #D982A5 !important;
+  -webkit-text-fill-color: #D982A5 !important;
+}
+
+.proof-status-card__link:hover,
+.proof-status-card__link:focus-visible,
+html[data-theme="dark"] .proof-status-card__link:hover,
+html[data-theme="dark"] .proof-status-card__link:focus-visible {
+  color: #C56B8F !important;
+  -webkit-text-fill-color: #C56B8F !important;
+}
+
+.proof-status-card__muted,
+html[data-theme="dark"] .proof-status-card__muted {
+  color: #5c675f !important;
+  -webkit-text-fill-color: #5c675f !important;
+}
+
+.proof-status-card__note,
+.subpage .card .proof-status-card__note,
+.payment-success-modal .proof-status-card__note,
+html[data-theme="dark"] .proof-status-card__note,
+html[data-theme="dark"] body.subpage .proof-status-card p {
+  color: #333A35 !important;
+  -webkit-text-fill-color: #333A35 !important;
+}
+
+.book-flow__panel[data-step="4"] > #paymentStepActions {
+  position: relative !important;
+  z-index: 5 !important;
+  margin-bottom: 0 !important;
+}
+
+.book-flow__panel[data-step="4"] > .booking-details-slot:not([hidden]) {
+  display: block !important;
+  position: relative !important;
+  z-index: 1 !important;
+  margin-top: 28px !important;
+  clear: both;
+}
+
+.book-flow__panel[data-step="4"] > .booking-details-slot[hidden] {
+  display: none !important;
+}
