@@ -3210,7 +3210,7 @@ body.subpage .pay-deadline-alert.is-expired .pay-deadline-alert__title {
 .about .heading h2 {
   position: relative;
   z-index: 1;
-  margin: 36px 0 20px;
+  margin: 0 0 12px;
   display: inline-block;
   font-size: clamp(2rem, 4.5vw, 3rem);
 }
