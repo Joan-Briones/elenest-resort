@@ -2320,3 +2320,652 @@ body.side-nav .auth-oauth {
     max-width: min(8rem, 48vw) !important;
   }
 }
+
+/* ==========================================================================
+   Guest pages — compact Modern Tropical Luxury
+   About, Reviews, Facilities, Policies, FAQ, Activities, Contact, Sign In.
+   Spacing and type only. Sidebar and the sign-in calendar are untouched.
+   ========================================================================== */
+
+body.guest-lux {
+  background-color: var(--cream);
+  background-image: var(--palm-tile);
+  background-size: 220px 220px;
+  font-family: var(--sans);
+}
+
+body.guest-lux main.container {
+  max-width: min(1000px, 100%);
+  padding-top: 0.65rem;
+  padding-bottom: 1.15rem;
+}
+
+body.guest-lux h1,
+body.guest-lux h2,
+body.guest-lux h3,
+body.guest-lux .section-title,
+body.guest-lux .faq-section__title,
+body.guest-lux .activities-section__title,
+body.guest-lux .activities-card__title,
+body.guest-lux .activities-cta-card__title,
+body.guest-lux .login-reserve-card__title,
+body.guest-lux .auth-card > h3,
+body.guest-lux .auth-card #loginCardTitle {
+  font-family: var(--serif);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+html:not([data-theme="dark"]) body.guest-lux .section-title,
+html:not([data-theme="dark"]) body.guest-lux .faq-section__title,
+html:not([data-theme="dark"]) body.guest-lux .activities-section__title,
+html:not([data-theme="dark"]) body.guest-lux .activities-cta-card__title,
+html:not([data-theme="dark"]) body.guest-lux .login-reserve-card__title,
+html:not([data-theme="dark"]) body.guest-lux .card h3,
+html:not([data-theme="dark"]) body.guest-lux .activities-card__title,
+html:not([data-theme="dark"]) body.guest-lux .auth-card > h3,
+html:not([data-theme="dark"]) body.guest-lux .auth-card #loginCardTitle,
+html:not([data-theme="dark"]) body.guest-lux .contact-location-title,
+html:not([data-theme="dark"]) body.guest-lux .reviews-card h3,
+html:not([data-theme="dark"]) body.guest-lux .policy-card h3 {
+  color: var(--forest) !important;
+  -webkit-text-fill-color: var(--forest);
+}
+
+body.guest-lux .hero {
+  margin: 0 0 0.35rem;
+  padding: 0.8rem 1rem 0.75rem 0.95rem;
+  min-height: 0 !important;
+  border-radius: 14px;
+  border: 0 !important;
+  border-left: 3px solid var(--sage) !important;
+  background:
+    linear-gradient(100deg, rgba(49, 93, 70, 0.22), transparent 46%),
+    linear-gradient(145deg, #d982a5 0%, #c56b8f 100%) !important;
+  box-shadow: 0 8px 18px rgba(217, 130, 165, 0.16);
+}
+
+body.guest-lux .hero::before {
+  content: "";
+  top: -0.15rem;
+  right: 0.15rem;
+  width: 6.5rem;
+  height: 3.4rem;
+  font-size: 0;
+  opacity: 0.34;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 78' fill='none'%3E%3Cpath d='M70 70c2-24 22-42 48-50-20 8-34 26-38 50 8-18 26-32 46-36' stroke='%23FFFDFB' stroke-width='1.4'/%3E%3Cpath d='M70 70c-2-24-22-42-48-50 20 8 34 26 38 50-8-18-26-32-46-36' stroke='%23FFFDFB' stroke-width='1.4'/%3E%3C/svg%3E") right center / contain no-repeat;
+}
+
+body.guest-lux .hero h1 {
+  margin: 0 0 0.2rem;
+  max-width: 22ch;
+  font-size: clamp(1.45rem, 2.4vw, 1.9rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+body.guest-lux .hero p {
+  margin: 0;
+  max-width: 62ch;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+body.guest-lux .faq-hero__eyebrow {
+  margin: 0 0 0.2rem;
+  color: var(--pink-soft);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+}
+
+body.guest-lux .section {
+  padding: 0.3rem 0 0.45rem;
+}
+
+body.guest-lux .section-title,
+body.guest-lux .faq-section__title,
+body.guest-lux .activities-section__title {
+  margin: 0 0 0.25rem;
+  font-size: clamp(1.2rem, 2vw, 1.45rem);
+  line-height: 1.2;
+}
+
+body.guest-lux .credentials-lead,
+body.guest-lux .faq-section__lead,
+body.guest-lux .activities-section__lead {
+  margin: 0 0 0.55rem;
+  max-width: 68ch;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+body.guest-lux .grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  align-items: stretch;
+}
+
+body.guest-lux #aboutStoryGrid,
+body.guest-lux #aboutCredGrid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+}
+
+body.guest-lux main.container,
+body.guest-lux .hero,
+body.guest-lux .section,
+body.guest-lux .grid,
+body.guest-lux .card,
+body.guest-lux .activities-grid,
+body.guest-lux .contact-grid,
+body.guest-lux .reviews-grid {
+  min-width: 0;
+  max-width: 100%;
+}
+
+body.guest-lux .hero p,
+body.guest-lux .card p,
+body.guest-lux .card h3,
+body.guest-lux .credentials-lead,
+body.guest-lux .faq-section__lead,
+body.guest-lux .activities-section__lead,
+body.guest-lux .activities-card__title,
+body.guest-lux .activities-card__desc {
+  overflow-wrap: break-word;
+}
+
+body.guest-lux .card {
+  padding: 12px 13px;
+  border-radius: 14px;
+}
+
+body.guest-lux .card:hover,
+body.guest-lux .policy-card:hover {
+  transform: translateY(-2px);
+}
+
+body.guest-lux .contact-info-card:hover,
+body.guest-lux .auth-card:hover,
+body.guest-lux .login-reserve-card:hover,
+body.guest-lux .activities-cta-card:hover {
+  transform: none;
+}
+
+body.guest-lux .list li {
+  margin: 0;
+}
+
+body.guest-lux .card h3 {
+  margin: 0 0 0.3rem;
+  font-size: 1.08rem;
+  line-height: 1.25;
+}
+
+body.guest-lux .card p,
+body.guest-lux .card li {
+  margin-top: 0;
+  margin-bottom: 0.35rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+body.guest-lux .card p:last-child,
+body.guest-lux .policy-card p:last-child {
+  margin-bottom: 0;
+}
+
+body.guest-lux .list {
+  gap: 6px;
+  margin: 0;
+}
+
+body.guest-lux .note {
+  margin-top: 0.4rem;
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+
+body.guest-lux #contactEmailHint {
+  margin: 2px 0 8px !important;
+}
+
+body.guest-lux main .btn {
+  min-height: 2.4rem;
+  margin-top: 0.4rem;
+  padding: 0.45rem 0.9rem;
+}
+
+body.guest-lux .map-wrap {
+  margin-top: 0.55rem;
+  border-radius: 12px;
+  border-color: rgba(168, 201, 165, 0.45);
+}
+
+body.guest-lux .map-wrap iframe {
+  min-height: 220px;
+}
+
+body.guest-lux #aboutCredGrid .credential-card__media {
+  margin-bottom: 8px;
+  border-radius: 10px;
+  border-color: rgba(168, 201, 165, 0.4);
+}
+
+/* Facilities — photo on top, details tucked underneath */
+body.guest-lux.facilities-page .facilities-tabs-section {
+  padding-top: 0.15rem;
+}
+
+body.guest-lux.facilities-page .grid,
+body.guest-lux.facilities-page .facilities-tab-panel .grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+body.guest-lux .facilities-tabs,
+body.guest-lux .login-reserve-tabs {
+  gap: 6px;
+  margin: 0 0 10px;
+}
+
+body.guest-lux .facilities-tab,
+body.guest-lux .login-reserve-tab {
+  min-height: 2.15rem;
+  padding: 0.35rem 0.85rem;
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+}
+
+body.guest-lux .facility-card {
+  padding: 0 0 12px;
+}
+
+body.guest-lux .facility-card::before {
+  display: none;
+}
+
+body.guest-lux .facility-card .facility-swipe {
+  margin: 0 0 8px;
+}
+
+body.guest-lux .facility-card .facility-swipe__viewport {
+  border-radius: 14px 14px 0 0;
+}
+
+body.guest-lux .facility-card .facility-swipe .room-img {
+  height: 148px;
+}
+
+body.guest-lux .facility-card > :not(.facility-swipe) {
+  margin-inline: 12px;
+}
+
+body.guest-lux .facility-card__capacity,
+body.guest-lux .facility-card__amenities {
+  margin-top: 0;
+  margin-bottom: 0.3rem;
+}
+
+body.guest-lux .facility-card__amenities h4 {
+  margin-bottom: 0.25rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+body.guest-lux .facility-card__actions {
+  gap: 8px;
+  margin-top: 8px;
+}
+
+/* Reviews */
+body.guest-lux.reviews-page .reviews-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 0.35rem;
+}
+
+body.guest-lux.reviews-page .reviews-card {
+  padding: 10px 12px;
+  align-items: center;
+}
+
+body.guest-lux.reviews-page .reviews-pagination {
+  justify-content: center;
+  gap: 8px;
+  margin: 0.55rem 0 0;
+  padding-top: 0.45rem;
+}
+
+/* Policies */
+body.guest-lux .policy-card {
+  padding: 12px 13px 11px;
+}
+
+body.guest-lux .policy-card__icon-wrap {
+  width: 36px;
+  height: 36px;
+  margin-bottom: 8px;
+  border-radius: 10px;
+  font-size: 0.95rem;
+}
+
+body.guest-lux .policies-detail-wrap {
+  padding-top: 0.15rem;
+  padding-bottom: 0.2rem;
+}
+
+body.guest-lux .policies-detail-intro {
+  margin-bottom: 0.45rem;
+  text-align: left;
+}
+
+body.guest-lux .policies-detail-intro .credentials-lead {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/* FAQ */
+body.guest-lux .faq-section {
+  max-width: none;
+  margin: 0;
+}
+
+body.guest-lux .faq-list {
+  gap: 8px;
+}
+
+body.guest-lux .faq-item__question {
+  padding: 10px 12px;
+  font-size: 0.95rem;
+}
+
+body.guest-lux .faq-item__answer {
+  padding: 0 12px 10px;
+}
+
+body.guest-lux .faq-item__answer p {
+  margin-top: 8px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Activities */
+body.guest-lux .activities-grid {
+  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+}
+
+body.guest-lux .activities-card {
+  padding: 0;
+}
+
+body.guest-lux .activities-card__media {
+  aspect-ratio: 16 / 9;
+}
+
+body.guest-lux .activities-card__body {
+  padding: 10px 12px 12px;
+}
+
+body.guest-lux .activities-card__type {
+  margin-bottom: 0.15rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+}
+
+body.guest-lux .activities-card__title {
+  margin-bottom: 0.2rem;
+  font-size: 1.08rem;
+}
+
+body.guest-lux .activities-card__date {
+  margin-bottom: 0.35rem;
+  font-size: 0.82rem;
+}
+
+body.guest-lux .activities-card__desc {
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+body.guest-lux .activities-cta-card {
+  padding: 14px 14px 12px;
+  text-align: left;
+}
+
+body.guest-lux .activities-cta-card p {
+  margin-bottom: 0.35rem;
+}
+
+/* Contact */
+body.guest-lux .contact-grid {
+  gap: 10px;
+  align-items: start;
+}
+
+body.guest-lux .contact-location {
+  margin-top: 10px;
+  padding-top: 10px;
+}
+
+body.guest-lux .contact-location-title {
+  margin-bottom: 0.2rem;
+  font-family: var(--serif);
+  font-size: 1.05rem;
+}
+
+body.guest-lux .contact-location-lead {
+  margin-bottom: 0.35rem;
+}
+
+body.guest-lux .contact-info-card .map-wrap iframe {
+  min-height: 200px;
+}
+
+body.guest-lux .contact-map-actions {
+  gap: 6px;
+  margin-top: 8px;
+}
+
+body.guest-lux label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+html:not([data-theme="dark"]) body.guest-lux label {
+  color: var(--forest);
+}
+
+/* Sign in — page chrome only. Calendar modal styles stay as they are. */
+body.guest-lux:has(#loginForm) main.container {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(260px, 0.8fr);
+  gap: 10px 12px;
+  align-items: start;
+}
+
+body.guest-lux:has(#loginForm) main.container > .hero {
+  grid-column: 1 / -1;
+}
+
+body.guest-lux .login-reserve,
+body.guest-lux:has(#loginForm) main.container > .section {
+  padding: 0;
+  min-width: 0;
+}
+
+body.guest-lux .login-reserve-card,
+body.guest-lux .auth-card {
+  padding: 14px 14px 12px;
+  max-width: none;
+  margin: 0;
+}
+
+body.guest-lux .login-reserve-card__title,
+body.guest-lux .auth-card > h3,
+body.guest-lux .auth-card #loginCardTitle {
+  margin-bottom: 0.45rem;
+  font-size: 1.35rem;
+  text-align: left;
+}
+
+body.guest-lux .login-reserve-panel__note,
+body.guest-lux .auth-card .note,
+body.guest-lux .auth-switch {
+  margin-bottom: 0.45rem;
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
+body.guest-lux .login-reserve-stay-bar {
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+body.guest-lux .auth-card .btn,
+body.guest-lux .auth-oauth .btn {
+  width: 100%;
+}
+
+body.guest-lux .auth-oauth {
+  margin-top: 10px;
+}
+
+body.guest-lux .auth-msg {
+  margin-bottom: 8px;
+  padding: 8px 10px;
+}
+
+html:not([data-theme="dark"]) body.guest-lux footer {
+  background: var(--forest);
+  border-top: 3px solid var(--pink);
+  padding: 12px 0;
+}
+
+@media (max-width: 1100px) {
+  body.guest-lux:has(#loginForm) main.container {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 980px) {
+  body.guest-lux .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  body.guest-lux main.container {
+    padding-top: 0.45rem;
+    padding-bottom: 0.85rem;
+  }
+
+  body.guest-lux .hero {
+    padding: 0.7rem 0.75rem 0.65rem 0.8rem;
+  }
+
+  body.guest-lux .hero::before {
+    width: 4.2rem;
+    opacity: 0.28;
+  }
+
+  body.guest-lux .hero h1 {
+    font-size: 1.35rem;
+    max-width: none;
+  }
+
+  body.guest-lux .hero p,
+  body.guest-lux .credentials-lead,
+  body.guest-lux .faq-section__lead,
+  body.guest-lux .activities-section__lead {
+    font-size: 0.84rem;
+  }
+
+  body.guest-lux .grid,
+  body.guest-lux.facilities-page .grid,
+  body.guest-lux.facilities-page .facilities-tab-panel .grid,
+  body.guest-lux .contact-grid,
+  body.guest-lux.reviews-page .reviews-grid,
+  body.guest-lux .activities-grid,
+  body.guest-lux .policies-pool-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+  }
+
+  body.guest-lux .card,
+  body.guest-lux .policy-card {
+    padding: 11px 12px;
+  }
+
+  body.guest-lux .facility-card {
+    padding: 0 0 11px;
+  }
+
+  body.guest-lux .facility-card .facility-swipe .room-img {
+    height: 168px;
+  }
+
+  body.guest-lux .facility-card__actions,
+  body.guest-lux .contact-map-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  body.guest-lux .facility-card__actions .btn,
+  body.guest-lux .contact-map-actions .btn,
+  body.guest-lux .activities-cta-card .btn {
+    width: 100%;
+    flex: 1 1 auto;
+  }
+
+  body.guest-lux .map-wrap iframe,
+  body.guest-lux .contact-info-card .map-wrap iframe {
+    min-height: 180px;
+  }
+
+  body.guest-lux .reviews-pagination {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  body.guest-lux .reviews-pagination .btn {
+    flex: 1 1 0;
+  }
+
+  body.guest-lux .faq-item__question {
+    align-items: flex-start;
+    font-size: 0.9rem;
+  }
+
+  body.guest-lux .login-reserve-stay-bar__option,
+  body.guest-lux .login-reserve-stay-bar__option span {
+    min-height: 0;
+    white-space: normal;
+  }
+
+  body.guest-lux .login-reserve-stay-bar__option {
+    min-height: 2.5rem;
+    padding: 0.4rem 0.35rem;
+  }
+
+  body.guest-lux .login-reserve-card__title,
+  body.guest-lux .auth-card > h3,
+  body.guest-lux .auth-card #loginCardTitle {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 380px) {
+  body.guest-lux .hero h1 {
+    font-size: 1.22rem;
+  }
+
+  body.guest-lux .facilities-tab,
+  body.guest-lux .login-reserve-tab {
+    flex: 1 1 auto;
+    text-align: center;
+  }
+}
