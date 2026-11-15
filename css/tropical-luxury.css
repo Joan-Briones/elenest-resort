@@ -1409,7 +1409,7 @@ textarea:focus-visible {
    ========================================================================== */
 
 body.side-nav {
-  --home-side-w: calc(252px + env(safe-area-inset-left, 0px));
+  --home-side-w: calc(272px + env(safe-area-inset-left, 0px));
   --home-side-ink: #f7f3ee;
   --home-side-forest: #2a4c3a;
   --palm-tile-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160' fill='none'%3E%3Cpath d='M80 132c6-28 28-50 52-58-22 10-38 32-42 58 10-24 34-40 58-44-26 12-44 36-46 62 8-18 26-32 48-36' stroke='%23A8C9A5' stroke-opacity='0.18' stroke-width='1.3'/%3E%3Cpath d='M80 132c-6-28-28-50-52-58 22 10 38 32 42 58-10-24-34-40-58-44 26 12 44 36 46 62-8-18-26-32-48-36' stroke='%23F8DDE8' stroke-opacity='0.2' stroke-width='1.3'/%3E%3C/svg%3E");
@@ -1487,17 +1487,17 @@ body.side-nav > header.home-side .content.flex_space {
   flex-direction: column !important;
   align-items: stretch !important;
   justify-content: flex-start !important;
-  gap: 0.65rem !important;
+  gap: 0.85rem !important;
   width: 100% !important;
   max-width: none !important;
   min-height: 0;
   height: 100%;
   margin: 0 !important;
   padding:
-    max(0.8rem, env(safe-area-inset-top, 0px))
-    0.7rem
-    max(0.7rem, env(safe-area-inset-bottom, 0px))
-    max(0.7rem, env(safe-area-inset-left, 0px)) !important;
+    max(1.05rem, env(safe-area-inset-top, 0px))
+    0.85rem
+    max(0.9rem, env(safe-area-inset-bottom, 0px))
+    max(0.85rem, env(safe-area-inset-left, 0px)) !important;
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -1511,9 +1511,9 @@ body.side-nav > header.home-side .logo {
   width: 100% !important;
   max-width: none !important;
   min-width: 0;
-  gap: 0.2rem;
+  gap: 0.4rem;
   margin: 0;
-  padding: 0.05rem 0.15rem 0.6rem;
+  padding: 0.15rem 0.25rem 0.8rem;
   border-bottom: 1px solid rgba(168, 201, 165, 0.32);
   text-align: center;
 }
@@ -1528,10 +1528,10 @@ body.side-nav > header.home-side .site-logo-link {
 body.side-nav > header.home-side .site-logo,
 body.side-nav > header.home-side .logo img {
   display: block;
-  width: 100% !important;
+  width: auto !important;
   height: auto !important;
-  max-width: 100% !important;
-  max-height: 4.6rem !important;
+  max-width: 92% !important;
+  max-height: 4.85rem !important;
   margin: 0 auto !important;
   object-fit: contain !important;
   object-position: center center !important;
@@ -1544,8 +1544,8 @@ body.side-nav > header.home-side .home-side__place {
   font-family: var(--serif);
   font-style: italic;
   font-weight: 500;
-  font-size: 0.92rem;
-  letter-spacing: 0.08em;
+  font-size: 1rem;
+  letter-spacing: 0.06em;
   line-height: 1.2;
   color: var(--pink-soft);
 }
@@ -1559,18 +1559,19 @@ body.side-nav > header.home-side .navlinks {
   width: 100% !important;
   min-width: 0;
   min-height: 0;
-  gap: 0.35rem !important;
+  gap: 0.45rem !important;
   position: relative !important;
   overflow: hidden;
 }
 
 body.side-nav > header.home-side .home-side__eyebrow {
   flex: 0 0 auto;
-  margin: 0.05rem 0.15rem 0;
+  margin: 0.1rem 0.2rem 0.05rem;
   font-family: var(--sans);
-  font-size: 0.64rem;
+  font-size: 0.8125rem;
   font-weight: 600;
-  letter-spacing: 0.28em;
+  letter-spacing: 0.2em;
+  line-height: 1.3;
   text-transform: uppercase;
   color: var(--sage);
 }
@@ -1592,7 +1593,7 @@ body.side-nav > header.home-side #menulist.site-nav-list.is-open {
   align-items: stretch !important;
   justify-content: flex-start !important;
   flex: 1 1 auto;
-  gap: 0.18rem !important;
+  gap: 0.22rem !important;
   width: 100% !important;
   max-width: none !important;
   height: auto !important;
@@ -1640,9 +1641,9 @@ body.side-nav > header.home-side #menulist.site-nav-list > li > a:not(.staff-acc
   justify-content: flex-start !important;
   width: 100% !important;
   max-width: 100% !important;
-  min-height: 2.3rem !important;
+  min-height: 2.5rem !important;
   margin: 0 !important;
-  padding: 0.38rem 0.6rem !important;
+  padding: 0.45rem 0.7rem !important;
   box-sizing: border-box !important;
   border: 0 !important;
   border-radius: 12px !important;
@@ -1650,10 +1651,10 @@ body.side-nav > header.home-side #menulist.site-nav-list > li > a:not(.staff-acc
   color: rgba(247, 243, 238, 0.92) !important;
   -webkit-text-fill-color: rgba(247, 243, 238, 0.92) !important;
   font-family: var(--sans) !important;
-  font-size: 0.74rem !important;
-  font-weight: 500 !important;
-  letter-spacing: 0.055em !important;
-  line-height: 1.25 !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.035em !important;
+  line-height: 1.15 !important;
   text-align: left !important;
   text-transform: uppercase !important;
   text-decoration: none !important;
@@ -1666,12 +1667,13 @@ body.side-nav > header.home-side #menulist.site-nav-list > li > a:not(.staff-acc
 
 body.side-nav > header.home-side #menulist.site-nav-list > li > a:not(.staff-access-btn)::before {
   content: "";
-  flex: 0 0 auto;
-  width: 0.7rem;
-  height: 1px;
-  margin-right: 0.4rem;
-  background: rgba(168, 201, 165, 0.9);
-  transform: scaleX(0.55);
+  flex: 0 0 0.85rem;
+  align-self: center;
+  width: 0.85rem;
+  height: 2px;
+  margin-right: 0.55rem;
+  background: rgba(168, 201, 165, 0.95);
+  transform: scaleX(0.58);
   transform-origin: left center;
   transition: transform 0.22s var(--ease-out), background 0.22s var(--ease-out);
 }
@@ -1686,14 +1688,16 @@ body.side-nav > header.home-side #menulist.site-nav-list > li > a:not(.staff-acc
 body.side-nav > header.home-side #menulist.site-nav-list > li > a:not(.staff-access-btn):hover::before,
 body.side-nav > header.home-side #menulist.site-nav-list > li > a:not(.staff-access-btn):focus-visible::before,
 body.side-nav > header.home-side #menulist.site-nav-list > li > a:not(.staff-access-btn).active::before {
-  width: 0.7rem;
+  width: 0.85rem;
   transform: scaleX(1);
-  background: var(--pink-soft);
+  background: #fff;
 }
 
 body.side-nav > header.home-side #menulist.site-nav-list > li > a:not(.staff-access-btn).active,
 body.side-nav > header.home-side #menulist.site-nav-list > li > a:not(.staff-access-btn).active:hover,
 body.side-nav > header.home-side #menulist.site-nav-list > li > a:not(.staff-access-btn)[aria-current="page"] {
+  align-items: center !important;
+  justify-content: flex-start !important;
   background: var(--pink) !important;
   color: #fff !important;
   -webkit-text-fill-color: #fff !important;
@@ -1719,10 +1723,10 @@ body.side-nav > header.home-side a#roleLoginTrigger.staff-access-btn {
   width: 100% !important;
   max-width: 100% !important;
   min-width: 0 !important;
-  min-height: 2.6rem !important;
+  min-height: 2.95rem !important;
   height: auto !important;
   margin: 0 !important;
-  padding: 0.65rem 0.7rem !important;
+  padding: 0.7rem 0.85rem !important;
   border: 1px solid rgba(255, 253, 251, 0.35) !important;
   border-radius: 999px !important;
   background: var(--pink) !important;
@@ -1730,10 +1734,10 @@ body.side-nav > header.home-side a#roleLoginTrigger.staff-access-btn {
   -webkit-text-fill-color: #fff !important;
   box-shadow: 0 8px 16px rgba(217, 130, 165, 0.32) !important;
   font-family: var(--sans) !important;
-  font-size: clamp(0.68rem, 0.62rem + 0.15vw, 0.78rem) !important;
-  font-weight: 600 !important;
-  letter-spacing: 0.14em !important;
-  line-height: 1.2 !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.12em !important;
+  line-height: 1.15 !important;
   text-align: center !important;
   text-transform: uppercase !important;
   white-space: normal !important;
@@ -1816,28 +1820,30 @@ body.home-page .home .hero-title--single {
   }
 
   body.side-nav > header.home-side .home-side__eyebrow {
-    letter-spacing: 0.18em;
-    font-size: 0.58rem;
+    letter-spacing: 0.16em;
+    font-size: 0.75rem;
   }
 
   body.side-nav > header.home-side #menulist.site-nav-list {
-    gap: 0.12rem !important;
+    gap: 0.2rem !important;
   }
 
   body.side-nav > header.home-side #menulist.site-nav-list > li > a:not(.staff-access-btn) {
     min-height: 2.5rem !important;
-    padding: 0.4rem 0.45rem !important;
-    letter-spacing: 0.04em !important;
-    font-size: 0.66rem !important;
-    border-radius: 10px !important;
+    padding: 0.45rem 0.6rem !important;
+    letter-spacing: 0.03em !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    border-radius: 12px !important;
   }
 
   body.side-nav > header.home-side #menulist.site-nav-list > li > a.role-login-trigger.staff-access-btn,
   body.side-nav > header.home-side a#roleLoginTrigger.staff-access-btn {
-    min-height: 2.35rem !important;
-    padding: 0.5rem 0.4rem !important;
-    letter-spacing: 0.08em !important;
-    font-size: 0.64rem !important;
+    min-height: 2.75rem !important;
+    padding: 0.6rem 0.7rem !important;
+    letter-spacing: 0.1em !important;
+    font-size: 15px !important;
+    font-weight: 700 !important;
   }
 }
 
@@ -1856,11 +1862,12 @@ body.home-page .home .hero-title--single {
   }
 
   body.side-nav > header.home-side #menulist.site-nav-list > li > a:not(.staff-access-btn) {
-    justify-content: center !important;
-    text-align: center !important;
-    padding: 0.38rem 0.3rem !important;
-    letter-spacing: 0.02em !important;
-    font-size: 0.62rem !important;
+    justify-content: flex-start !important;
+    text-align: left !important;
+    padding: 0.45rem 0.55rem !important;
+    letter-spacing: 0.03em !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
   }
 
   body.home-page .home,
@@ -1940,9 +1947,10 @@ body.home-page .home .hero-title--single {
   }
 
   body.side-nav > header.home-side #menulist.site-nav-list > li > a:not(.staff-access-btn) {
-    font-size: 0.58rem !important;
-    min-height: 2.4rem !important;
-    padding: 0.32rem 0.22rem !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    min-height: 2.5rem !important;
+    padding: 0.42rem 0.5rem !important;
   }
 }
 
@@ -2190,7 +2198,7 @@ body.side-nav .auth-oauth {
     align-items: stretch !important;
     justify-content: flex-start !important;
     flex: none !important;
-    gap: 0.12rem !important;
+    gap: 0.22rem !important;
     width: 100% !important;
     max-width: none !important;
     height: auto !important;
@@ -2246,11 +2254,13 @@ body.side-nav .auth-oauth {
 
   body.side-nav > header.home-side #menulist.site-nav-list > li > a:not(.staff-access-btn) {
     justify-content: flex-start !important;
+    align-items: center !important;
     min-height: 2.75rem !important;
-    padding: 0.55rem 0.75rem !important;
+    padding: 0.55rem 0.85rem !important;
     border-radius: 12px !important;
-    font-size: 0.8rem !important;
-    letter-spacing: 0.07em !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.04em !important;
     text-align: left !important;
     color: rgba(247, 243, 238, 0.94) !important;
     -webkit-text-fill-color: rgba(247, 243, 238, 0.94) !important;
@@ -2289,16 +2299,17 @@ body.side-nav .auth-oauth {
 
   body.side-nav > header.home-side #menulist.site-nav-list > li > a.role-login-trigger.staff-access-btn,
   body.side-nav > header.home-side a#roleLoginTrigger.staff-access-btn {
-    min-height: 2.75rem !important;
+    min-height: 2.95rem !important;
     margin: 0.35rem 0 0 !important;
-    padding: 0.65rem 0.85rem !important;
+    padding: 0.7rem 0.9rem !important;
     width: 100% !important;
     max-width: none !important;
     border-radius: 999px !important;
     background: var(--pink) !important;
     color: #fff !important;
     -webkit-text-fill-color: #fff !important;
-    font-size: 0.78rem !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
     letter-spacing: 0.12em !important;
     text-align: center !important;
   }
