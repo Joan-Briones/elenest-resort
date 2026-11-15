@@ -3506,3 +3506,131 @@ body.home-page .home-reviews__stars {
   font-weight: var(--weight-heading) !important;
   letter-spacing: 0.04em !important;
 }
+
+/* ==========================================================================
+   Create Guest Account — same guest column as Sign In and the other sections.
+   Shown in the sign-in main area; the sidebar stays in place.
+   ========================================================================== */
+
+body.guest-lux #guestRegisterSection[hidden],
+body.guest-lux.is-guest-register #loginReserve,
+body.guest-lux.is-guest-register #loginSignSection {
+  display: none !important;
+}
+
+body.guest-lux.is-guest-register:has(#loginForm) main.container,
+body.guest-lux.is-guest-register:has(#loginForm) > main.container {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.7rem;
+}
+
+body.guest-lux.is-guest-register #guestRegisterSection,
+body.guest-lux #guestRegisterSection {
+  grid-column: 1 / -1;
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+}
+
+body.side-nav.guest-lux .guest-register-card,
+body.guest-lux .guest-register-card {
+  width: 100%;
+  max-width: 920px;
+  margin: 0;
+  padding: 1.15rem 1.25rem 1.1rem;
+}
+
+body.guest-lux .guest-register-card > h3 {
+  margin: 0 0 0.85rem;
+  text-align: left;
+}
+
+body.guest-lux .guest-register-form,
+body.guest-lux .guest-register-card .auth-oauth,
+body.guest-lux .guest-register-card .auth-switch,
+body.guest-lux .guest-register-card > .auth-msg {
+  width: 100%;
+  max-width: none;
+}
+
+body.guest-lux .guest-register-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.95rem 1rem;
+  align-items: start;
+}
+
+body.guest-lux .guest-register-form > div {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+body.guest-lux .guest-register-form .full {
+  grid-column: 1 / -1;
+}
+
+body.guest-lux .guest-register-form label {
+  margin: 0;
+}
+
+body.guest-lux .guest-register-form input,
+body.guest-lux .guest-register-form select {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  min-height: 2.75rem;
+}
+
+body.guest-lux .guest-register-form .password-field {
+  width: 100%;
+  margin: 0;
+}
+
+body.guest-lux .guest-register-form .note {
+  margin: 0;
+}
+
+body.guest-lux .guest-register-card .auth-oauth {
+  margin-top: 1rem;
+}
+
+body.guest-lux .guest-register-card .auth-switch {
+  margin: 0.9rem 0 0;
+}
+
+body.guest-lux .guest-register-card .auth-switch a {
+  color: var(--pink-dark);
+  text-decoration: underline;
+  text-underline-offset: 0.16em;
+}
+
+body.guest-lux .guest-register-card .auth-switch a:hover,
+body.guest-lux .guest-register-card .auth-switch a:focus-visible {
+  color: var(--forest);
+}
+
+html[data-theme="dark"] body.guest-lux .guest-register-card .auth-switch a,
+html[data-theme="dark"] body.guest-lux .guest-register-card .auth-switch a:hover,
+html[data-theme="dark"] body.guest-lux .guest-register-card .auth-switch a:focus-visible {
+  color: var(--pink-soft);
+}
+
+@media (max-width: 760px) {
+  body.side-nav.guest-lux .guest-register-card,
+  body.guest-lux .guest-register-card {
+    max-width: none;
+    padding: 0.95rem 0.9rem 0.9rem;
+  }
+
+  body.guest-lux .guest-register-form {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.8rem;
+  }
+
+  body.guest-lux .guest-register-form .full {
+    grid-column: auto;
+  }
+}
