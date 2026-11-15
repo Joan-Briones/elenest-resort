@@ -9,7 +9,7 @@
   <script src="../js/theme.js?v=20261020-theme1"></script>
   <script src="../js/ui-motion.js?v=20261014-motion1" defer></script>
   <link rel="stylesheet" href="../css/predictive-analytics.css?v=20261020-theme1">
-  <link rel="stylesheet" href="../css/tropical-luxury.css?v=20261115-sidebar1">
+  <link rel="stylesheet" href="../css/tropical-luxury.css?v=20261115-adminhdr1">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -108,7 +108,7 @@
   <main class="container">
     <section class="section admin-section" id="section-dashboard">
       <div class="appointments-strip">
-        <div class="appointments-strip__head">
+        <div class="appointments-strip__head admin-section-header">
           <h2 class="appointments-strip__title">Booking Dashboard</h2>
         </div>
         <div class="split-2" style="margin-top: 18px;">
@@ -156,14 +156,14 @@
       </div>
 
       <div class="card admin-upcoming-card" style="margin-top: 18px;" id="adminUpcomingBookingsCard">
-        <h2 class="section-title admin-upcoming-card__title">Upcoming Bookings</h2>
+        <h2 class="section-title admin-upcoming-card__title admin-section-header">Upcoming Bookings</h2>
         <div id="adminUpcomingBookingsList" class="admin-payment-verification-list"></div>
         <div id="adminUpcomingBookingsEmpty" class="admin-upcoming-empty" hidden>No upcoming confirmed bookings.</div>
       </div>
 
       <div class="card admin-dash-cal-card" style="margin-top: 18px;">
         <div class="admin-dash-cal-card__head">
-          <h2 class="section-title admin-dash-cal-card__title">Reservation Calendar</h2>
+          <h2 class="section-title admin-dash-cal-card__title admin-section-header">Reservation Calendar</h2>
           <p class="admin-dash-cal-card__lead">
             Tap a date to open customer reservations for that day.
           </p>
@@ -180,7 +180,7 @@
           </div>
 
           <aside class="admin-dash-cal-notes" aria-label="Calendar notes">
-            <h3 class="admin-dash-cal-notes__title">Calendar Notes</h3>
+            <h3 class="admin-dash-cal-notes__title admin-section-header">Calendar Notes</h3>
             <ul class="admin-dash-cal-legend">
               <li>
                 <span class="avail-legend__swatch avail-legend__swatch--available" aria-hidden="true"></span>
@@ -219,13 +219,9 @@
 
     <section class="section admin-section" id="section-reports" hidden>
       <div class="appointments-strip admin-reports-strip">
-        <div class="appointments-strip__head">
+        <div class="appointments-strip__head admin-section-header">
           <h2 class="appointments-strip__title">Report &amp; Analytics</h2>
-          <p class="admin-reports-lede">
-            Live booking, revenue, facility, guest-review, and model metrics from saved reservations and feedback.
-          </p>
-        </div>
-        <button
+          <button
           type="button"
           class="admin-model-eval-toggle"
           id="adminModelEvalToggle"
@@ -245,7 +241,11 @@
             <path d="M9.9 5.1A10.8 10.8 0 0 1 12 5c6.5 0 10 7 10 7a18.2 18.2 0 0 1-3.2 4.2"></path>
             <path d="M6.1 6.1C3.8 7.8 2 12 2 12a18.5 18.5 0 0 0 6.2 5.5"></path>
           </svg>
-        </button>
+          </button>
+        </div>
+        <p class="admin-reports-lede">
+          Live booking, revenue, facility, guest-review, and model metrics from saved reservations and feedback.
+        </p>
       </div>
 
       <div class="split-2 admin-reports-kpi-row">
@@ -261,7 +261,7 @@
 
       <div class="admin-reports-grid" id="adminReportsGrid">
         <article class="card admin-report-chart-card">
-          <h3 class="admin-report-card-title">Booking trends</h3>
+          <h3 class="admin-report-card-title admin-section-header">Booking trends</h3>
           <p class="booking-card__sub admin-report-chart-sub">Reservations by month (last 12 months).</p>
           <div class="admin-report-chart-legend" aria-label="Chart legend">
             <span class="admin-report-chart-legend__item">
@@ -281,7 +281,7 @@
         </article>
 
         <article class="card admin-report-chart-card">
-          <h3 class="admin-report-card-title">Booking status</h3>
+          <h3 class="admin-report-card-title admin-section-header">Booking status</h3>
           <p class="booking-card__sub admin-report-chart-sub">Share of pending, confirmed, and cancelled bookings.</p>
           <div class="admin-report-donut-layout">
             <canvas id="adminReportStatusChart" width="280" height="200" class="admin-pro-chart admin-report-donut-chart" aria-label="Booking status donut chart"></canvas>
@@ -290,13 +290,13 @@
         </article>
 
         <article class="card admin-report-chart-card">
-          <h3 class="admin-report-card-title">Facility usage</h3>
+          <h3 class="admin-report-card-title admin-section-header">Facility usage</h3>
           <p class="booking-card__sub admin-report-chart-sub">Bookings by facility category from reservation records.</p>
           <canvas id="adminReportFacilityChart" width="640" height="220" class="admin-pro-chart" aria-label="Facility usage bar chart"></canvas>
         </article>
 
         <article class="card admin-report-chart-card">
-          <h3 class="admin-report-card-title">Revenue</h3>
+          <h3 class="admin-report-card-title admin-section-header">Revenue</h3>
           <p class="booking-card__sub admin-report-chart-sub" id="adminReportRevenueSub">Confirmed earnings by month (last 12 months).</p>
           <div class="admin-report-chart-legend" aria-label="Revenue legend">
             <span class="admin-report-chart-legend__item">
@@ -311,7 +311,7 @@
         </article>
 
         <article class="card admin-report-chart-card admin-report-reviews-card" id="adminReportGuestReviewsCard">
-          <div class="admin-report-card-head">
+          <div class="admin-report-card-head admin-section-header">
             <h3 class="admin-report-card-title">Guest Reviews</h3>
             <a href="#section-sentiment" class="btn btn--outline btn--small admin-report-link-btn">Sentiment details</a>
           </div>
@@ -422,7 +422,7 @@
 
     <section class="section admin-section" id="section-payments" hidden>
       <div class="appointments-strip admin-payments-strip">
-        <div class="appointments-strip__head admin-payments-strip__head">
+        <div class="appointments-strip__head admin-section-header admin-payments-strip__head">
           <h2 class="appointments-strip__title admin-payments-strip__title">Reservation Management</h2>
         </div>
       </div>
@@ -473,11 +473,11 @@
             aria-labelledby="adminPaymentsTabBookings"
           >
             <div class="admin-booking-review-head">
-              <div>
+              <div class="admin-section-header">
                 <h3 class="admin-pay-table-title">Booking requests</h3>
-                <p class="admin-booking-review-lead">Confirm the facility, date, schedule, guests, total, and availability. Confirmation notifies the guest and opens online payment for 3 hours.</p>
+                <button type="button" class="btn btn--outline btn--small" id="adminBookingReviewRefresh">Refresh</button>
               </div>
-              <button type="button" class="btn btn--outline btn--small" id="adminBookingReviewRefresh">Refresh</button>
+              <p class="admin-booking-review-lead">Confirm the facility, date, schedule, guests, total, and availability. Confirmation notifies the guest and opens online payment for 3 hours.</p>
             </div>
             <div id="adminBookingReviewList" class="admin-booking-review-list"></div>
           </div>
@@ -591,7 +591,7 @@
 
             <div class="card admin-payment-approval-board">
               <section class="admin-pay-table-section admin-payment-feature-card" id="adminPaymentVerificationCard">
-                <div class="admin-status-group-head">
+                <div class="admin-status-group-head admin-section-header">
                   <h3 class="admin-pay-table-title">For payment verification</h3>
                   <div class="admin-pay-table-head-actions">
                     <span id="adminPaymentVerificationCount" class="admin-arrival-status-pill admin-pay-verify-count" hidden></span>
@@ -603,7 +603,7 @@
               </section>
 
               <section class="admin-pay-table-section admin-payment-feature-card" id="adminArrivalMonitoringCard">
-                <div class="admin-status-group-head">
+                <div class="admin-status-group-head admin-section-header">
                   <h3 class="admin-pay-table-title">Down payment — 3-hour monitoring</h3>
                   <button type="button" class="btn btn--outline btn--small" id="adminArrivalMonitoringRefresh">Refresh</button>
                 </div>
@@ -612,7 +612,7 @@
               </section>
 
               <section class="admin-pay-table-section admin-payment-feature-card" id="adminPaymentHistoryCard">
-                <div class="admin-status-group-head">
+                <div class="admin-status-group-head admin-section-header">
                   <h3 class="admin-pay-table-title">Payment history</h3>
                   <button type="button" class="btn btn--outline btn--small" id="adminPaymentHistoryRefresh">Refresh</button>
                 </div>
@@ -632,7 +632,7 @@
           >
             <div class="split-2 admin-payments-split">
               <article class="card">
-                <h3 style="margin: 0 0 10px;">Add / edit payment method</h3>
+                <h3 class="admin-section-header">Add / edit payment method</h3>
                 <form id="adminPaymentMethodForm" class="form-grid" autocomplete="off">
                   <input type="hidden" id="adminPaymentMethodEditId" value="">
                   <div>
@@ -674,7 +674,7 @@
               </article>
 
               <article class="card">
-                <h3 style="margin: 0 0 10px;">Configured payment methods</h3>
+                <h3 class="admin-section-header">Configured payment methods</h3>
                 <p style="margin: 0 0 14px; color: #5f6673; line-height: 1.6;">
                   Guests see active methods during the booking payment step. Deactivated methods are hidden but kept on file.
                 </p>
@@ -685,8 +685,13 @@
         </div>
       </div>
     </section>
-// Sentiment Analysis
+<!-- Sentiment Analysis -->
     <section class="section admin-section" id="section-sentiment" hidden>
+      <div class="appointments-strip">
+        <div class="appointments-strip__head admin-section-header">
+          <h2 class="section-title admin-sentiment-title">Guest sentiment analysis</h2>
+        </div>
+      </div>
       <aside
         class="admin-sentiment-recommendations"
         id="sentimentRecommendationsPanel"
@@ -695,7 +700,7 @@
         <div class="admin-sentiment-rec-inner">
           <div class="admin-sentiment-rec-heading">
             <span class="admin-sentiment-rec-badge">Weekly insights</span>
-            <h3 class="admin-sentiment-rec-title" id="sentimentRecHeadline">Weekly recommendation</h3>
+            <h3 class="admin-sentiment-rec-title admin-section-header" id="sentimentRecHeadline">Weekly recommendation</h3>
             <p id="sentimentRecExampleNote" class="admin-sentiment-rec-example-note" hidden></p>
             <p class="admin-sentiment-rec-summary" id="sentimentRecSummary"></p>
           </div>
@@ -705,10 +710,7 @@
       </aside>
       <div class="card admin-sentiment-hero">
         <div class="admin-sentiment-header-row">
-          <div>
-            <h2 class="section-title admin-sentiment-title">Guest sentiment analysis</h2>
-            <p class="admin-sentiment-lede" id="sentimentCurrentWeekNote"></p>
-          </div>
+          <p class="admin-sentiment-lede" id="sentimentCurrentWeekNote"></p>
           <div class="admin-sentiment-archive-actions">
             <button
               type="button"
@@ -728,7 +730,7 @@
         </div>
         <div class="split-2">
           <article class="card admin-sentiment-metric-card">
-            <h3 class="admin-sentiment-h3">Aggregate distribution</h3>
+            <h3 class="admin-sentiment-h3 admin-section-header">Aggregate distribution</h3>
             <p class="booking-card__sub admin-sentiment-sub">
               Classification: <strong>Positive</strong> (4–5 stars), <strong>Negative</strong> (1–2 stars), <strong>Neutral</strong> (3 stars).
               <span id="sentimentTotalCount" class="admin-sentiment-total"></span>
@@ -773,7 +775,7 @@
             </div>
           </article>
           <article class="card admin-sentiment-metric-card">
-            <h3 class="admin-sentiment-h3">Recent guest comments</h3>
+            <h3 class="admin-sentiment-h3 admin-section-header">Recent guest comments</h3>
             <div class="sentiment-feedback-list" id="sentimentFeedbackList"></div>
             <button
               type="button"
@@ -789,13 +791,17 @@
         </div>
       </div>
     </section>
-// Predictive 
+<!-- Predictive --> 
     <section class="section admin-section" id="section-predictive" hidden>
+      <div class="appointments-strip">
+        <div class="appointments-strip__head admin-section-header">
+          <h2 class="pa-title">Predictive Analytics</h2>
+        </div>
+      </div>
       <div class="pa-shell">
         <div class="pa-panel pa-panel--header">
           <div class="pa-header-row">
             <div class="pa-header-copy">
-              <h2 class="pa-title">Predictive Analytics</h2>
               <p class="pa-lede">
                 Monthly booking &amp; revenue forecast from reservations, weather, weekends, holidays, and seasonality.
               </p>
@@ -917,7 +923,7 @@
           </div>
 
           <div class="pa-panel" style="margin-top: 16px;">
-            <h3 class="pa-panel-title">Positive feedback signal</h3>
+            <h3 class="pa-panel-title admin-section-header">Positive feedback signal</h3>
             <p class="pa-panel-sub">
               Guest sentiment feeds the forecast model — more positive reviews increase predicted bookings and confidence.
             </p>
@@ -949,7 +955,7 @@
         <div class="pa-view" data-pa-view="charts" id="paViewCharts" hidden>
           <div class="pa-charts-grid">
             <article class="pa-panel">
-              <h3 class="pa-panel-title">Bookings &amp; guest outlook</h3>
+              <h3 class="pa-panel-title admin-section-header">Bookings &amp; guest outlook</h3>
               <div class="pa-chart-wrap">
                 <canvas id="paChartBookings" width="640" height="280" class="pa-canvas" aria-label="Bookings trend line chart"></canvas>
                 <div class="pa-chart-tooltip" id="paTipBookings" hidden></div>
@@ -961,7 +967,7 @@
               </div>
             </article>
             <article class="pa-panel">
-              <h3 class="pa-panel-title">Revenue forecast (PHP)</h3>
+              <h3 class="pa-panel-title admin-section-header">Revenue forecast (PHP)</h3>
               <div class="pa-chart-wrap">
                 <canvas id="paChartRevenue" width="640" height="280" class="pa-canvas" aria-label="Revenue trend line chart"></canvas>
                 <div class="pa-chart-tooltip" id="paTipRevenue" hidden></div>
@@ -977,7 +983,7 @@
 
         <div class="pa-view" data-pa-view="table" id="paViewTable" hidden>
           <div class="pa-panel">
-            <h3 class="pa-panel-title">Forecast detail</h3>
+            <h3 class="pa-panel-title admin-section-header">Forecast detail</h3>
             <p class="pa-panel-sub">Predicted bookings, guests, occupancy, revenue, and confidence by month.</p>
             <div class="pa-table-wrap">
               <table class="pa-table" id="paForecastTable">
@@ -1001,7 +1007,7 @@
 
         <div class="pa-view" data-pa-view="weather" id="paViewWeather" hidden>
           <div class="pa-panel">
-            <h3 class="pa-panel-title">Weather Impact Analysis</h3>
+            <h3 class="pa-panel-title admin-section-header">Weather Impact Analysis</h3>
             <p class="pa-panel-sub">
               Estimated change in reservations under sunny, rainy, and stormy conditions relative to the expected seasonal weather mix.
             </p>
@@ -1011,14 +1017,14 @@
 
         <div class="pa-view" data-pa-view="insights" id="paViewInsights" hidden>
           <div class="pa-panel">
-            <h3 class="pa-panel-title">Prescriptive Recommendations</h3>
+            <h3 class="pa-panel-title admin-section-header">Prescriptive Recommendations</h3>
             <p class="pa-panel-sub" id="paRecommendationsNote">
               Actions generated from the forecast — staffing, promotions, facilities, maintenance, and income outlook.
             </p>
             <ul class="pa-rec-list" id="paRecommendationsList"></ul>
           </div>
           <div class="pa-panel" style="margin-top: 16px;">
-            <h3 class="pa-panel-title">Income vs previous months</h3>
+            <h3 class="pa-panel-title admin-section-header">Income vs previous months</h3>
             <p class="pa-panel-sub">Recent actual revenue compared with the next forecast months.</p>
             <div id="paIncomeCompare"></div>
           </div>
@@ -1028,7 +1034,7 @@
 
     <section class="section admin-section" id="section-calendar-access" hidden>
       <div class="appointments-strip">
-        <div class="appointments-strip__head">
+        <div class="appointments-strip__head admin-section-header">
           <h2 class="appointments-strip__title">Calendar Access Control</h2>
         </div>
       </div>
@@ -1080,7 +1086,7 @@
       </div>
 
       <div class="card admin-payment-feature-card" style="margin-top: 18px;" id="adminCalendarRequestsCard">
-        <div class="admin-status-group-head">
+        <div class="admin-status-group-head admin-section-header">
           <h3 class="admin-pay-table-title">Calendar Access Requests</h3>
           <div class="admin-pay-table-head-actions">
             <span id="adminCalendarRequestsCount" class="admin-arrival-status-pill admin-pay-verify-count" hidden></span>
@@ -1092,7 +1098,7 @@
       </div>
 
       <div class="card admin-payment-feature-card" style="margin-top: 18px;" id="adminCalendarHistoryCard">
-        <div class="admin-status-group-head">
+        <div class="admin-status-group-head admin-section-header">
           <h3 class="admin-pay-table-title">Request history</h3>
           <div class="admin-pay-table-head-actions">
             <button type="button" class="btn btn--outline btn--small" id="adminCalendarHistoryRefresh">Refresh</button>
@@ -1108,7 +1114,7 @@
 
     <section class="section admin-section" id="section-activity-logs" hidden>
       <div class="appointments-strip">
-        <div class="appointments-strip__head">
+        <div class="appointments-strip__head admin-section-header">
           <h2 class="appointments-strip__title">Activity Logs</h2>
         </div>
       </div>
@@ -1129,7 +1135,7 @@
       </div>
 
       <div class="card admin-payment-feature-card" id="adminActivityLogsCard">
-        <div class="admin-status-group-head">
+        <div class="admin-status-group-head admin-section-header">
           <h3 class="admin-pay-table-title">Staff activity</h3>
           <div class="admin-pay-table-head-actions">
             <button type="button" class="btn btn--outline btn--small" id="adminActivityRefresh">Refresh</button>
@@ -1182,18 +1188,18 @@
 
     <section class="section admin-section" id="section-manager-user" hidden>
       <div class="appointments-strip">
-        <div class="appointments-strip__head">
+        <div class="appointments-strip__head admin-section-header">
           <h2 class="appointments-strip__title">User administration</h2>
-          <p class="appointments-strip__lead">
-            Create staff accounts and assign roles. Staff sign in with the same Sign In page as clients; their dashboard is determined by the role stored on the account.
-          </p>
         </div>
+        <p class="appointments-strip__lead">
+          Create staff accounts and assign roles. Staff sign in with the same Sign In page as clients; their dashboard is determined by the role stored on the account.
+        </p>
       </div>
       <div class="card">
-        <h2 class="section-title" style="margin-bottom: 10px;">Manage Users</h2>
+        <h2 class="section-title admin-section-header">Manage Users</h2>
         <div class="split-2">
           <article class="card">
-            <h3 style="margin: 0 0 10px;">Current admin profile</h3>
+            <h3 class="admin-section-header">Current admin profile</h3>
             <div class="admin-settings-profile" style="margin-top: 0;">
               <div class="admin-settings-field">
                 <strong>Name:</strong> <span id="adminManagerName">…</span>
@@ -1204,7 +1210,7 @@
             </div>
           </article>
           <article class="card">
-            <h3 style="margin: 0 0 10px;">How to use</h3>
+            <h3 class="admin-section-header">How to use</h3>
             <p style="margin: 0; color: #5f6673; line-height: 1.6;">
               First, create a user account (email and password), then assign a job/position such as
               <strong>Receptionist</strong> or <strong>Manager</strong>. After saving, provide the account details to the
@@ -1216,7 +1222,7 @@
 
         <div class="split-2" style="margin-top: 18px;">
           <article class="card">
-            <h3 style="margin: 0 0 10px;">Create / assign user</h3>
+            <h3 class="admin-section-header">Create / assign user</h3>
             <form id="adminUserForm" class="form-grid" autocomplete="off">
               <div>
                 <label for="adminUserName">Full name</label>
@@ -1246,7 +1252,7 @@
           </article>
 
           <article class="card">
-            <h3 style="margin: 0 0 10px;">Existing user accounts</h3>
+            <h3 class="admin-section-header">Existing user accounts</h3>
             <p style="margin: 0 0 14px; color: #5f6673; line-height: 1.6;">
               Staff accounts are saved in Supabase. After creating an account, give the staff member their
               email and password so they can use Sign In. Access follows the role saved on their profile.

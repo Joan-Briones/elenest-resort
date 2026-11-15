@@ -3675,3 +3675,249 @@ html[data-theme="dark"] body.guest-lux .guest-register-card .auth-switch a:focus
     grid-column: auto;
   }
 }
+
+/* ==========================================================================
+   Admin Dashboard — one section header
+   Same bar for every admin page title and every in-page section title.
+   ========================================================================== */
+:is(html, html[data-theme="dark"]) body.admin-app {
+  --admin-header-h: 52px;
+  --admin-header-bg: linear-gradient(90deg, #f8dde8 0%, #fff7fa 32%, #fffdfb 100%);
+  --admin-header-color: #315d46;
+  --admin-header-font: "Poppins", "Segoe UI", system-ui, sans-serif;
+  --admin-header-size: 1.125rem;
+  --admin-header-weight: 600;
+  --admin-header-radius: 12px;
+}
+
+:is(html, html[data-theme="dark"]) body.admin-app :is(
+  #section-dashboard,
+  #section-reports,
+  #section-payments,
+  #section-sentiment,
+  #section-calendar-access,
+  #section-activity-logs,
+  #section-manager-user
+) > .appointments-strip,
+:is(html, html[data-theme="dark"]) body.admin-app #section-predictive > .appointments-strip {
+  margin: 0 0 16px !important;
+  padding: 0 !important;
+  min-height: 0 !important;
+  height: auto !important;
+  display: block !important;
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+:is(html, html[data-theme="dark"]) body.admin-app .admin-section-header {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  width: 100%;
+  max-width: none;
+  min-height: var(--admin-header-h);
+  height: var(--admin-header-h);
+  margin: 0 0 12px;
+  padding: 0 16px;
+  background: var(--admin-header-bg) !important;
+  background-image: var(--admin-header-bg) !important;
+  color: var(--admin-header-color) !important;
+  -webkit-text-fill-color: var(--admin-header-color) !important;
+  border: 1px solid rgba(217, 130, 165, 0.55) !important;
+  border-left: 4px solid #315d46 !important;
+  border-radius: var(--admin-header-radius) !important;
+  box-shadow: inset 0 -3px 0 #d982a5 !important;
+  font-family: var(--admin-header-font);
+  text-align: left !important;
+  flex-wrap: nowrap;
+}
+
+:is(html, html[data-theme="dark"]) body.admin-app :is(h2, h3).admin-section-header {
+  display: flex;
+  align-items: center;
+}
+
+:is(html, html[data-theme="dark"]) body.admin-app .appointments-strip > .admin-section-header {
+  margin: 0 !important;
+}
+
+:is(html, html[data-theme="dark"]) body.admin-app :is(
+  #section-dashboard,
+  #section-reports,
+  #section-payments,
+  #section-sentiment,
+  #section-calendar-access,
+  #section-activity-logs,
+  #section-manager-user,
+  #section-predictive
+) .appointments-strip__head.admin-section-header {
+  max-width: none !important;
+  width: 100% !important;
+  margin: 0 !important;
+  text-align: left !important;
+  justify-content: flex-start !important;
+  align-items: center !important;
+}
+
+:is(html, html[data-theme="dark"]) body.admin-app :is(
+  #section-dashboard,
+  #section-reports,
+  #section-payments,
+  #section-sentiment,
+  #section-predictive,
+  #section-calendar-access,
+  #section-activity-logs,
+  #section-manager-user
+) .admin-section-header :is(h2, h3, h4),
+:is(html, html[data-theme="dark"]) body.admin-app :is(
+  #section-dashboard,
+  #section-reports,
+  #section-payments,
+  #section-sentiment,
+  #section-predictive,
+  #section-calendar-access,
+  #section-activity-logs,
+  #section-manager-user
+) :is(h2, h3).admin-section-header {
+  font-family: var(--admin-header-font) !important;
+  font-size: var(--admin-header-size) !important;
+  font-weight: var(--admin-header-weight) !important;
+  line-height: 1.25 !important;
+  letter-spacing: -0.015em !important;
+  color: var(--admin-header-color) !important;
+  -webkit-text-fill-color: var(--admin-header-color) !important;
+  text-align: left !important;
+  text-transform: none !important;
+  width: auto !important;
+  margin: 0 !important;
+}
+
+:is(html, html[data-theme="dark"]) body.admin-app .admin-section-header :is(h2, h3, h4) {
+  margin: 0 !important;
+  padding: 0 !important;
+  min-height: 0 !important;
+  height: auto !important;
+  width: auto !important;
+  max-width: 100%;
+  flex: 1 1 auto;
+  min-width: 0;
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  font-family: var(--admin-header-font) !important;
+  font-size: var(--admin-header-size) !important;
+  font-weight: var(--admin-header-weight) !important;
+  line-height: 1.25 !important;
+  letter-spacing: -0.015em !important;
+  color: var(--admin-header-color) !important;
+  -webkit-text-fill-color: var(--admin-header-color) !important;
+  text-align: left !important;
+  text-transform: none !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+:is(html, html[data-theme="dark"]) body.admin-app :is(h2, h3).admin-section-header {
+  font-family: var(--admin-header-font) !important;
+  font-size: var(--admin-header-size) !important;
+  font-weight: var(--admin-header-weight) !important;
+  line-height: 1.25 !important;
+  letter-spacing: -0.015em !important;
+  color: var(--admin-header-color) !important;
+  -webkit-text-fill-color: var(--admin-header-color) !important;
+  text-transform: none !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* A title inside a header row keeps the type, not a second bar. */
+:is(html, html[data-theme="dark"]) body.admin-app .admin-section-header .admin-section-header {
+  display: block;
+  width: auto !important;
+  max-width: 100%;
+  min-height: 0 !important;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  flex: 1 1 auto;
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  color: var(--admin-header-color) !important;
+  -webkit-text-fill-color: var(--admin-header-color) !important;
+}
+
+:is(html, html[data-theme="dark"]) body.admin-app .admin-section-header > .btn,
+:is(html, html[data-theme="dark"]) body.admin-app .admin-section-header .btn,
+:is(html, html[data-theme="dark"]) body.admin-app .admin-section-header .admin-pay-table-head-actions {
+  margin: 0 !important;
+  flex: 0 0 auto;
+}
+
+:is(html, html[data-theme="dark"]) body.admin-app .admin-reports-strip .admin-section-header .admin-model-eval-toggle {
+  position: static;
+  top: auto;
+  right: auto;
+  flex: 0 0 auto;
+  margin: 0 0 0 auto;
+}
+
+:is(html, html[data-theme="dark"]) body.admin-app .appointments-strip > .appointments-strip__lead,
+:is(html, html[data-theme="dark"]) body.admin-app .appointments-strip > .admin-reports-lede {
+  margin: 10px 2px 0 !important;
+  text-align: left !important;
+  color: #5c675f !important;
+  -webkit-text-fill-color: #5c675f !important;
+}
+
+:is(html, html[data-theme="dark"]) body.admin-app .admin-booking-review-head {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+:is(html, html[data-theme="dark"]) body.admin-app .admin-booking-review-head .admin-booking-review-lead {
+  margin: 0;
+  max-width: none;
+}
+
+@media (max-width: 720px) {
+  :is(html, html[data-theme="dark"]) body.admin-app .admin-section-header,
+  :is(html, html[data-theme="dark"]) body.admin-app :is(
+    #section-dashboard,
+    #section-reports,
+    #section-payments,
+    #section-sentiment,
+    #section-calendar-access,
+    #section-activity-logs,
+    #section-manager-user,
+    #section-predictive
+  ) .appointments-strip__head.admin-section-header {
+    height: auto !important;
+    min-height: var(--admin-header-h) !important;
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+    flex-wrap: wrap !important;
+  }
+
+  :is(html, html[data-theme="dark"]) body.admin-app .admin-section-header :is(h2, h3, h4),
+  :is(html, html[data-theme="dark"]) body.admin-app :is(h2, h3).admin-section-header,
+  :is(html, html[data-theme="dark"]) body.admin-app .admin-section-header .admin-section-header {
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+  }
+}
