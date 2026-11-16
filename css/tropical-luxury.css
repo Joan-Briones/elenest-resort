@@ -2885,6 +2885,26 @@ html:not([data-theme="dark"]) body.guest-lux footer {
   padding: 12px 0;
 }
 
+/* Sign-in only: main fills leftover viewport height so the copyright bar
+   stays at the bottom when the form is shorter than the screen. */
+body.guest-lux.side-nav:has(#loginForm) {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+body.guest-lux.side-nav:has(#loginForm) > main.container {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+body.guest-lux.side-nav:has(#loginForm) > footer {
+  flex: 0 0 auto;
+  margin-top: auto;
+  min-width: 0;
+}
+
 @media (max-width: 1100px) {
   body.guest-lux:has(#loginForm) main.container {
     grid-template-columns: minmax(0, 1fr);
