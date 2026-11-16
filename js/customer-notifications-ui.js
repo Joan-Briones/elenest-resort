@@ -98,7 +98,7 @@
       sidebarRect.width <= 420 &&
       sidebarRect.height >= vh * 0.72
     );
-    var width = Math.min(300, vw - margin * 2);
+    var width = Math.min(440, vw - margin * 2);
     panel.style.width = width + "px";
     panel.style.right = "auto";
     panel.style.bottom = "auto";
@@ -109,7 +109,7 @@
     if (!openBelow && spaceAbove < 150 && spaceBelow > spaceAbove) openBelow = true;
     if (openBelow && spaceBelow < 150 && spaceAbove > spaceBelow) openBelow = false;
     var room = openBelow ? spaceBelow : spaceAbove;
-    var available = Math.min(300, Math.max(150, room));
+    var available = Math.min(560, Math.max(150, room));
     panel.style.maxHeight = available + "px";
 
     var list = panel.querySelector(".customer-notif-panel__list");
@@ -120,7 +120,7 @@
     if (accent) chrome += accent.offsetHeight;
     if (head) chrome += head.offsetHeight;
     if (bar) chrome += bar.offsetHeight;
-    if (list) list.style.maxHeight = Math.max(96, available - chrome) + "px";
+    if (list) list.style.maxHeight = Math.max(140, available - chrome) + "px";
 
     var panelH = panel.offsetHeight;
     var top = openBelow ? rect.bottom + gap : rect.top - gap - panelH;
