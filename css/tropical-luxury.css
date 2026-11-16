@@ -3886,13 +3886,17 @@ html[data-theme="dark"] body.guest-lux .guest-register-card .auth-switch a:focus
   flex: 0 0 auto;
 }
 
-:is(html, html[data-theme="dark"]) :is(body.admin-app, body[data-staff-portal="manager"], body[data-staff-portal="reception"]) #adminReportGuestReviewsCard > .admin-section-header .admin-model-eval-toggle {
+:is(html, html[data-theme="dark"]) :is(body.admin-app, body[data-staff-portal="manager"], body[data-staff-portal="reception"]) :is(#adminReportGuestReviewsCard, #managerReportGuestReviewsCard) > .admin-section-header .admin-model-eval-toggle {
   position: static;
   top: auto;
   right: auto;
   flex: 0 0 auto;
   align-self: center;
   margin: 0;
+}
+
+#section-analytics.is-model-eval-hidden #managerModelEvaluation {
+  display: none !important;
 }
 
 :is(html, html[data-theme="dark"]) :is(body.admin-app, body[data-staff-portal="manager"], body[data-staff-portal="reception"]) .appointments-strip > .appointments-strip__lead,

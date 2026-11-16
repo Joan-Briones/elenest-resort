@@ -1105,6 +1105,7 @@
       }
     }
     else if (sectionId === "section-analytics") {
+      initManagerModelEvalToggle();
       renderAnalytics();
       renderReports();
       pullLiveBookings();
@@ -2454,6 +2455,47 @@
   function setText(id, text) {
     var el = document.getElementById(id);
     if (el) el.textContent = text;
+  }
+
+  var MANAGER_MODEL_EVAL_HIDDEN_KEY = "elenest_manager_model_eval_hidden";
+
+  function managerModelEvalIsHidden() {
+    var section = document.getElementById("section-analytics");
+    return !!(section && section.classList.contains("is-model-eval-hidden"));
+  }
+
+  function setManagerModelEvalHidden(hidden) {
+    var section = document.getElementById("section-analytics");
+    var panel = document.getElementById("managerModelEvaluation");
+    var btn = document.getElementById("managerModelEvalToggle");
+    if (section) section.classList.toggle("is-model-eval-hidden", !!hidden);
+    if (panel) panel.hidden = !!hidden;
+    if (btn) {
+      btn.classList.toggle("is-active", !!hidden);
+      btn.setAttribute("aria-pressed", hidden ? "true" : "false");
+      btn.setAttribute("aria-expanded", hidden ? "false" : "true");
+      var label = hidden ? "Show model evaluation" : "Hide model evaluation";
+      btn.setAttribute("aria-label", label);
+      btn.title = label;
+    }
+    try {
+      localStorage.setItem(MANAGER_MODEL_EVAL_HIDDEN_KEY, hidden ? "1" : "0");
+    } catch (eStore) {}
+  }
+
+  function initManagerModelEvalToggle() {
+    var btn = document.getElementById("managerModelEvalToggle");
+    if (!btn) return;
+    var hidden = false;
+    try {
+      hidden = localStorage.getItem(MANAGER_MODEL_EVAL_HIDDEN_KEY) === "1";
+    } catch (eRead) {}
+    setManagerModelEvalHidden(hidden);
+    if (btn.getAttribute("data-bound") === "1") return;
+    btn.setAttribute("data-bound", "1");
+    btn.addEventListener("click", function () {
+      setManagerModelEvalHidden(!managerModelEvalIsHidden());
+    });
   }
 
   function renderAnalytics() {
@@ -4735,6 +4777,7 @@
     }
 
     initManagerNavDropdowns();
+    initManagerModelEvalToggle();
     navLinks.forEach(function (a) {
       a.addEventListener("click", function (e) {
         var href = a.getAttribute("href") || "";
