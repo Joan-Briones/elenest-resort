@@ -4196,3 +4196,187 @@ html[data-theme="dark"] body.staff-app.subpage > header #menulist .admin-nav-dro
   -webkit-text-fill-color: #8E3A5A !important;
   box-shadow: inset 3px 0 0 #D982A5 !important;
 }
+
+/* ==========================================================================
+   CLIENT BOOKING PAGE — same forest sidebar as the guest pages.
+   Layout and the signed-in account cluster only. Booking and calendar
+   controls keep their existing look.
+   ========================================================================== */
+
+body.book-page.side-nav {
+  background-color: var(--cream);
+  background-image: var(--palm-tile);
+  background-size: 220px 220px;
+}
+
+body.book-page.side-nav > .weather-bar--top,
+body.book-page.side-nav > .book.book-page-reserve,
+body.book-page.side-nav > main.container {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+body.book-page.side-nav > main.container {
+  max-width: 1440px;
+}
+
+body.book-page.side-nav > .weather-bar--top .weather-widget {
+  width: 100%;
+  max-width: 1440px;
+  margin-left: 0;
+  margin-right: auto;
+  box-sizing: border-box;
+  padding-inline: var(--page-gutter, clamp(0.85rem, 2.5vw, 1.5rem));
+}
+
+body.book-page.side-nav > .book .container {
+  width: 100%;
+  max-width: 1440px;
+  margin-left: 0;
+  margin-right: auto;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+body.book-page.side-nav .book-flow-layout,
+body.book-page.side-nav .book-flow,
+body.book-page.side-nav .book-flow__panels,
+body.book-page.side-nav .book-flow__panel {
+  min-width: 0;
+  max-width: 100%;
+}
+
+body.book-page.side-nav > header.home-side #bookNavUser[hidden] {
+  display: none !important;
+}
+
+body.book-page.side-nav > header.home-side #bookNavUser:not([hidden]) {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+  gap: 0.5rem !important;
+  width: 100% !important;
+  margin: auto 0 0 !important;
+  padding: 0.7rem 0.05rem 0.15rem !important;
+  border-top: 1px solid rgba(168, 201, 165, 0.32);
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  background: linear-gradient(180deg, rgba(36, 63, 50, 0), #243f32 32%);
+  text-transform: none !important;
+}
+
+body.book-page.side-nav > header.home-side #bookNavUser .book-nav-identity,
+body.book-page.side-nav > header.home-side #bookNavUser .book-nav-profile {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  width: 100% !important;
+  min-width: 0;
+  max-width: 100%;
+  gap: 0.5rem;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body.book-page.side-nav > header.home-side #bookNavUser button.book-nav-profile {
+  min-height: 2.5rem;
+  padding: 0.3rem 0.45rem !important;
+  border: 0 !important;
+  border-radius: 12px !important;
+  background: transparent !important;
+  color: #fff !important;
+  box-shadow: none !important;
+  text-transform: none !important;
+  transform: none !important;
+}
+
+body.book-page.side-nav > header.home-side #bookNavUser button.book-nav-profile:hover,
+body.book-page.side-nav > header.home-side #bookNavUser button.book-nav-profile:focus-visible {
+  background: rgba(255, 253, 251, 0.1) !important;
+  color: #fff !important;
+  opacity: 1;
+  transform: none !important;
+  outline: none;
+}
+
+body.book-page.side-nav > header.home-side #bookNavUser .book-nav-greet,
+body.book-page.side-nav > header.home-side .book-nav-profile .book-nav-greet {
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+  font-family: var(--sans) !important;
+  font-size: 0.92rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.01em !important;
+  line-height: 1.2 !important;
+  text-align: left !important;
+  text-transform: none !important;
+  text-decoration: none !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+body.book-page.side-nav > header.home-side #bookNavUser .book-nav-actions {
+  display: flex !important;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+  gap: 0.45rem;
+  width: 100%;
+  padding: 0.15rem 0.15rem 0.05rem;
+  box-sizing: border-box;
+}
+
+body.book-page.side-nav > header.home-side #bookNavUser button.book-nav-icon-btn,
+body.book-page.side-nav > header.home-side #bookNavUser button.book-nav-appointments,
+body.book-page.side-nav > header.home-side #bookNavUser button.book-nav-logout,
+body.book-page.side-nav > header.home-side #bookNavUser .customer-notif-bell {
+  width: 38px !important;
+  height: 38px !important;
+  min-width: 38px !important;
+  min-height: 38px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 1px solid rgba(255, 253, 251, 0.38) !important;
+  border-radius: 50% !important;
+  background: rgba(255, 253, 251, 0.12) !important;
+  color: #fff !important;
+  box-shadow: none !important;
+}
+
+body.book-page.side-nav > header.home-side #bookNavUser button.book-nav-icon-btn:hover,
+body.book-page.side-nav > header.home-side #bookNavUser button.book-nav-icon-btn:focus-visible,
+body.book-page.side-nav > header.home-side #bookNavUser button.book-nav-appointments:hover,
+body.book-page.side-nav > header.home-side #bookNavUser button.book-nav-appointments:focus-visible,
+body.book-page.side-nav > header.home-side #bookNavUser button.book-nav-appointments.is-active,
+body.book-page.side-nav > header.home-side #bookNavUser button.book-nav-logout:hover,
+body.book-page.side-nav > header.home-side #bookNavUser button.book-nav-logout:focus-visible,
+body.book-page.side-nav > header.home-side #bookNavUser .customer-notif-bell:hover,
+body.book-page.side-nav > header.home-side #bookNavUser .customer-notif-bell:focus-visible,
+body.book-page.side-nav > header.home-side #bookNavUser .customer-notif-bell[aria-expanded="true"] {
+  background: var(--pink) !important;
+  border-color: transparent !important;
+  color: #fff !important;
+  outline: none;
+}
+
+@media (max-width: 900px) {
+  body.book-page.side-nav > header.home-side #bookNavUser:not([hidden]) {
+    margin: 0.45rem 0 0 !important;
+    position: static;
+    bottom: auto;
+    background: transparent;
+    padding: 0.55rem 0.15rem 0.1rem !important;
+  }
+
+  body.book-page.side-nav > .weather-bar--top,
+  body.book-page.side-nav > .book.book-page-reserve {
+    max-width: 100%;
+  }
+}
