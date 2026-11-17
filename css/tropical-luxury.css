@@ -5653,3 +5653,631 @@ html[data-theme="dark"] body.staff-app.subpage > header #menulist .admin-setting
     font-size: 0.68rem !important;
   }
 }
+
+/* ==========================================================================
+   DARK MODE — Modern Tropical Luxury
+   Deep forest canvas, lifted green surfaces, blush pink accents.
+   Light mode rules above are unchanged. This block only applies when
+   html[data-theme="dark"] is set by theme.js.
+   ========================================================================== */
+
+html[data-theme="dark"] {
+  --lux-bg: #173228;
+  --lux-bg-deep: #12281f;
+  --lux-surface: #214536;
+  --lux-surface-2: #1b3b2e;
+  --lux-input: #143026;
+  --lux-hover: #2c5644;
+  --lux-text: #f4f7f1;
+  --lux-heading: #f7f3ee;
+  --lux-muted: #d5e4d8;
+  --lux-line: rgba(168, 201, 165, 0.34);
+  --lux-pink: #D982A5;
+  --lux-pink-soft: #f3c6d6;
+  color-scheme: dark;
+}
+
+html[data-theme="dark"] body,
+html[data-theme="dark"] body.home-page,
+html[data-theme="dark"] body.guest-lux,
+html[data-theme="dark"] body.side-nav.subpage,
+html[data-theme="dark"] body.book-page.side-nav,
+html[data-theme="dark"] body.staff-app {
+  background-color: var(--lux-bg) !important;
+  color: var(--lux-text);
+}
+
+html[data-theme="dark"] body.home-page,
+html[data-theme="dark"] body.guest-lux,
+html[data-theme="dark"] body.book-page.side-nav {
+  background-image: var(--palm-tile);
+  background-size: 220px 220px;
+}
+
+/* Side rails stay forest, a step deeper than the page, with the pink edge. */
+html[data-theme="dark"] body.side-nav > header.home-side {
+  background-color: #143026 !important;
+  background-image:
+    radial-gradient(120% 70% at 0% 0%, rgba(217, 130, 165, 0.22), transparent 52%),
+    radial-gradient(90% 50% at 100% 100%, rgba(168, 201, 165, 0.14), transparent 55%),
+    var(--palm-tile),
+    linear-gradient(180deg, #245443 0%, #1a3a2e 52%, #12281f 100%) !important;
+  background-size: auto, auto, 150px 150px, auto !important;
+  color: #f7f3ee;
+}
+
+html[data-theme="dark"] body.staff-app > header {
+  background-color: #143026 !important;
+  background-image:
+    radial-gradient(120% 80% at 0% 0%, rgba(217, 130, 165, 0.2), transparent 50%),
+    var(--palm-tile),
+    linear-gradient(180deg, #245443 0%, #1a3a2e 55%, #12281f 100%) !important;
+  background-size: auto, 160px 160px, auto !important;
+  color: #f7f3ee;
+}
+
+html[data-theme="dark"] body.side-nav > header.home-side #menulist a.active,
+html[data-theme="dark"] body.side-nav > header.home-side #menulist a[aria-current="page"],
+html[data-theme="dark"] body.staff-app > header #menulist > li > a.active,
+html[data-theme="dark"] body.staff-app > header #menulist a[href^="#section-"].active,
+html[data-theme="dark"] body.staff-app > header #adminSettingsToggle.active,
+html[data-theme="dark"] body.staff-app > header #staffSettingsToggle.active,
+html[data-theme="dark"] body.staff-app > header .admin-nav-dropdown-toggle.active {
+  background: var(--lux-pink) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html[data-theme="dark"] body.staff-app .staff-header-user__inner,
+html[data-theme="dark"] body.subpage .staff-header-user__inner,
+html[data-theme="dark"] body.staff-app > header .staff-header-user__inner {
+  background: rgba(244, 247, 241, 0.1) !important;
+  color: var(--lux-text) !important;
+  border: 1px solid rgba(168, 201, 165, 0.28) !important;
+  box-shadow: none !important;
+}
+
+html[data-theme="dark"] body.staff-app .staff-header-user__name,
+html[data-theme="dark"] body.subpage .staff-header-user__name {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html[data-theme="dark"] :is(.customer-notif-bell, .staff-notif-bell),
+html[data-theme="dark"] .subpage :is(.customer-notif-bell, .staff-notif-bell) {
+  background: rgba(244, 247, 241, 0.1) !important;
+  color: var(--lux-text) !important;
+  border-color: rgba(248, 221, 232, 0.45) !important;
+  box-shadow: none !important;
+}
+
+/* Readable type on the dark canvas. Pink buttons keep their own color. */
+html[data-theme="dark"] :is(body.home-page, body.guest-lux, body.subpage, body.staff-app) :is(
+  .section-title,
+  .faq-section__title,
+  .activities-section__title,
+  .activities-cta-card__title,
+  .login-reserve-card__title,
+  .appointments-strip__title,
+  .manager-chart-card__title,
+  .admin-report-card-title,
+  .pa-title,
+  .contact-location-title,
+  .credentials-lead,
+  .faq-section__lead,
+  .activities-section__lead,
+  .card h3,
+  .auth-card > h3,
+  .auth-card #loginCardTitle,
+  .reviews-card h3,
+  .policy-card h3,
+  .facility-card h3,
+  .activities-card__title,
+  .heading h2,
+  .book h1
+) {
+  color: var(--lux-heading) !important;
+  -webkit-text-fill-color: var(--lux-heading) !important;
+}
+
+html[data-theme="dark"] body.home-page .book h1 span,
+html[data-theme="dark"] :is(.kpi h4, .admin-kpi-card h4, .admin-payment-kpi-card h4) {
+  color: var(--lux-pink) !important;
+  -webkit-text-fill-color: var(--lux-pink) !important;
+}
+
+html[data-theme="dark"] body.home-page :is(
+  .about p,
+  .about .heading h2,
+  .home-signature__intro h2,
+  .home-signature__intro p,
+  .home-amenity p,
+  .home-amenity h3,
+  .rooms p,
+  .rooms .text h2,
+  .news p,
+  .news .text h2,
+  .services p,
+  .gallery .heading p,
+  .home-reviews__count,
+  .heading p
+) {
+  color: var(--lux-text) !important;
+  -webkit-text-fill-color: var(--lux-text) !important;
+}
+
+html[data-theme="dark"] .staff-boot-loading {
+  background:
+    radial-gradient(ellipse 80% 55% at 12% 18%, rgba(217, 130, 165, 0.24), transparent 58%),
+    radial-gradient(ellipse 70% 50% at 88% 82%, rgba(168, 201, 165, 0.16), transparent 55%),
+    radial-gradient(circle at 50% 42%, rgba(36, 84, 67, 0.45), transparent 62%),
+    linear-gradient(155deg, #10261e 0%, #173228 50%, #1b3b2e 100%) !important;
+}
+
+html[data-theme="dark"] .staff-boot-loading__sub,
+html[data-theme="dark"] .staff-boot-loading__kicker,
+html[data-theme="dark"] .staff-boot-loading__title {
+  color: var(--lux-heading) !important;
+  -webkit-text-fill-color: var(--lux-heading) !important;
+}
+
+html[data-theme="dark"] .login-reserve-stay-bar__option:has(input:checked),
+html[data-theme="dark"] .reception-walkin-stay-bar__option input:checked + span {
+  background: rgba(217, 130, 165, 0.42) !important;
+  color: #fff7fb !important;
+  -webkit-text-fill-color: #fff7fb !important;
+  border-color: #D982A5 !important;
+}
+
+html[data-theme="dark"] :is(
+  .kpi p,
+  .admin-kpi-card p,
+  .admin-payment-kpi-card p,
+  .admin-reports-lede,
+  .note,
+  .auth-lead,
+  .booking-form-hint,
+  .activities-card__desc,
+  .policy-card p,
+  .facility-card__capacity,
+  .home-amenity p,
+  .reviews-card__comment
+) {
+  color: var(--lux-muted) !important;
+  -webkit-text-fill-color: var(--lux-muted) !important;
+}
+
+html[data-theme="dark"] :is(body.guest-lux, body.subpage, body.staff-app, body.home-page) label {
+  color: var(--lux-muted);
+}
+
+/* Surfaces */
+html[data-theme="dark"] :is(
+  .card,
+  .subpage .card,
+  .auth-card,
+  .login-reserve-card,
+  .guest-register-card,
+  .admin-kpi-card,
+  .admin-payment-kpi-card,
+  .manager-chart-card,
+  .admin-report-chart-card,
+  .admin-booking-review-card,
+  .admin-dash-cal-card,
+  .review-card,
+  .reviews-card,
+  .facility-card,
+  .policy-card,
+  .activities-card,
+  .activities-cta-card,
+  .faq-item,
+  .subpage .faq-item,
+  .home-amenity,
+  .home-review-card,
+  .home-reviews__empty,
+  .contact-info-card,
+  .rooms .items,
+  .news .box,
+  .news .items,
+  .book-flow,
+  .book-flow__panel,
+  .book-flow-block,
+  .book-flow-calendar,
+  .book-unit-summary,
+  .book-details-summary,
+  .content-mgmt-form,
+  .pa-panel,
+  .pa-stat-card,
+  .pa-feedback-card,
+  .checkin-ticket,
+  .reception-records-panel,
+  .stay-schedule__card,
+  .book-capacity-notice,
+  .staff-boot-loading__card,
+  .guest-review-modal,
+  .customer-proof-modal,
+  .payment-success-modal,
+  .modal__dialog,
+  .avail-modal__dialog,
+  .facility-detail-modal__dialog,
+  .appointments-modal__dialog,
+  .swal2-popup,
+  .staff-identity-popover,
+  .proof-status-card,
+  .book-facility-card,
+  .book-unit-confirm__box
+) {
+  background: var(--lux-surface) !important;
+  background-color: var(--lux-surface) !important;
+  background-image: none !important;
+  color: var(--lux-text) !important;
+  border-color: var(--lux-line) !important;
+  box-shadow: 0 10px 24px rgba(8, 22, 16, 0.28) !important;
+}
+
+html[data-theme="dark"] .btn--success:not(.btn--outline) {
+  background: #315D46 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html[data-theme="dark"] body.home-page .book .container.flex_space {
+  background: var(--lux-surface) !important;
+  color: var(--lux-text) !important;
+  border-color: var(--lux-line) !important;
+  box-shadow: 0 18px 40px rgba(8, 22, 16, 0.35) !important;
+}
+
+html[data-theme="dark"] body.home-page .home-amenity__icon {
+  color: #d7eadc;
+  background: rgba(168, 201, 165, 0.16);
+}
+
+html[data-theme="dark"] .proof-status-card__title,
+html[data-theme="dark"] .subpage .card .proof-status-card__title,
+html[data-theme="dark"] .proof-status-card__row dt,
+html[data-theme="dark"] body.subpage .proof-status-card dt,
+html[data-theme="dark"] .swal2-title,
+html[data-theme="dark"] .modal__title {
+  color: var(--lux-heading) !important;
+  -webkit-text-fill-color: var(--lux-heading) !important;
+}
+
+html[data-theme="dark"] .proof-status-card__row dd,
+html[data-theme="dark"] .swal2-html-container {
+  background: transparent !important;
+  color: var(--lux-text) !important;
+  -webkit-text-fill-color: var(--lux-text) !important;
+}
+
+html[data-theme="dark"] .guest-lux .hero,
+html[data-theme="dark"] body.guest-lux .hero {
+  background:
+    linear-gradient(100deg, rgba(18, 40, 31, 0.28), transparent 46%),
+    linear-gradient(145deg, #d982a5 0%, #c56b8f 100%) !important;
+  color: #fffdfb !important;
+}
+
+html[data-theme="dark"] body.guest-lux .hero :is(h1, p) {
+  color: #fffdfb !important;
+  -webkit-text-fill-color: #fffdfb !important;
+}
+
+/* Forms */
+html[data-theme="dark"] input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="hidden"]):not([type="range"]),
+html[data-theme="dark"] textarea,
+html[data-theme="dark"] select,
+html[data-theme="dark"] .book-date-trigger,
+html[data-theme="dark"] .book-reserve-form .book-date-trigger {
+  background: var(--lux-input) !important;
+  color: var(--lux-text) !important;
+  -webkit-text-fill-color: var(--lux-text) !important;
+  border-color: rgba(168, 201, 165, 0.42) !important;
+}
+
+html[data-theme="dark"] .avail-guest-stepper input[type="number"] {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+html[data-theme="dark"] input:-webkit-autofill,
+html[data-theme="dark"] textarea:-webkit-autofill,
+html[data-theme="dark"] select:-webkit-autofill {
+  -webkit-text-fill-color: var(--lux-text) !important;
+  caret-color: var(--lux-text);
+  box-shadow: 0 0 0 1000px var(--lux-input) inset !important;
+}
+
+html[data-theme="dark"] ::placeholder {
+  color: #a8c0b0;
+  opacity: 1;
+}
+
+html[data-theme="dark"] option {
+  background: var(--lux-bg);
+  color: var(--lux-text);
+}
+
+html[data-theme="dark"] :is(.btn--outline, .swal2-cancel, .staff-identity-popover__cancel) {
+  background: transparent !important;
+  color: var(--lux-text) !important;
+  -webkit-text-fill-color: var(--lux-text) !important;
+  border-color: rgba(168, 201, 165, 0.65) !important;
+}
+
+html[data-theme="dark"] :is(.btn--outline, .swal2-cancel):hover {
+  background: rgba(168, 201, 165, 0.16) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border-color: #A8C9A5 !important;
+}
+
+html[data-theme="dark"] :is(.primary-btn, .admin-save-btn, .book-flow-btn-main, .book-reserve-submit, .swal2-confirm) {
+  background: var(--lux-pink) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Tables */
+html[data-theme="dark"] :is(
+  table,
+  .data-table,
+  .admin-pay-table,
+  .reception-table,
+  .manager-msg-table,
+  .appointments-table
+) {
+  background: var(--lux-surface-2) !important;
+  color: var(--lux-text) !important;
+}
+
+html[data-theme="dark"] :is(
+  table,
+  .data-table,
+  .admin-pay-table,
+  .reception-table,
+  .manager-msg-table,
+  .appointments-table
+) :is(th, td) {
+  color: var(--lux-text) !important;
+  border-color: rgba(168, 201, 165, 0.22) !important;
+}
+
+html[data-theme="dark"] :is(
+  table,
+  .data-table,
+  .admin-pay-table,
+  .reception-table,
+  .manager-msg-table,
+  .appointments-table
+) thead th {
+  background: #2a5242 !important;
+  color: #e7f6d8 !important;
+  -webkit-text-fill-color: #e7f6d8 !important;
+}
+
+html[data-theme="dark"] :is(
+  table,
+  .data-table,
+  .admin-pay-table,
+  .reception-table,
+  .manager-msg-table,
+  .appointments-table
+) tbody tr:nth-child(even) {
+  background: #1a382c !important;
+}
+
+html[data-theme="dark"] :is(
+  table,
+  .data-table,
+  .admin-pay-table,
+  .reception-table,
+  .manager-msg-table,
+  .appointments-table
+) tbody tr:hover {
+  background: rgba(217, 130, 165, 0.16) !important;
+}
+
+html[data-theme="dark"] .faq-item__question,
+html[data-theme="dark"] .subpage .faq-item__question {
+  color: var(--lux-heading) !important;
+  -webkit-text-fill-color: var(--lux-heading) !important;
+}
+
+html[data-theme="dark"] .subpage .faq-item[open] {
+  border-color: rgba(217, 130, 165, 0.55) !important;
+}
+
+/* Status chips stay meaningful, on dark tints instead of pale paper. */
+html[data-theme="dark"] :is(.booking-status--pending, .booking-status--pending-payment) {
+  background: #4a3b22 !important;
+  color: #f6e0b5 !important;
+  -webkit-text-fill-color: #f6e0b5 !important;
+  border-color: #d4a656 !important;
+}
+
+html[data-theme="dark"] :is(.booking-status--confirmed) {
+  background: #1e4a36 !important;
+  color: #d7eadc !important;
+  -webkit-text-fill-color: #d7eadc !important;
+  border-color: #A8C9A5 !important;
+}
+
+html[data-theme="dark"] :is(.booking-status--cancelled) {
+  background: #4a2a30 !important;
+  color: #f6c9c6 !important;
+  -webkit-text-fill-color: #f6c9c6 !important;
+  border-color: #e0a8a4 !important;
+}
+
+html[data-theme="dark"] :is(.booking-status--completed, .booking-status--checked-in, .admin-arrival-status-pill.is-checked-in) {
+  background: #4a3140 !important;
+  color: #f6d5df !important;
+  -webkit-text-fill-color: #f6d5df !important;
+  border-color: rgba(217, 130, 165, 0.55) !important;
+}
+
+html[data-theme="dark"] :is(.booking-status--checked-out, .admin-arrival-status-pill.is-checked-out) {
+  background: #243830 !important;
+  color: #d5e4d8 !important;
+  -webkit-text-fill-color: #d5e4d8 !important;
+  border-color: rgba(168, 201, 165, 0.45) !important;
+}
+
+/* Notifications and popovers */
+html[data-theme="dark"] :is(.customer-notif-panel, .staff-notif-panel) {
+  background: var(--lux-surface) !important;
+  color: var(--lux-text) !important;
+  border-color: rgba(217, 130, 165, 0.38) !important;
+  box-shadow: 0 18px 40px rgba(8, 22, 16, 0.45) !important;
+}
+
+html[data-theme="dark"] .customer-notif-panel__head {
+  background: linear-gradient(180deg, rgba(217, 130, 165, 0.28), #214536) !important;
+  color: var(--lux-text) !important;
+}
+
+html[data-theme="dark"] .customer-notif-panel__title,
+html[data-theme="dark"] .customer-notif-item__title {
+  color: var(--lux-heading) !important;
+}
+
+html[data-theme="dark"] .customer-notif-item__msg,
+html[data-theme="dark"] .customer-notif-item__time,
+html[data-theme="dark"] .staff-identity-popover__hint,
+html[data-theme="dark"] .staff-identity-popover__role {
+  color: var(--lux-muted) !important;
+}
+
+html[data-theme="dark"] :is(.customer-notif-list, .staff-notif-list) {
+  background: var(--lux-surface-2) !important;
+}
+
+html[data-theme="dark"] :is(.customer-notif-item, .customer-notif-item--read, .staff-notif-item) {
+  background: var(--lux-surface-2) !important;
+  color: var(--lux-text) !important;
+  border-color: var(--lux-line) !important;
+}
+
+html[data-theme="dark"] .customer-notif-item:hover,
+html[data-theme="dark"] .customer-notif-item:focus-visible {
+  background: var(--lux-hover) !important;
+  border-color: var(--lux-pink) !important;
+}
+
+html[data-theme="dark"] .customer-notif-item--unread {
+  background: linear-gradient(180deg, #2a4638 0%, #3a3140 140%) !important;
+  border-color: rgba(217, 130, 165, 0.5) !important;
+  box-shadow: inset 3px 0 0 #D982A5 !important;
+}
+
+/* Dashboard section titles: forest bar, pink accent, light type. */
+html[data-theme="dark"] :is(body.admin-app, body[data-staff-portal="manager"], body[data-staff-portal="reception"]) {
+  --admin-header-bg: linear-gradient(90deg, rgba(217, 130, 165, 0.34) 0%, #245443 34%, #1e4034 100%);
+  --admin-header-color: #f7f3ee;
+}
+
+html[data-theme="dark"] :is(body.admin-app, body[data-staff-portal="manager"], body[data-staff-portal="reception"]) .admin-section-header {
+  border-color: rgba(217, 130, 165, 0.45) !important;
+  border-left-color: #D982A5 !important;
+  color: #f7f3ee !important;
+  -webkit-text-fill-color: #f7f3ee !important;
+}
+
+/* Calendar days and the weather strip */
+html[data-theme="dark"] :is(.book-flow-cal-nav, .rq-cal-nav__btn) {
+  background: #1a382c !important;
+  color: #f3c6d6 !important;
+  -webkit-text-fill-color: #f3c6d6 !important;
+  border-color: rgba(217, 130, 165, 0.5) !important;
+}
+
+html[data-theme="dark"] :is(.book-flow-cal-nav, .rq-cal-nav__btn):hover {
+  background: #D982A5 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html[data-theme="dark"] :is(.manager-chart-wrap, .admin-report-chart-wrap, .pa-chart-wrap) {
+  background: #1a382c;
+  border-radius: 12px;
+}
+
+html[data-theme="dark"] :is(.manager-chart-legend, .admin-report-chart-legend, .admin-report-donut-legend) {
+  color: var(--lux-muted) !important;
+}
+
+html[data-theme="dark"] .book-flow-cal-day {
+  background: #1a382c !important;
+  color: var(--lux-text) !important;
+  border-color: rgba(168, 201, 165, 0.28) !important;
+}
+
+html[data-theme="dark"] .book-flow-cal-day--available {
+  background: #1e4a36 !important;
+  color: #d7eadc !important;
+  border-color: rgba(168, 201, 165, 0.7) !important;
+}
+
+html[data-theme="dark"] .book-flow-cal-day--partial,
+html[data-theme="dark"] .book-flow-cal-day--partial:hover {
+  background: #4a3b22 !important;
+  color: #f6e0b5 !important;
+  border-color: #d4a656 !important;
+}
+
+html[data-theme="dark"] .book-flow-cal-day--partial .book-flow-cal-day__status {
+  color: #f6d7a8 !important;
+}
+
+html[data-theme="dark"] .book-flow-cal-day--selected {
+  background: var(--lux-pink) !important;
+  color: #ffffff !important;
+  border-color: var(--lux-pink) !important;
+}
+
+html[data-theme="dark"] .weather-bar--top {
+  background:
+    radial-gradient(900px 80px at 8% 0%, rgba(168, 201, 165, 0.16), transparent 60%),
+    radial-gradient(700px 90px at 92% 120%, rgba(217, 130, 165, 0.18), transparent 58%),
+    linear-gradient(105deg, #1a382c 0%, #214536 52%, #243038 100%) !important;
+  border-bottom-color: rgba(217, 130, 165, 0.28) !important;
+  color: var(--lux-text) !important;
+}
+
+html[data-theme="dark"] .weather-widget,
+html[data-theme="dark"] .weather-widget :is(h2, h3, p, span, strong) {
+  color: var(--lux-text);
+}
+
+html[data-theme="dark"] .weather-live {
+  color: #d7eadc !important;
+  background: rgba(168, 201, 165, 0.18) !important;
+}
+
+@media (min-width: 901px) {
+  html[data-theme="dark"] body.side-nav > header.home-side #menulist,
+  html[data-theme="dark"] body.staff-app > header #menulist,
+  html[data-theme="dark"] body.staff-app > header .navlinks > ul.site-nav-list {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+  }
+}
+
+html[data-theme="dark"] {
+  scrollbar-color: #3d6b56 #173228;
+}
+
+html[data-theme="dark"] :is(body.home-page, body.guest-lux, body.staff-app, body.subpage) :is(hr) {
+  border-color: rgba(168, 201, 165, 0.28);
+}
+
+/* Guest footer matches the forest rail instead of the old charcoal bar. */
+html[data-theme="dark"] :is(body.guest-lux, body.subpage) > footer {
+  background: linear-gradient(180deg, #245443 0%, #143026 100%) !important;
+  border-top: 3px solid #D982A5 !important;
+  color: #ffffff !important;
+}

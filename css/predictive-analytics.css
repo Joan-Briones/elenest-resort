@@ -853,10 +853,10 @@
 }
 
 html[data-theme="dark"] #section-predictive {
-  --pa-ink: #f4eef2;
-  --pa-muted: #cbbfc6;
-  --pa-line: rgba(255, 255, 255, 0.12);
-  color: #f4eef2;
+  --pa-ink: #f3f7f2;
+  --pa-muted: #b7cbbd;
+  --pa-line: rgba(168, 201, 165, 0.24);
+  color: #f3f7f2;
 }
 
 html[data-theme="dark"] #section-predictive .pa-panel,
@@ -868,7 +868,7 @@ html[data-theme="dark"] #section-predictive .pa-table-wrap,
 html[data-theme="dark"] #section-predictive .pa-rec-item,
 html[data-theme="dark"] #section-predictive .pa-filter-chip,
 html[data-theme="dark"] #section-predictive .pa-filter-chip select {
-  background: #221e28;
-  color: #f4eef2;
-  border-color: rgba(217, 130, 165, 0.32);
+  background: #214536;
+  color: #f3f7f2;
+  border-color: rgba(217, 130, 165, 0.38);
 }
