@@ -2909,12 +2909,13 @@
   var MGR_CHART_AMBER_DEEP = "#c4921a";
   var MGR_CHART_SLATE = "#6b7c93";
   var MGR_CHART_SLATE_DEEP = "#4f5f73";
+  var managerPrintUsesLightCharts = false;
   var managerTrendMetaById = {};
   var managerRevenueMetaById = {};
   var managerChartsResizeBound = false;
 
   function syncManagerChartTheme() {
-    var dark = document.documentElement.getAttribute("data-theme") === "dark";
+    var dark = !managerPrintUsesLightCharts && document.documentElement.getAttribute("data-theme") === "dark";
     if (!dark) {
       MGR_CHART_BG = "#ffffff";
       MGR_CHART_PLOT = "rgba(248, 246, 249, 0.72)";
@@ -4424,8 +4425,11 @@
   function buildManagerPrintSheet() {
     var sheet = document.getElementById("managerPrintSheet");
     if (!sheet) return;
-    renderAnalytics();
-    var report = renderReports() || computeManagerReport();
+    managerPrintUsesLightCharts = true;
+    syncManagerChartTheme();
+    try {
+      renderAnalytics();
+      var report = renderReports() || computeManagerReport();
     var user = currentManagerUser();
     var preparedName = (user && (user.name || user.email)) || "Resort Manager";
     var preparedEmail = (user && user.email) || "—";
@@ -4679,6 +4683,14 @@
       escapeHtml(fmtDateTimeOfficial(report.generatedAt)) +
       " · Not for public release without management approval.</p>" +
       "</article>";
+    } finally {
+      managerPrintUsesLightCharts = false;
+      syncManagerChartTheme();
+      try {
+        renderAnalytics();
+        renderReports();
+      } catch (eRestoreCharts) {}
+    }
   }
 
   function finishManagerPrint() {

@@ -7382,3 +7382,458 @@ html[data-theme="dark"] body[data-staff-portal="manager"] #section-manage .admin
   -webkit-text-fill-color: #ffffff !important;
   border-color: #D982A5 !important;
 }
+
+/* ==========================================================================
+   Analytics report — light mode paper, dark mode contrast
+   Dashboard chrome stays Modern Tropical Luxury. Only the report surfaces.
+   ========================================================================== */
+html:not([data-theme="dark"]) body[data-staff-portal="manager"] #section-analytics :is(
+  .card.kpi,
+  .manager-report-card,
+  .admin-report-chart-card,
+  .admin-model-eval
+) {
+  background: #ffffff !important;
+  background-image: none !important;
+  color: #1a1a1a !important;
+}
+
+html:not([data-theme="dark"]) body[data-staff-portal="manager"] #section-analytics :is(
+  .manager-report-summary,
+  .kpi p,
+  .admin-report-chart-sub,
+  .admin-report-chart-legend,
+  .admin-report-chart-legend__item,
+  .admin-report-donut-legend,
+  .admin-report-donut-legend__label,
+  .admin-report-donut-legend__count,
+  .admin-report-donut-legend__value,
+  .admin-report-insights,
+  .admin-report-insights__list li,
+  .admin-report-reviews-chart-title,
+  .admin-report-chart-months span,
+  .admin-sentiment-label,
+  .sentiment-row label,
+  .sentiment-row strong,
+  .admin-model-eval h2,
+  .admin-model-eval h3,
+  .admin-model-eval p,
+  .admin-model-eval li,
+  .admin-model-eval td,
+  .admin-model-eval th
+) {
+  color: #1a1a1a !important;
+  -webkit-text-fill-color: #1a1a1a !important;
+}
+
+html:not([data-theme="dark"]) body[data-staff-portal="manager"] #section-analytics :is(
+  .manager-report-summary__label,
+  .manager-report-summary__meta,
+  .manager-report-summary__empty,
+  .admin-report-chart-sub,
+  .admin-report-reviews-kpi span,
+  .admin-model-eval__empty,
+  .admin-model-eval__remark,
+  .admin-model-eval__live-note
+) {
+  color: #3d4a44 !important;
+  -webkit-text-fill-color: #3d4a44 !important;
+}
+
+html:not([data-theme="dark"]) body[data-staff-portal="manager"] #section-analytics .manager-report-summary__row {
+  background: #ffffff !important;
+  background-image: none !important;
+  border-color: rgba(49, 93, 70, 0.18) !important;
+}
+
+html:not([data-theme="dark"]) body[data-staff-portal="manager"] #section-analytics .manager-report-summary__value,
+html:not([data-theme="dark"]) body[data-staff-portal="manager"] #section-analytics .admin-report-reviews-kpi strong {
+  color: #1a1a1a !important;
+  -webkit-text-fill-color: #1a1a1a !important;
+}
+
+html:not([data-theme="dark"]) body[data-staff-portal="manager"] #section-analytics .manager-report-summary__section-title {
+  color: #7a3148 !important;
+  -webkit-text-fill-color: #7a3148 !important;
+}
+
+html:not([data-theme="dark"]) body[data-staff-portal="manager"] #section-analytics :is(
+  .admin-model-eval__table-wrap,
+  .admin-model-eval__table,
+  .admin-report-chart-wrap,
+  canvas.admin-pro-chart
+) {
+  background: #ffffff !important;
+  color: #1a1a1a !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] #section-analytics .admin-report-reviews-kpi strong,
+html[data-theme="dark"] body[data-staff-portal="manager"] #section-analytics .kpi h4,
+html[data-theme="dark"] body[data-staff-portal="manager"] #section-analytics .manager-report-summary__value {
+  color: #e7a3c0 !important;
+  -webkit-text-fill-color: #e7a3c0 !important;
+}
+
+/* Printed report and the browser print preview. Always white paper. */
+@media print {
+  html,
+  html[data-theme="dark"],
+  body.manager-printing {
+    color-scheme: light !important;
+    background: #ffffff !important;
+    color: #1a1a1a !important;
+  }
+
+  body.manager-printing header,
+  body.manager-printing footer,
+  body.manager-printing main,
+  body.manager-printing .nav-menu-toggle,
+  body.manager-printing #staffHeaderRoleItem,
+  body.manager-printing #staffProfileOverlay,
+  body.manager-printing #managerEditOverlay,
+  body.manager-printing .swal2-container,
+  body.manager-printing .admin-settings-overlay,
+  body.manager-printing #staffBootLoading {
+    display: none !important;
+  }
+
+  body.manager-printing #managerPrintSheet,
+  body.manager-printing #managerPrintSheet[hidden],
+  body.manager-printing .manager-print-sheet {
+    display: block !important;
+    position: static !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+    color: #1a1a1a !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+    -webkit-text-fill-color: #1a1a1a !important;
+  }
+
+  body.manager-printing #managerPrintSheet,
+  body.manager-printing #managerPrintSheet * {
+    color-scheme: light !important;
+    box-sizing: border-box !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    text-shadow: none !important;
+    opacity: 1 !important;
+    filter: none !important;
+    box-shadow: none !important;
+  }
+
+  body.manager-printing #managerPrintSheet :is(
+    h1, h2, h3, h4, p, li, span, strong, td, th, div, article, section
+  ) {
+    color: #1a1a1a !important;
+    -webkit-text-fill-color: #1a1a1a !important;
+  }
+
+  body.manager-printing .mgr-doc {
+    background: #ffffff !important;
+    color: #1a1a1a !important;
+    font-size: 11pt !important;
+    line-height: 1.45 !important;
+  }
+
+  body.manager-printing .mgr-doc__letterhead {
+    display: grid !important;
+    grid-template-columns: 64px minmax(0, 1fr) auto !important;
+    gap: 12px !important;
+    align-items: center !important;
+    border-bottom: 2.5px solid #7a3148 !important;
+    background: #ffffff !important;
+  }
+
+  body.manager-printing .mgr-doc__org-name,
+  body.manager-printing .mgr-doc__title,
+  body.manager-printing .mgr-doc__h {
+    color: #1a1a1a !important;
+    -webkit-text-fill-color: #1a1a1a !important;
+    opacity: 1 !important;
+  }
+
+  body.manager-printing .mgr-doc__org-sub,
+  body.manager-printing .mgr-doc__mark strong,
+  body.manager-printing .mgr-doc__sign-label,
+  body.manager-printing .mgr-doc__h {
+    border-color: #7a3148 !important;
+  }
+
+  body.manager-printing #managerPrintSheet :is(
+    .mgr-doc__org-sub,
+    .mgr-doc__mark strong,
+    .mgr-doc__sign-label
+  ) {
+    color: #7a3148 !important;
+    -webkit-text-fill-color: #7a3148 !important;
+  }
+
+  body.manager-printing #managerPrintSheet :is(
+    .mgr-doc__subtitle,
+    .mgr-doc__org-lines,
+    .mgr-doc__org-lines li,
+    .mgr-doc__mark,
+    .mgr-doc__note,
+    .mgr-doc__foot,
+    .mgr-doc__findings,
+    .mgr-doc__findings li,
+    .mgr-doc__empty,
+    .mgr-doc__sign-line
+  ) {
+    color: #333333 !important;
+    -webkit-text-fill-color: #333333 !important;
+    background: transparent !important;
+  }
+
+  body.manager-printing .mgr-doc table,
+  body.manager-printing .mgr-doc .subpage table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    border-spacing: 0 !important;
+    border-radius: 0 !important;
+    overflow: visible !important;
+    background: #ffffff !important;
+    color: #1a1a1a !important;
+    box-shadow: none !important;
+  }
+
+  body.manager-printing .mgr-doc :is(th, td) {
+    border: 1px solid #bdbdbd !important;
+    color: #1a1a1a !important;
+    -webkit-text-fill-color: #1a1a1a !important;
+    background: #ffffff !important;
+    opacity: 1 !important;
+    vertical-align: top !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  body.manager-printing #managerPrintSheet :is(
+    .mgr-doc__meta th,
+    .mgr-doc__table th,
+    .mgr-doc__table tfoot td
+  ) {
+    background: #f4f1f2 !important;
+    color: #1a1a1a !important;
+    -webkit-text-fill-color: #1a1a1a !important;
+    font-weight: 700 !important;
+  }
+
+  body.manager-printing #managerPrintSheet .mgr-doc__table tbody tr:nth-child(even) td {
+    background: #f7f7f7 !important;
+    color: #1a1a1a !important;
+    -webkit-text-fill-color: #1a1a1a !important;
+  }
+
+  body.manager-printing #managerPrintSheet .mgr-doc__kpis th {
+    background: #7a3148 !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    font-size: 8.5pt !important;
+    font-weight: 700 !important;
+    text-align: center !important;
+  }
+
+  body.manager-printing #managerPrintSheet .mgr-doc__kpis td {
+    background: #ffffff !important;
+    color: #1a1a1a !important;
+    -webkit-text-fill-color: #1a1a1a !important;
+    font-size: 13pt !important;
+    font-weight: 700 !important;
+    text-align: center !important;
+  }
+
+  body.manager-printing .mgr-doc__table td.num,
+  body.manager-printing .mgr-doc__table th.num {
+    text-align: right !important;
+    white-space: nowrap !important;
+    font-variant-numeric: tabular-nums !important;
+    color: #1a1a1a !important;
+    -webkit-text-fill-color: #1a1a1a !important;
+  }
+
+  body.manager-printing .mgr-doc__section--register .mgr-doc__table {
+    table-layout: fixed !important;
+    font-size: 8pt !important;
+  }
+
+  body.manager-printing .mgr-doc__section--register .mgr-doc__table :is(th, td) {
+    padding: 3px 4px !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+  }
+
+  body.manager-printing .mgr-doc__section--register .mgr-doc__table :is(th.num, td.num) {
+    white-space: nowrap !important;
+  }
+
+  body.manager-printing #managerPrintSheet .mgr-doc__charts {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+    gap: 10px !important;
+    background: #ffffff !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  body.manager-printing #managerPrintSheet .mgr-doc__chart,
+  body.manager-printing #managerPrintSheet .mgr-doc__chart--wide {
+    background: #ffffff !important;
+    border: 1px solid #bdbdbd !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  body.manager-printing .mgr-doc__chart--wide {
+    grid-column: 1 / -1 !important;
+  }
+
+  body.manager-printing .mgr-doc__chart h4,
+  body.manager-printing .mgr-doc__chart img {
+    background: #ffffff !important;
+    color: #1a1a1a !important;
+    -webkit-text-fill-color: #1a1a1a !important;
+  }
+
+  body.manager-printing .mgr-doc__chart img {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+  }
+
+  body.manager-printing .mgr-doc__model-eval,
+  body.manager-printing .mgr-doc__model-eval :is(
+    .admin-model-eval__head,
+    .admin-model-eval__grid,
+    .admin-model-eval__panel,
+    .admin-model-eval__table-wrap,
+    .admin-model-eval__table
+  ) {
+    background: #ffffff !important;
+    color: #1a1a1a !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+
+  body.manager-printing .mgr-doc__model-eval .admin-model-eval__head {
+    position: static !important;
+    display: block !important;
+    padding: 0 !important;
+    margin: 0 0 8px !important;
+    text-align: left !important;
+  }
+
+  body.manager-printing .mgr-doc__model-eval :is(
+    .admin-model-eval__live,
+    .admin-model-eval__live-note
+  ) {
+    display: none !important;
+  }
+
+  body.manager-printing #managerPrintSheet .mgr-doc__model-eval .admin-model-eval__grid {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 10px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  body.manager-printing #managerPrintSheet .mgr-doc__model-eval :is(
+    .admin-model-eval__panel,
+    .admin-model-eval__table-wrap,
+    .admin-model-eval__table
+  ) {
+    min-width: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    overflow: hidden !important;
+    background: #ffffff !important;
+    color: #1a1a1a !important;
+  }
+
+  body.manager-printing #managerPrintSheet .mgr-doc__model-eval :is(
+    .admin-model-eval__table-wrap,
+    table.admin-model-eval__table,
+    table.admin-model-eval__table th,
+    table.admin-model-eval__table td
+  ) {
+    background: #ffffff !important;
+    background-image: none !important;
+    color: #1a1a1a !important;
+    -webkit-text-fill-color: #1a1a1a !important;
+    border-color: #bdbdbd !important;
+  }
+
+  body.manager-printing #managerPrintSheet .mgr-doc__model-eval table.admin-model-eval__table th {
+    background: #f4f1f2 !important;
+    color: #1a1a1a !important;
+    -webkit-text-fill-color: #1a1a1a !important;
+  }
+
+  body.manager-printing .mgr-doc__model-eval h3 {
+    color: #1a1a1a !important;
+    -webkit-text-fill-color: #1a1a1a !important;
+    font-size: 11pt !important;
+    margin: 0 0 6px !important;
+  }
+
+  body.manager-printing .mgr-doc__model-eval :is(th, td) {
+    text-align: left !important;
+    font-size: 8pt !important;
+  }
+
+  body.manager-printing #managerPrintSheet .mgr-doc__model-eval .admin-model-eval__badge {
+    background: #f4f1f2 !important;
+    color: #1a1a1a !important;
+    -webkit-text-fill-color: #1a1a1a !important;
+    border: 1px solid #bdbdbd !important;
+  }
+
+  body.manager-printing #managerPrintSheet .mgr-doc__model-eval .admin-model-eval__badge--very-good,
+  body.manager-printing #managerPrintSheet .mgr-doc__model-eval .admin-model-eval__badge--good {
+    background: #ecfdf3 !important;
+    color: #166534 !important;
+    -webkit-text-fill-color: #166534 !important;
+  }
+
+  body.manager-printing #managerPrintSheet .mgr-doc__model-eval .admin-model-eval__badge--acceptable {
+    background: #fffbeb !important;
+    color: #92400e !important;
+    -webkit-text-fill-color: #92400e !important;
+  }
+
+  body.manager-printing #managerPrintSheet .mgr-doc__model-eval .admin-model-eval__badge--needs-improvement {
+    background: #fff1f2 !important;
+    color: #9f1239 !important;
+    -webkit-text-fill-color: #9f1239 !important;
+  }
+
+  body.manager-printing .mgr-doc__section {
+    break-inside: auto !important;
+    page-break-inside: auto !important;
+  }
+
+  body.manager-printing .mgr-doc__meta,
+  body.manager-printing .mgr-doc__kpis,
+  body.manager-printing .mgr-doc__sign,
+  body.manager-printing .mgr-doc__table tr {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  body.manager-printing .mgr-doc__table thead {
+    display: table-header-group !important;
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 12mm 12mm 14mm;
+  }
+}
