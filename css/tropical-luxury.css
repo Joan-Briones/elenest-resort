@@ -6741,3 +6741,8 @@ html[data-theme="dark"] body.admin-app input[type="file"]::-webkit-file-upload-b
   font-weight: 600;
   cursor: pointer;
 }
+
+html[data-theme="dark"] :is(body.admin-app, body[data-staff-portal="manager"], body[data-staff-portal="reception"]) .appointments-strip > :is(.admin-reports-lede, .appointments-strip__lead) {
+  color: #e7f0e4 !important;
+  -webkit-text-fill-color: #e7f0e4 !important;
+}
