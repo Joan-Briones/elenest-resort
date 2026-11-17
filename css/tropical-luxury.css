@@ -6686,3 +6686,58 @@ html[data-theme="dark"] body.admin-app .admin-reservation-picker__item--active {
   border-color: #D982A5 !important;
   box-shadow: 0 0 0 1px rgba(217, 130, 165, 0.45) !important;
 }
+
+/* Management page: pale chips inherited light header/table text. */
+html[data-theme="dark"] body.admin-app .admin-pay-verify-count {
+  background: #1e4a36 !important;
+  background-image: none !important;
+  color: #e7f6d8 !important;
+  -webkit-text-fill-color: #e7f6d8 !important;
+  border: 1px solid rgba(168, 201, 165, 0.7) !important;
+}
+
+html[data-theme="dark"] body.admin-app .admin-future-booking-pill {
+  background: #4a3b22 !important;
+  color: #f6e0b5 !important;
+  -webkit-text-fill-color: #f6e0b5 !important;
+  border: 1px solid #d4a656 !important;
+}
+
+html[data-theme="dark"] body.admin-app .admin-checkin-today-pill {
+  background: #1e4a36 !important;
+  color: #d7eadc !important;
+  -webkit-text-fill-color: #d7eadc !important;
+  border: 1px solid #A8C9A5 !important;
+}
+
+html[data-theme="dark"] body.admin-app :is(.admin-pagination__info, .admin-pagination__page) {
+  color: #e7f0e4 !important;
+  -webkit-text-fill-color: #e7f0e4 !important;
+}
+
+html[data-theme="dark"] body.admin-app .admin-pagination {
+  border-top-color: rgba(168, 201, 165, 0.4) !important;
+}
+
+html[data-theme="dark"] body.admin-app input[type="file"] {
+  background: #143026 !important;
+  color: #f4f7f1 !important;
+  -webkit-text-fill-color: #f4f7f1 !important;
+  border: 1px solid rgba(168, 201, 165, 0.45) !important;
+  border-radius: 12px;
+  padding: 6px 8px;
+}
+
+html[data-theme="dark"] body.admin-app input[type="file"]::file-selector-button,
+html[data-theme="dark"] body.admin-app input[type="file"]::-webkit-file-upload-button {
+  background: #D982A5;
+  color: #ffffff;
+  -webkit-text-fill-color: #ffffff;
+  border: 0;
+  border-radius: 8px;
+  padding: 8px 14px;
+  margin-right: 12px;
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
