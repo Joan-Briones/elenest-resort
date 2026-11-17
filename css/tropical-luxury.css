@@ -925,6 +925,30 @@ body.home-page .home-footer__copy {
 body.staff-app,
 body.staff-app {
   background: var(--cream);
+  /* Short pages keep the copyright bar on the bottom edge of the viewport. */
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+body.staff-app > main {
+  flex: 1 1 auto;
+}
+
+body.staff-app > footer {
+  flex: 0 0 auto;
+  margin-top: auto;
+  padding: 12px 0;
+  background: #282834;
+}
+
+body.staff-app > footer .container,
+body.staff-app > footer p {
+  margin: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  line-height: 1.4;
 }
 
 body.staff-app .staff-boot-loading,
