@@ -7951,8 +7951,10 @@ html[data-theme="dark"] body[data-staff-portal="reception"] :is(
   border-color: rgba(217, 130, 165, 0.38) !important;
 }
 
-html[data-theme="dark"] body[data-staff-portal="reception"] .reception-records-panel--checkout {
-  border-color: rgba(217, 130, 165, 0.48) !important;
+html[data-theme="dark"] body[data-staff-portal="reception"] .reception-records-panel--checkout,
+html[data-theme="dark"] body[data-staff-portal="reception"] #section-checkout .reception-table-wrap,
+html[data-theme="dark"] body[data-staff-portal="reception"] .reception-records-panel--checkout .reception-table-wrap {
+  border-color: rgba(168, 201, 165, 0.32) !important;
 }
 
 html[data-theme="dark"] body[data-staff-portal="reception"] .reception-records-panel__head {
@@ -8198,11 +8200,13 @@ html[data-theme="dark"] body[data-staff-portal="reception"] .reception-table the
   border-bottom-color: rgba(168, 201, 165, 0.35) !important;
 }
 
-html[data-theme="dark"] body[data-staff-portal="reception"] .reception-records-panel--checkout .reception-table thead th {
-  background: #3a3540 !important;
-  color: #f6d5df !important;
-  -webkit-text-fill-color: #f6d5df !important;
-  border-bottom-color: rgba(217, 130, 165, 0.4) !important;
+html[data-theme="dark"] body[data-staff-portal="reception"] #section-checkout .reception-table thead th,
+html[data-theme="dark"] body[data-staff-portal="reception"] .reception-records-panel--checkout .reception-table thead th,
+html[data-theme="dark"] body[data-staff-portal="reception"] .reception-records-panel--checkout .reception-table th {
+  background: #2a5242 !important;
+  color: #e7f6d8 !important;
+  -webkit-text-fill-color: #e7f6d8 !important;
+  border-bottom-color: rgba(168, 201, 165, 0.35) !important;
 }
 
 html[data-theme="dark"] body[data-staff-portal="reception"] .reception-table tbody tr:nth-child(odd) td {
@@ -8217,12 +8221,19 @@ html[data-theme="dark"] body[data-staff-portal="reception"] .reception-table tbo
   background: rgba(217, 130, 165, 0.18) !important;
 }
 
-html[data-theme="dark"] body[data-staff-portal="reception"] .reception-records-panel--checkout .reception-table tbody tr:nth-child(even) td {
-  background: #243038 !important;
+html[data-theme="dark"] body[data-staff-portal="reception"] #section-checkout .reception-table tbody tr:nth-child(odd) td,
+html[data-theme="dark"] body[data-staff-portal="reception"] .reception-records-panel--checkout .reception-table tbody tr:nth-child(odd) td {
+  background: #1a382c !important;
 }
 
+html[data-theme="dark"] body[data-staff-portal="reception"] #section-checkout .reception-table tbody tr:nth-child(even) td,
+html[data-theme="dark"] body[data-staff-portal="reception"] .reception-records-panel--checkout .reception-table tbody tr:nth-child(even) td {
+  background: #143026 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] #section-checkout .reception-table tbody tr:hover td,
 html[data-theme="dark"] body[data-staff-portal="reception"] .reception-records-panel--checkout .reception-table tbody tr:hover td {
-  background: rgba(217, 130, 165, 0.22) !important;
+  background: rgba(217, 130, 165, 0.18) !important;
 }
 
 html[data-theme="dark"] body[data-staff-portal="reception"] .reception-stay::before {
