@@ -38,7 +38,11 @@
   --track-kicker: 0.16em;
   --track-label: 0.04em;
   --track-button: 0.03em;
-  --staff-sidebar-w: 252px;
+  --staff-sidebar-w: 352px;
+  --dash-sidebar-size: 16px;
+  --dash-sidebar-weight: 600;
+  --dash-sidebar-track: 0.035em;
+  --dash-sidebar-lh: 1.15;
   --radius-card: 16px;
   --radius-control: 12px;
   --shadow-soft: 0 6px 18px rgba(49, 93, 70, 0.06), 0 1px 3px rgba(51, 58, 53, 0.04);
@@ -941,9 +945,11 @@ body.staff-app > header {
 body.staff-app > header .staff-sidebar__portal {
   margin: 0.2rem 0 0;
   font-family: var(--sans);
-  font-size: 0.62rem;
-  font-weight: 600;
-  letter-spacing: 0.16em;
+  font-size: var(--dash-sidebar-size);
+  font-weight: var(--dash-sidebar-weight);
+  font-style: normal;
+  letter-spacing: var(--dash-sidebar-track);
+  line-height: var(--dash-sidebar-lh);
   text-transform: uppercase;
   color: var(--sage);
 }
@@ -1008,9 +1014,11 @@ body.staff-app > header .staff-sidebar__portal {
   body.staff-app > header .staff-sidebar__portal {
     margin: 0;
     font-family: var(--sans);
-    font-size: 0.68rem;
-    font-weight: 600;
-    letter-spacing: 0.18em;
+    font-size: var(--dash-sidebar-size);
+    font-weight: var(--dash-sidebar-weight);
+    font-style: normal;
+    letter-spacing: var(--dash-sidebar-track);
+    line-height: var(--dash-sidebar-lh);
     text-transform: uppercase;
     color: var(--sage);
   }
@@ -1111,9 +1119,9 @@ body.staff-app > header .staff-sidebar__portal {
     width: 100% !important;
     max-width: none !important;
     box-sizing: border-box !important;
-    padding: 0.7rem 0.9rem !important;
+    padding: 0.45rem 0.7rem !important;
     margin: 0 !important;
-    min-height: 44px !important;
+    min-height: 2.5rem !important;
     height: auto !important;
     border-radius: 12px !important;
     color: rgba(255, 255, 255, 0.94) !important;
@@ -1121,13 +1129,16 @@ body.staff-app > header .staff-sidebar__portal {
     background: transparent !important;
     border: 0 !important;
     font-family: var(--sans) !important;
-    font-weight: 600 !important;
-    font-size: 0.78rem !important;
-    letter-spacing: 0.08em !important;
+    font-weight: var(--dash-sidebar-weight) !important;
+    font-style: normal !important;
+    font-size: var(--dash-sidebar-size) !important;
+    letter-spacing: var(--dash-sidebar-track) !important;
     text-transform: uppercase !important;
     text-align: left !important;
-    line-height: 1.25 !important;
-    white-space: normal !important;
+    line-height: var(--dash-sidebar-lh) !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
     box-shadow: none !important;
     cursor: pointer;
   }
@@ -1172,7 +1183,7 @@ body.staff-app > header .staff-sidebar__portal {
     width: 100% !important;
     max-width: none !important;
     margin: 0.2rem 0 0.2rem !important;
-    padding: 0.22rem !important;
+    padding: 0.18rem 0 !important;
     background: rgba(0, 0, 0, 0.16) !important;
     border: 1px solid rgba(168, 201, 165, 0.22) !important;
     border-radius: 12px !important;
@@ -1194,17 +1205,22 @@ body.staff-app > header .staff-sidebar__portal {
     align-items: center;
     justify-content: flex-start !important;
     width: 100% !important;
-    min-height: 40px;
+    min-height: 2.5rem;
     color: rgba(255, 255, 255, 0.88) !important;
     -webkit-text-fill-color: rgba(255, 255, 255, 0.88) !important;
     border-radius: 10px !important;
-    padding: 0.55rem 0.75rem 0.55rem 0.9rem !important;
+    padding: 0.45rem 0.7rem !important;
     background: transparent !important;
-    white-space: normal !important;
-    font-size: 0.78rem !important;
-    font-weight: 600 !important;
-    letter-spacing: 0.02em !important;
-    text-transform: none !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    font-family: var(--sans) !important;
+    font-size: var(--dash-sidebar-size) !important;
+    font-weight: var(--dash-sidebar-weight) !important;
+    font-style: normal !important;
+    letter-spacing: var(--dash-sidebar-track) !important;
+    line-height: var(--dash-sidebar-lh) !important;
+    text-transform: uppercase !important;
     text-align: left !important;
   }
 
@@ -1232,9 +1248,16 @@ body.staff-app > header .staff-sidebar__portal {
   body.staff-app > header .admin-settings-item {
     color: #fff !important;
     text-align: left;
-    padding: 0.62rem 0.8rem;
+    padding: 0.45rem 0.7rem;
     border-radius: 10px;
-    font-size: 0.8rem;
+    font-family: var(--sans);
+    font-size: var(--dash-sidebar-size);
+    font-weight: var(--dash-sidebar-weight);
+    font-style: normal;
+    letter-spacing: var(--dash-sidebar-track);
+    line-height: var(--dash-sidebar-lh);
+    text-transform: uppercase;
+    white-space: nowrap;
   }
 
   body.staff-app > header .admin-settings-item:hover,
@@ -1285,15 +1308,25 @@ body.staff-app > header .staff-sidebar__portal {
   body.staff-app > header .staff-header-user__name,
   body.staff-app > header .staff-header-user__name {
     color: #fff !important;
-    font-size: 0.82rem !important;
-    font-weight: 700 !important;
+    font-family: var(--sans) !important;
+    font-size: var(--dash-sidebar-size) !important;
+    font-weight: var(--dash-sidebar-weight) !important;
+    font-style: normal !important;
+    letter-spacing: var(--dash-sidebar-track) !important;
+    line-height: var(--dash-sidebar-lh) !important;
+    text-transform: uppercase !important;
   }
 
   body.staff-app > header .staff-header-user__role,
   body.staff-app > header .staff-header-user__role {
     color: var(--pink-soft) !important;
-    font-size: 0.62rem !important;
-    letter-spacing: 0.1em;
+    font-family: var(--sans) !important;
+    font-size: var(--dash-sidebar-size) !important;
+    font-weight: var(--dash-sidebar-weight) !important;
+    font-style: normal !important;
+    letter-spacing: var(--dash-sidebar-track) !important;
+    line-height: var(--dash-sidebar-lh) !important;
+    text-transform: uppercase !important;
   }
 
   body.staff-app > header .staff-notif-bell,
@@ -1345,13 +1378,46 @@ body.staff-app > header .staff-sidebar__portal {
   body.staff-app > header #menulist a,
   body.staff-app > header .admin-nav-dropdown-toggle,
   body.staff-app > header #adminSettingsToggle,
+  body.staff-app > header .admin-nav-dropdown-item,
+  body.staff-app > header .admin-settings-item,
+  body.staff-app > header .staff-sidebar__portal,
+  body.staff-app > header .staff-header-user__name,
+  body.staff-app > header .staff-header-user__role,
   body.staff-app > header #menulist a,
   body.staff-app > header .admin-nav-dropdown-toggle,
   body.staff-app > header #staffSettingsToggle {
-    color: #fff !important;
-    -webkit-text-fill-color: #fff !important;
     justify-content: flex-start !important;
     text-align: left !important;
+    font-family: var(--sans) !important;
+    font-size: var(--dash-sidebar-size) !important;
+    font-weight: var(--dash-sidebar-weight) !important;
+    font-style: normal !important;
+    letter-spacing: var(--dash-sidebar-track) !important;
+    line-height: var(--dash-sidebar-lh) !important;
+    text-transform: uppercase !important;
+  }
+
+  body.staff-app > header #menulist > li > a,
+  body.staff-app > header .admin-nav-dropdown-toggle,
+  body.staff-app > header #adminSettingsToggle,
+  body.staff-app > header #staffSettingsToggle {
+    color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
+  }
+
+  body.staff-app > header .staff-sidebar__portal {
+    color: var(--sage) !important;
+    -webkit-text-fill-color: var(--sage) !important;
+  }
+
+  body.staff-app > header .staff-header-user__name {
+    color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
+  }
+
+  body.staff-app > header .staff-header-user__role {
+    color: var(--pink-soft) !important;
+    -webkit-text-fill-color: var(--pink-soft) !important;
   }
 
   body.staff-app > header #menulist a.active,
@@ -4308,12 +4374,13 @@ body.book-page.side-nav > header.home-side .book-nav-profile .book-nav-greet {
   color: #fff !important;
   -webkit-text-fill-color: #fff !important;
   font-family: var(--sans) !important;
-  font-size: 0.92rem !important;
-  font-weight: 600 !important;
-  letter-spacing: 0.01em !important;
-  line-height: 1.2 !important;
+  font-size: var(--dash-sidebar-size) !important;
+  font-weight: var(--dash-sidebar-weight) !important;
+  font-style: normal !important;
+  letter-spacing: var(--dash-sidebar-track) !important;
+  line-height: var(--dash-sidebar-lh) !important;
   text-align: left !important;
-  text-transform: none !important;
+  text-transform: uppercase !important;
   text-decoration: none !important;
   white-space: nowrap;
   overflow: hidden;
@@ -4397,5 +4464,263 @@ body.book-page.side-nav > header.home-side #bookNavUser .customer-notif-bell[ari
   body.book-page.side-nav > .weather-bar--top,
   body.book-page.side-nav > .book.book-page-reserve {
     max-width: 100%;
+  }
+}
+
+/* ==========================================================================
+   DASHBOARD SIDEBARS — one width and one type style.
+   Admin, Manager, and Reception share the staff rail.
+   The client booking page uses that same rail size and lettering.
+   Public pages keep their own sidebar.
+   ========================================================================== */
+
+@media (min-width: 901px) {
+  body.book-page.side-nav {
+    --home-side-w: calc(var(--staff-sidebar-w) + env(safe-area-inset-left, 0px));
+  }
+
+  body.book-page.side-nav > header.home-side .content.flex_space {
+    gap: 1.1rem !important;
+    padding: 1.15rem 0.9rem 1.15rem !important;
+  }
+
+  body.book-page.side-nav > header.home-side .navlinks {
+    gap: 0.75rem !important;
+  }
+
+  body.book-page.side-nav > header.home-side #menulist.site-nav-list {
+    gap: 0.28rem !important;
+  }
+}
+
+body.book-page.side-nav > header.home-side #menulist.site-nav-list > li > a,
+body.book-page.side-nav > header.home-side a#roleLoginTrigger.staff-access-btn,
+body.book-page.side-nav > header.home-side #bookNavUser .book-nav-greet,
+html[data-theme="dark"] body.book-page.side-nav > header.home-side #menulist.site-nav-list > li > a,
+html[data-theme="dark"] body.book-page.side-nav > header.home-side a#roleLoginTrigger.staff-access-btn,
+html[data-theme="dark"] body.book-page.side-nav > header.home-side #bookNavUser .book-nav-greet {
+  font-family: var(--sans) !important;
+  font-size: var(--dash-sidebar-size) !important;
+  font-weight: var(--dash-sidebar-weight) !important;
+  font-style: normal !important;
+  letter-spacing: var(--dash-sidebar-track) !important;
+  line-height: var(--dash-sidebar-lh) !important;
+  text-transform: uppercase !important;
+}
+
+body.book-page.side-nav > header.home-side .home-side__eyebrow {
+  margin: 0.1rem 0 0.15rem;
+  padding: 0 0.9rem;
+  text-align: left;
+  color: var(--sage);
+}
+
+body.book-page.side-nav > header.home-side #menulist.site-nav-list > li > a:not(.staff-access-btn),
+html[data-theme="dark"] body.book-page.side-nav > header.home-side #menulist.site-nav-list > li > a:not(.staff-access-btn) {
+  align-items: center !important;
+  justify-content: flex-start !important;
+  width: 100% !important;
+  min-height: 2.5rem !important;
+  padding: 0.45rem 0.7rem !important;
+  border-radius: 12px !important;
+  text-align: left !important;
+  white-space: nowrap !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+}
+
+body.book-page.side-nav > header.home-side #menulist.site-nav-list > li > a:not(.staff-access-btn)::before {
+  display: none !important;
+}
+
+body.book-page.side-nav > header.home-side #menulist.site-nav-list > li > a#roleLoginTrigger.staff-access-btn,
+html[data-theme="dark"] body.book-page.side-nav > header.home-side #menulist.site-nav-list > li > a#roleLoginTrigger.staff-access-btn {
+  justify-content: flex-start !important;
+  align-items: center !important;
+  min-height: 2.5rem !important;
+  padding: 0.45rem 0.7rem !important;
+  border-radius: 12px !important;
+  text-align: left !important;
+  white-space: nowrap !important;
+  font-family: var(--sans) !important;
+  font-size: var(--dash-sidebar-size) !important;
+  font-weight: var(--dash-sidebar-weight) !important;
+  font-style: normal !important;
+  letter-spacing: var(--dash-sidebar-track) !important;
+  line-height: var(--dash-sidebar-lh) !important;
+  text-transform: uppercase !important;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+  background: var(--pink) !important;
+}
+
+html[data-theme="dark"] body.book-page.side-nav > header.home-side .home-side__place {
+  color: var(--pink-soft) !important;
+  -webkit-text-fill-color: var(--pink-soft) !important;
+}
+
+html[data-theme="dark"] body.book-page.side-nav > header.home-side .home-side__eyebrow {
+  color: var(--sage) !important;
+  -webkit-text-fill-color: var(--sage) !important;
+}
+
+html[data-theme="dark"] body.book-page.side-nav > header.home-side #menulist.site-nav-list > li > a:not(.staff-access-btn):not(.active) {
+  color: rgba(247, 243, 238, 0.94) !important;
+  -webkit-text-fill-color: rgba(247, 243, 238, 0.94) !important;
+}
+
+html[data-theme="dark"] body.staff-app > header .staff-sidebar__portal {
+  color: var(--sage) !important;
+  -webkit-text-fill-color: var(--sage) !important;
+}
+
+html[data-theme="dark"] body.staff-app > header #menulist > li > a:not(.active):not(.admin-nav-dropdown-item),
+html[data-theme="dark"] body.staff-app > header .admin-nav-dropdown-toggle:not(.active) {
+  color: rgba(255, 255, 255, 0.94) !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.94) !important;
+}
+
+html[data-theme="dark"] body.staff-app > header .staff-header-user__name {
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+}
+
+html[data-theme="dark"] body.staff-app > header .staff-header-user__role {
+  color: var(--pink-soft) !important;
+  -webkit-text-fill-color: var(--pink-soft) !important;
+}
+
+body.staff-app > header .staff-sidebar__portal,
+body.staff-app > header #menulist > li > a,
+body.staff-app > header .admin-nav-dropdown-toggle,
+body.staff-app > header #adminSettingsToggle,
+body.staff-app > header #staffSettingsToggle,
+body.staff-app > header .admin-nav-dropdown-item,
+body.staff-app > header .admin-settings-item,
+body.staff-app > header .staff-header-user__name,
+body.staff-app > header .staff-header-user__role {
+  font-family: var(--sans) !important;
+  font-size: var(--dash-sidebar-size) !important;
+  font-weight: var(--dash-sidebar-weight) !important;
+  font-style: normal !important;
+  letter-spacing: var(--dash-sidebar-track) !important;
+  line-height: var(--dash-sidebar-lh) !important;
+  text-transform: uppercase !important;
+}
+
+body.staff-app > header #menulist > li > a,
+body.staff-app > header .admin-nav-dropdown-toggle,
+body.staff-app > header #adminSettingsToggle,
+body.staff-app > header #staffSettingsToggle,
+body.staff-app > header .admin-nav-dropdown-item,
+body.staff-app > header .admin-settings-item {
+  white-space: nowrap !important;
+  text-align: left !important;
+}
+
+body.staff-app > header .staff-header-user__name,
+body.staff-app > header .staff-header-user__role {
+  display: block;
+  max-width: 100%;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* Beat the older dropdown-link rule so submenu labels match the rail type
+   and stay light on the forest sidebar in both themes. */
+body.staff-app.subpage > header .admin-nav-dropdown-menu,
+body.staff-app.subpage > header .admin-nav-dropdown.is-open .admin-nav-dropdown-menu,
+html[data-theme="dark"] body.staff-app.subpage > header .admin-nav-dropdown-menu,
+html[data-theme="dark"] body.staff-app.subpage > header .admin-nav-dropdown.is-open .admin-nav-dropdown-menu {
+  background: rgba(0, 0, 0, 0.18) !important;
+  background-color: rgba(0, 0, 0, 0.18) !important;
+  background-image: none !important;
+  color: rgba(255, 255, 255, 0.94) !important;
+}
+
+body.staff-app.subpage > header .admin-nav-dropdown-menu a.admin-nav-dropdown-item,
+body.staff-app.subpage > header .admin-nav-dropdown-menu a.admin-nav-dropdown-item:link,
+body.staff-app.subpage > header .admin-nav-dropdown-menu a.admin-nav-dropdown-item:visited,
+body.staff-app.subpage > header .admin-nav-dropdown-menu a.admin-nav-dropdown-item:hover,
+body.staff-app.subpage > header .admin-nav-dropdown-menu a.admin-nav-dropdown-item:focus-visible,
+body.staff-app.subpage > header .admin-nav-dropdown-menu a.admin-nav-dropdown-item[href^="#section-"],
+body.staff-app.subpage > header .admin-nav-dropdown-menu a.admin-nav-dropdown-item[href^="#section-"]:link,
+body.staff-app.subpage > header .admin-nav-dropdown-menu a.admin-nav-dropdown-item[href^="#section-"]:visited,
+body.staff-app.subpage > header .admin-nav-dropdown-menu a.admin-nav-dropdown-item[href^="#section-"]:hover,
+html[data-theme="dark"] body.staff-app.subpage > header .admin-nav-dropdown-menu a.admin-nav-dropdown-item,
+html[data-theme="dark"] body.staff-app.subpage > header .admin-nav-dropdown-menu a.admin-nav-dropdown-item:link,
+html[data-theme="dark"] body.staff-app.subpage > header .admin-nav-dropdown-menu a.admin-nav-dropdown-item:visited,
+html[data-theme="dark"] body.staff-app.subpage > header .admin-nav-dropdown-menu a.admin-nav-dropdown-item[href^="#section-"],
+html[data-theme="dark"] body.staff-app.subpage > header .admin-nav-dropdown-menu a.admin-nav-dropdown-item[href^="#section-"]:link,
+html[data-theme="dark"] body.staff-app.subpage > header .admin-nav-dropdown-menu a.admin-nav-dropdown-item[href^="#section-"]:visited {
+  font-family: var(--sans) !important;
+  font-size: var(--dash-sidebar-size) !important;
+  font-weight: var(--dash-sidebar-weight) !important;
+  font-style: normal !important;
+  letter-spacing: var(--dash-sidebar-track) !important;
+  line-height: var(--dash-sidebar-lh) !important;
+  text-transform: uppercase !important;
+  text-align: left !important;
+  white-space: nowrap !important;
+  color: rgba(255, 255, 255, 0.94) !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.94) !important;
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+body.staff-app.subpage > header .admin-nav-dropdown-menu a.admin-nav-dropdown-item.active,
+body.staff-app.subpage > header .admin-nav-dropdown-menu a.admin-nav-dropdown-item[href^="#section-"].active,
+html[data-theme="dark"] body.staff-app.subpage > header .admin-nav-dropdown-menu a.admin-nav-dropdown-item.active,
+html[data-theme="dark"] body.staff-app.subpage > header .admin-nav-dropdown-menu a.admin-nav-dropdown-item[href^="#section-"].active {
+  background: #F8DDE8 !important;
+  background-color: #F8DDE8 !important;
+  color: #8E3A5A !important;
+  -webkit-text-fill-color: #8E3A5A !important;
+}
+
+/* Theme sheets: light submenu is a white panel with dark type.
+   Dark submenu stays on a deep panel with light type. Active chips stay pink. */
+html:not([data-theme="dark"]) body.staff-app.subpage > header #menulist .admin-nav-dropdown-menu,
+html:not([data-theme="dark"]) body.staff-app.subpage > header #menulist .admin-settings-menu {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  color: #333A35 !important;
+}
+
+html:not([data-theme="dark"]) body.staff-app.subpage > header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item:not(.active):not(.primary-btn):not(.staff-access-btn):not(.role-login-trigger),
+html:not([data-theme="dark"]) body.staff-app.subpage > header #menulist .admin-settings-item:not(.primary-btn) {
+  color: #333A35 !important;
+  -webkit-text-fill-color: #333A35 !important;
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+html[data-theme="dark"] body.staff-app.subpage > header #menulist .admin-nav-dropdown-menu,
+html[data-theme="dark"] body.staff-app.subpage > header #menulist .admin-settings-menu {
+  background: #243028 !important;
+  background-color: #243028 !important;
+  color: #f7f3ee !important;
+}
+
+html[data-theme="dark"] body.staff-app.subpage > header #menulist .admin-nav-dropdown-menu a.admin-nav-dropdown-item:not(.active):not(.primary-btn):not(.staff-access-btn):not(.role-login-trigger),
+html[data-theme="dark"] body.staff-app.subpage > header #menulist .admin-settings-item:not(.primary-btn) {
+  color: #f7f3ee !important;
+  -webkit-text-fill-color: #f7f3ee !important;
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+@media (max-width: 900px) {
+  body.staff-app.subpage > header #menulist > li > a:not(.primary-btn):not(.admin-nav-dropdown-item):not(.staff-access-btn),
+  body.staff-app.subpage > header #menulist .admin-nav-dropdown-toggle:not(.active),
+  body.staff-app.subpage > header #menulist #adminSettingsToggle:not(.active),
+  body.staff-app.subpage > header #menulist #staffSettingsToggle:not(.active),
+  html[data-theme="dark"] body.staff-app.subpage > header #menulist > li > a:not(.primary-btn):not(.admin-nav-dropdown-item):not(.staff-access-btn),
+  html[data-theme="dark"] body.staff-app.subpage > header #menulist .admin-nav-dropdown-toggle:not(.active) {
+    color: rgba(255, 255, 255, 0.94) !important;
+    -webkit-text-fill-color: rgba(255, 255, 255, 0.94) !important;
+    background: transparent !important;
+    background-color: transparent !important;
   }
 }
