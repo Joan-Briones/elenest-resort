@@ -6281,3 +6281,408 @@ html[data-theme="dark"] :is(body.guest-lux, body.subpage) > footer {
   border-top: 3px solid #D982A5 !important;
   color: #ffffff !important;
 }
+
+/* ==========================================================================
+   Admin dashboard — Dark Mode contrast
+   Reports, payments, logs, sentiment, predictive, and reservation details.
+   ========================================================================== */
+
+html[data-theme="dark"] body.admin-app :is(
+  .admin-reports-lede,
+  .admin-report-chart-sub,
+  .booking-card__sub,
+  .admin-report-insights,
+  .admin-report-insights__list,
+  .admin-report-insights__title,
+  .admin-report-reviews-kpi span,
+  .admin-report-chart-legend,
+  .admin-report-donut-legend,
+  .admin-sentiment-label,
+  .sentiment-row label,
+  .admin-pay-table,
+  .admin-pay-cell-main,
+  .admin-pay-cell-sub,
+  .admin-pay-table-lead,
+  .admin-pay-table-title,
+  .admin-pay-wait-note,
+  .activity-logs-filters label,
+  .activity-logs-role,
+  .booking-dl dt,
+  .booking-dl dd,
+  .bookings-empty,
+  .admin-booking-review-lead,
+  .admin-booking-review-card__name,
+  .admin-booking-review-card__email,
+  .admin-booking-review-card__note,
+  .admin-booking-review-card__grid dt,
+  .admin-booking-review-card__grid dd,
+  .admin-reservation-modal__eyebrow,
+  .admin-reservation-modal__head h3,
+  .admin-reservation-modal__date,
+  .admin-model-eval__head h2,
+  .admin-model-eval__sub,
+  .admin-model-eval p,
+  .admin-model-eval li,
+  .admin-model-eval td,
+  .admin-model-eval th,
+  .pa-muted,
+  .pa-note,
+  .pa-help
+) {
+  color: #f4f7f1 !important;
+  -webkit-text-fill-color: #f4f7f1 !important;
+}
+
+html[data-theme="dark"] body.admin-app :is(
+  .admin-report-chart-sub,
+  .admin-reports-lede,
+  .admin-pay-cell-sub,
+  .admin-pay-table-lead,
+  .booking-dl dt,
+  .admin-booking-review-card__email,
+  .admin-booking-review-card__note,
+  .admin-reservation-modal__date,
+  .admin-reservation-modal__eyebrow,
+  .activity-logs-filters label
+) {
+  color: #d5e4d8 !important;
+  -webkit-text-fill-color: #d5e4d8 !important;
+}
+
+html[data-theme="dark"] body.admin-app :is(
+  .admin-report-reviews-kpi strong,
+  .admin-kpi-card h4,
+  .card.kpi h4
+) {
+  color: #E7A3C0 !important;
+  -webkit-text-fill-color: #E7A3C0 !important;
+}
+
+html[data-theme="dark"] body.admin-app :is(
+  .admin-payments-strip,
+  .admin-payment-approval-board .admin-payment-verification-list,
+  .booking-card__details,
+  .bookings-empty,
+  .admin-reservation-empty,
+  .admin-reservation-modal,
+  .admin-reservation-modal__head,
+  .admin-reservation-modal__body,
+  .admin-reservation-modal__footer,
+  .content-mgmt-tab:not(.content-mgmt-tab--active),
+  .sentiment-period-btn:not(.sentiment-period-btn--active),
+  .admin-model-eval-toggle:not(.is-active)
+) {
+  background: #1b3b2e !important;
+  background-image: none !important;
+  color: #f4f7f1 !important;
+  border-color: rgba(168, 201, 165, 0.34) !important;
+}
+
+html[data-theme="dark"] body.admin-app :is(
+  .content-mgmt-tab--active,
+  .sentiment-period-btn--active
+) {
+  background: #D982A5 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border-color: #D982A5 !important;
+}
+
+html[data-theme="dark"] body.admin-app .sentiment-bar {
+  background: #143026 !important;
+}
+
+html[data-theme="dark"] body.admin-app .sentiment-bar .positive {
+  background: #A8C9A5 !important;
+}
+
+html[data-theme="dark"] body.admin-app .activity-logs-role {
+  background: #2a5242 !important;
+  color: #e7f6d8 !important;
+  -webkit-text-fill-color: #e7f6d8 !important;
+}
+
+html[data-theme="dark"] body.admin-app .admin-pay-wait-note {
+  color: #f6e0b5 !important;
+  -webkit-text-fill-color: #f6e0b5 !important;
+}
+
+html[data-theme="dark"] body.admin-app .admin-reservation-modal__close {
+  background: #143026 !important;
+  color: #f4f7f1 !important;
+  border-color: rgba(217, 130, 165, 0.45) !important;
+}
+
+html[data-theme="dark"] body.admin-app :is(
+  canvas.admin-pro-chart,
+  canvas.pa-canvas,
+  #section-predictive canvas
+) {
+  background: #1b3b2e;
+}
+
+html[data-theme="dark"] body.admin-app :is(
+  .admin-report-chart-tooltip,
+  .pa-chart-tooltip
+) {
+  background: #214536 !important;
+  color: #f4f7f1 !important;
+  border-color: rgba(217, 130, 165, 0.4) !important;
+}
+
+html[data-theme="dark"] body.admin-app :is(
+  .payment-method-card,
+  .payment-methods-empty,
+  .booking-card,
+  .admin-payment-feature-card,
+  .admin-payment-methods-list
+) {
+  background: #214536 !important;
+  color: #f4f7f1 !important;
+  border-color: rgba(168, 201, 165, 0.38) !important;
+}
+
+html[data-theme="dark"] body.admin-app :is(
+  .booking-card__name,
+  .payment-method-card__provider,
+  .payment-method-card__body,
+  .payment-method-card p,
+  .payment-method-card span,
+  .payment-method-card strong
+) {
+  color: #f4f7f1 !important;
+  -webkit-text-fill-color: #f4f7f1 !important;
+}
+
+html[data-theme="dark"] body.admin-app .payment-method-card:has(.payment-method-card__radio:checked) {
+  border-color: #D982A5 !important;
+  box-shadow: 0 0 0 1px rgba(217, 130, 165, 0.45) !important;
+}
+
+/* Light leftovers that kept dark ink, or light ink painted onto pale chips. */
+html[data-theme="dark"] body.admin-app :is(
+  .admin-report-insights,
+  .admin-report-donut-legend li,
+  .admin-report-donut-legend__empty,
+  .admin-booking-review-card__grid div,
+  .admin-payments-period,
+  .admin-sentiment-rec-inner,
+  .admin-sentiment-rec-item,
+  .admin-sentiment-rec-item--action,
+  .admin-sentiment-rec-item--watch,
+  .admin-sentiment-rec-item--positive,
+  .admin-sentiment-rec-item--neutral,
+  .sentiment-detail-row,
+  .admin-reservation-picker__item,
+  .admin-reservation-picker__item--active,
+  .admin-reservation-detail__panel,
+  .admin-reservation-detail__hero,
+  .admin-payment-empty,
+  .sentiment-current-week-empty,
+  .sentiment-archive-empty,
+  #section-predictive .pa-status__retry
+) {
+  background: #1b3b2e !important;
+  background-image: none !important;
+  color: #f4f7f1 !important;
+  border-color: rgba(168, 201, 165, 0.38) !important;
+}
+
+html[data-theme="dark"] body.admin-app :is(
+  .admin-report-chart-legend__item,
+  .admin-report-donut-legend li,
+  .admin-report-donut-legend__label,
+  .admin-report-donut-legend__value,
+  .admin-report-insights__list li,
+  .admin-report-reviews-chart-title,
+  .admin-report-review-names__name,
+  .admin-sentiment-lede,
+  .admin-sentiment-sub,
+  .admin-sentiment-total,
+  .admin-sentiment-rec-title,
+  .admin-sentiment-rec-summary,
+  .admin-sentiment-rec-footnote,
+  .admin-sentiment-rec-item,
+  .admin-sentiment-rec-item p,
+  .sentiment-detail-name,
+  .sentiment-detail-quote,
+  .sentiment-detail-empty,
+  .sentiment-row strong,
+  #section-sentiment .sentiment-row strong,
+  .admin-model-eval__panel h3,
+  .admin-model-eval__empty,
+  .admin-model-eval__remark,
+  .admin-model-eval__live-note,
+  .admin-payments-period__field span,
+  .admin-payments-period__summary,
+  .admin-reservation-picker__title,
+  .admin-reservation-picker__name,
+  .admin-reservation-picker__meta,
+  .admin-reservation-detail__hero-text h4,
+  .admin-reservation-stat__label,
+  .admin-reservation-stat__value,
+  .admin-reservation-field__label,
+  .admin-reservation-field__value,
+  .admin-reservation-empty p,
+  .admin-payment-empty,
+  #adminPaymentsPanelSettings p,
+  #section-manager-user p
+) {
+  color: #f4f7f1 !important;
+  -webkit-text-fill-color: #f4f7f1 !important;
+}
+
+html[data-theme="dark"] body.admin-app :is(
+  .admin-report-chart-sub,
+  .admin-report-donut-legend__count,
+  .admin-report-review-names__heading,
+  .admin-report-review-names__meta,
+  .admin-sentiment-lede,
+  .admin-sentiment-sub,
+  .admin-sentiment-rec-summary,
+  .admin-sentiment-rec-footnote,
+  .admin-payments-period__summary,
+  .admin-reservation-picker__meta,
+  .admin-reservation-stat__label,
+  .admin-reservation-field__label,
+  .admin-reservation-empty p
+) {
+  color: #d5e4d8 !important;
+  -webkit-text-fill-color: #d5e4d8 !important;
+}
+
+html[data-theme="dark"] body.admin-app :is(
+  .admin-report-insights__title,
+  .admin-reservation-stat--amount .admin-reservation-stat__value,
+  .admin-report-reviews-kpi strong
+) {
+  color: #E7A3C0 !important;
+  -webkit-text-fill-color: #E7A3C0 !important;
+}
+
+html[data-theme="dark"] body.admin-app .admin-report-reviews-kpi hr {
+  background: #E7A3C0 !important;
+}
+
+html[data-theme="dark"] body.admin-app .admin-report-chart-legend__swatch--green,
+html[data-theme="dark"] body.admin-app .admin-report-chart-legend__swatch--pos {
+  background: #A8C9A5 !important;
+}
+
+html[data-theme="dark"] body.admin-app #section-sentiment .sentiment-row,
+html[data-theme="dark"] body.admin-app #section-sentiment .sentiment-feedback-list .review-card {
+  border-color: rgba(168, 201, 165, 0.28) !important;
+}
+
+html[data-theme="dark"] body.admin-app #section-sentiment .sentiment-feedback-list :is(.review-name, .review-quote) {
+  color: #f4f7f1 !important;
+  -webkit-text-fill-color: #f4f7f1 !important;
+}
+
+html[data-theme="dark"] body.admin-app .admin-sentiment-rec-badge {
+  color: #f6d5df !important;
+  -webkit-text-fill-color: #f6d5df !important;
+  background: rgba(217, 130, 165, 0.22) !important;
+  border-color: rgba(217, 130, 165, 0.5) !important;
+}
+
+html[data-theme="dark"] body.admin-app .admin-sentiment-rec-icon {
+  background: #143026 !important;
+  border-color: rgba(168, 201, 165, 0.35) !important;
+}
+
+html[data-theme="dark"] body.admin-app :is(
+  .admin-sentiment-rec-item--action,
+  .admin-sentiment-rec-item--watch,
+  .admin-sentiment-rec-item--positive,
+  .admin-sentiment-rec-item--neutral
+) {
+  border-left-width: 4px !important;
+  border-left-style: solid !important;
+}
+
+html[data-theme="dark"] body.admin-app .admin-sentiment-rec-item--action { border-left-color: #D982A5 !important; }
+html[data-theme="dark"] body.admin-app .admin-sentiment-rec-item--watch { border-left-color: #e0b03a !important; }
+html[data-theme="dark"] body.admin-app .admin-sentiment-rec-item--positive { border-left-color: #A8C9A5 !important; }
+html[data-theme="dark"] body.admin-app .admin-sentiment-rec-item--neutral { border-left-color: #d5dde6 !important; }
+
+html[data-theme="dark"] body.admin-app .admin-model-eval__live {
+  background: #1e4a36 !important;
+  color: #d7eadc !important;
+  -webkit-text-fill-color: #d7eadc !important;
+}
+
+html[data-theme="dark"] body.admin-app .activity-logs-role--manager {
+  background: #4a3140 !important;
+  color: #f6d5df !important;
+  -webkit-text-fill-color: #f6d5df !important;
+}
+
+html[data-theme="dark"] body.admin-app .activity-logs-role--reception {
+  background: #1e4a36 !important;
+  color: #d7eadc !important;
+  -webkit-text-fill-color: #d7eadc !important;
+}
+
+html[data-theme="dark"] body.admin-app .admin-booking-review-card__note {
+  color: #ffc9c9 !important;
+  -webkit-text-fill-color: #ffc9c9 !important;
+}
+
+html[data-theme="dark"] body.admin-app .admin-booking-review-card__badge.is-available {
+  background: #1e4a36 !important;
+  color: #d7eadc !important;
+  -webkit-text-fill-color: #d7eadc !important;
+}
+
+html[data-theme="dark"] body.admin-app .admin-booking-review-card__badge.is-unavailable {
+  background: #4a2a30 !important;
+  color: #ffc9c9 !important;
+  -webkit-text-fill-color: #ffc9c9 !important;
+}
+
+html[data-theme="dark"] body.admin-app .admin-reservation-pill--paid {
+  background: #1e4a36 !important;
+  color: #d7eadc !important;
+  -webkit-text-fill-color: #d7eadc !important;
+  border-color: #A8C9A5 !important;
+}
+
+html[data-theme="dark"] body.admin-app .admin-reservation-pill--pending {
+  background: #4a3b22 !important;
+  color: #f6e0b5 !important;
+  -webkit-text-fill-color: #f6e0b5 !important;
+  border-color: #d4a656 !important;
+}
+
+html[data-theme="dark"] body.admin-app .admin-reservation-pill--danger {
+  background: #4a2a30 !important;
+  color: #ffc9c9 !important;
+  -webkit-text-fill-color: #ffc9c9 !important;
+  border-color: #e0a8a4 !important;
+}
+
+html[data-theme="dark"] body.admin-app .admin-reservation-picker__count {
+  background: #1e4a36 !important;
+  color: #d7eadc !important;
+  -webkit-text-fill-color: #d7eadc !important;
+  border-color: rgba(168, 201, 165, 0.45) !important;
+}
+
+html[data-theme="dark"] body.admin-app .admin-reservation-picker__avatar {
+  color: #f6d5df !important;
+  -webkit-text-fill-color: #f6d5df !important;
+  background: rgba(217, 130, 165, 0.22) !important;
+  border-color: rgba(217, 130, 165, 0.45) !important;
+}
+
+html[data-theme="dark"] body.admin-app .sentiment-detail-stars,
+html[data-theme="dark"] body.admin-app #section-sentiment .sentiment-feedback-list .stars {
+  color: #f5c451 !important;
+  -webkit-text-fill-color: #f5c451 !important;
+}
+
+html[data-theme="dark"] body.admin-app .admin-reservation-picker__item--active {
+  border-color: #D982A5 !important;
+  box-shadow: 0 0 0 1px rgba(217, 130, 165, 0.45) !important;
+}

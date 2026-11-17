@@ -4717,8 +4717,26 @@
         var section = document.getElementById("section-reports");
         if (!section || section.hidden) return;
         if (lastReportBookings) paintAllReportCharts(lastReportBookings);
+        if (typeof renderReportsGuestReviews === "function") renderReportsGuestReviews();
       }, 180);
     });
+    if (!bindReportChartsResize._themeBound && window.MutationObserver) {
+      bindReportChartsResize._themeBound = true;
+      var themeObs = new MutationObserver(function () {
+        var reports = document.getElementById("section-reports");
+        if (reports && !reports.hidden) {
+          if (lastReportBookings) paintAllReportCharts(lastReportBookings);
+          renderReportsGuestReviews();
+        }
+        var sentiment = document.getElementById("section-sentiment");
+        if (sentiment && !sentiment.hidden) {
+          Object.keys(sentimentChartMetaById).forEach(function (id) {
+            paintSentimentStackedChart(id);
+          });
+        }
+      });
+      themeObs.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+    }
   }
 
   function monthKeyFromIso(iso) {
@@ -4727,8 +4745,9 @@
   }
 
   function drawCanvasTextFallback(ctx, w, h, text) {
+    syncAdminChartTheme();
     ctx.clearRect(0, 0, w, h);
-    ctx.fillStyle = "#64748b";
+    ctx.fillStyle = CHART_MUTED;
     ctx.font = "13px 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
@@ -4746,6 +4765,7 @@
   var CHART_PLOT_BG = "rgba(248, 246, 249, 0.72)";
   var CHART_GRID = "rgba(51, 58, 53, 0.07)";
   var CHART_AXIS = "rgba(51, 58, 53, 0.16)";
+  var CHART_TRACK = "rgba(51, 58, 53, 0.045)";
   var CHART_TEXT = "#2f2933";
   var CHART_MUTED = "#6b6570";
   var CHART_PINK = "#D982A5";
@@ -4754,11 +4774,54 @@
   var CHART_GREEN_DEEP = "#254836";
   var CHART_PINK_SOFT = "rgba(217, 130, 165, 0.1)";
   var CHART_GREEN_SOFT = "rgba(168, 201, 165, 0.12)";
+  var CHART_EMPTY = "#e8e4ea";
+  var CHART_EMPTY_DEEP = "#d5d0d8";
+  var CHART_NEUTRAL = "#7b7480";
+
+  function syncAdminChartTheme() {
+    var dark = document.documentElement.getAttribute("data-theme") === "dark";
+    if (!dark) {
+      CHART_BG = "#ffffff";
+      CHART_PLOT_BG = "rgba(248, 246, 249, 0.72)";
+      CHART_GRID = "rgba(51, 58, 53, 0.07)";
+      CHART_AXIS = "rgba(51, 58, 53, 0.16)";
+      CHART_TRACK = "rgba(51, 58, 53, 0.045)";
+      CHART_TEXT = "#2f2933";
+      CHART_MUTED = "#6b6570";
+      CHART_PINK = "#D982A5";
+      CHART_PINK_DEEP = "#C56B8F";
+      CHART_GREEN = "#315D46";
+      CHART_GREEN_DEEP = "#254836";
+      CHART_PINK_SOFT = "rgba(217, 130, 165, 0.1)";
+      CHART_GREEN_SOFT = "rgba(168, 201, 165, 0.12)";
+      CHART_EMPTY = "#e8e4ea";
+      CHART_EMPTY_DEEP = "#d5d0d8";
+      CHART_NEUTRAL = "#7b7480";
+      return;
+    }
+    CHART_BG = "#1b3b2e";
+    CHART_PLOT_BG = "rgba(20, 48, 38, 0.88)";
+    CHART_GRID = "rgba(168, 201, 165, 0.28)";
+    CHART_AXIS = "rgba(213, 228, 216, 0.55)";
+    CHART_TRACK = "rgba(168, 201, 165, 0.16)";
+    CHART_TEXT = "#f4f7f1";
+    CHART_MUTED = "#d5e4d8";
+    CHART_PINK = "#E7A3C0";
+    CHART_PINK_DEEP = "#D982A5";
+    CHART_GREEN = "#A8C9A5";
+    CHART_GREEN_DEEP = "#6fa884";
+    CHART_PINK_SOFT = "rgba(217, 130, 165, 0.28)";
+    CHART_GREEN_SOFT = "rgba(168, 201, 165, 0.24)";
+    CHART_EMPTY = "#2a5242";
+    CHART_EMPTY_DEEP = "#1e4034";
+    CHART_NEUTRAL = "#d5dde6";
+  }
   var adminTrendChartMeta = null;
   var adminRevenueChartMeta = null;
 
   /** Crisp rendering on high-DPI displays; drawing uses CSS pixel units in returned w/h. */
   function prepareChartContext(canvas, fallbackW, fallbackH, minH) {
+    syncAdminChartTheme();
     if (!canvas || !canvas.getContext) return null;
     var dpr = Math.min(window.devicePixelRatio || 1, 2.5);
     var cw = canvas.clientWidth;
@@ -4977,14 +5040,14 @@
       var r = active ? 5.5 : 4.2;
       ctx.beginPath();
       ctx.arc(p.x, p.y, r + 1.2, 0, Math.PI * 2);
-      ctx.fillStyle = "#ffffff";
+      ctx.fillStyle = CHART_BG;
       ctx.fill();
       ctx.beginPath();
       ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
       ctx.fillStyle = color;
       ctx.fill();
       ctx.lineWidth = 1.6;
-      ctx.strokeStyle = "#ffffff";
+      ctx.strokeStyle = CHART_BG;
       ctx.stroke();
       if (active) {
         ctx.beginPath();
@@ -5214,8 +5277,8 @@
         key: "Confirmed",
         label: "Confirmed",
         value: counts.Confirmed,
-        color: "#315D46",
-        colorDeep: "#254836"
+        color: CHART_GREEN,
+        colorDeep: CHART_GREEN_DEEP
       },
       {
         key: "Pending",
@@ -5228,15 +5291,15 @@
         key: "Cancelled",
         label: "Cancelled",
         value: counts.Cancelled,
-        color: "#D982A5",
-        colorDeep: "#C56B8F"
+        color: CHART_PINK,
+        colorDeep: CHART_PINK_DEEP
       },
       {
         key: "Completed",
         label: "Completed",
         value: counts.Completed,
-        color: "#6b7c93",
-        colorDeep: "#4f5f73"
+        color: CHART_NEUTRAL,
+        colorDeep: "#9aa6b5"
       }
     ].filter(function (s) {
       return s.value > 0;
@@ -5247,8 +5310,8 @@
           key: "Empty",
           label: "No bookings yet",
           value: 1,
-          color: "#e8e4ea",
-          colorDeep: "#d5d0d8",
+          color: CHART_EMPTY,
+          colorDeep: CHART_EMPTY_DEEP,
           empty: true
         }
       ];
@@ -5291,7 +5354,7 @@
     ctx.save();
     ctx.beginPath();
     ctx.arc(cx, cy, midR, 0, Math.PI * 2);
-    ctx.strokeStyle = "rgba(51, 58, 53, 0.07)";
+    ctx.strokeStyle = CHART_GRID;
     ctx.lineWidth = ringW;
     ctx.lineCap = "butt";
     ctx.stroke();
@@ -5341,11 +5404,11 @@
     var innerR = midR - ringW / 2 - 2;
     ctx.beginPath();
     ctx.arc(cx, cy, innerR, 0, Math.PI * 2);
-    ctx.fillStyle = "#ffffff";
+    ctx.fillStyle = CHART_BG;
     ctx.fill();
     ctx.beginPath();
     ctx.arc(cx, cy, innerR, 0, Math.PI * 2);
-    ctx.strokeStyle = "rgba(51, 58, 53, 0.07)";
+    ctx.strokeStyle = CHART_GRID;
     ctx.lineWidth = 1;
     ctx.stroke();
 
@@ -5446,7 +5509,7 @@
       var deep = idx % 2 === 0 ? CHART_GREEN_DEEP : CHART_PINK_DEEP;
 
       /* Track behind bar */
-      ctx.fillStyle = "rgba(51, 58, 53, 0.045)";
+      ctx.fillStyle = CHART_TRACK;
       fillRoundBar(ctx, padL, y, chartW, barH, 7);
 
       if (drawW > 0) {
@@ -6336,14 +6399,14 @@
     };
 
     ctx.clearRect(0, 0, w, h);
-    ctx.fillStyle = "#ffffff";
+    ctx.fillStyle = CHART_BG;
     ctx.fillRect(0, 0, w, h);
 
-    var cPos = overlay ? "#315D46" : "#254836";
-    var cNeu = overlay ? "#8b8490" : "#7b7480";
-    var cNeg = "#D982A5";
-    var textInk = "#333A35";
-    var textMute = "#8a8490";
+    var cPos = CHART_GREEN;
+    var cNeu = CHART_NEUTRAL;
+    var cNeg = CHART_PINK;
+    var textInk = CHART_TEXT;
+    var textMute = CHART_MUTED;
     var fontLegend = "600 11px Poppins, 'Segoe UI', sans-serif";
     var fontAxis = "600 11px Poppins, 'Segoe UI', sans-serif";
     var fontMeta = "600 10px Poppins, 'Segoe UI', sans-serif";
@@ -6417,7 +6480,7 @@
     }
 
     // Soft plot background
-    ctx.fillStyle = "rgba(51, 58, 53, 0.02)";
+    ctx.fillStyle = CHART_PLOT_BG;
     ctx.fillRect(x0, y0, chartW, chartH);
 
     drawProChartGrid(ctx, x0, y0, chartW, chartH, 4);
@@ -6520,7 +6583,7 @@
         var r = active ? 5.2 : 3.6;
         if (active) {
           ctx.save();
-          ctx.strokeStyle = "rgba(51, 58, 53, 0.12)";
+          ctx.strokeStyle = CHART_GRID;
           ctx.lineWidth = 1;
           ctx.setLineDash([4, 4]);
           ctx.beginPath();
@@ -6536,14 +6599,14 @@
         ].forEach(function (dot) {
           ctx.beginPath();
           ctx.arc(p.x, dot.y, r + 1.1, 0, Math.PI * 2);
-          ctx.fillStyle = "#ffffff";
+          ctx.fillStyle = CHART_BG;
           ctx.fill();
           ctx.beginPath();
           ctx.arc(p.x, dot.y, r, 0, Math.PI * 2);
           ctx.fillStyle = dot.color;
           ctx.fill();
           ctx.lineWidth = 1.4;
-          ctx.strokeStyle = "#ffffff";
+          ctx.strokeStyle = CHART_BG;
           ctx.stroke();
         });
       });
@@ -7905,7 +7968,7 @@
       if (predictiveScriptPromise) return predictiveScriptPromise;
       predictiveScriptPromise = new Promise(function (resolve, reject) {
         var s = document.createElement("script");
-        s.src = "../js/predictive-analytics.js?v=20261109-openai1";
+        s.src = "../js/predictive-analytics.js?v=20261117-admindark2";
         s.async = true;
         s.onload = function () {
           resolve(window.ElenestPredictiveAnalytics || null);

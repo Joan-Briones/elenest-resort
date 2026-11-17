@@ -854,7 +854,12 @@
 
 html[data-theme="dark"] #section-predictive {
   --pa-ink: #f3f7f2;
-  --pa-muted: #b7cbbd;
+  --pa-muted: #d5e4d8;
+  --pa-green: #A8C9A5;
+  --pa-green-soft: rgba(168, 201, 165, 0.18);
+  --pa-green-border: rgba(168, 201, 165, 0.45);
+  --pa-pink-soft: rgba(217, 130, 165, 0.18);
+  --pa-pink-border: rgba(217, 130, 165, 0.45);
   --pa-line: rgba(168, 201, 165, 0.24);
   color: #f3f7f2;
 }

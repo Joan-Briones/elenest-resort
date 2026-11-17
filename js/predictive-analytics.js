@@ -22,6 +22,30 @@
   var GREEN_SOFT = "rgba(49, 93, 70, 0.12)";
   var PINK_SOFT = "rgba(217, 130, 165, 0.12)";
   var GRID = "rgba(51, 58, 53, 0.08)";
+  var CHART_BG = "#ffffff";
+
+  function applyPaTheme() {
+    var dark = document.documentElement.getAttribute("data-theme") === "dark";
+    if (!dark) {
+      PINK = "#D982A5";
+      GREEN = "#315D46";
+      INK = "#333A35";
+      MUTED = "#6b6570";
+      GREEN_SOFT = "rgba(49, 93, 70, 0.12)";
+      PINK_SOFT = "rgba(217, 130, 165, 0.12)";
+      GRID = "rgba(51, 58, 53, 0.08)";
+      CHART_BG = "#ffffff";
+      return;
+    }
+    PINK = "#E7A3C0";
+    GREEN = "#A8C9A5";
+    INK = "#f4f7f1";
+    MUTED = "#d5e4d8";
+    GREEN_SOFT = "rgba(168, 201, 165, 0.22)";
+    PINK_SOFT = "rgba(217, 130, 165, 0.24)";
+    GRID = "rgba(168, 201, 165, 0.28)";
+    CHART_BG = "#1b3b2e";
+  }
 
   var state = {
     horizon: 6,
@@ -1439,6 +1463,7 @@
   }
 
   function prepareChartContext(canvas, fallbackW, fallbackH) {
+    applyPaTheme();
     if (!canvas || !canvas.getContext) return null;
     var dpr = Math.min(window.devicePixelRatio || 1, 2.5);
     var cw = canvas.clientWidth;
@@ -1584,7 +1609,7 @@
     var hoverIndex = meta.hoverIndex;
 
     ctx.clearRect(0, 0, w, h);
-    ctx.fillStyle = "#fff";
+    ctx.fillStyle = CHART_BG;
     ctx.fillRect(0, 0, w, h);
 
     if (!series.length) {
@@ -1682,7 +1707,7 @@
       var color = p.forecast ? PINK : GREEN;
       ctx.beginPath();
       ctx.arc(p.x, p.y, active ? 5.5 : 3.8, 0, Math.PI * 2);
-      ctx.fillStyle = "#fff";
+      ctx.fillStyle = CHART_BG;
       ctx.fill();
       ctx.lineWidth = active ? 2.4 : 2;
       ctx.strokeStyle = color;
@@ -1883,6 +1908,7 @@
   }
 
   function renderTable(result) {
+    applyPaTheme();
     var host = el("paForecastTableBody");
     if (!host) return;
     host.textContent = "";
@@ -2464,6 +2490,15 @@
       if (!isPredictiveSectionVisible()) return;
       if (state.lastResult && state.section === "charts") renderCharts(state.lastResult);
     });
+    if (window.MutationObserver && !bindUi._themeBound) {
+      bindUi._themeBound = true;
+      var themeObs = new MutationObserver(function () {
+        applyPaTheme();
+        if (!isPredictiveSectionVisible()) return;
+        if (state.lastResult && state.section === "charts") renderCharts(state.lastResult);
+      });
+      themeObs.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+    }
   }
 
   function renderSection() {
