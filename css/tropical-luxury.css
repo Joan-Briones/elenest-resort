@@ -4324,13 +4324,24 @@ body.book-page.side-nav > header.home-side .book-nav-profile .book-nav-greet {
 
 body.book-page.side-nav > header.home-side #bookNavUser .book-nav-actions {
   display: flex !important;
-  align-items: center;
-  justify-content: flex-start;
+  align-items: center !important;
+  justify-content: space-evenly !important;
   flex-wrap: nowrap;
-  gap: 0.45rem;
+  gap: 0.65rem;
   width: 100%;
-  padding: 0.15rem 0.15rem 0.05rem;
+  margin: 0 auto;
+  padding: 0.2rem 0.35rem 0.12rem;
   box-sizing: border-box;
+}
+
+body.book-page.side-nav > header.home-side #bookNavUser .book-nav-actions > .customer-notif-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 38px;
+  width: 38px;
+  height: 38px;
+  overflow: visible;
 }
 
 body.book-page.side-nav > header.home-side #bookNavUser button.book-nav-icon-btn,
@@ -4364,6 +4375,14 @@ body.book-page.side-nav > header.home-side #bookNavUser .customer-notif-bell[ari
   border-color: transparent !important;
   color: #fff !important;
   outline: none;
+}
+
+@media (max-width: 640px) {
+  body.book-page.side-nav > header.home-side #bookNavUser .book-nav-actions {
+    justify-content: center !important;
+    gap: 0.35rem;
+    padding-inline: 0;
+  }
 }
 
 @media (max-width: 900px) {
