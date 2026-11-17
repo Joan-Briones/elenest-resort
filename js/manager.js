@@ -2880,8 +2880,9 @@
   }
 
   function drawCanvasTextFallback(ctx, w, h, text) {
+    syncManagerChartTheme();
     ctx.clearRect(0, 0, w, h);
-    ctx.fillStyle = "#6b7280";
+    ctx.fillStyle = MGR_CHART_MUTED;
     ctx.font = "14px sans-serif";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
@@ -2899,11 +2900,75 @@
   var MGR_CHART_PINK_DEEP = "#C56B8F";
   var MGR_CHART_GREEN = "#315D46";
   var MGR_CHART_GREEN_DEEP = "#254836";
+  var MGR_CHART_TRACK = "rgba(51, 58, 53, 0.045)";
+  var MGR_CHART_PINK_END = "#F8DDE8";
+  var MGR_CHART_NEUTRAL = "#7b7480";
+  var MGR_CHART_EMPTY = "#e8e4ea";
+  var MGR_CHART_EMPTY_DEEP = "#d5d0d8";
+  var MGR_CHART_AMBER = "#e0b03a";
+  var MGR_CHART_AMBER_DEEP = "#c4921a";
+  var MGR_CHART_SLATE = "#6b7c93";
+  var MGR_CHART_SLATE_DEEP = "#4f5f73";
   var managerTrendMetaById = {};
   var managerRevenueMetaById = {};
   var managerChartsResizeBound = false;
 
+  function syncManagerChartTheme() {
+    var dark = document.documentElement.getAttribute("data-theme") === "dark";
+    if (!dark) {
+      MGR_CHART_BG = "#ffffff";
+      MGR_CHART_PLOT = "rgba(248, 246, 249, 0.72)";
+      MGR_CHART_GRID = "rgba(51, 58, 53, 0.07)";
+      MGR_CHART_AXIS = "rgba(51, 58, 53, 0.16)";
+      MGR_CHART_TEXT = "#2f2933";
+      MGR_CHART_MUTED = "#6b6570";
+      MGR_CHART_PINK = "#D982A5";
+      MGR_CHART_PINK_DEEP = "#C56B8F";
+      MGR_CHART_GREEN = "#315D46";
+      MGR_CHART_GREEN_DEEP = "#254836";
+      MGR_CHART_TRACK = "rgba(51, 58, 53, 0.045)";
+      MGR_CHART_PINK_END = "#F8DDE8";
+      MGR_CHART_NEUTRAL = "#7b7480";
+      MGR_CHART_EMPTY = "#e8e4ea";
+      MGR_CHART_EMPTY_DEEP = "#d5d0d8";
+      MGR_CHART_AMBER = "#e0b03a";
+      MGR_CHART_AMBER_DEEP = "#c4921a";
+      MGR_CHART_SLATE = "#6b7c93";
+      MGR_CHART_SLATE_DEEP = "#4f5f73";
+      return;
+    }
+    MGR_CHART_BG = "#1b3b2e";
+    MGR_CHART_PLOT = "rgba(20, 48, 38, 0.92)";
+    MGR_CHART_GRID = "rgba(168, 201, 165, 0.28)";
+    MGR_CHART_AXIS = "rgba(213, 228, 216, 0.55)";
+    MGR_CHART_TEXT = "#f4f7f1";
+    MGR_CHART_MUTED = "#d5e4d8";
+    MGR_CHART_PINK = "#E7A3C0";
+    MGR_CHART_PINK_DEEP = "#D982A5";
+    MGR_CHART_GREEN = "#A8C9A5";
+    MGR_CHART_GREEN_DEEP = "#6fa884";
+    MGR_CHART_TRACK = "rgba(168, 201, 165, 0.16)";
+    MGR_CHART_PINK_END = "#C56B8F";
+    MGR_CHART_NEUTRAL = "#d5dde6";
+    MGR_CHART_EMPTY = "#2a5242";
+    MGR_CHART_EMPTY_DEEP = "#1e4034";
+    MGR_CHART_AMBER = "#e8c56a";
+    MGR_CHART_AMBER_DEEP = "#c4921a";
+    MGR_CHART_SLATE = "#d5dde6";
+    MGR_CHART_SLATE_DEEP = "#9aa8b8";
+  }
+
+  function mgrStatusColors(key) {
+    syncManagerChartTheme();
+    if (key === "Confirmed") return { color: MGR_CHART_GREEN, colorDeep: MGR_CHART_GREEN_DEEP };
+    if (key === "Pending") return { color: MGR_CHART_AMBER, colorDeep: MGR_CHART_AMBER_DEEP };
+    if (key === "Cancelled") return { color: MGR_CHART_PINK, colorDeep: MGR_CHART_PINK_DEEP };
+    if (key === "Completed") return { color: MGR_CHART_SLATE, colorDeep: MGR_CHART_SLATE_DEEP };
+    return { color: MGR_CHART_EMPTY, colorDeep: MGR_CHART_EMPTY_DEEP };
+  }
+
   function prepareManagerChartContext(canvas, fallbackW, fallbackH, minH) {
+    syncManagerChartTheme();
     if (!canvas || !canvas.getContext) return null;
     var dpr = Math.min(window.devicePixelRatio || 1, 2.5);
     var cw = canvas.clientWidth;
@@ -3060,6 +3125,18 @@
         }
       }, 180);
     });
+    if (!bindManagerChartsResize._themeBound && window.MutationObserver) {
+      bindManagerChartsResize._themeBound = true;
+      var themeObs = new MutationObserver(function () {
+        syncManagerChartTheme();
+        renderDashboard();
+        if (currentSectionId === "section-analytics") {
+          renderAnalytics();
+          renderReports();
+        }
+      });
+      themeObs.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+    }
   }
 
   function buildMonthBuckets(monthCount, items) {
@@ -3185,7 +3262,7 @@
     bookingPts.forEach(function (p) {
       ctx.beginPath();
       ctx.arc(p.x, p.y, 5.2, 0, Math.PI * 2);
-      ctx.fillStyle = "#ffffff";
+      ctx.fillStyle = MGR_CHART_BG;
       ctx.fill();
       ctx.beginPath();
       ctx.arc(p.x, p.y, 4, 0, Math.PI * 2);
@@ -3263,11 +3340,15 @@
       } else if (label === "Cancelled") counts.Cancelled += 1;
       else counts.Pending += 1;
     });
+    var confirmedTone = mgrStatusColors("Confirmed");
+    var pendingTone = mgrStatusColors("Pending");
+    var cancelledTone = mgrStatusColors("Cancelled");
+    var completedTone = mgrStatusColors("Completed");
     var slices = [
-      { key: "Confirmed", label: "Confirmed", value: counts.Confirmed, color: "#315D46", colorDeep: "#254836" },
-      { key: "Pending", label: "Pending", value: counts.Pending, color: "#e0b03a", colorDeep: "#c4921a" },
-      { key: "Cancelled", label: "Cancelled", value: counts.Cancelled, color: "#D982A5", colorDeep: "#C56B8F" },
-      { key: "Completed", label: "Completed", value: counts.Completed, color: "#6b7c93", colorDeep: "#4f5f73" }
+      { key: "Confirmed", label: "Confirmed", value: counts.Confirmed, color: confirmedTone.color, colorDeep: confirmedTone.colorDeep },
+      { key: "Pending", label: "Pending", value: counts.Pending, color: pendingTone.color, colorDeep: pendingTone.colorDeep },
+      { key: "Cancelled", label: "Cancelled", value: counts.Cancelled, color: cancelledTone.color, colorDeep: cancelledTone.colorDeep },
+      { key: "Completed", label: "Completed", value: counts.Completed, color: completedTone.color, colorDeep: completedTone.colorDeep }
     ].filter(function (s) {
       return s.value > 0;
     });
@@ -3286,11 +3367,14 @@
       pack = statusSlicesFromItems(items);
     } else {
       var c = itemsOrCounts || {};
+      var approvedTone = mgrStatusColors("Confirmed");
+      var pendingCountTone = mgrStatusColors("Pending");
+      var cancelledCountTone = mgrStatusColors("Cancelled");
       pack = {
         slices: [
-          { key: "Confirmed", label: "Approved", value: Number(c.approved) || 0, color: "#315D46", colorDeep: "#254836" },
-          { key: "Pending", label: "Pending", value: Number(c.pending) || 0, color: "#e0b03a", colorDeep: "#c4921a" },
-          { key: "Cancelled", label: "Cancelled", value: Number(c.cancelled) || 0, color: "#D982A5", colorDeep: "#C56B8F" }
+          { key: "Confirmed", label: "Approved", value: Number(c.approved) || 0, color: approvedTone.color, colorDeep: approvedTone.colorDeep },
+          { key: "Pending", label: "Pending", value: Number(c.pending) || 0, color: pendingCountTone.color, colorDeep: pendingCountTone.colorDeep },
+          { key: "Cancelled", label: "Cancelled", value: Number(c.cancelled) || 0, color: cancelledCountTone.color, colorDeep: cancelledCountTone.colorDeep }
         ].filter(function (s) {
           return s.value > 0;
         }),
@@ -3301,7 +3385,8 @@
 
     var slices = pack.slices.slice();
     if (!slices.length) {
-      slices = [{ key: "Empty", label: "No bookings yet", value: 1, color: "#e8e4ea", colorDeep: "#d5d0d8", empty: true }];
+      var emptyTone = mgrStatusColors("Empty");
+      slices = [{ key: "Empty", label: "No bookings yet", value: 1, color: emptyTone.color, colorDeep: emptyTone.colorDeep, empty: true }];
     }
     var total = slices.reduce(function (a, s) {
       return a + s.value;
@@ -3349,7 +3434,7 @@
     ctx.save();
     ctx.beginPath();
     ctx.arc(cx, cy, midR, 0, Math.PI * 2);
-    ctx.strokeStyle = "rgba(51, 58, 53, 0.07)";
+    ctx.strokeStyle = MGR_CHART_GRID;
     ctx.lineWidth = ringW;
     ctx.stroke();
     ctx.restore();
@@ -3392,11 +3477,11 @@
     var innerR = midR - ringW / 2 - 2;
     ctx.beginPath();
     ctx.arc(cx, cy, innerR, 0, Math.PI * 2);
-    ctx.fillStyle = "#ffffff";
+    ctx.fillStyle = MGR_CHART_BG;
     ctx.fill();
     ctx.beginPath();
     ctx.arc(cx, cy, innerR, 0, Math.PI * 2);
-    ctx.strokeStyle = "rgba(51, 58, 53, 0.07)";
+    ctx.strokeStyle = MGR_CHART_GRID;
     ctx.lineWidth = 1;
     ctx.stroke();
 
@@ -3577,7 +3662,7 @@
       var active = hoverIndex === p.index;
       ctx.beginPath();
       ctx.arc(p.lineX, p.lineY, active ? 5.5 : 4, 0, Math.PI * 2);
-      ctx.fillStyle = "#fff";
+      ctx.fillStyle = MGR_CHART_BG;
       ctx.fill();
       ctx.beginPath();
       ctx.arc(p.lineX, p.lineY, active ? 4.2 : 3.2, 0, Math.PI * 2);
@@ -3760,7 +3845,7 @@
       var drawW = Math.max(r.value > 0 ? 6 : 0, bw);
       var top = idx % 2 === 0 ? MGR_CHART_GREEN : MGR_CHART_PINK;
       var deep = idx % 2 === 0 ? MGR_CHART_GREEN_DEEP : MGR_CHART_PINK_DEEP;
-      ctx.fillStyle = "rgba(51, 58, 53, 0.045)";
+      ctx.fillStyle = MGR_CHART_TRACK;
       fillMgrRoundBar(ctx, padL, y, chartW, barH, 7);
       if (drawW > 0) {
         var grad = ctx.createLinearGradient(padL, y, padL + drawW, y);
@@ -3847,7 +3932,7 @@
       if (bh > 0) {
         var grad = ctx.createLinearGradient(x, y, x, y + Math.max(bh, 3));
         grad.addColorStop(0, isPeak || isHover ? "#D982A5" : MGR_CHART_PINK);
-        grad.addColorStop(1, isPeak || isHover ? MGR_CHART_PINK_DEEP : "#F8DDE8");
+        grad.addColorStop(1, isPeak || isHover ? MGR_CHART_PINK_DEEP : MGR_CHART_PINK_END);
         ctx.fillStyle = grad;
         fillMgrRoundTopBar(ctx, x, y, barW, Math.max(bh, 3), Math.min(8, barW / 2));
       } else {
@@ -4053,14 +4138,14 @@
       niceMax = step * 4;
     }
 
-    ctx.fillStyle = "rgba(51, 58, 53, 0.02)";
+    ctx.fillStyle = MGR_CHART_PLOT;
     ctx.fillRect(x0, y0, chartW, chartH);
     drawMgrGrid(ctx, x0, y0, chartW, chartH, 4);
     drawMgrBaseline(ctx, x0, y0, chartW, chartH);
 
     ctx.save();
     ctx.font = "600 11px Poppins, 'Segoe UI', sans-serif";
-    ctx.fillStyle = "#8a8490";
+    ctx.fillStyle = MGR_CHART_MUTED;
     ctx.textAlign = "right";
     ctx.textBaseline = "middle";
     var yt;
@@ -4070,9 +4155,9 @@
     ctx.restore();
 
     var n = Math.max(1, working.length);
-    var cPos = "#254836";
-    var cNeu = "#7b7480";
-    var cNeg = "#D982A5";
+    var cPos = MGR_CHART_GREEN;
+    var cNeu = MGR_CHART_NEUTRAL;
+    var cNeg = MGR_CHART_PINK;
     var pts = working.map(function (b, i) {
       var x = n === 1 ? x0 + chartW / 2 : x0 + (i * chartW) / (n - 1);
       return {
@@ -4137,7 +4222,7 @@
         ].forEach(function (dot) {
           ctx.beginPath();
           ctx.arc(p.x, dot.y, 4.6, 0, Math.PI * 2);
-          ctx.fillStyle = "#ffffff";
+          ctx.fillStyle = MGR_CHART_BG;
           ctx.fill();
           ctx.beginPath();
           ctx.arc(p.x, dot.y, 3.4, 0, Math.PI * 2);
@@ -4151,12 +4236,12 @@
     ctx.textAlign = "center";
     ctx.textBaseline = "top";
     working.forEach(function (b, i) {
-      ctx.fillStyle = "#8a8490";
+      ctx.fillStyle = MGR_CHART_MUTED;
       ctx.fillText(b.label, pts[i].x, yBase + 8);
     });
 
     if (!hasAny) {
-      ctx.fillStyle = "#8a8490";
+      ctx.fillStyle = MGR_CHART_MUTED;
       ctx.font = "600 12px Poppins, 'Segoe UI', sans-serif";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";

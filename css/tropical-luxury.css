@@ -6770,3 +6770,497 @@ html[data-theme="dark"] :is(body.admin-app, body[data-staff-portal="manager"], b
   color: #e7f0e4 !important;
   -webkit-text-fill-color: #e7f0e4 !important;
 }
+
+/* ==========================================================================
+   Manager Dashboard — Dark Mode contrast
+   Deep forest surfaces and blush accents. Light mode is unchanged.
+   Colors and contrast only; layout, spacing, and behavior stay as they are.
+   ========================================================================== */
+html[data-theme="dark"] body[data-staff-portal="manager"] :is(
+  .kpi h4,
+  .manager-reviews-kpi strong,
+  .admin-report-reviews-kpi strong,
+  .manager-report-summary__value,
+  .admin-reservation-stat--amount .admin-reservation-stat__value
+) {
+  color: #E7A3C0 !important;
+  -webkit-text-fill-color: #E7A3C0 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] :is(
+  .kpi p,
+  .manager-chart-card__title,
+  .manager-chart-card__sub,
+  .manager-chart-legend,
+  .manager-chart-legend__item,
+  .manager-donut-legend,
+  .manager-donut-legend li,
+  .manager-donut-legend__label,
+  .manager-donut-legend__count,
+  .manager-donut-legend__value,
+  .manager-donut-legend__empty,
+  .manager-chart-insights__list li,
+  .manager-chart-tooltip,
+  .manager-chart-tooltip__value,
+  .manager-chart-tooltip__kind,
+  .manager-report-summary,
+  .manager-report-summary__empty,
+  .manager-report-summary__meta,
+  .manager-report-summary__label,
+  .manager-report-live,
+  .manager-report-tools__field span,
+  .admin-toolbar__note,
+  .content-mgmt-card__lead,
+  .content-mgmt-card__title,
+  .manager-cal-selected__info,
+  .manager-cal-selected__status,
+  .admin-dash-cal-notes__title,
+  .admin-dash-cal-legend__text,
+  .admin-dash-cal-legend__text strong,
+  .admin-dash-cal-legend__text span,
+  .admin-dash-cal-notes__hint,
+  .manager-appt-card__name,
+  .manager-appt-card__label,
+  .manager-appt-card__value,
+  .manager-appt-card__sub,
+  .manager-appt-empty,
+  .manager-messages-empty,
+  .section-lead,
+  .admin-pay-table,
+  .admin-pay-table td,
+  .admin-pay-table th,
+  .admin-pay-cell-main,
+  .admin-pay-cell-sub,
+  .admin-pay-table-lead,
+  .admin-pay-table-title,
+  .admin-pagination__info,
+  .admin-pagination__page,
+  .admin-report-card-title,
+  .admin-report-chart-sub,
+  .admin-report-chart-legend,
+  .admin-report-chart-legend__item,
+  .admin-report-chart-months span,
+  .admin-report-donut-legend,
+  .admin-report-donut-legend li,
+  .admin-report-donut-legend__label,
+  .admin-report-donut-legend__count,
+  .admin-report-donut-legend__value,
+  .admin-report-donut-legend__empty,
+  .admin-report-insights,
+  .admin-report-insights__list li,
+  .admin-report-reviews-chart-title,
+  .admin-report-reviews-kpi span,
+  .admin-report-chart-tooltip,
+  .admin-report-chart-tooltip__value,
+  .admin-report-chart-tooltip__kind,
+  .admin-sentiment-label,
+  .sentiment-row label,
+  .sentiment-row strong,
+  .admin-model-eval h2,
+  .admin-model-eval h3,
+  .admin-model-eval p,
+  .admin-model-eval li,
+  .admin-model-eval td,
+  .admin-model-eval th,
+  .admin-model-eval__empty,
+  .admin-model-eval__remark,
+  .admin-model-eval__live-note,
+  .admin-settings-modal,
+  .admin-settings-modal h3,
+  .admin-settings-modal p,
+  .admin-settings-modal label,
+  .admin-settings-item,
+  .manager-msg-customer__name,
+  .manager-msg-body,
+  .manager-msg-when,
+  .swal2-title,
+  .swal2-html-container
+) {
+  color: #f4f7f1 !important;
+  -webkit-text-fill-color: #f4f7f1 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] :is(
+  .manager-chart-card__sub,
+  .manager-donut-legend__count,
+  .manager-chart-tooltip__kind,
+  .manager-report-summary__empty,
+  .manager-report-summary__meta,
+  .manager-report-summary__label,
+  .manager-report-tools__field span,
+  .admin-toolbar__note,
+  .content-mgmt-card__lead,
+  #section-content .content-mgmt-card__lead,
+  #section-content .content-mgmt-check .admin-toolbar__note,
+  .admin-dash-cal-legend__text span,
+  .admin-dash-cal-notes__hint,
+  .manager-cal-selected__status,
+  .manager-appt-card__label,
+  .manager-appt-card__sub,
+  .manager-appt-empty,
+  .admin-pay-cell-sub,
+  .admin-pay-table-lead,
+  .admin-pagination__info,
+  .admin-report-chart-sub,
+  .admin-report-donut-legend__count,
+  .admin-report-reviews-kpi span,
+  .admin-report-chart-tooltip__kind,
+  .admin-model-eval__empty,
+  .admin-model-eval__remark,
+  .admin-model-eval__live-note,
+  .manager-msg-when
+) {
+  color: #d5e4d8 !important;
+  -webkit-text-fill-color: #d5e4d8 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] :is(
+  .manager-chart-insights__title,
+  .manager-chart-tooltip__month,
+  .manager-chart-tooltip__kind--pink,
+  .manager-report-summary__section-title,
+  .admin-report-insights__title,
+  .admin-report-chart-tooltip__month,
+  .admin-report-chart-tooltip__kind--pink
+) {
+  color: #E7A3C0 !important;
+  -webkit-text-fill-color: #E7A3C0 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] :is(
+  .manager-chart-live,
+  .admin-model-eval__live
+) {
+  background: #1e4a36 !important;
+  color: #d7eadc !important;
+  -webkit-text-fill-color: #d7eadc !important;
+  border: 1px solid rgba(168, 201, 165, 0.55);
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] :is(
+  #section-dashboard .manager-chart-wrap,
+  #section-analytics .manager-chart-wrap,
+  .admin-report-chart-wrap,
+  .manager-chart-insights,
+  #section-dashboard .manager-chart-insights,
+  #section-analytics .manager-chart-insights,
+  .admin-report-insights,
+  .manager-donut-legend li,
+  .admin-report-donut-legend li,
+  .manager-donut-legend__empty,
+  .admin-report-donut-legend__empty,
+  .manager-report-summary__row,
+  .manager-cal-selected,
+  .admin-dash-cal-notes,
+  .admin-dash-cal-legend li,
+  .manager-appt-card,
+  .content-mgmt-tab:not(.content-mgmt-tab--active),
+  .admin-settings-menu,
+  .manager-chart-tooltip,
+  .admin-report-chart-tooltip,
+  .admin-payment-empty,
+  .admin-model-eval__table-wrap
+) {
+  background: #1b3b2e !important;
+  background-image: none !important;
+  color: #f4f7f1 !important;
+  border-color: rgba(168, 201, 165, 0.38) !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] :is(
+  canvas.manager-pro-chart,
+  canvas.admin-pro-chart
+) {
+  background: #1b3b2e !important;
+  border-color: rgba(168, 201, 165, 0.28) !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] :is(
+  .manager-chart-legend__swatch--green,
+  .admin-report-chart-legend__swatch--green,
+  .admin-report-chart-legend__swatch--pos
+) {
+  background: #A8C9A5 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] :is(
+  .manager-chart-legend__swatch--pink,
+  .admin-report-chart-legend__swatch--pink,
+  .admin-report-chart-legend__swatch--neg
+) {
+  background: #E7A3C0 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] .admin-report-chart-legend__swatch--neu,
+html[data-theme="dark"] body[data-staff-portal="manager"] .manager-chart-legend__swatch--neu {
+  background: #d5dde6 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] .admin-report-reviews-kpi hr {
+  background: #E7A3C0 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] .sentiment-bar {
+  background: #143026 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] .sentiment-bar .positive {
+  background: #A8C9A5 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] .sentiment-bar .neutral {
+  background: #d5dde6 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] .sentiment-bar .negative {
+  background: #E7A3C0 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] .content-mgmt-tab--active {
+  background: #D982A5 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border-color: #D982A5 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] .content-mgmt-tab:not(.content-mgmt-tab--active):hover {
+  color: #E7A3C0 !important;
+  -webkit-text-fill-color: #E7A3C0 !important;
+  border-color: #E7A3C0 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] :is(
+  #section-content .manager-msg-table input:not([type="checkbox"]):not([type="hidden"]):not([type="file"]),
+  #section-content .manager-msg-table select,
+  #section-content .manager-msg-table textarea,
+  .manager-msg-reply-input,
+  .admin-settings-modal input,
+  .admin-settings-modal select,
+  .admin-settings-modal textarea
+) {
+  background: #143026 !important;
+  color: #f4f7f1 !important;
+  -webkit-text-fill-color: #f4f7f1 !important;
+  border-color: rgba(217, 130, 165, 0.45) !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] #section-content .manager-msg-table input[type="file"] {
+  background: #143026 !important;
+  color: #f4f7f1 !important;
+  -webkit-text-fill-color: #f4f7f1 !important;
+  border-color: rgba(217, 130, 165, 0.45) !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] .manager-msg-icon-btn {
+  background: #1b3b2e !important;
+  color: #E7A3C0 !important;
+  -webkit-text-fill-color: #E7A3C0 !important;
+  border-color: rgba(217, 130, 165, 0.45) !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] .manager-msg-icon-btn--send:hover,
+html[data-theme="dark"] body[data-staff-portal="manager"] .manager-msg-icon-btn--send:focus-visible,
+html[data-theme="dark"] body[data-staff-portal="manager"] .manager-msg-icon-btn--clear:hover,
+html[data-theme="dark"] body[data-staff-portal="manager"] .manager-msg-icon-btn--clear:focus-visible {
+  background: #D982A5 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border-color: #D982A5 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] .admin-settings-item:hover,
+html[data-theme="dark"] body[data-staff-portal="manager"] .admin-settings-item:focus-visible {
+  background: rgba(217, 130, 165, 0.28) !important;
+  color: #fff7fb !important;
+  -webkit-text-fill-color: #fff7fb !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] .admin-settings-item--danger {
+  color: #ffb4c0 !important;
+  -webkit-text-fill-color: #ffb4c0 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] .admin-pagination {
+  border-top-color: rgba(168, 201, 165, 0.4) !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] :is(
+  .booking-status--pending,
+  .booking-status--pending-payment,
+  .manager-reserve-table .booking-status--pending
+) {
+  background: #4a3b22 !important;
+  color: #f6e0b5 !important;
+  -webkit-text-fill-color: #f6e0b5 !important;
+  border-color: #d4a656 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] :is(
+  .booking-status--confirmed,
+  .manager-reserve-table .booking-status--confirmed
+) {
+  background: #1e4a36 !important;
+  color: #d7eadc !important;
+  -webkit-text-fill-color: #d7eadc !important;
+  border-color: #A8C9A5 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] :is(
+  .booking-status--cancelled,
+  .manager-reserve-table .booking-status--cancelled
+) {
+  background: #4a2a30 !important;
+  color: #f6c9c6 !important;
+  -webkit-text-fill-color: #f6c9c6 !important;
+  border-color: #e0a8a4 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] :is(
+  .booking-status--completed,
+  .manager-reserve-table .booking-status--completed
+) {
+  background: #4a3140 !important;
+  color: #f6d5df !important;
+  -webkit-text-fill-color: #f6d5df !important;
+  border-color: rgba(217, 130, 165, 0.55) !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] #section-calendar :is(
+  .book-flow-cal-day--available,
+  .book-flow-cal-day--available:hover
+) {
+  background: #1e4a36 !important;
+  color: #d7eadc !important;
+  -webkit-text-fill-color: #d7eadc !important;
+  border-color: #A8C9A5 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] #section-calendar .book-flow-cal-day--pending:not(.book-flow-cal-day--selected) {
+  background: #4a3b22 !important;
+  color: #f6e0b5 !important;
+  -webkit-text-fill-color: #f6e0b5 !important;
+  border-color: #d4a656 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] #section-calendar .book-flow-cal-day--pending:not(.book-flow-cal-day--selected) .book-flow-cal-day__status {
+  color: #f6e0b5 !important;
+  -webkit-text-fill-color: #f6e0b5 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] #section-calendar .book-flow-cal-day--booked:not(.book-flow-cal-day--selected) {
+  background: #2c3840 !important;
+  color: #e7eef2 !important;
+  -webkit-text-fill-color: #e7eef2 !important;
+  border-color: #9aa8b8 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] #section-calendar .book-flow-cal-day--booked:not(.book-flow-cal-day--selected) .book-flow-cal-day__status {
+  color: #d5dde6 !important;
+  -webkit-text-fill-color: #d5dde6 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] #section-calendar :is(
+  .book-flow-cal-day--unavailable,
+  .book-flow-cal-day--manager-blocked
+):not(.book-flow-cal-day--booked):not(.book-flow-cal-day--selected) {
+  background: #4a2a30 !important;
+  color: #f6c9c6 !important;
+  -webkit-text-fill-color: #f6c9c6 !important;
+  border-color: #e0a8a4 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] #section-calendar :is(
+  .book-flow-cal-day--unavailable,
+  .book-flow-cal-day--manager-blocked
+):not(.book-flow-cal-day--booked):not(.book-flow-cal-day--selected) .book-flow-cal-day__status {
+  color: #f6c9c6 !important;
+  -webkit-text-fill-color: #f6c9c6 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] #section-calendar .manager-cal-grid .book-flow-cal-day--selected,
+html[data-theme="dark"] body[data-staff-portal="manager"] #section-calendar .manager-cal-grid .book-flow-cal-day--selected:hover,
+html[data-theme="dark"] body[data-staff-portal="manager"] #section-calendar .manager-cal-grid .book-flow-cal-day--selected:focus {
+  background: #D982A5 !important;
+  background-image: none !important;
+  border-color: #E7A3C0 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  box-shadow: 0 8px 18px rgba(217, 130, 165, 0.28) !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] #section-calendar .manager-cal-grid .book-flow-cal-day--selected :is(
+  .book-flow-cal-day__num,
+  .book-flow-cal-day__status
+) {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  background: none !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] #section-calendar .admin-dash-cal-legend .avail-legend__swatch--available {
+  background: #1e4a36 !important;
+  border-color: #A8C9A5 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] #section-calendar .admin-dash-cal-legend .avail-legend__swatch--pending {
+  background: #4a3b22 !important;
+  border-color: #d4a656 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] #section-calendar .admin-dash-cal-legend .avail-legend__swatch--booked {
+  background: #2c3840 !important;
+  border-color: #9aa8b8 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] #section-calendar .admin-dash-cal-legend .avail-legend__swatch--unavailable {
+  background: #4a2a30 !important;
+  border-color: #e0a8a4 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] .btn.btn--outline {
+  background: #2a5242 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border-color: #E7A3C0 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] .btn.btn--outline:hover,
+html[data-theme="dark"] body[data-staff-portal="manager"] .btn.btn--outline:focus-visible {
+  background: #D982A5 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border-color: #D982A5 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] .swal2-popup {
+  background: #214536 !important;
+  color: #f4f7f1 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] .swal2-input,
+html[data-theme="dark"] body[data-staff-portal="manager"] .swal2-textarea,
+html[data-theme="dark"] body[data-staff-portal="manager"] .swal2-select {
+  background: #143026 !important;
+  color: #f4f7f1 !important;
+  -webkit-text-fill-color: #f4f7f1 !important;
+  border-color: rgba(217, 130, 165, 0.45) !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] .admin-model-eval__badge--very-good,
+html[data-theme="dark"] body[data-staff-portal="manager"] .admin-model-eval__badge--good {
+  background: #1e4a36 !important;
+  color: #d7eadc !important;
+  -webkit-text-fill-color: #d7eadc !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] .admin-model-eval__badge--acceptable {
+  background: #4a3b22 !important;
+  color: #f6e0b5 !important;
+  -webkit-text-fill-color: #f6e0b5 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] .admin-model-eval__badge--needs-improvement {
+  background: #4a2a30 !important;
+  color: #f6c9c6 !important;
+  -webkit-text-fill-color: #f6c9c6 !important;
+}
