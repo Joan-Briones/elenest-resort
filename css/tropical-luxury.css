@@ -7327,3 +7327,58 @@ html[data-theme="dark"] body[data-staff-portal="manager"] .cm-icon-btn--delete:f
 html[data-theme="dark"] body[data-staff-portal="manager"] #managerReportGuestReviewsCard .admin-report-review-names {
   display: none !important;
 }
+
+/* Reservation list: verification chips, edit icons, and pager stay on forest + blush. */
+html[data-theme="dark"] body[data-staff-portal="manager"] #section-manage .manager-reserve-table .booking-status--pending {
+  background: #4a3140 !important;
+  color: #f8e4ec !important;
+  -webkit-text-fill-color: #f8e4ec !important;
+  border-color: #E7A3C0 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] #section-manage .manager-reserve-table .booking-status--pending :is(
+  .booking-status__label,
+  .booking-status__icon,
+  .status-glyph
+) {
+  background: transparent !important;
+  color: #f8e4ec !important;
+  -webkit-text-fill-color: #f8e4ec !important;
+  stroke: #f8e4ec !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] #section-manage .cm-icon-btn--edit {
+  background: #1b3b2e !important;
+  color: #E7A3C0 !important;
+  -webkit-text-fill-color: #E7A3C0 !important;
+  border-color: #E7A3C0 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] #section-manage .cm-icon-btn--edit svg {
+  color: #E7A3C0 !important;
+  stroke: #E7A3C0 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] #section-manage .admin-pagination .btn.btn--outline,
+html[data-theme="dark"] body[data-staff-portal="manager"] #section-manage .admin-pagination .btn.btn--outline:disabled {
+  background: #1b3b2e !important;
+  background-color: #1b3b2e !important;
+  color: #f4f7f1 !important;
+  -webkit-text-fill-color: #f4f7f1 !important;
+  border: 1.5px solid rgba(217, 130, 165, 0.65) !important;
+  opacity: 1;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] #section-manage .admin-pagination .btn.btn--outline:disabled {
+  color: #d5e4d8 !important;
+  -webkit-text-fill-color: #d5e4d8 !important;
+  opacity: 0.55;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] #section-manage .admin-pagination .btn.btn--outline:not(:disabled) {
+  background: #D982A5 !important;
+  background-color: #D982A5 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border-color: #D982A5 !important;
+}
