@@ -4907,3 +4907,740 @@ html[data-theme="dark"] body.staff-app.subpage > header #menulist .admin-setting
     background-color: transparent !important;
   }
 }
+
+/* ==========================================================================
+   Staff portals — phone / tablet layout only (desktop sidebar stays ≥901px)
+   Admin, Manager, and Reception share body.staff-app.
+   ========================================================================== */
+@media (max-width: 900px) {
+  body.staff-app {
+    max-width: 100%;
+  }
+
+  body.staff-app > header.staff-sidebar {
+    position: sticky !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    z-index: 1400 !important;
+  }
+
+  body.staff-app > header .content.flex_space.staff-sidebar__inner {
+    --staff-icon: 2.5rem;
+    --staff-icon-gap: 0.4rem;
+    position: relative !important;
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 0.45rem 0.4rem !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+    padding:
+      max(0.45rem, env(safe-area-inset-top, 0px))
+      max(0.7rem, env(safe-area-inset-right, 0px))
+      0.5rem
+      max(0.7rem, env(safe-area-inset-left, 0px)) !important;
+    overflow: visible !important;
+  }
+
+  body.staff-app > header .navlinks.staff-sidebar__nav {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    justify-content: stretch !important;
+    position: static !important;
+    flex: 1 1 100% !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    gap: 0 !important;
+  }
+
+  body.staff-app > header .staff-header-user {
+    display: flex !important;
+    flex: 1 1 100% !important;
+    align-items: center !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    gap: 0 !important;
+  }
+
+  body.staff-app > header .staff-header-user[hidden] {
+    display: none !important;
+  }
+
+  body.staff-app > header .logo.staff-sidebar__brand {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    flex: 1 1 auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+    min-height: var(--staff-icon) !important;
+    max-width: calc(100% - (var(--staff-icon) * 2) - var(--staff-icon-gap) - 0.85rem) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    gap: 0.4rem !important;
+    overflow: hidden !important;
+    text-align: left !important;
+  }
+
+  body.staff-app > header .site-logo-link {
+    flex: 0 1 auto;
+    width: auto !important;
+    min-width: 0;
+    max-width: min(8.5rem, 46vw) !important;
+    justify-content: flex-start !important;
+  }
+
+  body.staff-app > header .site-logo,
+  body.staff-app > header .logo img {
+    display: block !important;
+    width: auto !important;
+    height: auto !important;
+    max-width: 100% !important;
+    max-height: 2.05rem !important;
+    margin: 0 !important;
+    object-fit: contain !important;
+    object-position: left center !important;
+  }
+
+  body.staff-app > header .staff-sidebar__portal {
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: 8rem;
+    margin: 0 !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.68rem !important;
+    letter-spacing: 0.06em !important;
+    line-height: 1.15 !important;
+  }
+
+  body.staff-app > header .staff-notif-wrap {
+    position: absolute !important;
+    top: max(0.45rem, env(safe-area-inset-top, 0px)) !important;
+    right: calc(max(0.7rem, env(safe-area-inset-right, 0px)) + var(--staff-icon) + var(--staff-icon-gap)) !important;
+    left: auto !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    width: var(--staff-icon) !important;
+    height: var(--staff-icon) !important;
+    margin: 0 !important;
+    z-index: 4 !important;
+  }
+
+  body.staff-app > header .staff-notif-bell,
+  body.staff-app > header button.staff-notif-bell {
+    position: relative !important;
+    width: var(--staff-icon) !important;
+    height: var(--staff-icon) !important;
+    min-width: var(--staff-icon) !important;
+    min-height: var(--staff-icon) !important;
+    flex: 0 0 var(--staff-icon) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  body.staff-app > header .nav-menu-toggle,
+  body.staff-app > header button.nav-menu-toggle {
+    position: absolute !important;
+    top: max(0.45rem, env(safe-area-inset-top, 0px)) !important;
+    right: max(0.7rem, env(safe-area-inset-right, 0px)) !important;
+    left: auto !important;
+    display: inline-flex !important;
+    flex: 0 0 var(--staff-icon) !important;
+    width: var(--staff-icon) !important;
+    height: var(--staff-icon) !important;
+    min-width: var(--staff-icon) !important;
+    min-height: var(--staff-icon) !important;
+    margin: 0 !important;
+    z-index: 5 !important;
+  }
+
+  body.staff-app > header .staff-header-user__inner {
+    display: flex !important;
+    align-items: center !important;
+    flex: 1 1 100% !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    min-height: 2.5rem !important;
+    height: auto !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+    gap: 0.55rem !important;
+    padding: 0.35rem 0.75rem 0.35rem 0.35rem !important;
+  }
+
+  body.staff-app > header .staff-header-user__icon {
+    flex: 0 0 auto !important;
+    width: 2rem !important;
+    height: 2rem !important;
+  }
+
+  body.staff-app > header .staff-header-user__meta {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+  }
+
+  body.staff-app > header .staff-header-user__name,
+  body.staff-app > header .staff-header-user__role {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
+  }
+
+  body.staff-app > header .staff-header-user__name {
+    font-size: 0.92rem !important;
+    letter-spacing: 0.03em !important;
+    line-height: 1.25 !important;
+  }
+
+  body.staff-app > header .staff-header-user__role {
+    font-size: 0.68rem !important;
+    letter-spacing: 0.06em !important;
+    line-height: 1.2 !important;
+  }
+
+  body.staff-app > header #menulist,
+  body.staff-app > header .navlinks > ul.site-nav-list {
+    position: absolute !important;
+    top: calc(100% + 6px) !important;
+    left: max(0.65rem, env(safe-area-inset-left, 0px)) !important;
+    right: max(0.65rem, env(safe-area-inset-right, 0px)) !important;
+    width: auto !important;
+    max-width: none !important;
+    margin: 0 !important;
+    z-index: 1500 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0.15rem !important;
+    box-sizing: border-box !important;
+  }
+
+  body.staff-app > header #menulist:not(.is-open),
+  body.staff-app > header .navlinks > ul.site-nav-list:not(.is-open) {
+    max-height: 0 !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    overflow: hidden !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+
+  body.staff-app > header #menulist.is-open,
+  body.staff-app > header .navlinks > ul.site-nav-list.is-open {
+    visibility: visible !important;
+    pointer-events: auto !important;
+    max-height: min(72dvh, 34rem) !important;
+    height: auto !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    padding: 0.45rem !important;
+    background: #2A513C !important;
+    border: 1px solid rgba(168, 201, 165, 0.28) !important;
+    border-radius: 14px !important;
+    box-shadow: 0 16px 36px rgba(49, 93, 70, 0.28) !important;
+  }
+
+  body.staff-app > header #menulist > li > a,
+  body.staff-app > header .admin-nav-dropdown-toggle,
+  body.staff-app > header #adminSettingsToggle,
+  body.staff-app > header #staffSettingsToggle,
+  body.staff-app > header .admin-nav-dropdown-item,
+  body.staff-app > header .admin-settings-item {
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+    height: auto !important;
+    min-height: 2.75rem !important;
+    line-height: 1.3 !important;
+  }
+
+  body.staff-app > header .admin-nav-dropdown-menu,
+  body.staff-app > header .admin-settings-menu:not([hidden]) {
+    position: static !important;
+    left: auto !important;
+    right: auto !important;
+    top: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    transform: none !important;
+    margin: 0.2rem 0 0.15rem !important;
+    box-sizing: border-box !important;
+  }
+
+  body.staff-app > header .admin-settings-menu[hidden],
+  body.staff-app > header .admin-nav-dropdown:not(.is-open) > .admin-nav-dropdown-menu {
+    display: none !important;
+  }
+
+  body.staff-app > main.container {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-top: 1rem !important;
+    padding-bottom: 2rem !important;
+    box-sizing: border-box !important;
+    overflow-x: clip;
+  }
+
+  body.staff-app .admin-section,
+  body.staff-app .card,
+  body.staff-app .appointments-strip,
+  body.staff-app .manager-chart-card,
+  body.staff-app .admin-report-chart-card,
+  body.staff-app .reception-records-panel {
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  body.staff-app .split-2,
+  body.staff-app .admin-reports-grid,
+  body.staff-app .admin-reports-kpi-row,
+  body.staff-app .admin-report-reviews-kpis,
+  body.staff-app .admin-report-donut-layout,
+  body.staff-app .admin-dash-cal-layout,
+  body.staff-app .manager-donut-layout,
+  body.staff-app .form-grid,
+  body.staff-app .admin-model-eval__grid,
+  body.staff-app .admin-dash-cal-legend,
+  body.staff-app .grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  body.staff-app .section-title,
+  body.staff-app .appointments-strip__title,
+  body.staff-app .admin-report-card-title,
+  body.staff-app .manager-chart-card__title,
+  body.staff-app h2,
+  body.staff-app h3,
+  body.staff-app h4 {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+
+  body.staff-app .admin-report-card-head,
+  body.staff-app .admin-sentiment-header-row,
+  body.staff-app .sentiment-chart-header,
+  body.staff-app .admin-toolbar,
+  body.staff-app .manager-report-tools,
+  body.staff-app .admin-booking-actions,
+  body.staff-app .admin-payment-verification-actions,
+  body.staff-app .reception-records-panel__head,
+  body.staff-app .facilities-tabs {
+    display: flex;
+    flex-wrap: wrap !important;
+    align-items: center;
+    gap: 0.45rem 0.65rem;
+    min-width: 0;
+    max-width: 100%;
+    height: auto !important;
+  }
+
+  body.staff-app .manager-chart-card__head,
+  body.staff-app #section-dashboard .manager-chart-card__head,
+  body.staff-app #section-analytics .manager-chart-card__head {
+    position: relative !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 0.4rem 0.75rem !important;
+    min-height: 0 !important;
+    height: auto !important;
+    padding-right: 0 !important;
+  }
+
+  body.staff-app .manager-chart-card__title,
+  body.staff-app #section-dashboard .manager-chart-card__title,
+  body.staff-app #section-analytics .manager-chart-card__title {
+    flex: 1 1 12rem;
+    min-width: 0;
+    text-align: left !important;
+    overflow-wrap: anywhere;
+  }
+
+  body.staff-app .manager-chart-live,
+  body.staff-app #section-dashboard .manager-chart-live,
+  body.staff-app #section-analytics .manager-chart-live {
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
+    transform: none !important;
+    margin-left: auto;
+    flex: 0 0 auto;
+  }
+
+  body.staff-app .admin-report-chart-wrap,
+  body.staff-app .manager-chart-wrap,
+  body.staff-app .pa-chart-wrap,
+  body.staff-app .table-wrap,
+  body.staff-app .reception-table-wrap,
+  body.staff-app .manager-msg-table-wrap,
+  body.staff-app .admin-payment-verification-list,
+  body.staff-app .activity-logs-table-wrap {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  body.staff-app canvas.admin-pro-chart,
+  body.staff-app canvas.manager-pro-chart,
+  body.staff-app canvas.pa-canvas,
+  body.staff-app .pa-canvas {
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  body.staff-app .admin-report-chart-legend,
+  body.staff-app .manager-chart-legend,
+  body.staff-app .admin-report-donut-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 0.75rem;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  body.staff-app .admin-report-chart-months,
+  body.staff-app .manager-chart-months {
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  body.staff-app .admin-report-chart-months span,
+  body.staff-app .manager-chart-months span {
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  body.staff-app .review-card,
+  body.staff-app .manager-feedback-card,
+  body.staff-app .admin-booking-review-card,
+  body.staff-app .sentiment-archive-comment,
+  body.staff-app .admin-report-review-names__item,
+  body.staff-app .checkin-ticket {
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  body.staff-app .review-name,
+  body.staff-app .review-quote,
+  body.staff-app .manager-feedback-card__name,
+  body.staff-app .manager-feedback-card__comment,
+  body.staff-app .manager-feedback-card__when,
+  body.staff-app .admin-booking-review-card__name,
+  body.staff-app .admin-booking-review-card__email,
+  body.staff-app .admin-report-review-names__name,
+  body.staff-app .admin-report-review-names__meta,
+  body.staff-app .sentiment-archive-comment blockquote,
+  body.staff-app .checkin-ticket__guest,
+  body.staff-app .checkin-ticket__id,
+  body.staff-app .checkin-ticket__meta,
+  body.staff-app .reception-table__name,
+  body.staff-app .admin-dash-cal-legend__text,
+  body.staff-app .sentiment-row label,
+  body.staff-app .admin-sentiment-label {
+    min-width: 0;
+    max-width: 100%;
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
+  }
+
+  body.staff-app #section-sentiment .sentiment-feedback-list .review-card {
+    grid-template-columns: 3rem minmax(0, 1fr) !important;
+    column-gap: 0.75rem !important;
+  }
+
+  body.staff-app #section-sentiment .sentiment-feedback-list .review-card > * {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  body.staff-app .stars,
+  body.staff-app .manager-feedback-card__stars,
+  body.staff-app .sentiment-archive-comment-stars,
+  body.staff-app .sentiment-detail-stars,
+  body.staff-app .feedback-stars {
+    display: block;
+    max-width: 100%;
+    margin-top: 0.15rem;
+    letter-spacing: 0.12em;
+    line-height: 1.35;
+    white-space: nowrap;
+  }
+
+  body.staff-app .manager-feedback-card__top {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-areas:
+      "name"
+      "stars"
+      "when" !important;
+    align-items: start !important;
+    gap: 0.2rem !important;
+  }
+
+  body.staff-app .manager-feedback-card__name { grid-area: name; }
+  body.staff-app .manager-feedback-card__stars { grid-area: stars; }
+  body.staff-app .manager-feedback-card__when {
+    grid-area: when;
+    justify-self: start !important;
+  }
+
+  body.staff-app .admin-booking-review-card__top,
+  body.staff-app .admin-report-review-names__item,
+  body.staff-app .sentiment-archive-comment-head {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: flex-start !important;
+    gap: 0.35rem 0.65rem !important;
+    min-width: 0;
+  }
+
+  body.staff-app .reception-table,
+  body.staff-app .manager-msg-table,
+  body.staff-app .admin-payment-approval-board .admin-pay-table {
+    width: 100%;
+    min-width: 40rem;
+  }
+
+  #adminUpcomingBookingsList .admin-pay-table,
+  #adminUpcomingBookingsCard .admin-pay-table {
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+
+  body.staff-app .admin-pay-table th,
+  body.staff-app .admin-pay-table td,
+  body.staff-app .reception-table th,
+  body.staff-app .reception-table td,
+  body.staff-app .manager-msg-table th,
+  body.staff-app .manager-msg-table td {
+    white-space: normal !important;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    vertical-align: top;
+  }
+
+  body.staff-app .btn,
+  body.staff-app button.btn,
+  body.staff-app .primary-btn,
+  body.staff-app .secondary-btn,
+  body.staff-app .btn--small {
+    max-width: 100%;
+    height: auto !important;
+    white-space: normal !important;
+    text-align: center;
+    line-height: 1.25;
+  }
+
+  body.staff-app .manager-report-tools__field,
+  body.staff-app .manager-report-tools__field input,
+  body.staff-app .manager-report-tools__field select,
+  body.staff-app .admin-toolbar input,
+  body.staff-app .admin-toolbar select,
+  body.staff-app input,
+  body.staff-app select,
+  body.staff-app textarea {
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  body.staff-app .book-flow-calendar,
+  body.staff-app .manager-cal-grid,
+  body.staff-app .admin-dash-cal-host,
+  body.staff-app .reception-cal-grid {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  body.staff-app .book-flow-cal-weekdays,
+  body.staff-app .book-flow-cal-grid {
+    width: 100%;
+    min-width: 0;
+    gap: 3px !important;
+  }
+
+  body.staff-app .book-flow-cal-wd {
+    font-size: 0.58rem !important;
+    letter-spacing: 0 !important;
+    padding: 4px 1px !important;
+    overflow: hidden;
+  }
+
+  body.staff-app .book-flow-cal-day,
+  body.staff-app .manager-cal-day,
+  body.staff-app .admin-dash-cal-day {
+    min-width: 0 !important;
+    min-height: 2.55rem !important;
+    padding: 2px !important;
+    overflow: hidden !important;
+    font-size: 0.72rem !important;
+  }
+
+  body.staff-app .book-flow-cal-day__status,
+  body.staff-app .manager-cal-day__status,
+  body.staff-app .admin-dash-cal-day__status {
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden !important;
+    max-height: 2.15em !important;
+    font-size: 0.5rem !important;
+    line-height: 1.05 !important;
+    letter-spacing: 0 !important;
+    white-space: normal !important;
+  }
+
+  body.staff-app .checkin-ticket {
+    grid-template-columns: 1fr !important;
+  }
+
+  body.staff-app .modal__dialog,
+  body.staff-app .avail-modal__dialog,
+  body.staff-app .facility-detail-modal__dialog,
+  body.staff-app .appointments-modal__dialog,
+  body.staff-app .swal2-popup {
+    width: min(100% - 1.25rem, 640px) !important;
+    max-width: calc(100vw - 1.25rem) !important;
+    box-sizing: border-box !important;
+  }
+
+  body.staff-app .staff-identity-popover {
+    max-width: calc(100vw - 1rem) !important;
+  }
+
+  body.staff-app .staff-identity-popover__name,
+  body.staff-app .staff-identity-popover__role {
+    overflow-wrap: anywhere;
+    white-space: normal;
+  }
+
+  body.staff-app .m-record {
+    align-items: flex-start;
+    max-width: 100%;
+  }
+
+  body.staff-app .m-record__main,
+  body.staff-app .m-record__title,
+  body.staff-app .m-record__meta,
+  body.staff-app .m-record-modal__title,
+  body.staff-app .m-record-modal__value {
+    min-width: 0;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  body.staff-app .admin-status-group-head {
+    flex-wrap: wrap;
+    min-width: 0;
+  }
+
+  body.staff-app .admin-status-toggle {
+    white-space: normal;
+  }
+}
+
+@media (max-width: 640px) {
+  body.staff-app > header .staff-sidebar__portal {
+    display: none !important;
+  }
+
+  body.staff-app .card.kpi h4,
+  body.staff-app .admin-report-reviews-kpi strong {
+    font-size: clamp(1.35rem, 7vw, 1.85rem) !important;
+    overflow-wrap: anywhere;
+  }
+
+  body.staff-app .admin-pay-table,
+  body.staff-app .reception-table,
+  body.staff-app .manager-msg-table {
+    font-size: 0.82rem;
+  }
+
+  body.staff-app.admin-app #section-sentiment .sentiment-row {
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    grid-template-areas:
+      "label pct"
+      "bar bar"
+      "btn btn" !important;
+    gap: 0.25rem 0.5rem !important;
+  }
+
+  body.staff-app.admin-app #section-sentiment .sentiment-view-btn {
+    justify-self: start !important;
+    white-space: normal !important;
+  }
+}
+
+@media (max-width: 380px) {
+  body.staff-app > header .content.flex_space.staff-sidebar__inner {
+    --staff-icon: 2.15rem;
+  }
+
+  body.staff-app > header .site-logo,
+  body.staff-app > header .logo img {
+    max-height: 1.75rem !important;
+    max-width: min(6.4rem, 42vw) !important;
+  }
+
+  body.staff-app > header .staff-header-user__name {
+    font-size: 0.84rem !important;
+  }
+}
