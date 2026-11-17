@@ -4932,15 +4932,18 @@ html[data-theme="dark"] body.staff-app.subpage > header #menulist .admin-setting
   }
 
   body.staff-app > header .content.flex_space.staff-sidebar__inner {
-    --staff-icon: 2.5rem;
-    --staff-icon-gap: 0.4rem;
+    --staff-icon: 2.4rem;
+    --staff-icon-gap: 0.7rem;
+    --staff-logo-h: 2.6rem;
+    --staff-bar-pad-t: max(0.4rem, env(safe-area-inset-top, 0px));
+    --staff-bar-pad-x: max(0.7rem, env(safe-area-inset-right, 0px));
     position: relative !important;
     display: flex !important;
     flex-direction: row !important;
     flex-wrap: wrap !important;
     align-items: center !important;
     justify-content: flex-start !important;
-    gap: 0.45rem 0.4rem !important;
+    gap: 0.42rem var(--staff-icon-gap) !important;
     width: 100% !important;
     min-width: 0 !important;
     min-height: 0 !important;
@@ -4948,9 +4951,9 @@ html[data-theme="dark"] body.staff-app.subpage > header #menulist .admin-setting
     margin: 0 !important;
     box-sizing: border-box !important;
     padding:
-      max(0.45rem, env(safe-area-inset-top, 0px))
-      max(0.7rem, env(safe-area-inset-right, 0px))
-      0.5rem
+      var(--staff-bar-pad-t)
+      var(--staff-bar-pad-x)
+      0.32rem
       max(0.7rem, env(safe-area-inset-left, 0px)) !important;
     overflow: visible !important;
   }
@@ -4995,12 +4998,12 @@ html[data-theme="dark"] body.staff-app.subpage > header #menulist .admin-setting
     flex: 1 1 auto !important;
     width: auto !important;
     min-width: 0 !important;
-    min-height: var(--staff-icon) !important;
-    max-width: calc(100% - (var(--staff-icon) * 2) - var(--staff-icon-gap) - 0.85rem) !important;
+    min-height: var(--staff-logo-h) !important;
+    max-width: calc(100% - (var(--staff-icon) * 2) - (var(--staff-icon-gap) * 2)) !important;
     margin: 0 !important;
     padding: 0 !important;
     border: 0 !important;
-    gap: 0.4rem !important;
+    gap: 0.45rem !important;
     overflow: hidden !important;
     text-align: left !important;
   }
@@ -5009,7 +5012,7 @@ html[data-theme="dark"] body.staff-app.subpage > header #menulist .admin-setting
     flex: 0 1 auto;
     width: auto !important;
     min-width: 0;
-    max-width: min(8.5rem, 46vw) !important;
+    max-width: min(11.25rem, 58vw) !important;
     justify-content: flex-start !important;
   }
 
@@ -5019,7 +5022,7 @@ html[data-theme="dark"] body.staff-app.subpage > header #menulist .admin-setting
     width: auto !important;
     height: auto !important;
     max-width: 100% !important;
-    max-height: 2.05rem !important;
+    max-height: var(--staff-logo-h) !important;
     margin: 0 !important;
     object-fit: contain !important;
     object-position: left center !important;
@@ -5040,8 +5043,8 @@ html[data-theme="dark"] body.staff-app.subpage > header #menulist .admin-setting
 
   body.staff-app > header .staff-notif-wrap {
     position: absolute !important;
-    top: max(0.45rem, env(safe-area-inset-top, 0px)) !important;
-    right: calc(max(0.7rem, env(safe-area-inset-right, 0px)) + var(--staff-icon) + var(--staff-icon-gap)) !important;
+    top: calc(var(--staff-bar-pad-t) + (var(--staff-logo-h) - var(--staff-icon)) / 2) !important;
+    right: calc(var(--staff-bar-pad-x) + var(--staff-icon) + var(--staff-icon-gap)) !important;
     left: auto !important;
     display: inline-flex !important;
     align-items: center;
@@ -5067,8 +5070,8 @@ html[data-theme="dark"] body.staff-app.subpage > header #menulist .admin-setting
   body.staff-app > header .nav-menu-toggle,
   body.staff-app > header button.nav-menu-toggle {
     position: absolute !important;
-    top: max(0.45rem, env(safe-area-inset-top, 0px)) !important;
-    right: max(0.7rem, env(safe-area-inset-right, 0px)) !important;
+    top: calc(var(--staff-bar-pad-t) + (var(--staff-logo-h) - var(--staff-icon)) / 2) !important;
+    right: var(--staff-bar-pad-x) !important;
     left: auto !important;
     display: inline-flex !important;
     flex: 0 0 var(--staff-icon) !important;
@@ -5087,19 +5090,24 @@ html[data-theme="dark"] body.staff-app.subpage > header #menulist .admin-setting
     width: 100% !important;
     max-width: 100% !important;
     min-width: 0 !important;
-    min-height: 2.5rem !important;
+    min-height: 0 !important;
     height: auto !important;
     margin: 0 !important;
     box-sizing: border-box !important;
     overflow: hidden !important;
-    gap: 0.55rem !important;
-    padding: 0.35rem 0.75rem 0.35rem 0.35rem !important;
+    gap: 0.4rem !important;
+    padding: 0.12rem 0.55rem 0.12rem 0.16rem !important;
   }
 
   body.staff-app > header .staff-header-user__icon {
     flex: 0 0 auto !important;
-    width: 2rem !important;
-    height: 2rem !important;
+    width: 1.6rem !important;
+    height: 1.6rem !important;
+  }
+
+  body.staff-app > header .staff-header-user__icon svg {
+    width: 0.92rem !important;
+    height: 0.92rem !important;
   }
 
   body.staff-app > header .staff-header-user__meta {
@@ -5117,23 +5125,23 @@ html[data-theme="dark"] body.staff-app.subpage > header #menulist .admin-setting
     display: block !important;
     width: 100% !important;
     max-width: 100% !important;
-    white-space: normal !important;
-    overflow: visible !important;
-    text-overflow: clip !important;
-    overflow-wrap: anywhere !important;
-    word-break: break-word !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    overflow-wrap: normal !important;
+    word-break: normal !important;
   }
 
   body.staff-app > header .staff-header-user__name {
-    font-size: 0.92rem !important;
-    letter-spacing: 0.03em !important;
-    line-height: 1.25 !important;
+    font-size: 0.78rem !important;
+    letter-spacing: 0.01em !important;
+    line-height: 1.15 !important;
   }
 
   body.staff-app > header .staff-header-user__role {
-    font-size: 0.68rem !important;
-    letter-spacing: 0.06em !important;
-    line-height: 1.2 !important;
+    font-size: 0.6rem !important;
+    letter-spacing: 0.05em !important;
+    line-height: 1.1 !important;
   }
 
   body.staff-app > header #menulist,
@@ -5631,16 +5639,18 @@ html[data-theme="dark"] body.staff-app.subpage > header #menulist .admin-setting
 
 @media (max-width: 380px) {
   body.staff-app > header .content.flex_space.staff-sidebar__inner {
-    --staff-icon: 2.15rem;
+    --staff-icon: 2.25rem;
+    --staff-logo-h: 2.5rem;
+    --staff-icon-gap: 0.5rem;
+    --staff-bar-pad-x: max(0.55rem, env(safe-area-inset-right, 0px));
+    padding-left: max(0.55rem, env(safe-area-inset-left, 0px)) !important;
   }
 
-  body.staff-app > header .site-logo,
-  body.staff-app > header .logo img {
-    max-height: 1.75rem !important;
-    max-width: min(6.4rem, 42vw) !important;
+  body.staff-app > header .site-logo-link {
+    max-width: min(9.75rem, 54vw) !important;
   }
 
   body.staff-app > header .staff-header-user__name {
-    font-size: 0.84rem !important;
+    font-size: 0.74rem !important;
   }
 }
