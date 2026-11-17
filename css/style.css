@@ -29024,8 +29024,9 @@ html[data-theme="dark"] .manager-msg-table tbody th {
 }
 
 html[data-theme="dark"] .manager-msg-table tbody tr:nth-child(even) td,
-html[data-theme="dark"] .manager-msg-row:nth-child(even) td {
-  background: #261f2c !important;
+html[data-theme="dark"] .manager-msg-row:nth-child(even) td,
+html[data-theme="dark"] .manager-msg-table tbody tr:nth-child(even) th {
+  background: #143026 !important;
 }
 
 html[data-theme="dark"] .manager-msg-customer__name,

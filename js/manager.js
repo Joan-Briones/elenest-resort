@@ -4325,14 +4325,6 @@
         else byKey[mk2].neu += 1;
       });
       drawReviewsCompositionChart(buckets, "managerReportReviewsChart");
-      if (
-        window.ElenestGuestFeedback &&
-        typeof window.ElenestGuestFeedback.mountRecentReviewNames === "function"
-      ) {
-        window.ElenestGuestFeedback.mountRecentReviewNames(
-          document.getElementById("managerReportGuestReviewsCard")
-        );
-      }
     }
 
     var GF = window.ElenestGuestFeedback;
@@ -4887,14 +4879,6 @@
 
     window.addEventListener("elenest-review-names-updated", function () {
       if (document.getElementById("managerFeedbackList")) renderFeedbackPeople();
-      if (
-        window.ElenestGuestFeedback &&
-        typeof window.ElenestGuestFeedback.mountRecentReviewNames === "function"
-      ) {
-        window.ElenestGuestFeedback.mountRecentReviewNames(
-          document.getElementById("managerReportGuestReviewsCard")
-        );
-      }
     });
 
     window.addEventListener("elenest-sentiment-model-ready", function () {

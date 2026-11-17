@@ -7264,3 +7264,66 @@ html[data-theme="dark"] body[data-staff-portal="manager"] .admin-model-eval__bad
   color: #f6c9c6 !important;
   -webkit-text-fill-color: #f6c9c6 !important;
 }
+
+/* Table rows, names, fields, and icon buttons stay on the same forest palette. */
+html[data-theme="dark"] body[data-staff-portal="manager"] .manager-msg-table tbody tr:nth-child(odd) :is(td, th) {
+  background: #1a382c !important;
+  color: #f4f7f1 !important;
+  -webkit-text-fill-color: #f4f7f1 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] .manager-msg-table tbody tr:nth-child(even) :is(td, th),
+html[data-theme="dark"] body[data-staff-portal="manager"] .manager-msg-row:nth-child(even) :is(td, th) {
+  background: #143026 !important;
+  color: #f4f7f1 !important;
+  -webkit-text-fill-color: #f4f7f1 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] .manager-msg-table :is(
+  strong,
+  .manager-msg-customer__name,
+  .manager-msg-body,
+  .manager-msg-when
+) {
+  color: #f4f7f1 !important;
+  -webkit-text-fill-color: #f4f7f1 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] #section-content .manager-msg-table :is(
+  input:not([type="checkbox"]):not([type="hidden"]):not([type="radio"]),
+  select,
+  textarea
+) {
+  background: #214536 !important;
+  color: #f4f7f1 !important;
+  -webkit-text-fill-color: #f4f7f1 !important;
+  border-color: rgba(217, 130, 165, 0.45) !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] .cm-icon-btn {
+  background: #1b3b2e !important;
+  color: #E7A3C0 !important;
+  -webkit-text-fill-color: #E7A3C0 !important;
+  border-color: rgba(217, 130, 165, 0.55) !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] .cm-icon-btn--delete {
+  background: #3a2430 !important;
+  color: #f6c9c6 !important;
+  -webkit-text-fill-color: #f6c9c6 !important;
+  border-color: rgba(224, 168, 164, 0.75) !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] .cm-icon-btn--edit:hover,
+html[data-theme="dark"] body[data-staff-portal="manager"] .cm-icon-btn--edit:focus-visible,
+html[data-theme="dark"] body[data-staff-portal="manager"] .cm-icon-btn--delete:hover,
+html[data-theme="dark"] body[data-staff-portal="manager"] .cm-icon-btn--delete:focus-visible {
+  background: #D982A5 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border-color: #D982A5 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="manager"] #managerReportGuestReviewsCard .admin-report-review-names {
+  display: none !important;
+}
