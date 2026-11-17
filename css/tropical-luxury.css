@@ -7837,3 +7837,695 @@ html[data-theme="dark"] body[data-staff-portal="manager"] #section-analytics .ma
     margin: 12mm 12mm 14mm;
   }
 }
+
+/* ==========================================================================
+   Receptionist Dashboard — Dark Mode contrast
+   Deep forest surfaces and blush accents. Light mode is unchanged.
+   Colors and contrast only; layout, spacing, and behavior stay as they are.
+   ========================================================================== */
+html[data-theme="dark"] body[data-staff-portal="reception"] {
+  --admin-header-bg: linear-gradient(90deg, rgba(217, 130, 165, 0.34) 0%, #245443 34%, #1e4034 100%);
+  --admin-header-color: #f7f3ee;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] :is(
+  .section-lead,
+  .section-title,
+  .appointments-strip__title,
+  .admin-toolbar__note,
+  .admin-toolbar__note strong,
+  .reception-walkin-hint,
+  .reception-walkin-stay-label,
+  .reception-walkin-stay-label strong,
+  .reception-walkin-stay-bar__label,
+  .book-step2-facilities__dates,
+  .book-unit-summary,
+  .book-unit-summary strong,
+  .reception-records-split__heading,
+  .reception-records-split__empty,
+  .reception-table,
+  .reception-table th,
+  .reception-table td,
+  .reception-table__name,
+  .reception-table__facility,
+  .reception-table__date,
+  .reception-stay__value,
+  .checkin-ticket__guest,
+  .checkin-ticket__meta-item dd,
+  .booking-dl dd,
+  .admin-settings-modal,
+  .admin-settings-modal h3,
+  .admin-settings-modal p,
+  .checkin-cancel-modal__title,
+  .checkin-cancel-modal__lead,
+  .book-unit-modal__title,
+  .book-unit-modal__dates,
+  .book-unit-modal__lead,
+  .book-unit-modal__lead strong,
+  .book-unit-modal__capacity,
+  .book-unit-modal__empty,
+  .book-facility-card__name,
+  .swal2-title,
+  .swal2-html-container
+) {
+  color: #f4f7f1 !important;
+  -webkit-text-fill-color: #f4f7f1 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] :is(
+  label,
+  .form-grid label,
+  .reception-records-search label,
+  .reception-stay__label,
+  .reception-table__id,
+  .admin-pagination__info,
+  .admin-pagination__page,
+  .admin-dash-cal-legend__text span,
+  .admin-dash-cal-notes__hint,
+  .booking-dl dt,
+  .checkin-ticket__id,
+  .book-facility-card__capacity,
+  .book-unit-picker__group-title,
+  .book-step2-facilities__subtype,
+  .checkin-cancel-modal__label
+) {
+  color: #d5e4d8 !important;
+  -webkit-text-fill-color: #d5e4d8 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] :is(
+  .req-mark,
+  .checkin-ticket__meta-item dt,
+  .checkin-ticket__stub-label,
+  .book-facility-card__price,
+  .book-flow-cal-month,
+  .book-flow-cal-wd
+) {
+  color: #f3c6d6 !important;
+  -webkit-text-fill-color: #f3c6d6 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] :is(
+  .card,
+  .reception-walkin-calendar-card,
+  .reception-walkin-guest-card,
+  .reception-checkin-card-wrap,
+  .reception-records-panel,
+  .reception-records-panel--checkout,
+  .reception-table-wrap,
+  .admin-dash-cal-notes,
+  .admin-dash-cal-legend li,
+  .book-unit-summary,
+  .admin-settings-modal,
+  .checkin-cancel-modal,
+  .book-unit-modal__dialog,
+  .book-unit-modal__header,
+  .book-unit-modal header.book-unit-modal__header,
+  .book-unit-modal__dialog > .book-unit-modal__actions,
+  .swal2-popup
+) {
+  background: #214536 !important;
+  background-color: #214536 !important;
+  background-image: none !important;
+  color: #f4f7f1 !important;
+  border-color: rgba(217, 130, 165, 0.38) !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] .reception-records-panel--checkout {
+  border-color: rgba(217, 130, 165, 0.48) !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] .reception-records-panel__head {
+  border-bottom-color: rgba(168, 201, 165, 0.28) !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] .reception-walkin-stay-bar,
+html[data-theme="dark"] body[data-staff-portal="reception"] .reception-walkin-calendar-card .book-unit-summary {
+  border-color: rgba(168, 201, 165, 0.28) !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] .reception-walkin-stay-bar__toggle {
+  background: #143026 !important;
+  border-color: rgba(217, 130, 165, 0.45) !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] .reception-walkin-stay-bar__option span,
+html[data-theme="dark"] body[data-staff-portal="reception"] .reception-walkin-stay-bar__option:hover span {
+  background: transparent !important;
+  color: #d5e4d8 !important;
+  -webkit-text-fill-color: #d5e4d8 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] .reception-walkin-stay-bar__option input:checked + span,
+html[data-theme="dark"] body[data-staff-portal="reception"] .reception-walkin-stay-bar__option input:checked + span:hover {
+  background: #9d4d6c !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border-color: #E7A3C0 !important;
+  box-shadow: inset 0 0 0 1px #E7A3C0 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] :is(
+  input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="hidden"]):not([type="range"]),
+  textarea,
+  select,
+  #receptionWiDayTourTime[readonly]
+) {
+  background: #143026 !important;
+  color: #f4f7f1 !important;
+  -webkit-text-fill-color: #f4f7f1 !important;
+  border-color: rgba(217, 130, 165, 0.45) !important;
+  color-scheme: dark;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] :is(
+  .admin-settings-modal input,
+  .admin-settings-modal select,
+  .admin-settings-modal textarea,
+  .checkin-cancel-modal textarea,
+  .swal2-input,
+  .swal2-textarea,
+  .swal2-select
+) {
+  background: #143026 !important;
+  color: #f4f7f1 !important;
+  -webkit-text-fill-color: #f4f7f1 !important;
+  border-color: rgba(217, 130, 165, 0.45) !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] .book-flow-cal-wd {
+  background: rgba(217, 130, 165, 0.16) !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] :is(.book-flow-cal-nav) {
+  background: #1a382c !important;
+  color: #f3c6d6 !important;
+  -webkit-text-fill-color: #f3c6d6 !important;
+  border-color: rgba(217, 130, 165, 0.5) !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] .book-flow-cal-nav:hover {
+  background: #D982A5 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] #section-walkin .reception-cal-grid :is(
+  .book-flow-cal-day,
+  .book-flow-cal-day:hover
+) {
+  background: #1a382c !important;
+  background-image: none !important;
+  color: #f4f7f1 !important;
+  -webkit-text-fill-color: #f4f7f1 !important;
+  border-color: rgba(168, 201, 165, 0.32) !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] #section-walkin .reception-cal-grid :is(
+  .book-flow-cal-day--disabled,
+  .book-flow-cal-day--past,
+  .book-flow-cal-day--disabled:hover
+):not(.book-flow-cal-day--booked):not(.book-flow-cal-day--unavailable):not(.book-flow-cal-day--manager-blocked):not(.book-flow-cal-day--checkin):not(.book-flow-cal-day--checkout):not(.book-flow-cal-day--range):not(.book-flow-cal-day--selected) {
+  background: #143026 !important;
+  background-image: none !important;
+  color: #8eaa9c !important;
+  -webkit-text-fill-color: #8eaa9c !important;
+  border-color: rgba(168, 201, 165, 0.18) !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] #section-walkin .reception-cal-grid :is(
+  .book-flow-cal-day--available,
+  .book-flow-cal-day--available:hover
+):not(.book-flow-cal-day--checkin):not(.book-flow-cal-day--checkout):not(.book-flow-cal-day--range):not(.book-flow-cal-day--selected) {
+  background: #1e4a36 !important;
+  background-image: none !important;
+  color: #d7eadc !important;
+  -webkit-text-fill-color: #d7eadc !important;
+  border-color: #A8C9A5 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] #section-walkin .reception-cal-grid :is(
+  .book-flow-cal-day--pending,
+  .book-flow-cal-day--partial,
+  .book-flow-cal-day--hold,
+  .book-flow-cal-day--pending:hover,
+  .book-flow-cal-day--partial:hover,
+  .book-flow-cal-day--hold:hover
+):not(.book-flow-cal-day--checkin):not(.book-flow-cal-day--checkout):not(.book-flow-cal-day--range):not(.book-flow-cal-day--selected) {
+  background: #4a3b22 !important;
+  background-image: none !important;
+  color: #f6e0b5 !important;
+  -webkit-text-fill-color: #f6e0b5 !important;
+  border-color: #d4a656 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] #section-walkin .reception-cal-grid :is(
+  .book-flow-cal-day--pending,
+  .book-flow-cal-day--partial,
+  .book-flow-cal-day--hold
+):not(.book-flow-cal-day--checkin):not(.book-flow-cal-day--checkout):not(.book-flow-cal-day--range):not(.book-flow-cal-day--selected) .book-flow-cal-day__status {
+  color: #f6e0b5 !important;
+  -webkit-text-fill-color: #f6e0b5 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] #section-walkin .reception-cal-grid :is(
+  .book-flow-cal-day--booked,
+  .book-flow-cal-day--booked:hover,
+  .book-flow-cal-day--booked:disabled
+):not(.book-flow-cal-day--checkin):not(.book-flow-cal-day--checkout):not(.book-flow-cal-day--range):not(.book-flow-cal-day--selected) {
+  background: #2c3840 !important;
+  background-image: none !important;
+  color: #e7eef2 !important;
+  -webkit-text-fill-color: #e7eef2 !important;
+  border-color: #9aa8b8 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] #section-walkin .reception-cal-grid .book-flow-cal-day--booked:not(.book-flow-cal-day--checkin):not(.book-flow-cal-day--checkout):not(.book-flow-cal-day--range):not(.book-flow-cal-day--selected) .book-flow-cal-day__status {
+  color: #d5dde6 !important;
+  -webkit-text-fill-color: #d5dde6 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] #section-walkin .reception-cal-grid :is(
+  .book-flow-cal-day--unavailable,
+  .book-flow-cal-day--manager-blocked,
+  .book-flow-cal-day--unavailable:hover,
+  .book-flow-cal-day--manager-blocked:hover
+):not(.book-flow-cal-day--booked):not(.book-flow-cal-day--checkin):not(.book-flow-cal-day--checkout):not(.book-flow-cal-day--range):not(.book-flow-cal-day--selected) {
+  background: #4a2a30 !important;
+  background-image: none !important;
+  color: #f6c9c6 !important;
+  -webkit-text-fill-color: #f6c9c6 !important;
+  border-color: #e0a8a4 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] #section-walkin .reception-cal-grid :is(
+  .book-flow-cal-day--unavailable,
+  .book-flow-cal-day--manager-blocked
+):not(.book-flow-cal-day--booked):not(.book-flow-cal-day--checkin):not(.book-flow-cal-day--checkout):not(.book-flow-cal-day--range):not(.book-flow-cal-day--selected) .book-flow-cal-day__status {
+  color: #f6c9c6 !important;
+  -webkit-text-fill-color: #f6c9c6 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] #section-walkin .reception-cal-grid :is(
+  .book-flow-cal-day--selected,
+  .book-flow-cal-day--checkin,
+  .book-flow-cal-day--checkout,
+  .book-flow-cal-day--range,
+  .book-flow-cal-day--selected:hover,
+  .book-flow-cal-day--checkin:hover,
+  .book-flow-cal-day--checkout:hover,
+  .book-flow-cal-day--range:hover
+) {
+  background: #9d4d6c !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border-color: #E7A3C0 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] #section-walkin .reception-cal-grid :is(
+  .book-flow-cal-day--selected,
+  .book-flow-cal-day--checkin,
+  .book-flow-cal-day--checkout,
+  .book-flow-cal-day--range
+) :is(.book-flow-cal-day__num, .book-flow-cal-day__status) {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  background: none !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] #section-walkin .admin-dash-cal-legend .avail-legend__swatch--available {
+  background: #1e4a36 !important;
+  border-color: #A8C9A5 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] #section-walkin .admin-dash-cal-legend .avail-legend__swatch--pending {
+  background: #4a3b22 !important;
+  border-color: #d4a656 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] #section-walkin .admin-dash-cal-legend .avail-legend__swatch--booked {
+  background: #2c3840 !important;
+  border-color: #9aa8b8 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] #section-walkin .admin-dash-cal-legend .avail-legend__swatch--unavailable {
+  background: #4a2a30 !important;
+  border-color: #e0a8a4 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] .admin-dash-cal-notes__title,
+html[data-theme="dark"] body[data-staff-portal="reception"] .admin-dash-cal-legend__text strong {
+  color: #f7f3ee !important;
+  -webkit-text-fill-color: #f7f3ee !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] .reception-table {
+  background: #1a382c !important;
+  color: #f4f7f1 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] .reception-table :is(th, td) {
+  color: #f4f7f1 !important;
+  -webkit-text-fill-color: #f4f7f1 !important;
+  border-color: rgba(168, 201, 165, 0.22) !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] .reception-table thead th {
+  background: #2a5242 !important;
+  color: #e7f6d8 !important;
+  -webkit-text-fill-color: #e7f6d8 !important;
+  border-bottom-color: rgba(168, 201, 165, 0.35) !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] .reception-records-panel--checkout .reception-table thead th {
+  background: #3a3540 !important;
+  color: #f6d5df !important;
+  -webkit-text-fill-color: #f6d5df !important;
+  border-bottom-color: rgba(217, 130, 165, 0.4) !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] .reception-table tbody tr:nth-child(odd) td {
+  background: #1a382c !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] .reception-table tbody tr:nth-child(even) td {
+  background: #143026 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] .reception-table tbody tr:hover td {
+  background: rgba(217, 130, 165, 0.18) !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] .reception-records-panel--checkout .reception-table tbody tr:nth-child(even) td {
+  background: #243038 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] .reception-records-panel--checkout .reception-table tbody tr:hover td {
+  background: rgba(217, 130, 165, 0.22) !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] .reception-stay::before {
+  background: rgba(168, 201, 165, 0.45) !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] .reception-stay__dot {
+  background: #A8C9A5 !important;
+  box-shadow: 0 0 0 2px #1a382c !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] .reception-stay__row--out .reception-stay__dot {
+  background: #214536 !important;
+  border-color: #E7A3C0 !important;
+  box-shadow: 0 0 0 2px #1a382c !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] :is(
+  .booking-status,
+  .booking-status__label,
+  .booking-status__icon,
+  .status-glyph
+) {
+  background-image: none !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] :is(
+  .booking-status--pending,
+  .booking-status--pending-payment
+),
+html[data-theme="dark"] body[data-staff-portal="reception"] :is(
+  .booking-status--pending,
+  .booking-status--pending-payment
+) :is(.booking-status__label, .booking-status__icon, .status-glyph) {
+  background: #4a3b22 !important;
+  color: #f6e0b5 !important;
+  -webkit-text-fill-color: #f6e0b5 !important;
+  border-color: #d4a656 !important;
+  stroke: #f6e0b5 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] .booking-status--confirmed,
+html[data-theme="dark"] body[data-staff-portal="reception"] .booking-status--confirmed :is(
+  .booking-status__label,
+  .booking-status__icon,
+  .status-glyph
+) {
+  background: #1e4a36 !important;
+  color: #d7eadc !important;
+  -webkit-text-fill-color: #d7eadc !important;
+  border-color: #A8C9A5 !important;
+  stroke: #d7eadc !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] :is(
+  .booking-status--completed,
+  .booking-status--checked-in
+),
+html[data-theme="dark"] body[data-staff-portal="reception"] :is(
+  .booking-status--completed,
+  .booking-status--checked-in
+) :is(.booking-status__label, .booking-status__icon, .status-glyph) {
+  background: #4a3140 !important;
+  color: #f6d5df !important;
+  -webkit-text-fill-color: #f6d5df !important;
+  border-color: rgba(217, 130, 165, 0.55) !important;
+  stroke: #f6d5df !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] .booking-status--checked-out,
+html[data-theme="dark"] body[data-staff-portal="reception"] .booking-status--checked-out :is(
+  .booking-status__label,
+  .booking-status__icon,
+  .status-glyph
+) {
+  background: #243830 !important;
+  color: #d5e4d8 !important;
+  -webkit-text-fill-color: #d5e4d8 !important;
+  border-color: rgba(168, 201, 165, 0.45) !important;
+  stroke: #d5e4d8 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] .booking-status--cancelled,
+html[data-theme="dark"] body[data-staff-portal="reception"] .booking-status--cancelled :is(
+  .booking-status__label,
+  .booking-status__icon,
+  .status-glyph
+) {
+  background: #4a2a30 !important;
+  color: #f6c9c6 !important;
+  -webkit-text-fill-color: #f6c9c6 !important;
+  border-color: #e0a8a4 !important;
+  stroke: #f6c9c6 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] .booking-status :is(
+  .booking-status__label,
+  .booking-status__icon,
+  .status-glyph
+) {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] .checkin-ticket-list {
+  --ticket-paper: #214536;
+  --ticket-notch: #173228;
+  --ticket-ink: #f4f7f1;
+  --ticket-muted: #d5e4d8;
+  background: #143026 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] .checkin-ticket {
+  background: #214536 !important;
+  color: #f4f7f1 !important;
+  box-shadow: 0 10px 24px rgba(8, 22, 16, 0.32) !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] .checkin-ticket__notch {
+  background: #173228 !important;
+  box-shadow: inset 0 0 0 1px rgba(217, 130, 165, 0.28) !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] .checkin-ticket__actions :is(.btn--outline, .btn.btn--outline) {
+  background: #2a5242 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border-color: #E7A3C0 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] :is(
+  #section-checkin,
+  #section-checkout,
+  #section-customer-record
+) .admin-pagination {
+  border-top-color: rgba(168, 201, 165, 0.4) !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] .btn.btn--outline,
+html[data-theme="dark"] body[data-staff-portal="reception"] .btn.btn--outline:disabled {
+  background: #2a5242 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border-color: #E7A3C0 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] .btn.btn--outline:hover,
+html[data-theme="dark"] body[data-staff-portal="reception"] .btn.btn--outline:focus-visible {
+  background: #9d4d6c !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border-color: #E7A3C0 !important;
+}
+
+html[data-theme="dark"] body.subpage[data-staff-portal="reception"] .btn:not(.btn--outline):not(.btn--facebook):not(.btn--google):not(.btn--danger):not(.btn--success),
+html[data-theme="dark"] body.subpage[data-staff-portal="reception"] .book-flow-btn-main {
+  background: #9d4d6c !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border-color: #E7A3C0 !important;
+}
+
+html[data-theme="dark"] body.subpage[data-staff-portal="reception"] .btn:not(.btn--outline):not(.btn--facebook):not(.btn--google):not(.btn--danger):not(.btn--success):hover,
+html[data-theme="dark"] body.subpage[data-staff-portal="reception"] .btn:not(.btn--outline):not(.btn--facebook):not(.btn--google):not(.btn--danger):not(.btn--success):focus-visible,
+html[data-theme="dark"] body.subpage[data-staff-portal="reception"] .book-flow-btn-main:hover {
+  background: #7a3148 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] .admin-pay-icon-btn,
+html[data-theme="dark"] body[data-staff-portal="reception"] .admin-pay-icon-btn--view {
+  background: #1b3b2e !important;
+  color: #E7A3C0 !important;
+  -webkit-text-fill-color: #E7A3C0 !important;
+  border-color: rgba(217, 130, 165, 0.55) !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] .admin-pay-icon-btn--reject {
+  background: #3a2430 !important;
+  color: #f6c9c6 !important;
+  -webkit-text-fill-color: #f6c9c6 !important;
+  border-color: rgba(224, 168, 164, 0.75) !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] .admin-pay-icon-btn:hover,
+html[data-theme="dark"] body[data-staff-portal="reception"] .admin-pay-icon-btn:focus-visible {
+  background: #9d4d6c !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border-color: #E7A3C0 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] .admin-pay-icon-tip {
+  background: #143026 !important;
+  color: #f4f7f1 !important;
+  -webkit-text-fill-color: #f4f7f1 !important;
+  border: 1px solid rgba(217, 130, 165, 0.4);
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] header #menulist .admin-settings-menu:not([hidden]) {
+  background: #214536 !important;
+  border-color: rgba(217, 130, 165, 0.4) !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] header #menulist .admin-settings-item,
+html[data-theme="dark"] body[data-staff-portal="reception"] header #menulist .admin-settings-item:hover,
+html[data-theme="dark"] body[data-staff-portal="reception"] header #menulist .admin-settings-item:focus-visible {
+  color: #f4f7f1 !important;
+  -webkit-text-fill-color: #f4f7f1 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] header #menulist .admin-settings-item:hover,
+html[data-theme="dark"] body[data-staff-portal="reception"] header #menulist .admin-settings-item:focus-visible {
+  background: rgba(217, 130, 165, 0.28) !important;
+  color: #fff7fb !important;
+  -webkit-text-fill-color: #fff7fb !important;
+}
+
+html[data-theme="dark"] body.staff-app.subpage[data-staff-portal="reception"] > header #menulist .admin-settings-item--danger:not(.primary-btn),
+html[data-theme="dark"] body.staff-app.subpage[data-staff-portal="reception"] > header #menulist .admin-settings-item--danger:not(.primary-btn):hover,
+html[data-theme="dark"] body.staff-app.subpage[data-staff-portal="reception"] > header #menulist .admin-settings-item--danger:not(.primary-btn):focus-visible {
+  color: #ffb4c0 !important;
+  -webkit-text-fill-color: #ffb4c0 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] .book-unit-modal .book-facility-card,
+html[data-theme="dark"] body[data-staff-portal="reception"] .book-unit-modal .book-facility-card:hover {
+  background: #1b3b2e !important;
+  background-image: none !important;
+  color: #f4f7f1 !important;
+  border-color: rgba(168, 201, 165, 0.35) !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] .book-unit-modal :is(
+  .book-facility-card--selected,
+  .book-facility-card:has(> .book-facility-card__input:checked)
+) {
+  background: #2a3f38 !important;
+  border-color: #D982A5 !important;
+  box-shadow: 0 0 0 2px rgba(217, 130, 165, 0.45) !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] .book-unit-modal :is(
+  .book-facility-card--booked,
+  .book-facility-card--readonly,
+  .book-facility-card--unavailable
+) {
+  background: #2c3840 !important;
+  color: #e7eef2 !important;
+  border-color: #9aa8b8 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] .book-unit-modal :is(
+  .book-facility-card--booked,
+  .book-facility-card--readonly,
+  .book-facility-card--unavailable
+) :is(.book-facility-card__name, .book-facility-card__capacity, .book-facility-card__pending) {
+  color: #e7eef2 !important;
+  -webkit-text-fill-color: #e7eef2 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] .book-unit-modal .book-facility-card--none {
+  background: #1b3b2e !important;
+  color: #f4f7f1 !important;
+  -webkit-text-fill-color: #f4f7f1 !important;
+  border-color: rgba(217, 130, 165, 0.45) !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] .book-unit-modal__close,
+html[data-theme="dark"] body[data-staff-portal="reception"] .book-unit-modal__close:hover {
+  background: #143026 !important;
+  color: #f4f7f1 !important;
+  -webkit-text-fill-color: #f4f7f1 !important;
+  border: 1px solid rgba(217, 130, 165, 0.45) !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] .auth-msg--err,
+html[data-theme="dark"] body[data-staff-portal="reception"] #checkinCancelError {
+  color: #ffb4c0 !important;
+  -webkit-text-fill-color: #ffb4c0 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] .auth-msg--ok {
+  color: #d7eadc !important;
+  -webkit-text-fill-color: #d7eadc !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] :is(
+  .staff-notif-panel,
+  .staff-notif-item,
+  .customer-notif-panel,
+  .customer-notif-item
+) {
+  color: #f4f7f1 !important;
+}
+
+html[data-theme="dark"] body[data-staff-portal="reception"] :is(
+  .staff-notif-item__title,
+  .staff-notif-item__msg,
+  .customer-notif-item__title,
+  .customer-notif-item__msg
+) {
+  color: #f4f7f1 !important;
+  -webkit-text-fill-color: #f4f7f1 !important;
+}
