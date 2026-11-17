@@ -21747,28 +21747,62 @@ body.admin-app #section-content > .appointments-strip .appointments-strip__lead 
 }
 
 .manager-reserve-col-status {
-  width: 132px;
-  min-width: 132px;
-  max-width: 132px;
+  width: 188px;
+  min-width: 188px;
+  max-width: 188px;
+  white-space: nowrap;
 }
 
 .manager-reserve-table .booking-status {
   margin: 0;
   display: inline-flex;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
+  gap: 6px;
   box-sizing: border-box;
-  width: 112px;
-  min-width: 112px;
-  max-width: 112px;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
   height: 28px;
-  padding: 0 6px;
+  padding: 0 10px;
   font-size: 0.62rem;
   letter-spacing: 0.03em;
   line-height: 1;
   white-space: nowrap;
   overflow: hidden;
+}
+
+.manager-reserve-table .booking-status__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 1em;
+  height: 1em;
+  min-width: 1em;
+  margin: 0;
+  line-height: 0;
+}
+
+.manager-reserve-table .booking-status .status-glyph {
+  display: block;
+  width: 1em;
+  height: 1em;
+  flex: 0 0 auto;
+}
+
+.manager-reserve-table .booking-status__label {
+  display: block;
+  flex: 0 1 auto;
+  min-width: 0;
+  margin: 0;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
   text-overflow: ellipsis;
+  word-break: keep-all;
+  overflow-wrap: normal;
 }
 
 .manager-reserve-table .booking-status--pending {
@@ -27683,6 +27717,56 @@ tr.m-record-extra {
   overflow-wrap: anywhere !important;
   word-break: break-word !important;
   box-sizing: border-box;
+}
+
+.m-record-modal__value .booking-status {
+  display: inline-flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 6px !important;
+  width: auto !important;
+  max-width: 100% !important;
+  height: auto !important;
+  min-height: 28px !important;
+  padding: 4px 10px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+}
+
+.m-record-modal__value .booking-status__icon,
+.m-record-modal__value .booking-status .status-glyph {
+  display: inline-flex !important;
+  flex: 0 0 1em !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 1em !important;
+  height: 1em !important;
+  min-width: 1em !important;
+  max-width: 1em !important;
+  margin: 0 !important;
+  line-height: 0 !important;
+  white-space: nowrap !important;
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+  overflow: visible !important;
+}
+
+.m-record-modal__value .booking-status .status-glyph {
+  display: block !important;
+}
+
+.m-record-modal__value .booking-status__label {
+  flex: 0 1 auto !important;
+  min-width: 0 !important;
+  white-space: nowrap !important;
+  word-break: keep-all !important;
+  overflow-wrap: normal !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  line-height: 1 !important;
 }
 
 .m-record-modal__body {
