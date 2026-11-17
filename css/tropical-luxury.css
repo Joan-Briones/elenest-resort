@@ -38,7 +38,7 @@
   --track-kicker: 0.16em;
   --track-label: 0.04em;
   --track-button: 0.03em;
-  --staff-sidebar-w: 352px;
+  --staff-sidebar-w: calc(272px + env(safe-area-inset-left, 0px));
   --dash-sidebar-size: 16px;
   --dash-sidebar-weight: 600;
   --dash-sidebar-track: 0.035em;
@@ -986,12 +986,17 @@ body.staff-app > header .staff-sidebar__portal {
     flex-direction: column !important;
     align-items: stretch !important;
     justify-content: flex-start !important;
-    gap: 1.1rem !important;
+    gap: 0.85rem !important;
     width: 100% !important;
     max-width: none !important;
     min-height: 100%;
-    padding: 1.15rem 0.9rem 1.15rem !important;
+    padding:
+      max(1.05rem, env(safe-area-inset-top, 0px))
+      0.85rem
+      max(0.9rem, env(safe-area-inset-bottom, 0px))
+      max(0.85rem, env(safe-area-inset-left, 0px)) !important;
     margin: 0 !important;
+    box-sizing: border-box;
   }
 
   body.staff-app > header .logo,
@@ -1004,11 +1009,11 @@ body.staff-app > header .staff-sidebar__portal {
     justify-content: center;
     align-items: center;
     flex: 0 0 auto;
-    padding: 0.2rem 0.15rem 0.95rem;
+    padding: 0.15rem 0.25rem 0.8rem;
     margin: 0;
     border-bottom: 1px solid rgba(168, 201, 165, 0.28);
     text-align: center;
-    gap: 0.4rem;
+    gap: 0.35rem;
   }
 
   body.staff-app > header .staff-sidebar__portal {
@@ -1033,10 +1038,10 @@ body.staff-app > header .staff-sidebar__portal {
   body.staff-app > header .site-logo,
   body.staff-app > header .logo img,
   body.staff-app > header .logo img {
-    height: 52px !important;
-    max-height: 52px !important;
-    width: auto;
-    max-width: 100%;
+    height: auto !important;
+    max-height: 4.85rem !important;
+    width: auto !important;
+    max-width: 92% !important;
     object-position: center center;
     transform-origin: center center;
     filter: brightness(1.08);
@@ -1049,7 +1054,7 @@ body.staff-app > header .staff-sidebar__portal {
     align-items: stretch !important;
     justify-content: flex-start !important;
     width: 100% !important;
-    gap: 0.75rem !important;
+    gap: 0.45rem !important;
     flex: 1 1 auto;
     min-height: 0;
   }
@@ -1073,7 +1078,7 @@ body.staff-app > header .staff-sidebar__portal {
     display: flex !important;
     flex-direction: column !important;
     align-items: stretch !important;
-    gap: 0.28rem !important;
+    gap: 0.22rem !important;
     width: 100% !important;
     max-height: none !important;
     height: auto !important;
@@ -1205,13 +1210,13 @@ body.staff-app > header .staff-sidebar__portal {
     align-items: center;
     justify-content: flex-start !important;
     width: 100% !important;
-    min-height: 2.5rem;
+    min-height: 2.35rem;
     color: rgba(255, 255, 255, 0.88) !important;
     -webkit-text-fill-color: rgba(255, 255, 255, 0.88) !important;
     border-radius: 10px !important;
-    padding: 0.45rem 0.7rem !important;
+    padding: 0.4rem 0.7rem !important;
     background: transparent !important;
-    white-space: nowrap !important;
+    white-space: normal !important;
     overflow: visible !important;
     text-overflow: clip !important;
     font-family: var(--sans) !important;
@@ -1248,8 +1253,9 @@ body.staff-app > header .staff-sidebar__portal {
   body.staff-app > header .admin-settings-item {
     color: #fff !important;
     text-align: left;
-    padding: 0.45rem 0.7rem;
+    padding: 0.4rem 0.7rem;
     border-radius: 10px;
+    white-space: normal;
     font-family: var(--sans);
     font-size: var(--dash-sidebar-size);
     font-weight: var(--dash-sidebar-weight);
@@ -1257,7 +1263,7 @@ body.staff-app > header .staff-sidebar__portal {
     letter-spacing: var(--dash-sidebar-track);
     line-height: var(--dash-sidebar-lh);
     text-transform: uppercase;
-    white-space: nowrap;
+    white-space: normal;
   }
 
   body.staff-app > header .admin-settings-item:hover,
@@ -1271,10 +1277,10 @@ body.staff-app > header .staff-sidebar__portal {
     align-items: center;
     width: 100%;
     margin: auto 0 0 !important;
-    padding-top: 0.85rem;
+    padding-top: 0.55rem;
     border-top: 1px solid rgba(168, 201, 165, 0.28);
-    justify-content: stretch;
-    gap: 0.5rem;
+    justify-content: flex-start;
+    gap: 0.4rem;
     flex: 0 0 auto;
   }
 
@@ -1289,20 +1295,25 @@ body.staff-app > header .staff-sidebar__portal {
     align-items: center;
     width: 100% !important;
     max-width: none !important;
-    min-height: 48px;
-    padding: 0.35rem 0.7rem 0.35rem 0.35rem !important;
+    min-height: 2.5rem;
+    padding: 0.28rem 0.55rem 0.28rem 0.28rem !important;
     background: rgba(255, 255, 255, 0.1) !important;
     border: 1px solid rgba(168, 201, 165, 0.3) !important;
     color: #fff !important;
-    border-radius: 14px !important;
+    border-radius: 12px !important;
     box-shadow: none !important;
   }
 
   body.staff-app > header .staff-header-user__icon,
   body.staff-app > header .staff-header-user__icon {
-    width: 2.05rem;
-    height: 2.05rem;
+    width: 1.75rem;
+    height: 1.75rem;
     background: var(--pink);
+  }
+
+  body.staff-app > header .staff-header-user__icon svg {
+    width: 1rem;
+    height: 1rem;
   }
 
   body.staff-app > header .staff-header-user__name,
@@ -1331,9 +1342,9 @@ body.staff-app > header .staff-sidebar__portal {
 
   body.staff-app > header .staff-notif-bell,
   body.staff-app > header .staff-notif-bell {
-    width: 40px !important;
-    height: 40px !important;
-    flex: 0 0 40px;
+    width: 2.25rem !important;
+    height: 2.25rem !important;
+    flex: 0 0 2.25rem;
     background: rgba(255, 255, 255, 0.12) !important;
     border-color: rgba(168, 201, 165, 0.35) !important;
     color: #fff !important;
@@ -1360,9 +1371,78 @@ body.staff-app > header .staff-sidebar__portal {
     top: 0 !important;
     width: 100% !important;
     height: auto !important;
-    min-height: 0 !important;
+    min-height: calc(3.55rem + env(safe-area-inset-top, 0px)) !important;
     max-height: none !important;
+    padding: 0 !important;
     background: var(--forest) !important;
+  }
+
+  body.staff-app > header .content.flex_space {
+    align-items: center !important;
+    gap: 0.65rem !important;
+    min-height: 3.55rem;
+    padding:
+      env(safe-area-inset-top, 0px)
+      max(0.85rem, env(safe-area-inset-right, 0px))
+      0
+      max(0.85rem, env(safe-area-inset-left, 0px)) !important;
+  }
+
+  body.staff-app > header .logo,
+  body.staff-app > header .staff-sidebar__brand {
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 0.45rem !important;
+    width: auto !important;
+    max-width: min(16.5rem, calc(100% - 3.4rem)) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-bottom: 0 !important;
+    text-align: left;
+  }
+
+  body.staff-app > header .site-logo-link {
+    width: auto;
+    max-width: min(7.2rem, 38vw);
+    justify-content: flex-start;
+  }
+
+  body.staff-app > header .site-logo,
+  body.staff-app > header .logo img {
+    width: auto !important;
+    height: auto !important;
+    max-width: min(7.2rem, 38vw) !important;
+    max-height: 2.15rem !important;
+    margin: 0 !important;
+    object-position: left center !important;
+  }
+
+  body.staff-app > header .staff-sidebar__portal {
+    margin: 0 !important;
+    max-width: 6.4rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.72rem !important;
+    letter-spacing: 0.08em !important;
+    line-height: 1.1 !important;
+  }
+
+  body.staff-app > header #menulist,
+  body.staff-app > header .navlinks > ul.site-nav-list {
+    top: calc(env(safe-area-inset-top, 0px) + 3.55rem + 6px);
+  }
+
+  body.staff-app > header #menulist > li > a,
+  body.staff-app > header .admin-nav-dropdown-toggle,
+  body.staff-app > header #adminSettingsToggle,
+  body.staff-app > header #staffSettingsToggle,
+  body.staff-app > header .admin-nav-dropdown-item,
+  body.staff-app > header .admin-settings-item {
+    min-height: 2.75rem;
+    padding: 0.55rem 0.85rem !important;
+    border-radius: 12px !important;
   }
 
   body.staff-app > header #menulist,
@@ -1408,6 +1488,9 @@ body.staff-app > header .staff-sidebar__portal {
   body.staff-app > header .staff-sidebar__portal {
     color: var(--sage) !important;
     -webkit-text-fill-color: var(--sage) !important;
+    font-size: 0.72rem !important;
+    letter-spacing: 0.08em !important;
+    line-height: 1.1 !important;
   }
 
   body.staff-app > header .staff-header-user__name {
@@ -1437,6 +1520,71 @@ body.staff-app > header .staff-sidebar__portal {
   body.staff-app .nav-menu-toggle__bar,
   body.staff-app .nav-menu-toggle__bar {
     background: #fff !important;
+  }
+
+  body.staff-app > header .content.flex_space {
+    min-width: 0;
+  }
+
+  body.staff-app > header .navlinks {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    flex: 0 0 auto !important;
+    width: auto !important;
+    min-width: 0;
+    justify-content: flex-end !important;
+    gap: 0.35rem !important;
+  }
+
+  body.staff-app > header .nav-menu-toggle,
+  body.staff-app > header button.nav-menu-toggle {
+    display: inline-flex !important;
+    flex: 0 0 2.75rem !important;
+    width: 2.75rem !important;
+    height: 2.75rem !important;
+    margin-left: 0.15rem;
+  }
+
+  body.staff-app > header .logo,
+  body.staff-app > header .staff-sidebar__brand {
+    min-width: 0;
+    flex: 1 1 auto;
+    max-width: calc(100% - 9.5rem) !important;
+  }
+
+  body.staff-app > header .staff-header-user {
+    display: inline-flex !important;
+    flex: 0 1 auto !important;
+    min-width: 0 !important;
+    max-width: min(11rem, 46vw);
+    margin: 0 !important;
+    padding-top: 0 !important;
+    border-top: 0 !important;
+    gap: 0.35rem;
+  }
+
+  body.staff-app > header .staff-header-user__inner {
+    min-width: 0;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 520px) {
+  body.staff-app > header .staff-sidebar__portal {
+    display: none !important;
+  }
+
+  body.staff-app > header .staff-header-user {
+    max-width: min(7.5rem, 38vw);
+  }
+
+  body.staff-app > header .staff-header-user__meta {
+    display: none;
+  }
+
+  body.staff-app > header .staff-header-user__inner {
+    padding-right: 0.2rem !important;
   }
 }
 
@@ -4323,10 +4471,10 @@ body.book-page.side-nav > header.home-side #bookNavUser:not([hidden]) {
   flex-direction: column !important;
   align-items: stretch !important;
   justify-content: flex-start !important;
-  gap: 0.5rem !important;
+  gap: 0.4rem !important;
   width: 100% !important;
   margin: auto 0 0 !important;
-  padding: 0.7rem 0.05rem 0.15rem !important;
+  padding: 0.55rem 0.05rem 0.1rem !important;
   border-top: 1px solid rgba(168, 201, 165, 0.32);
   position: sticky;
   bottom: 0;
@@ -4343,14 +4491,20 @@ body.book-page.side-nav > header.home-side #bookNavUser .book-nav-profile {
   width: 100% !important;
   min-width: 0;
   max-width: 100%;
-  gap: 0.5rem;
+  gap: 0.45rem;
   margin: 0;
   box-sizing: border-box;
 }
 
+body.book-page.side-nav > header.home-side #bookNavUser .guest-avatar,
+body.book-page.side-nav > header.home-side #bookNavUser .guest-avatar--sm {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
 body.book-page.side-nav > header.home-side #bookNavUser button.book-nav-profile {
   min-height: 2.5rem;
-  padding: 0.3rem 0.45rem !important;
+  padding: 0.22rem 0.4rem !important;
   border: 0 !important;
   border-radius: 12px !important;
   background: transparent !important;
@@ -4394,10 +4548,10 @@ body.book-page.side-nav > header.home-side #bookNavUser .book-nav-actions {
   align-items: center !important;
   justify-content: space-evenly !important;
   flex-wrap: nowrap;
-  gap: 0.65rem;
+  gap: 0.5rem;
   width: 100%;
   margin: 0 auto;
-  padding: 0.2rem 0.35rem 0.12rem;
+  padding: 0.1rem 0.15rem 0.05rem;
   box-sizing: border-box;
 }
 
@@ -4405,9 +4559,9 @@ body.book-page.side-nav > header.home-side #bookNavUser .book-nav-actions > .cus
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  flex: 0 0 38px;
-  width: 38px;
-  height: 38px;
+  flex: 0 0 2.25rem;
+  width: 2.25rem;
+  height: 2.25rem;
   overflow: visible;
 }
 
@@ -4415,10 +4569,10 @@ body.book-page.side-nav > header.home-side #bookNavUser button.book-nav-icon-btn
 body.book-page.side-nav > header.home-side #bookNavUser button.book-nav-appointments,
 body.book-page.side-nav > header.home-side #bookNavUser button.book-nav-logout,
 body.book-page.side-nav > header.home-side #bookNavUser .customer-notif-bell {
-  width: 38px !important;
-  height: 38px !important;
-  min-width: 38px !important;
-  min-height: 38px !important;
+  width: 2.25rem !important;
+  height: 2.25rem !important;
+  min-width: 2.25rem !important;
+  min-height: 2.25rem !important;
   padding: 0 !important;
   margin: 0 !important;
   border: 1px solid rgba(255, 253, 251, 0.38) !important;
@@ -4453,6 +4607,21 @@ body.book-page.side-nav > header.home-side #bookNavUser .customer-notif-bell[ari
 }
 
 @media (max-width: 900px) {
+  body.book-page.side-nav > header.home-side .logo {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    max-width: calc(100% - 3.6rem) !important;
+  }
+
+  body.book-page.side-nav > header.home-side .navlinks {
+    flex: 0 0 auto !important;
+  }
+
+  body.book-page.side-nav > header.home-side .nav-menu-toggle,
+  body.book-page.side-nav > header.home-side button.nav-menu-toggle {
+    flex: 0 0 2.75rem !important;
+  }
+
   body.book-page.side-nav > header.home-side #bookNavUser:not([hidden]) {
     margin: 0.45rem 0 0 !important;
     position: static;
@@ -4468,30 +4637,10 @@ body.book-page.side-nav > header.home-side #bookNavUser .customer-notif-bell[ari
 }
 
 /* ==========================================================================
-   DASHBOARD SIDEBARS — one width and one type style.
-   Admin, Manager, and Reception share the staff rail.
-   The client booking page uses that same rail size and lettering.
-   Public pages keep their own sidebar.
+   DASHBOARD SIDEBARS — homepage rail size and lettering.
+   Admin, Manager, Reception, and the client booking page share that scale.
+   Public pages keep the homepage sidebar itself.
    ========================================================================== */
-
-@media (min-width: 901px) {
-  body.book-page.side-nav {
-    --home-side-w: calc(var(--staff-sidebar-w) + env(safe-area-inset-left, 0px));
-  }
-
-  body.book-page.side-nav > header.home-side .content.flex_space {
-    gap: 1.1rem !important;
-    padding: 1.15rem 0.9rem 1.15rem !important;
-  }
-
-  body.book-page.side-nav > header.home-side .navlinks {
-    gap: 0.75rem !important;
-  }
-
-  body.book-page.side-nav > header.home-side #menulist.site-nav-list {
-    gap: 0.28rem !important;
-  }
-}
 
 body.book-page.side-nav > header.home-side #menulist.site-nav-list > li > a,
 body.book-page.side-nav > header.home-side a#roleLoginTrigger.staff-access-btn,
@@ -4509,8 +4658,8 @@ html[data-theme="dark"] body.book-page.side-nav > header.home-side #bookNavUser 
 }
 
 body.book-page.side-nav > header.home-side .home-side__eyebrow {
-  margin: 0.1rem 0 0.15rem;
-  padding: 0 0.9rem;
+  margin: 0.1rem 0.2rem 0.05rem;
+  padding: 0;
   text-align: left;
   color: var(--sage);
 }
@@ -4611,10 +4760,14 @@ body.staff-app > header .staff-header-user__role {
 body.staff-app > header #menulist > li > a,
 body.staff-app > header .admin-nav-dropdown-toggle,
 body.staff-app > header #adminSettingsToggle,
-body.staff-app > header #staffSettingsToggle,
+body.staff-app > header #staffSettingsToggle {
+  white-space: nowrap !important;
+  text-align: left !important;
+}
+
 body.staff-app > header .admin-nav-dropdown-item,
 body.staff-app > header .admin-settings-item {
-  white-space: nowrap !important;
+  white-space: normal !important;
   text-align: left !important;
 }
 
@@ -4625,6 +4778,36 @@ body.staff-app > header .staff-header-user__role {
   white-space: nowrap !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
+}
+
+body.staff-app > header .staff-header-user__role {
+  font-size: 0.6875rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.08em !important;
+  line-height: 1.2 !important;
+}
+
+body.book-page.side-nav > header.home-side #bookNavUser .book-nav-greet,
+body.book-page.side-nav > header.home-side .book-nav-profile .book-nav-greet {
+  font-size: 0.8125rem !important;
+  letter-spacing: 0.04em !important;
+}
+
+@media (max-width: 900px) {
+  body.staff-app > header .staff-header-user__inner {
+    background: #ffffff !important;
+    color: #333A35 !important;
+  }
+
+  body.staff-app > header .staff-header-user__name {
+    color: #333A35 !important;
+    -webkit-text-fill-color: #333A35 !important;
+  }
+
+  body.staff-app > header .staff-header-user__role {
+    color: #C56B8F !important;
+    -webkit-text-fill-color: #C56B8F !important;
+  }
 }
 
 /* Beat the older dropdown-link rule so submenu labels match the rail type
@@ -4662,7 +4845,7 @@ html[data-theme="dark"] body.staff-app.subpage > header .admin-nav-dropdown-menu
   line-height: var(--dash-sidebar-lh) !important;
   text-transform: uppercase !important;
   text-align: left !important;
-  white-space: nowrap !important;
+  white-space: normal !important;
   color: rgba(255, 255, 255, 0.94) !important;
   -webkit-text-fill-color: rgba(255, 255, 255, 0.94) !important;
   background: transparent !important;

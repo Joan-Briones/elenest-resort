@@ -120,7 +120,7 @@ button {
   --text-on-dark: #ffffff;
   --text-on-dark-muted: rgba(255, 255, 255, 0.9);
   --text-on-light: var(--ink);
-  --staff-sidebar-w: 352px;
+  --staff-sidebar-w: calc(272px + env(safe-area-inset-left, 0px));
   --radius-card: 16px;
   --radius-control: 12px;
   --shadow-soft: 0 6px 18px rgba(49, 93, 70, 0.06), 0 1px 3px rgba(51, 58, 53, 0.04);
