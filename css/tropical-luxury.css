@@ -6149,51 +6149,11 @@ html[data-theme="dark"] :is(.booking-status--checked-out, .admin-arrival-status-
   border-color: rgba(168, 201, 165, 0.45) !important;
 }
 
-/* Notifications and popovers */
-html[data-theme="dark"] :is(.customer-notif-panel, .staff-notif-panel) {
-  background: var(--lux-surface) !important;
-  color: var(--lux-text) !important;
-  border-color: rgba(217, 130, 165, 0.38) !important;
-  box-shadow: 0 18px 40px rgba(8, 22, 16, 0.45) !important;
-}
-
-html[data-theme="dark"] .customer-notif-panel__head {
-  background: linear-gradient(180deg, rgba(217, 130, 165, 0.28), #214536) !important;
-  color: var(--lux-text) !important;
-}
-
-html[data-theme="dark"] .customer-notif-panel__title,
-html[data-theme="dark"] .customer-notif-item__title {
-  color: var(--lux-heading) !important;
-}
-
-html[data-theme="dark"] .customer-notif-item__msg,
-html[data-theme="dark"] .customer-notif-item__time,
+/* Notification panel theme lives at the end of this file so it wins over
+   portal-specific color overrides. Identity popovers stay with the page type. */
 html[data-theme="dark"] .staff-identity-popover__hint,
 html[data-theme="dark"] .staff-identity-popover__role {
   color: var(--lux-muted) !important;
-}
-
-html[data-theme="dark"] :is(.customer-notif-list, .staff-notif-list) {
-  background: var(--lux-surface-2) !important;
-}
-
-html[data-theme="dark"] :is(.customer-notif-item, .customer-notif-item--read, .staff-notif-item) {
-  background: var(--lux-surface-2) !important;
-  color: var(--lux-text) !important;
-  border-color: var(--lux-line) !important;
-}
-
-html[data-theme="dark"] .customer-notif-item:hover,
-html[data-theme="dark"] .customer-notif-item:focus-visible {
-  background: var(--lux-hover) !important;
-  border-color: var(--lux-pink) !important;
-}
-
-html[data-theme="dark"] .customer-notif-item--unread {
-  background: linear-gradient(180deg, #2a4638 0%, #3a3140 140%) !important;
-  border-color: rgba(217, 130, 165, 0.5) !important;
-  box-shadow: inset 3px 0 0 #D982A5 !important;
 }
 
 /* Dashboard section titles: forest bar, pink accent, light type. */
@@ -8522,21 +8482,254 @@ html[data-theme="dark"] body[data-staff-portal="reception"] .auth-msg--ok {
   -webkit-text-fill-color: #d7eadc !important;
 }
 
-html[data-theme="dark"] body[data-staff-portal="reception"] :is(
-  .staff-notif-panel,
-  .staff-notif-item,
-  .customer-notif-panel,
-  .customer-notif-item
-) {
+/* Shared notification panel — Admin, Manager, Receptionist, and Client.
+   Light mode is the cream / forest / blush panel in style.css.
+   Dark mode is one deep-forest shell with lifted cards and light type. */
+html[data-theme="dark"] :is(
+  body.admin-app,
+  body[data-staff-portal="manager"],
+  body[data-staff-portal="reception"],
+  body.book-page,
+  body.guest-lux,
+  body.home-page,
+  body
+) :is(.customer-notif-panel, .staff-notif-panel) {
+  background: #173228 !important;
+  background-image: none !important;
   color: #f4f7f1 !important;
+  color-scheme: dark;
+  border-color: rgba(217, 130, 165, 0.42) !important;
+  box-shadow: 0 22px 48px rgba(8, 22, 16, 0.48) !important;
 }
 
-html[data-theme="dark"] body[data-staff-portal="reception"] :is(
-  .staff-notif-item__title,
-  .staff-notif-item__msg,
-  .customer-notif-item__title,
-  .customer-notif-item__msg
+html[data-theme="dark"] :is(
+  body.admin-app,
+  body[data-staff-portal="manager"],
+  body[data-staff-portal="reception"],
+  body.book-page,
+  body.guest-lux,
+  body.home-page,
+  body
+) :is(.customer-notif-panel, .staff-notif-panel) :is(
+  .customer-notif-panel__toolbar,
+  .customer-notif-panel__actions,
+  .customer-notif-panel__list
 ) {
+  background: #173228 !important;
+  background-image: none !important;
   color: #f4f7f1 !important;
-  -webkit-text-fill-color: #f4f7f1 !important;
+  border-color: rgba(168, 201, 165, 0.22) !important;
+}
+
+html[data-theme="dark"] :is(.customer-notif-panel, .staff-notif-panel) .customer-notif-panel__head {
+  background: linear-gradient(180deg, rgba(217, 130, 165, 0.36) 0%, #1e4034 58%, #173228 100%) !important;
+  background-image: linear-gradient(180deg, rgba(217, 130, 165, 0.36) 0%, #1e4034 58%, #173228 100%) !important;
+  color: #f7f3ee !important;
+}
+
+html[data-theme="dark"] :is(
+  body.admin-app,
+  body[data-staff-portal="manager"],
+  body[data-staff-portal="reception"],
+  body.book-page,
+  body.guest-lux,
+  body.home-page,
+  body
+) :is(.customer-notif-panel, .staff-notif-panel, .customer-notif-detail-modal) :is(
+  .customer-notif-panel__title,
+  .customer-notif-item__title,
+  .customer-notif-detail__title,
+  .staff-notif-item__title
+) {
+  color: #f7f3ee !important;
+  -webkit-text-fill-color: #f7f3ee !important;
+}
+
+html[data-theme="dark"] :is(
+  body.admin-app,
+  body[data-staff-portal="manager"],
+  body[data-staff-portal="reception"],
+  body.book-page,
+  body.guest-lux,
+  body.home-page,
+  body
+) :is(.customer-notif-panel, .staff-notif-panel, .customer-notif-detail-modal) :is(
+  .customer-notif-item__msg,
+  .customer-notif-detail__message,
+  .staff-notif-item__msg
+) {
+  color: #d7eadc !important;
+  -webkit-text-fill-color: #d7eadc !important;
+}
+
+html[data-theme="dark"] :is(
+  body.admin-app,
+  body[data-staff-portal="manager"],
+  body[data-staff-portal="reception"],
+  body.book-page,
+  body.guest-lux,
+  body.home-page,
+  body
+) :is(.customer-notif-panel, .staff-notif-panel, .customer-notif-detail-modal) :is(
+  .customer-notif-item__time,
+  .customer-notif-detail__time
+) {
+  color: #f3c6d6 !important;
+  -webkit-text-fill-color: #f3c6d6 !important;
+}
+
+html[data-theme="dark"] :is(.customer-notif-item, .customer-notif-item--read, .staff-notif-item) {
+  background: #214536 !important;
+  background-image: none !important;
+  color: #f4f7f1 !important;
+  border-color: rgba(168, 201, 165, 0.34) !important;
+  box-shadow: none !important;
+}
+
+html[data-theme="dark"] .customer-notif-item--unread {
+  background: linear-gradient(180deg, #245443 0%, #2c3140 100%) !important;
+  background-image: linear-gradient(180deg, #245443 0%, #2c3140 100%) !important;
+  border-color: rgba(217, 130, 165, 0.5) !important;
+  box-shadow: inset 3px 0 0 #D982A5 !important;
+}
+
+html[data-theme="dark"] .customer-notif-item:hover,
+html[data-theme="dark"] .customer-notif-item:focus-visible {
+  background: #2c5644 !important;
+  background-image: none !important;
+  border-color: #D982A5 !important;
+  box-shadow: 0 8px 18px rgba(8, 22, 16, 0.28) !important;
+}
+
+html[data-theme="dark"] .customer-notif-item--unread:hover,
+html[data-theme="dark"] .customer-notif-item--unread:focus-visible {
+  background: linear-gradient(180deg, #2c5644 0%, #3a3144 100%) !important;
+  background-image: linear-gradient(180deg, #2c5644 0%, #3a3144 100%) !important;
+  border-color: #D982A5 !important;
+  box-shadow: inset 3px 0 0 #D982A5, 0 8px 18px rgba(8, 22, 16, 0.28) !important;
+}
+
+html[data-theme="dark"] .customer-notif-item__type,
+html[data-theme="dark"] .customer-notif-detail__type {
+  background: rgba(168, 201, 165, 0.18) !important;
+  color: #d7eadc !important;
+  -webkit-text-fill-color: #d7eadc !important;
+}
+
+html[data-theme="dark"] .customer-notif-item--read .customer-notif-item__type {
+  background: rgba(168, 201, 165, 0.16) !important;
+  color: #d7eadc !important;
+  -webkit-text-fill-color: #d7eadc !important;
+}
+
+html[data-theme="dark"] .customer-notif-item--unread .customer-notif-item__type {
+  background: rgba(217, 130, 165, 0.24) !important;
+  color: #f8dde8 !important;
+  -webkit-text-fill-color: #f8dde8 !important;
+}
+
+html[data-theme="dark"] .customer-notif-item__status {
+  background: #A8C9A5 !important;
+}
+
+html[data-theme="dark"] .customer-notif-item--unread .customer-notif-item__status {
+  background: #D982A5 !important;
+  box-shadow: 0 0 0 3px rgba(217, 130, 165, 0.28) !important;
+}
+
+html[data-theme="dark"] .customer-notif-panel__count {
+  background: #D982A5 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html[data-theme="dark"] .customer-notif-panel__close {
+  background: #12281f !important;
+  color: #f7f3ee !important;
+  -webkit-text-fill-color: #f7f3ee !important;
+  border: 1px solid rgba(168, 201, 165, 0.42) !important;
+}
+
+html[data-theme="dark"] .customer-notif-panel__close:hover,
+html[data-theme="dark"] .customer-notif-panel__close:focus-visible {
+  background: #D982A5 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border-color: #D982A5 !important;
+}
+
+html[data-theme="dark"] .customer-notif-panel__mark-all {
+  color: #d7eadc !important;
+  -webkit-text-fill-color: #d7eadc !important;
+  background: rgba(168, 201, 165, 0.16) !important;
+  border-color: rgba(168, 201, 165, 0.4) !important;
+}
+
+html[data-theme="dark"] .customer-notif-panel__mark-all:hover,
+html[data-theme="dark"] .customer-notif-panel__mark-all:focus-visible {
+  background: rgba(168, 201, 165, 0.32) !important;
+  color: #f7f3ee !important;
+  -webkit-text-fill-color: #f7f3ee !important;
+}
+
+html[data-theme="dark"] .customer-notif-panel__clear-all {
+  color: #f8dde8 !important;
+  -webkit-text-fill-color: #f8dde8 !important;
+  background: rgba(217, 130, 165, 0.16) !important;
+  border-color: rgba(217, 130, 165, 0.42) !important;
+}
+
+html[data-theme="dark"] .customer-notif-panel__clear-all:hover,
+html[data-theme="dark"] .customer-notif-panel__clear-all:focus-visible {
+  background: rgba(217, 130, 165, 0.32) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html[data-theme="dark"] .customer-notif-empty {
+  color: #f7f3ee !important;
+  -webkit-text-fill-color: #f7f3ee !important;
+  background: rgba(168, 201, 165, 0.08) !important;
+  border-color: rgba(168, 201, 165, 0.36) !important;
+}
+
+html[data-theme="dark"] :is(.customer-notif-panel, .staff-notif-panel) .customer-notif-panel__list {
+  scrollbar-width: thin;
+  scrollbar-color: #d982a5 #12281f;
+}
+
+html[data-theme="dark"] :is(.customer-notif-panel, .staff-notif-panel) .customer-notif-panel__list::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+html[data-theme="dark"] :is(.customer-notif-panel, .staff-notif-panel) .customer-notif-panel__list::-webkit-scrollbar-track {
+  background: #12281f !important;
+  border-radius: 999px;
+}
+
+html[data-theme="dark"] :is(.customer-notif-panel, .staff-notif-panel) .customer-notif-panel__list::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #e09ab8, #d982a5) !important;
+  border: 2px solid #12281f !important;
+  border-radius: 999px;
+  background-clip: padding-box;
+}
+
+html[data-theme="dark"] :is(.customer-notif-panel, .staff-notif-panel) .customer-notif-panel__list::-webkit-scrollbar-thumb:hover {
+  background: #f3c6d6 !important;
+  background-clip: padding-box;
+}
+
+html[data-theme="dark"] :is(.customer-notif-panel, .staff-notif-panel, .customer-notif-detail-modal) ::selection {
+  background: rgba(217, 130, 165, 0.45);
+  color: #f7f3ee;
+  -webkit-text-fill-color: #f7f3ee;
+}
+
+html[data-theme="dark"] .customer-notif-detail-modal {
+  background: #214536 !important;
+  background-image: none !important;
+  color: #f4f7f1 !important;
+  border-color: rgba(217, 130, 165, 0.38) !important;
+  color-scheme: dark;
 }

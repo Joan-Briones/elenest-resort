@@ -12563,6 +12563,7 @@ button.btn--disabled {
     0 2px 8px rgba(217, 130, 165, 0.14);
   overflow: hidden;
   color: #333A35;
+  color-scheme: light;
 }
 
 .customer-notif-panel[hidden],
@@ -12749,7 +12750,29 @@ button.btn--disabled {
   -webkit-overflow-scrolling: touch;
   background: #fffdfb;
   scrollbar-width: thin;
-  scrollbar-color: rgba(217, 130, 165, 0.55) transparent;
+  scrollbar-color: rgba(217, 130, 165, 0.72) rgba(248, 221, 232, 0.45);
+}
+
+.customer-notif-panel__list::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.customer-notif-panel__list::-webkit-scrollbar-track {
+  background: rgba(248, 221, 232, 0.45);
+  border-radius: 999px;
+}
+
+.customer-notif-panel__list::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(217, 130, 165, 0.85), rgba(168, 201, 165, 0.7));
+  border-radius: 999px;
+  border: 2px solid #fffdfb;
+  background-clip: padding-box;
+}
+
+.customer-notif-panel__list::-webkit-scrollbar-thumb:hover {
+  background: #D982A5;
+  background-clip: padding-box;
 }
 
 .customer-notif-item {
@@ -29229,12 +29252,16 @@ html[data-theme="dark"] .book-unit-modal__empty {
 }
 
 html[data-theme="dark"] .customer-notif-panel,
+html[data-theme="dark"] .staff-notif-panel,
 html[data-theme="dark"] .customer-notif-panel__head,
 html[data-theme="dark"] .customer-notif-panel__toolbar,
+html[data-theme="dark"] .customer-notif-panel__actions,
+html[data-theme="dark"] .customer-notif-panel__list,
+html[data-theme="dark"] .staff-notif-panel .customer-notif-panel__list,
 html[data-theme="dark"] .customer-notif-item,
 html[data-theme="dark"] .customer-notif-item--read,
 html[data-theme="dark"] .customer-notif-item--unread {
-  background: #214536 !important;
+  background: #173228 !important;
   color: #f4f7f1 !important;
   border-color: rgba(217, 130, 165, 0.28) !important;
 }
@@ -29306,15 +29333,36 @@ html[data-theme="dark"] .customer-notif-empty {
 }
 
 html[data-theme="dark"] .customer-notif-panel__close {
-  color: #f4f7f1 !important;
-  -webkit-text-fill-color: #f4f7f1 !important;
+  background: #12281f !important;
+  color: #f7f3ee !important;
+  -webkit-text-fill-color: #f7f3ee !important;
+  border: 1px solid rgba(168, 201, 165, 0.4) !important;
 }
 
 html[data-theme="dark"] .customer-notif-panel__close:hover,
 html[data-theme="dark"] .customer-notif-panel__close:focus-visible {
-  background: rgba(247, 242, 245, 0.12) !important;
+  background: #D982A5 !important;
   color: #fff !important;
   -webkit-text-fill-color: #fff !important;
+  border-color: #D982A5 !important;
+}
+
+html[data-theme="dark"] :is(.customer-notif-panel, .staff-notif-panel) {
+  color-scheme: dark;
+}
+
+html[data-theme="dark"] :is(.customer-notif-panel, .staff-notif-panel) .customer-notif-panel__list {
+  scrollbar-color: #d982a5 #12281f;
+}
+
+html[data-theme="dark"] :is(.customer-notif-panel, .staff-notif-panel) .customer-notif-panel__list::-webkit-scrollbar-track {
+  background: #12281f;
+}
+
+html[data-theme="dark"] :is(.customer-notif-panel, .staff-notif-panel) .customer-notif-panel__list::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #e09ab8, #d982a5);
+  border-color: #12281f;
+  background-clip: padding-box;
 }
 
 html[data-theme="dark"] .m-record {
