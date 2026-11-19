@@ -13421,6 +13421,31 @@ html[data-theme="dark"] body.admin-app .admin-payment-active-label:has(input:che
   font-size: 0.72rem;
 }
 
+/* Event photo upload: native Choose File button, left-aligned and vertically centered. */
+#section-content .manager-msg-table #cmEventImageUpload {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  max-width: 100%;
+  height: 30px;
+  min-height: 30px;
+  margin: 0;
+  padding: 4px 8px;
+  font-size: 0.78rem;
+  line-height: 20px;
+  box-sizing: border-box;
+}
+
+#section-content .manager-msg-table #cmEventImageUpload::file-selector-button,
+#section-content .manager-msg-table #cmEventImageUpload::-webkit-file-upload-button {
+  margin-top: 0;
+  margin-bottom: 0;
+  vertical-align: middle;
+  align-self: center;
+  flex: 0 0 auto;
+}
+
 #section-content .manager-msg-table input:not([type="checkbox"]):focus,
 #section-content .manager-msg-table select:focus,
 #section-content .manager-msg-table textarea:focus {
