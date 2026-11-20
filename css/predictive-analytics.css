@@ -814,7 +814,9 @@
 
   #section-predictive .pa-toolbar .btn,
   #section-predictive .pa-section-btn {
-    flex: 1 1 auto;
+    flex: 0 1 auto;
+    width: auto;
+    min-height: 38px;
   }
 
   #section-predictive .pa-filters {

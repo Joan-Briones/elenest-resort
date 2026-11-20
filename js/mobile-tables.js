@@ -55,6 +55,7 @@
   function releaseMobile(table) {
     if (!table) return;
     table.classList.remove("m-src");
+    table.removeAttribute("hidden");
     try { table.inert = false; } catch (e) {}
     var host = table.parentNode;
     if (host) host.classList.remove("m-host");
@@ -444,6 +445,7 @@
     var existing = next && next.classList && next.classList.contains("m-record-list") ? next : null;
     if (!items.length) {
       table.classList.remove("m-src");
+      table.removeAttribute("hidden");
       table.inert = false;
       host.classList.remove("m-host");
       if (existing) existing.remove();
@@ -452,6 +454,7 @@
     var sig = signature(table);
     if (existing && existing.getAttribute("data-m-sig") === sig) {
       table.classList.add("m-src");
+      table.setAttribute("hidden", "");
       table.inert = true;
       host.classList.add("m-host");
       return;
@@ -461,6 +464,7 @@
     if (existing) existing.replaceWith(list);
     else host.insertBefore(list, table.nextSibling);
     table.classList.add("m-src");
+    table.setAttribute("hidden", "");
     table.inert = true;
     host.classList.add("m-host");
   }
@@ -470,6 +474,7 @@
     document.querySelectorAll(".m-record-list").forEach(function (list) { list.remove(); });
     document.querySelectorAll("table.m-src").forEach(function (table) {
       table.classList.remove("m-src");
+      table.removeAttribute("hidden");
       table.inert = false;
       if (table.parentNode) table.parentNode.classList.remove("m-host");
     });

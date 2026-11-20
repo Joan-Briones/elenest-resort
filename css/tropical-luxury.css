@@ -5600,7 +5600,8 @@ html[data-theme="dark"] body.staff-app.subpage > header #menulist .admin-setting
   }
 
   body.staff-app .m-record {
-    align-items: flex-start;
+    align-items: center;
+    height: auto;
     max-width: 100%;
   }
 
@@ -5622,6 +5623,84 @@ html[data-theme="dark"] body.staff-app.subpage > header #menulist .admin-setting
 
   body.staff-app .admin-status-toggle {
     white-space: normal;
+  }
+}
+
+@media (max-width: 700px) {
+  body.staff-app .admin-section,
+  body.staff-app .card,
+  body.staff-app .manager-messages-card,
+  body.staff-app .reception-records-panel,
+  body.staff-app .admin-payment-feature-card,
+  body.staff-app .manager-messages-list,
+  body.staff-app .m-record-list {
+    height: auto;
+    min-height: 0;
+    flex: 0 0 auto;
+  }
+
+  body.staff-app .appointments-strip__tools {
+    width: 100%;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+
+  body.staff-app .appointments-strip__tools input,
+  body.staff-app .appointments-strip__tools select {
+    flex: 1 1 12rem;
+    width: auto;
+    min-width: 0;
+    max-width: 100% !important;
+    min-height: 40px;
+  }
+
+  body.staff-app .content-mgmt-actions,
+  body.staff-app .manager-cal-actions,
+  body.staff-app .manager-report-tools,
+  body.staff-app .admin-toolbar,
+  body.staff-app .admin-pay-table-head-actions,
+  body.staff-app .reception-records-panel__head {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  body.staff-app .content-mgmt-actions .btn,
+  body.staff-app .manager-cal-actions .btn,
+  body.staff-app .manager-report-tools .btn,
+  body.staff-app .admin-toolbar .btn,
+  body.staff-app .admin-pay-table-head-actions .btn,
+  body.staff-app .admin-pagination .btn {
+    width: auto;
+    flex: 0 1 auto;
+    min-height: 38px;
+    margin-top: 0;
+  }
+
+  body.staff-app .m-record__view.btn {
+    width: auto;
+    min-height: 36px;
+    margin-top: 0;
+  }
+
+  body.staff-app #section-recommendations.admin-section:not([hidden]),
+  body.staff-app #section-recommendations .manager-rec-strip,
+  body.staff-app #section-recommendations .manager-rec-panel,
+  body.staff-app #section-recommendations .manager-rec-grid {
+    flex: 0 0 auto;
+    height: auto;
+    min-height: 0;
+  }
+}
+
+@media (hover: none) and (max-width: 900px) {
+  body.staff-app .card:hover,
+  body.staff-app .subpage .card:hover,
+  body.staff-app .manager-messages-card:hover,
+  body.staff-app .reception-records-panel:hover {
+    transform: none;
   }
 }
 
@@ -8732,4 +8811,25 @@ html[data-theme="dark"] .customer-notif-detail-modal {
   color: #f4f7f1 !important;
   border-color: rgba(217, 130, 165, 0.38) !important;
   color-scheme: dark;
+}
+
+/* Phone record lists hug their cards. Later dark-surface rules must not
+   paint a stretched frame behind them. Desktop tables are unchanged. */
+@media (max-width: 700px) {
+  html[data-theme="dark"] body.staff-app .m-host,
+  html[data-theme="dark"] body.admin-app .m-host,
+  html[data-theme="dark"] body[data-staff-portal] .m-host,
+  html[data-theme="dark"] body.admin-app .admin-payment-approval-board .admin-payment-verification-list.m-host,
+  html[data-theme="dark"] body[data-staff-portal="reception"] .reception-table-wrap.m-host,
+  html[data-theme="dark"] body[data-staff-portal="manager"] .manager-msg-table-wrap.m-host {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
 }

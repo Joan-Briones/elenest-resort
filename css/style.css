@@ -27983,30 +27983,35 @@ body.m-record-open {
 }
 
 @media (max-width: 700px) {
-  .m-host {
+  /* Phone lists replace the table. Keep the source table out of layout so it
+     cannot stretch the panel or leave a second scrollbar. */
+  .m-host,
+  html[data-theme="dark"] .m-host {
     position: relative;
-    overflow-x: hidden !important;
+    overflow: visible !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
     min-width: 0;
     max-width: 100%;
   }
 
-  table.m-src {
-    position: absolute !important;
-    left: 0 !important;
-    top: 0 !important;
-    width: 1px !important;
-    height: 1px !important;
-    min-width: 0 !important;
-    max-width: 1px !important;
-    overflow: hidden !important;
-    clip: rect(0 0 0 0) !important;
-    clip-path: inset(50%) !important;
-    white-space: nowrap !important;
-    border: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    visibility: hidden !important;
-    pointer-events: none !important;
+  table.m-src,
+  #adminUpcomingBookingsList table.m-src,
+  .admin-pay-table.m-src,
+  .admin-upcoming-table.m-src,
+  .manager-msg-table.m-src,
+  .manager-reserve-table.m-src,
+  .reception-table.m-src,
+  .admin-users-table.m-src,
+  .activity-logs-table.m-src,
+  .pa-table.m-src,
+  .rq-table.m-src {
+    display: none !important;
   }
 
   .m-record-list {
@@ -28014,7 +28019,9 @@ body.m-record-open {
     flex-direction: column;
     gap: 8px;
     width: 100%;
+    height: auto;
     min-width: 0;
+    min-height: 0;
     max-width: 100%;
   }
 
@@ -28031,13 +28038,14 @@ body.m-record-open {
     align-items: center;
     gap: 10px;
     width: 100%;
+    height: auto;
     min-width: 0;
     box-sizing: border-box;
-    padding: 12px;
+    padding: 10px 12px;
     background: #fff;
     border: 1px solid #ead7de;
-    border-radius: 14px;
-    box-shadow: 0 8px 20px rgba(90, 32, 48, 0.05);
+    border-radius: 12px;
+    box-shadow: none;
   }
 
   .m-record__main {
@@ -28068,9 +28076,14 @@ body.m-record-open {
 
   .m-record__view.btn {
     flex: 0 0 auto;
-    min-width: 72px;
-    min-height: 40px;
-    padding: 8px 12px;
+    align-self: center;
+    width: auto;
+    min-width: 4.25rem;
+    max-width: 6.5rem;
+    min-height: 36px;
+    height: auto;
+    margin: 0;
+    padding: 6px 12px;
     white-space: nowrap;
   }
 }
@@ -28092,10 +28105,19 @@ body.m-record-open {
   .admin-model-eval__table-wrap,
   .admin-app .admin-model-eval__table-wrap,
   .pa-table-wrap,
-  .rq-table-wrap,
-  .m-host {
+  .rq-table-wrap {
     overflow-x: hidden !important;
     overscroll-behavior-x: none;
+    max-width: 100%;
+  }
+
+  .m-host,
+  html[data-theme="dark"] .m-host {
+    overflow: visible !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overscroll-behavior: auto;
     max-width: 100%;
   }
 
@@ -28122,7 +28144,12 @@ body.m-record-open {
     display: none !important;
   }
 
-  table.m-src {
+  table.m-src,
+  #adminUpcomingBookingsList table.m-src,
+  .admin-pay-table.m-src,
+  .manager-msg-table.m-src,
+  .reception-table.m-src {
+    display: table !important;
     position: static !important;
     width: auto !important;
     height: auto !important;
@@ -29244,6 +29271,20 @@ html[data-theme="dark"] .manager-msg-table tbody th {
   background: #1a382c !important;
   color: #f4f7f1 !important;
   -webkit-text-fill-color: #f4f7f1 !important;
+}
+
+@media (max-width: 700px) {
+  html[data-theme="dark"] .m-host,
+  html[data-theme="dark"] .manager-msg-table-wrap.m-host,
+  html[data-theme="dark"] .reception-table-wrap.m-host,
+  html[data-theme="dark"] .admin-payment-verification-list.m-host,
+  html[data-theme="dark"] .admin-users-list.m-host,
+  html[data-theme="dark"] .table-wrap.m-host {
+    background: transparent !important;
+    background-image: none !important;
+    border: 0 !important;
+    box-shadow: none !important;
+  }
 }
 
 html[data-theme="dark"] .manager-msg-table tbody tr:nth-child(even) td,
@@ -30772,8 +30813,13 @@ html[data-theme="dark"] .admin-app .sentiment-archive-comment-stars {
   }
 
   .m-record__view.btn {
-    min-width: 4.5rem;
-    min-height: 44px;
+    width: auto;
+    min-width: 4.25rem;
+    max-width: 6.5rem;
+    min-height: 36px;
+    height: auto;
+    margin-top: 0;
+    padding: 6px 12px;
   }
 }
 
